@@ -1,0 +1,691 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{767534e3-7898-4451-bcad-aab97fdb4523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{8726f73a-8b74-4af8-9c43-2aa6077319eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scenes">
+      <UniqueIdentifier>{382a84c6-1fb4-48cc-88e8-e5f9bd5e8858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scenes\SceneTitle">
+      <UniqueIdentifier>{ca0ce9a7-94c2-413e-8e55-2845d94409c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{47425a2a-6a79-4db6-8563-28faeb3e58cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\imgui">
+      <UniqueIdentifier>{4dcb3640-e797-4d3f-8a93-c8ef469495f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{9f64f4ff-d9e0-43d7-88e1-13e6d3656a89}</UniqueIdentifier>
+      <Extensions>hlsl;hlsli</Extensions>
+    </Filter>
+    <Filter Include="HLSL\geometric_primitive">
+      <UniqueIdentifier>{f0797ecd-eefd-4e67-8786-be0b4e1fa2a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\skinned_mesh">
+      <UniqueIdentifier>{be26542f-13a1-485c-ab49-a52a1b729009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\sprite">
+      <UniqueIdentifier>{7c2840ed-f9cc-4519-a407-b3607e0559fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\static_mesh">
+      <UniqueIdentifier>{2e472d2c-55ea-4afc-bf1c-f32d776380c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\sprite_batch">
+      <UniqueIdentifier>{e64027c8-fb70-4465-bf95-506c7adf03a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems">
+      <UniqueIdentifier>{aaebcfaf-a2cf-490b-904e-925ef68293d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\FrameBuffer">
+      <UniqueIdentifier>{c90690ce-3a1b-48df-b812-213fa22b4e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\FrameWork">
+      <UniqueIdentifier>{3f50b83f-a4ff-467d-b356-2243f3db2a9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Rasterizer">
+      <UniqueIdentifier>{cce47734-c4ad-4638-b0dc-a719d10fd904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Graphics">
+      <UniqueIdentifier>{2573b810-52de-4e9c-aaa9-7cc015a86568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Texture">
+      <UniqueIdentifier>{a40cf411-c231-4245-bac1-43a0586dd647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Shader">
+      <UniqueIdentifier>{c7141395-4af5-4f19-a9d9-eb26809528bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Shader\Lambert">
+      <UniqueIdentifier>{9550a8aa-855e-4f4d-bbc0-8b61825d419c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Graphics\ImGuiRenderer">
+      <UniqueIdentifier>{121fcde6-ecb0-4686-9fb5-7523f937ad20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Graphics\DebugRenderer">
+      <UniqueIdentifier>{515faa1d-fc7b-4551-981f-11045b9d7cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Graphics\LineRenderer">
+      <UniqueIdentifier>{b3d75226-23e3-4d12-9ad9-065d87fbd1c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\LineRenderer">
+      <UniqueIdentifier>{40543093-6dd2-4218-a7d0-a7b04143ac82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\ImguiRenderer">
+      <UniqueIdentifier>{9da834e2-0d5d-4b0f-a2fb-9e46ec2cfe8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\DebugRenderer">
+      <UniqueIdentifier>{028d89ac-b2e3-45ef-9e3f-1fdcae9abdaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Lambert">
+      <UniqueIdentifier>{a612bcbd-3972-41bb-ad6b-e57220ffa262}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Scene">
+      <UniqueIdentifier>{e0e2067b-4d97-4ed3-9bf3-80fe3cda74d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Scene\SceneManager">
+      <UniqueIdentifier>{82a12c04-f183-49e8-81d3-1a2e8c87fb6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Camera">
+      <UniqueIdentifier>{7681e782-386d-479f-b13e-2c548e460389}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Camera\CameraController">
+      <UniqueIdentifier>{c6f372ef-108a-4b12-9483-1d7281f9ff5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Input">
+      <UniqueIdentifier>{da2d717f-f28c-4726-ba79-fdf01c40ebff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AI">
+      <UniqueIdentifier>{73100ebf-40ca-49c2-82ba-bc693c9e7028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AI\MetaAI">
+      <UniqueIdentifier>{8acfe35c-8b60-485d-89ab-901656dc4926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Character">
+      <UniqueIdentifier>{944d8e67-5793-4f0c-bf15-279933f07ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Character\Manager">
+      <UniqueIdentifier>{2d38a632-97a5-4cee-83aa-5abc48a96ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Stage">
+      <UniqueIdentifier>{c4c6f021-bf24-4096-af6c-f9cd5be4f210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Stage\StageManeger">
+      <UniqueIdentifier>{57dfd7f9-a42b-4a36-ac51-774e99cb14bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Collision">
+      <UniqueIdentifier>{dd1ef98e-9068-4f11-ae7b-f4bd7a29a137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scenes\SceneLoad">
+      <UniqueIdentifier>{ed717e6e-bdd6-4caf-a3c9-9e50f2d456ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Characters">
+      <UniqueIdentifier>{cec9c0ab-b640-4219-beab-8d8fec05a925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Logger">
+      <UniqueIdentifier>{bd3ff42b-eadc-45b9-9313-dbc6f22e2959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Stages">
+      <UniqueIdentifier>{1c4e1277-6c37-43aa-b949-82bf0cea9c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Math">
+      <UniqueIdentifier>{5a259069-7fc2-4673-881e-08e4686fc037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\StateMachine">
+      <UniqueIdentifier>{e2eea2b4-c833-4bf3-886e-b1efb4362056}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\BehaviorTree">
+      <UniqueIdentifier>{78c0efff-7ff8-4485-9f90-198c6b3fa9e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\StateMachine\StateBase">
+      <UniqueIdentifier>{50b0b10c-fe8b-48d2-b3b4-4102e11d2495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scenes\SceneGame">
+      <UniqueIdentifier>{e73a9ebd-b7a2-4e0c-b3c9-884a00e62933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Character\PlayerBase">
+      <UniqueIdentifier>{baa6dca0-7ce3-4938-ab05-e0be67dfacb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Character\EnemyBase">
+      <UniqueIdentifier>{51b92ad6-7c8f-4121-af1d-e513f526d318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\ResourceManager">
+      <UniqueIdentifier>{9edadf04-0a38-43e1-b034-bbb7abad8ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Characters\Player">
+      <UniqueIdentifier>{3c8f846a-6896-4ecf-bbce-a863458e5eb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Characters\Player\State">
+      <UniqueIdentifier>{fe73f6d2-d3f6-4992-a2c6-8246c9faa221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Shader\Wireframe">
+      <UniqueIdentifier>{d82b0e80-2eeb-4e5a-8480-5b16838ac0e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\ShaderManager">
+      <UniqueIdentifier>{968c76de-13b6-4c6a-84e4-15f57d4eedb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Object">
+      <UniqueIdentifier>{66622235-764f-4ee3-83b9-b7740c770694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\NoTexture">
+      <UniqueIdentifier>{8952d226-ca8d-42a3-a761-bced7c620f18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Shader\NoTexture">
+      <UniqueIdentifier>{d909c3e1-61a7-443b-8f69-ec681855bd35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\DungeonMake">
+      <UniqueIdentifier>{f360e16e-d629-4400-b8fe-b35c2c745ae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AI\Aster">
+      <UniqueIdentifier>{9104f65e-d15e-48be-bdd6-6e56f16dc899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AI\Aster\HeuristicSearch">
+      <UniqueIdentifier>{55ae4d8c-952f-4d95-959a-cbe2c7f406a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AI\Aster\Edge">
+      <UniqueIdentifier>{f4ef7abf-6174-4ce3-8cfa-c2aa80e6e3b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AI\Aster\Node">
+      <UniqueIdentifier>{dfd9d9d3-5c23-4c6c-ae07-805cfcb44721}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Stages\StageMain %28サンプル%29">
+      <UniqueIdentifier>{20be4b45-22cf-47d2-9cc2-58fe5382a4d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Stage\RogueLikeStage">
+      <UniqueIdentifier>{e6050c99-73e7-4c39-a0dd-5b608bdca43f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Characters\Enemis">
+      <UniqueIdentifier>{057d3564-f1fa-4b8f-8eae-d996194c0169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Characters\Enemis\Snake">
+      <UniqueIdentifier>{0f9bd635-0d41-4002-9a31-61d296cd6430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Objects">
+      <UniqueIdentifier>{2e576be6-555c-4764-b57a-629d1d0ec899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Objects\Sprite">
+      <UniqueIdentifier>{f9dacbfb-171f-4cb6-ae89-368ad3c08061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Objects\GeometricPrimitive">
+      <UniqueIdentifier>{51804cf8-b0a8-474d-a265-06939923c579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Objects\SkinnedMesh">
+      <UniqueIdentifier>{08e72cd9-82ea-4e85-a873-591782bb301e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Objects\Model">
+      <UniqueIdentifier>{7dec8eb9-05e3-4c81-9649-71a3a7515621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Objects\ModelResource">
+      <UniqueIdentifier>{db1451e0-7b59-4844-ad5f-d2ad259611dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Objects\StaticMesh">
+      <UniqueIdentifier>{cb723e18-78bc-4cc6-98b7-aecbd0d2b9cd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Game\Scene\SceneTitle.cpp">
+      <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Objects\GeometricPrimitive.cpp">
+      <Filter>Source Files\Engine\Objects\GeometricPrimitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Objects\SkinnedMesh.cpp">
+      <Filter>Source Files\Engine\Objects\SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Objects\Sprite.cpp">
+      <Filter>Source Files\Engine\Objects\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Objects\StaticMesh.cpp">
+      <Filter>Source Files\Engine\Objects\StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Framebuffer.cpp">
+      <Filter>Source Files\Engine\Systems\FrameBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Framework.cpp">
+      <Filter>Source Files\Engine\Systems\FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Rasterizer.cpp">
+      <Filter>Source Files\Engine\Systems\Rasterizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Main.cpp">
+      <Filter>Source Files\Engine\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Objects\ModelResource.cpp">
+      <Filter>Source Files\Engine\Objects\ModelResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Objects\Model.cpp">
+      <Filter>Source Files\Engine\Objects\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\imgui.cpp">
+      <Filter>External\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\imgui_demo.cpp">
+      <Filter>External\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\imgui_draw.cpp">
+      <Filter>External\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\imgui_widgets.cpp">
+      <Filter>External\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Texture.cpp">
+      <Filter>Source Files\Engine\Systems\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Shader.cpp">
+      <Filter>Source Files\Engine\Systems\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\LambertShader.cpp">
+      <Filter>Source Files\Engine\Systems\Shader\Lambert</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Graphics.cpp">
+      <Filter>Source Files\Engine\Systems\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\ImGuiRenderer.cpp">
+      <Filter>Source Files\Engine\Systems\Graphics\ImGuiRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\DebugRenderer.cpp">
+      <Filter>Source Files\Engine\Systems\Graphics\DebugRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\LineRenderer.cpp">
+      <Filter>Source Files\Engine\Systems\Graphics\LineRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\CameraController.cpp">
+      <Filter>Source Files\Engine\Systems\Camera\CameraController</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\SceneManager.cpp">
+      <Filter>Source Files\Engine\Systems\Scene\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Camera.cpp">
+      <Filter>Source Files\Engine\Systems\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Input.cpp">
+      <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Mouse.cpp">
+      <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\GamePad.cpp">
+      <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\AI\MetaAI.cpp">
+      <Filter>Source Files\Engine\AI\MetaAI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Character.cpp">
+      <Filter>Source Files\Engine\Systems\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Collision.cpp">
+      <Filter>Source Files\Engine\Systems\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\CharacterManager.cpp">
+      <Filter>Source Files\Engine\Systems\Character\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\StageManager.cpp">
+      <Filter>Source Files\Engine\Systems\Stage\StageManeger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\SceneLoading.cpp">
+      <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Logger.cpp">
+      <Filter>Source Files\Engine\Systems\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Math.cpp">
+      <Filter>Source Files\Engine\Systems\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\StateMachine.cpp">
+      <Filter>Source Files\Engine\Systems\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\StateBase.cpp">
+      <Filter>Source Files\Engine\Systems\StateMachine\StateBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\PlayerBase.cpp">
+      <Filter>Source Files\Engine\Systems\Character\PlayerBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\EnemyBase.cpp">
+      <Filter>Source Files\Engine\Systems\Character\EnemyBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\SceneGame.cpp">
+      <Filter>Source Files\Game\Scenes\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\ResourceManager.cpp">
+      <Filter>Source Files\Engine\Systems\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Characters\Player.cpp">
+      <Filter>Source Files\Game\Characters\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Characters\DerivedPlayerState.cpp">
+      <Filter>Source Files\Game\Characters\Player\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\WireframeLambert.cpp">
+      <Filter>Source Files\Engine\Systems\Shader\Wireframe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\ShaderManager.cpp">
+      <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Stages\StageMain.cpp">
+      <Filter>Source Files\Game\Stages\StageMain %28サンプル%29</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Object.cpp">
+      <Filter>Source Files\Engine\Systems\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\NoTextureShader.cpp">
+      <Filter>Source Files\Engine\Systems\Shader\NoTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\DungeonMake.cpp">
+      <Filter>Source Files\Engine\Systems\DungeonMake</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\AI\HeuristicSearch.cpp">
+      <Filter>Source Files\Engine\AI\Aster\HeuristicSearch</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\AI\Edge.cpp">
+      <Filter>Source Files\Engine\AI\Aster\Edge</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\AI\Node.cpp">
+      <Filter>Source Files\Engine\AI\Aster\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\RogueLikeStage.cpp">
+      <Filter>Source Files\Engine\Systems\Stage\RogueLikeStage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Characters\DerivedEnemyState.cpp">
+      <Filter>Source Files\Game\Characters\Enemis</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Game\Scene\SceneTitle.h">
+      <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Objects\GeometricPrimitive.h">
+      <Filter>Source Files\Engine\Objects\GeometricPrimitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Objects\SkinnedMesh.h">
+      <Filter>Source Files\Engine\Objects\SkinnedMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Objects\Sprite.h">
+      <Filter>Source Files\Engine\Objects\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Objects\StaticMesh.h">
+      <Filter>Source Files\Engine\Objects\StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Framebuffer.h">
+      <Filter>Source Files\Engine\Systems\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Framework.h">
+      <Filter>Source Files\Engine\Systems\FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Rasterizer.h">
+      <Filter>Source Files\Engine\Systems\Rasterizer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Blender.h">
+      <Filter>Source Files\Engine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\HighResolutionTimer.h">
+      <Filter>Source Files\Engine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Imgui.h">
+      <Filter>Source Files\Engine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Misc.h">
+      <Filter>Source Files\Engine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Objects\ModelResource.h">
+      <Filter>Source Files\Engine\Objects\ModelResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Objects\Model.h">
+      <Filter>Source Files\Engine\Objects\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\imconfig.h">
+      <Filter>External\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\imgui.h">
+      <Filter>External\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\imgui_internal.h">
+      <Filter>External\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\imstb_rectpack.h">
+      <Filter>External\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\imstb_textedit.h">
+      <Filter>External\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\imstb_truetype.h">
+      <Filter>External\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Texture.h">
+      <Filter>Source Files\Engine\Systems\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Shader.h">
+      <Filter>Source Files\Engine\Systems\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\LambertShader.h">
+      <Filter>Source Files\Engine\Systems\Shader\Lambert</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Graphics.h">
+      <Filter>Source Files\Engine\Systems\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\ImGuiRenderer.h">
+      <Filter>Source Files\Engine\Systems\Graphics\ImGuiRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\DebugRenderer.h">
+      <Filter>Source Files\Engine\Systems\Graphics\DebugRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\LineRenderer.h">
+      <Filter>Source Files\Engine\Systems\Graphics\LineRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\CameraController.h">
+      <Filter>Source Files\Engine\Systems\Camera\CameraController</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Scene.h">
+      <Filter>Source Files\Engine\Systems\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\RenderContext.h">
+      <Filter>Source Files\Engine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\SceneManager.h">
+      <Filter>Source Files\Engine\Systems\Scene\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Camera.h">
+      <Filter>Source Files\Engine\Systems\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Input.h">
+      <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Mouse.h">
+      <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\GamePad.h">
+      <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\AI\Telegram.h">
+      <Filter>Source Files\Engine\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\AI\MetaAI.h">
+      <Filter>Source Files\Engine\AI\MetaAI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Character.h">
+      <Filter>Source Files\Engine\Systems\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Collision.h">
+      <Filter>Source Files\Engine\Systems\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\CharacterManager.h">
+      <Filter>Source Files\Engine\Systems\Character\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Stage.h">
+      <Filter>Source Files\Engine\Systems\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\StageManager.h">
+      <Filter>Source Files\Engine\Systems\Stage\StageManeger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scene\SceneLoading.h">
+      <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Logger.h">
+      <Filter>Source Files\Engine\Systems\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Math.h">
+      <Filter>Source Files\Engine\Systems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\StateMachine.h">
+      <Filter>Source Files\Engine\Systems\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\StateBase.h">
+      <Filter>Source Files\Engine\Systems\StateMachine\StateBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\PlayerBase.h">
+      <Filter>Source Files\Engine\Systems\Character\PlayerBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\EnemyBase.h">
+      <Filter>Source Files\Engine\Systems\Character\EnemyBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scene\SceneGame.h">
+      <Filter>Source Files\Game\Scenes\SceneGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\ResourceManager.h">
+      <Filter>Source Files\Engine\Systems\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\Player.h">
+      <Filter>Source Files\Game\Characters\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\DerivedPlayerState.h">
+      <Filter>Source Files\Game\Characters\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\WireframeLambert.h">
+      <Filter>Source Files\Engine\Systems\Shader\Wireframe</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\ShaderManager.h">
+      <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Stages\StageMain.h">
+      <Filter>Source Files\Game\Stages\StageMain %28サンプル%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Object.h">
+      <Filter>Source Files\Engine\Systems\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\NoTextureShader.h">
+      <Filter>Source Files\Engine\Systems\Shader\NoTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\DungeonMake.h">
+      <Filter>Source Files\Engine\Systems\DungeonMake</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\AI\HeuristicSearch.h">
+      <Filter>Source Files\Engine\AI\Aster\HeuristicSearch</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\AI\Edge.h">
+      <Filter>Source Files\Engine\AI\Aster\Edge</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\AI\Node.h">
+      <Filter>Source Files\Engine\AI\Aster\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\RogueLikeStage.h">
+      <Filter>Source Files\Engine\Systems\Stage\RogueLikeStage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\DerivedEnemyState.h">
+      <Filter>Source Files\Game\Characters\Enemis</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\geometric_primitive.hlsli">
+      <Filter>HLSL\geometric_primitive</Filter>
+    </None>
+    <None Include="Shaders\skinned_mesh.hlsli">
+      <Filter>HLSL\skinned_mesh</Filter>
+    </None>
+    <None Include="Shaders\sprite.hlsli">
+      <Filter>HLSL\sprite</Filter>
+    </None>
+    <None Include="Shaders\sprite_batch.hlsli">
+      <Filter>HLSL\sprite_batch</Filter>
+    </None>
+    <None Include="Shaders\static_mesh.hlsli">
+      <Filter>HLSL\static_mesh</Filter>
+    </None>
+    <None Include="Shaders\ImGui.hlsli">
+      <Filter>HLSL\ImguiRenderer</Filter>
+    </None>
+    <None Include="Shaders\LineRender.hlsli">
+      <Filter>HLSL\LineRenderer</Filter>
+    </None>
+    <None Include="Shaders\DebugRender.hlsli">
+      <Filter>HLSL\DebugRenderer</Filter>
+    </None>
+    <None Include="Shaders\lambert.hlsli">
+      <Filter>HLSL\Lambert</Filter>
+    </None>
+    <None Include="Shaders\NoTexture.hlsli">
+      <Filter>HLSL\NoTexture</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\geometric_primitive_ps.hlsl">
+      <Filter>HLSL\geometric_primitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\geometric_primitive_vs.hlsl">
+      <Filter>HLSL\geometric_primitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\skinned_mesh_ps.hlsl">
+      <Filter>HLSL\skinned_mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\skinned_mesh_vs.hlsl">
+      <Filter>HLSL\skinned_mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\sprite_ps.hlsl">
+      <Filter>HLSL\sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\sprite_vs.hlsl">
+      <Filter>HLSL\sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\sprite_batch_ps.hlsl">
+      <Filter>HLSL\sprite_batch</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\sprite_batch_vs.hlsl">
+      <Filter>HLSL\sprite_batch</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\static_mesh_ps.hlsl">
+      <Filter>HLSL\static_mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\static_mesh_vs.hlsl">
+      <Filter>HLSL\static_mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\ImGui_ps.hlsl">
+      <Filter>HLSL\ImguiRenderer</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\ImGui_vs.hlsl">
+      <Filter>HLSL\ImguiRenderer</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\LineRender_ps.hlsl">
+      <Filter>HLSL\LineRenderer</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\LineRender_vs.hlsl">
+      <Filter>HLSL\LineRenderer</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\DebugRender_ps.hlsl">
+      <Filter>HLSL\DebugRenderer</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\DebugRender_vs.hlsl">
+      <Filter>HLSL\DebugRenderer</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\lambert_ps.hlsl">
+      <Filter>HLSL\Lambert</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\lambert_vs.hlsl">
+      <Filter>HLSL\Lambert</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\NoTexture_vs.hlsl">
+      <Filter>HLSL\NoTexture</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\NoTexture_ps.hlsl">
+      <Filter>HLSL\NoTexture</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
