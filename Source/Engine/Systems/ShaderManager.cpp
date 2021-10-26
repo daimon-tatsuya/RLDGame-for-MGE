@@ -1,6 +1,11 @@
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/ShaderManager.h"
 
+ShaderManager::~ShaderManager()
+{
+	shaders.clear();
+}
+
 void ShaderManager::AddShader(ShaderName shader_name, std::shared_ptr<Shader> shader)
 {
 	//ƒ‚ƒfƒ‹ŒŸõ

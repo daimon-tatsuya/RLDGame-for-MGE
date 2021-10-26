@@ -6,7 +6,10 @@ class SceneManager
 {
 private:
 	SceneManager() {}
-	~SceneManager() {}
+	~SceneManager()
+	{
+		delete current_scene;
+	}
 
 public:
 	// 唯一のインスタンス取得

@@ -9,17 +9,13 @@ void EnemyBase::Destroy()
 	CharacterManager::Instance().Remove(this);
 }
 
-void EnemyBase::DrawDebugPrimitive()
-{
-	DebugRenderer* debugRenderer = Graphics::Instance().GetDebugRenderer();
-
-	// 衝突判定用デバッグ球を描画
-	debugRenderer->DrawSphere(position, radius, DirectX::XMFLOAT4(0, 0, 0, 1));
-}
-
-void EnemyBase::DrawDebugGUI()
-{
-}
+//void EnemyBase::DrawDebugPrimitive()
+//{
+//	DebugRenderer* debugRenderer = Graphics::Instance().GetDebugRenderer();
+//
+//	// 衝突判定用デバッグ球を描画
+//	debugRenderer->DrawSphere(position, radius, DirectX::XMFLOAT4(0, 0, 0, 1));
+//}
 
 void EnemyBase::CollisionEnemyToEnemy()
 {
@@ -47,11 +43,4 @@ void EnemyBase::CollisionEnemyToEnemy()
 			this->SetPosition(out_enemy1_position);
 		}
 	}
-}
-
-bool EnemyBase::OnMessage(const Telegram& msg)
-{
-	//Todo　メタAIからの受信処理
-
-	return false;
 }

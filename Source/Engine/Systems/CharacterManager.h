@@ -9,7 +9,7 @@ class CharacterManager
 {
 private:
 	CharacterManager() {}
-	~CharacterManager() {}
+	~CharacterManager();
 
 	// キャラクター同士の衝突処理
 	void CollisionCharacterToCharacter();
@@ -57,6 +57,7 @@ public:
 
 	//IDからキャラクターを取得
 	Character* GetCharacterFromId(int id);
+
 private:
 	std::vector<Character*>	 characteres;
 	std::vector<Character*>	 removes;

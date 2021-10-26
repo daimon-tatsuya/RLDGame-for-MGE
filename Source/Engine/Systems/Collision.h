@@ -9,7 +9,7 @@ struct HitResult
 	DirectX::XMFLOAT3		normal = { 0, 0, 0 };	// 衝突したポリゴンの法線ベクトル
 	DirectX::XMFLOAT3		rotation = { 0, 0, 0 };	// 回転量
 	float								distance = 0.0f; 		// レイの始点から交点までの距離
-	int								material_index = -1; 	// 衝突したポリゴンのマテリアル番号
+	int									material_index = -1; 	// 衝突したポリゴンのマテリアル番号
 };
 
 class Collision

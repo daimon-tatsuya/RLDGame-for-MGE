@@ -10,8 +10,8 @@ class RogueLikeStage : public Stage
 {
 private:
 public:
-	RogueLikeStage(RogueLikeDungeon& rogue_like_dungeon);
-	virtual ~RogueLikeStage();
+	 RogueLikeStage(RogueLikeDungeon& rogue_like_dungeon);
+	 ~RogueLikeStage();
 
 	// çXêVèàóù
 	void Update(float elapsedTime);
@@ -36,8 +36,7 @@ public:
 
 private:
 protected:
-	std::vector <Stage*> stage_chip;
-	Stage* st[MapSize] = {};
+	std::vector <Stage> stage_chip;
 	RogueLikeDungeon  db_rogue_like_dungeon;
 public:
 };

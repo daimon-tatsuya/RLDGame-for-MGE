@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "Engine/Systems/Scene.h"
 #include "Engine/Systems/CameraController.h"
 #include "Engine/Systems/DungeonMake.h"
@@ -22,10 +23,13 @@ public:
 private:
 
 public:
+	std::unique_ptr<Player>   player = nullptr;
+	std::unique_ptr<CameraController> camera_controller = nullptr;
 
-	Player* player = nullptr;
-	CameraController* camera_controller = nullptr;
+	//CameraController* camera_controller = nullptr;
+	//Player* player = nullptr;
 
+	//ïKóvÇ»ÇÁégÇ§ÇÃÇ≈è¡Ç≥Ç»Ç¢
 	//float	timer = 0.0f;
 	//int		counter = 0;
 	//char	message[32] = { 0 };

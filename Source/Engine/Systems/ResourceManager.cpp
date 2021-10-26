@@ -1,6 +1,11 @@
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/ResourceManager.h"
 
+ResourceManager::~ResourceManager()
+{
+	models.clear();
+}
+
 std::shared_ptr<ModelResource> ResourceManager::LoadModelResource(const char* filename)
 {
 	//ƒ‚ƒfƒ‹ŒŸõ

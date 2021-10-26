@@ -1,6 +1,8 @@
 #pragma once
 #include "Game/Characters/Player.h"
 #include "Engine/Systems/StateBase.h"
+//書き方
+/*
 class ParentState :
 	public HierarchicalStateBase
 {
@@ -36,3 +38,4 @@ public:
 	// ステートから出ていくときのメソッド
 	void Exit()override;
 };
+*/

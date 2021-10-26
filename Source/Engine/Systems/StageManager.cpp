@@ -1,9 +1,14 @@
 #include "Engine/Systems/StageManager.h"
 
+StageManager::~StageManager()
+{
+	this->Clear();
+}
+
 // 更新処理
 void StageManager::Update(float elapsedTime)
 {
-	for (Stage* stage : stages)
+	for (auto& stage : stages)
 	{
 		stage->Update(elapsedTime);
 	}
@@ -12,7 +17,7 @@ void StageManager::Update(float elapsedTime)
 // 描画処理
 void StageManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader)
 {
-	for (Stage* stage : stages)
+	for (auto& stage : stages)
 	{
 		stage->Render(context, shader);
 	}
@@ -27,7 +32,7 @@ void StageManager::Register(Stage* stage)
 // ステージ全削除
 void StageManager::Clear()
 {
-	for (Stage* stage : stages)
+	for (auto& stage : stages)
 	{
 		delete stage;
 	}
@@ -40,7 +45,7 @@ bool StageManager::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
 	bool result = false;
 	hit.distance = FLT_MAX;
 
-	for (Stage* stage : stages)
+	for (auto& stage : stages)
 	{
 		HitResult tmp;
 		if (stage->RayCast(start, end, tmp))
@@ -58,7 +63,7 @@ bool StageManager::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
 
 void StageManager::DrawDebugGUI()
 {
-	for (Stage* stage : stages)
+	for (auto& stage : stages)
 	{
 		stage->DrawDebugGUI();
 	}

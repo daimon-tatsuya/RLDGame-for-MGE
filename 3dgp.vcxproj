@@ -247,6 +247,7 @@
     <ClCompile Include="Source\Engine\Systems\WireframeLambert.cpp" />
     <ClCompile Include="Source\Game\Characters\DerivedEnemyState.cpp" />
     <ClCompile Include="Source\Game\Characters\DerivedPlayerState.cpp" />
+    <ClCompile Include="Source\Game\Characters\EnemySnake.cpp" />
     <ClCompile Include="Source\Game\Characters\Player.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneGame.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneLoading.cpp" />
@@ -313,6 +314,7 @@
     <ClInclude Include="Source\Engine\Systems\WireframeLambert.h" />
     <ClInclude Include="Source\Game\Characters\DerivedEnemyState.h" />
     <ClInclude Include="Source\Game\Characters\DerivedPlayerState.h" />
+    <ClInclude Include="Source\Game\Characters\EnemySnake.h" />
     <ClInclude Include="Source\Game\Characters\Player.h" />
     <ClInclude Include="Source\Game\Scene\SceneGame.h" />
     <ClInclude Include="Source\Game\Scene\SceneLoading.h" />

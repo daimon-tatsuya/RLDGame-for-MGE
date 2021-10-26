@@ -49,15 +49,6 @@
     <Filter Include="Source Files\Engine\Systems">
       <UniqueIdentifier>{aaebcfaf-a2cf-490b-904e-925ef68293d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\FrameBuffer">
-      <UniqueIdentifier>{c90690ce-3a1b-48df-b812-213fa22b4e62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\FrameWork">
-      <UniqueIdentifier>{3f50b83f-a4ff-467d-b356-2243f3db2a9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\Rasterizer">
-      <UniqueIdentifier>{cce47734-c4ad-4638-b0dc-a719d10fd904}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Graphics">
       <UniqueIdentifier>{2573b810-52de-4e9c-aaa9-7cc015a86568}</UniqueIdentifier>
     </Filter>
@@ -115,9 +106,6 @@
     <Filter Include="Source Files\Engine\Systems\Character">
       <UniqueIdentifier>{944d8e67-5793-4f0c-bf15-279933f07ceb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Character\Manager">
-      <UniqueIdentifier>{2d38a632-97a5-4cee-83aa-5abc48a96ded}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Stage">
       <UniqueIdentifier>{c4c6f021-bf24-4096-af6c-f9cd5be4f210}</UniqueIdentifier>
     </Filter>
@@ -133,23 +121,11 @@
     <Filter Include="Source Files\Game\Characters">
       <UniqueIdentifier>{cec9c0ab-b640-4219-beab-8d8fec05a925}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Logger">
-      <UniqueIdentifier>{bd3ff42b-eadc-45b9-9313-dbc6f22e2959}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Stages">
-      <UniqueIdentifier>{1c4e1277-6c37-43aa-b949-82bf0cea9c39}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Math">
       <UniqueIdentifier>{5a259069-7fc2-4673-881e-08e4686fc037}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\StateMachine">
-      <UniqueIdentifier>{e2eea2b4-c833-4bf3-886e-b1efb4362056}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\BehaviorTree">
       <UniqueIdentifier>{78c0efff-7ff8-4485-9f90-198c6b3fa9e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\StateMachine\StateBase">
-      <UniqueIdentifier>{50b0b10c-fe8b-48d2-b3b4-4102e11d2495}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Game\Scenes\SceneGame">
       <UniqueIdentifier>{e73a9ebd-b7a2-4e0c-b3c9-884a00e62933}</UniqueIdentifier>
@@ -199,9 +175,6 @@
     <Filter Include="Source Files\Engine\AI\Aster\Node">
       <UniqueIdentifier>{dfd9d9d3-5c23-4c6c-ae07-805cfcb44721}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Stages\StageMain %28サンプル%29">
-      <UniqueIdentifier>{20be4b45-22cf-47d2-9cc2-58fe5382a4d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Stage\RogueLikeStage">
       <UniqueIdentifier>{e6050c99-73e7-4c39-a0dd-5b608bdca43f}</UniqueIdentifier>
     </Filter>
@@ -214,23 +187,65 @@
     <Filter Include="Source Files\Engine\Objects">
       <UniqueIdentifier>{2e576be6-555c-4764-b57a-629d1d0ec899}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Objects\Sprite">
-      <UniqueIdentifier>{f9dacbfb-171f-4cb6-ae89-368ad3c08061}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Objects\GeometricPrimitive">
-      <UniqueIdentifier>{51804cf8-b0a8-474d-a265-06939923c579}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Objects\SkinnedMesh">
-      <UniqueIdentifier>{08e72cd9-82ea-4e85-a873-591782bb301e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Objects\Model">
       <UniqueIdentifier>{7dec8eb9-05e3-4c81-9649-71a3a7515621}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Objects\ModelResource">
       <UniqueIdentifier>{db1451e0-7b59-4844-ad5f-d2ad259611dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Objects\StaticMesh">
+    <Filter Include="Source Files\Engine\Systems\StateMachine">
+      <UniqueIdentifier>{e2eea2b4-c833-4bf3-886e-b1efb4362056}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\StateMachine\StateBase">
+      <UniqueIdentifier>{50b0b10c-fe8b-48d2-b3b4-4102e11d2495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\FrameWork">
+      <UniqueIdentifier>{3f50b83f-a4ff-467d-b356-2243f3db2a9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing">
+      <UniqueIdentifier>{2634d080-ac7c-447e-8fb1-001fa808de41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine">
+      <UniqueIdentifier>{cb6d3581-d2f5-4ca6-bde4-855d2bcadfa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Systems">
+      <UniqueIdentifier>{d87423c2-051a-4f77-b517-df85aa40dadd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Systems\Logger">
+      <UniqueIdentifier>{bd3ff42b-eadc-45b9-9313-dbc6f22e2959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Systems\FrameBuffer">
+      <UniqueIdentifier>{c90690ce-3a1b-48df-b812-213fa22b4e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Systems\Rasterizer">
+      <UniqueIdentifier>{cce47734-c4ad-4638-b0dc-a719d10fd904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Objects">
+      <UniqueIdentifier>{bac9de6e-19db-480d-b7ce-134ab5c3c398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Objects\GeometricPrimitive">
+      <UniqueIdentifier>{51804cf8-b0a8-474d-a265-06939923c579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Objects\SkinnedMesh">
+      <UniqueIdentifier>{08e72cd9-82ea-4e85-a873-591782bb301e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Objects\Sprite">
+      <UniqueIdentifier>{f9dacbfb-171f-4cb6-ae89-368ad3c08061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Engine\Objects\StaticMesh">
       <UniqueIdentifier>{cb723e18-78bc-4cc6-98b7-aecbd0d2b9cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Game">
+      <UniqueIdentifier>{67655e2d-8f6b-40b1-97e9-17f74ebd2afd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Game\Stages">
+      <UniqueIdentifier>{1c4e1277-6c37-43aa-b949-82bf0cea9c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NotUsing\Game\Stages\StageMain %28サンプル%29">
+      <UniqueIdentifier>{20be4b45-22cf-47d2-9cc2-58fe5382a4d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Character\CharacterManager">
+      <UniqueIdentifier>{2d38a632-97a5-4cee-83aa-5abc48a96ded}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -238,25 +253,25 @@
       <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Objects\GeometricPrimitive.cpp">
-      <Filter>Source Files\Engine\Objects\GeometricPrimitive</Filter>
+      <Filter>Source Files\NotUsing\Engine\Objects\GeometricPrimitive</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Objects\SkinnedMesh.cpp">
-      <Filter>Source Files\Engine\Objects\SkinnedMesh</Filter>
+      <Filter>Source Files\NotUsing\Engine\Objects\SkinnedMesh</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Objects\Sprite.cpp">
-      <Filter>Source Files\Engine\Objects\Sprite</Filter>
+      <Filter>Source Files\NotUsing\Engine\Objects\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Objects\StaticMesh.cpp">
-      <Filter>Source Files\Engine\Objects\StaticMesh</Filter>
+      <Filter>Source Files\NotUsing\Engine\Objects\StaticMesh</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Framebuffer.cpp">
-      <Filter>Source Files\Engine\Systems\FrameBuffer</Filter>
+      <Filter>Source Files\NotUsing\Engine\Systems\FrameBuffer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Framework.cpp">
       <Filter>Source Files\Engine\Systems\FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Rasterizer.cpp">
-      <Filter>Source Files\Engine\Systems\Rasterizer</Filter>
+      <Filter>Source Files\NotUsing\Engine\Systems\Rasterizer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Main.cpp">
       <Filter>Source Files\Engine\Systems</Filter>
@@ -328,7 +343,7 @@
       <Filter>Source Files\Engine\Systems\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\CharacterManager.cpp">
-      <Filter>Source Files\Engine\Systems\Character\Manager</Filter>
+      <Filter>Source Files\Engine\Systems\Character\CharacterManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\StageManager.cpp">
       <Filter>Source Files\Engine\Systems\Stage\StageManeger</Filter>
@@ -337,7 +352,7 @@
       <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Logger.cpp">
-      <Filter>Source Files\Engine\Systems\Logger</Filter>
+      <Filter>Source Files\NotUsing\Engine\Systems\Logger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Math.cpp">
       <Filter>Source Files\Engine\Systems\Math</Filter>
@@ -373,7 +388,7 @@
       <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Stages\StageMain.cpp">
-      <Filter>Source Files\Game\Stages\StageMain %28サンプル%29</Filter>
+      <Filter>Source Files\NotUsing\Game\Stages\StageMain %28サンプル%29</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Object.cpp">
       <Filter>Source Files\Engine\Systems\Object</Filter>
@@ -399,31 +414,34 @@
     <ClCompile Include="Source\Game\Characters\DerivedEnemyState.cpp">
       <Filter>Source Files\Game\Characters\Enemis</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Characters\EnemySnake.cpp">
+      <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Scene\SceneTitle.h">
       <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Objects\GeometricPrimitive.h">
-      <Filter>Source Files\Engine\Objects\GeometricPrimitive</Filter>
+      <Filter>Source Files\NotUsing\Engine\Objects\GeometricPrimitive</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Objects\SkinnedMesh.h">
-      <Filter>Source Files\Engine\Objects\SkinnedMesh</Filter>
+      <Filter>Source Files\NotUsing\Engine\Objects\SkinnedMesh</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Objects\Sprite.h">
-      <Filter>Source Files\Engine\Objects\Sprite</Filter>
+      <Filter>Source Files\NotUsing\Engine\Objects\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Objects\StaticMesh.h">
-      <Filter>Source Files\Engine\Objects\StaticMesh</Filter>
+      <Filter>Source Files\NotUsing\Engine\Objects\StaticMesh</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Framebuffer.h">
-      <Filter>Source Files\Engine\Systems\FrameBuffer</Filter>
+      <Filter>Source Files\NotUsing\Engine\Systems\FrameBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Framework.h">
       <Filter>Source Files\Engine\Systems\FrameWork</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Rasterizer.h">
-      <Filter>Source Files\Engine\Systems\Rasterizer</Filter>
+      <Filter>Source Files\NotUsing\Engine\Systems\Rasterizer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Blender.h">
       <Filter>Source Files\Engine\Systems</Filter>
@@ -519,7 +537,7 @@
       <Filter>Source Files\Engine\Systems\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\CharacterManager.h">
-      <Filter>Source Files\Engine\Systems\Character\Manager</Filter>
+      <Filter>Source Files\Engine\Systems\Character\CharacterManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Stage.h">
       <Filter>Source Files\Engine\Systems\Stage</Filter>
@@ -531,7 +549,7 @@
       <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Logger.h">
-      <Filter>Source Files\Engine\Systems\Logger</Filter>
+      <Filter>Source Files\NotUsing\Engine\Systems\Logger</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Math.h">
       <Filter>Source Files\Engine\Systems\Math</Filter>
@@ -567,7 +585,7 @@
       <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Stages\StageMain.h">
-      <Filter>Source Files\Game\Stages\StageMain %28サンプル%29</Filter>
+      <Filter>Source Files\NotUsing\Game\Stages\StageMain %28サンプル%29</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Object.h">
       <Filter>Source Files\Engine\Systems\Object</Filter>
@@ -592,6 +610,9 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Characters\DerivedEnemyState.h">
       <Filter>Source Files\Game\Characters\Enemis</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\EnemySnake.h">
+      <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

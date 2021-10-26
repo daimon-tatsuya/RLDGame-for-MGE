@@ -156,31 +156,7 @@ bool PlayerBase::InputJump(float elapsedTime)
 	return false;
 }
 
-bool PlayerBase::OnMessage(const Telegram& msg)
-{
-	return false;
-}
-
 bool PlayerBase::InputAttack()
 {
 	return false;
-}
-void PlayerBase::DrawDebugGUI()
-{
-}
-
-void PlayerBase::DrawDebugPrimitive()
-{
-}
-
-void PlayerBase::OnDamaged()
-{
-}
-
-void PlayerBase::OnDead()
-{
-}
-
-void PlayerBase::OnLanding()
-{
 }

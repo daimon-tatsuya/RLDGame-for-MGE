@@ -1,3 +1,4 @@
+#include <crtdbg.h>
 #include <stdlib.h>
 #include <memory>
 
@@ -18,6 +19,7 @@ Framework::Framework(HWND hwnd)
 {
 	//// シーン初期化
 	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
+//	_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
 }
 
 void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
@@ -27,6 +29,7 @@ void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
 
 	// シーン更新処理
 	SceneManager::Instance().Update(elapsedTime);
+//	_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
 }
 
 void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/)
@@ -48,6 +51,7 @@ void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/)
 
 	// バックバッファに描画した画を画面に表示する。
 	graphics.GetSwapChain()->Present(syncInterval, 0);
+//	_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
 }
 
 int Framework::Run()
@@ -74,7 +78,7 @@ int Framework::Run()
 			Render(timer.TimeInterval());
 		}
 	}
-
+	//_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
 	return static_cast<int>(msg.wParam);
 }
 

@@ -14,15 +14,15 @@ public:
 
 	struct Node
 	{
-		const char* name;
-		Node* parent;
-		DirectX::XMFLOAT3	scale;
-		DirectX::XMFLOAT4	rotate;
-		DirectX::XMFLOAT3	translate;
+		const char*						name;
+		Node*							parent;
+		DirectX::XMFLOAT3		scale;
+		DirectX::XMFLOAT4		rotate;
+		DirectX::XMFLOAT3		translate;
 		DirectX::XMFLOAT4X4	local_transform;
 		DirectX::XMFLOAT4X4	world_transform;
 
-		std::vector<Node*>	children;
+		std::vector<Node*>			children;
 	};
 
 	// アニメーション
@@ -46,9 +46,9 @@ public:
 
 private:
 	std::shared_ptr<ModelResource>	resource;
-	std::vector<Node>				nodes;
-	int								current_animation = -1;
-	float							current_seconds = 0.0f;
-	bool							loop_animation = false;
-	bool							end_animation = false;
+	std::vector<Node>						nodes;
+	int												current_animation = -1;
+	float											current_seconds = 0.0f;
+	bool											loop_animation = false;
+	bool											end_animation = false;
 };

@@ -1,26 +1,16 @@
 #pragma once
 #include "Engine/Systems/Character.h"
-
+//Todo　コメント
 //敵クラスの基底クラス
 class EnemyBase :public Character
 {
 private:
 
-protected:
-
-	// 着地した時に呼ばれる
-	virtual void OnLanding() {}
-
-	// ダメージを受けた時に呼ばれる
-	virtual void OnDamaged() {}
-
-	// 死亡した時に呼ばれる
-	virtual void OnDead() {}
-
 public:
 
 	EnemyBase() {};
-
+	// 例えデストラクタが空でも
+	// virtual なデストラクタは明示的に定義する
 	~EnemyBase()override {};
 
 	// 更新処理
@@ -33,10 +23,7 @@ public:
 	void Destroy();
 
 	// デバッグプリミティブ描画
-	virtual void DrawDebugPrimitive() override;
-
-	// デバッグエネミー情報表示
-	virtual void DrawDebugGUI()override;
+	//virtual void DrawDebugPrimitive() override;
 
 	// 攻撃フラグ取得
 	bool	GetAttackFlg() { return attack_flg; }
@@ -47,8 +34,6 @@ public:
 	//敵同士の交差判定
 	void CollisionEnemyToEnemy();
 
-	//メッセージ受信処理
-	virtual bool OnMessage(const Telegram& msg) override;
 
 private:
 

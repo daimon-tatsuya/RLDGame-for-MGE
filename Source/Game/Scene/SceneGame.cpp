@@ -23,18 +23,12 @@ SceneGame::SceneGame()
 
 SceneGame::~SceneGame()
 {
+
 	// キャラクター終了化
 	CharacterManager::Instance().Clear();
-
-	// カメラコントローラー終了化
-	if (camera_controller != nullptr)
-	{
-		delete camera_controller;
-		camera_controller = nullptr;
-	}
-
 	// ステージ終了化
 	StageManager::Instance().Clear();
+
 }
 
 void SceneGame::Initialize()
@@ -55,24 +49,26 @@ void SceneGame::Initialize()
 	);
 
 	// カメラコントローラー初期化
-	camera_controller = new CameraController();
+	camera_controller = std::make_unique<CameraController>();
+
 
 	//ダンジョン生成初期化
 	RogueLikeDungeon rogue_like_dungeon;
 	struct DungeonMapRole dungeon_map_role;
 	rogue_like_dungeon.MapReMake(&dungeon_map_role);
+
 	// ステージ初期化
 	StageManager& stage_manager = StageManager::Instance();
-	RogueLikeStage* rogue_like_stage= new RogueLikeStage(rogue_like_dungeon);
-	//StageMain* stage_main = new StageMain();
+	RogueLikeStage* rogue_like_stage = new RogueLikeStage(rogue_like_dungeon);
 	stage_manager.Register(rogue_like_stage);
 
 	// キャラクター生成処理
 	CharacterManager& character_manager = CharacterManager::Instance();
 	{
 		// プレイヤー
-		player = new Player(rogue_like_dungeon);
-		character_manager.Register(player, static_cast<int>(Meta::Identity::Player));
+		player = std::make_unique<Player>(rogue_like_dungeon);
+		//player = new Player();
+		character_manager.Register(player.get(), static_cast<int>(Meta::Identity::Player));
 
 		//// エネミー初期化
 		//for (int i = 0; i < 3; ++i)
@@ -82,6 +78,7 @@ void SceneGame::Initialize()
 		//	characterManager.Register(slime);
 		//}
 	}
+
 }
 
 void SceneGame::Finalize()
@@ -95,6 +92,8 @@ void SceneGame::Update(float elapsed_time)
 
 	// ステージ更新処理
 	StageManager::Instance().Update(elapsed_time);
+
+
 
 	// キャラクター更新処理
 	CharacterManager::Instance().Update(elapsed_time);

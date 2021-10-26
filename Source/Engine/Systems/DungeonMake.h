@@ -57,7 +57,7 @@ class RogueLikeMap
 public:
 	RogueLikeMap(const size_t var_) :map_data(var_) {}
 	RogueLikeMap() = default;
-	//ToDo enum classを作る
+	//Todo enum classを作る
 	size_t map_data = 1;// 0:壁、1:床、2:プレイヤー、3:敵, 4 : アイテム, 5 : 罠
 };
 

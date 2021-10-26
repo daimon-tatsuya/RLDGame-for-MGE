@@ -8,37 +8,38 @@
 
 Player::Player(RogueLikeDungeon& rogue_like_dungeon)
 {
-	model = new Model("Assets/FBX/Animals/BlackWidow.bin");
+	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
 	scale.x = scale.y = scale.z = 1.f;
 	position.y = 15.f;
 	//初期ステート
 
 	//position.x = mob_role.position.x;// *Cell_Size;
 	//position.z = mob_role.position.y;// *Cell_Size;
-int a = 0,b=0;
+
 	//オブジェクト配置
 	for (int y = 0; y < MapSize_Y; y++)
 	{
-		a++;
 		for (int x = 0; x < MapSize_X; x++)
 		{
-			b++;
 			if (rogue_like_dungeon.map_role[y][x].map_data == 2)
 			{
 				position = DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size);
 			}
 		}
-		b = 0;
 	}
-	if (position.x == 0 || position.z == 0)
-	{
-		 b = 0;
-	}
+}
+
+Player::Player()
+{
+	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
+	scale.x = scale.y = scale.z = 1.f;
+	position = DirectX::XMFLOAT3(0, 3, 0);
+
 }
 
 Player::~Player()
 {
-	delete model;
+	//delete model;
 }
 
 void Player::Update(float elapsedTime)
@@ -74,7 +75,7 @@ void Player::Update(float elapsedTime)
 
 void Player::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
 {
-	shader->Draw(dc, model);
+	shader->Draw(dc, model.get());
 }
 
 void Player::DrawDebugGUI()

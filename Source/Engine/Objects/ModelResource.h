@@ -17,7 +17,7 @@ public:
 	struct Node
 	{
 		std::string						name;
-		int								parent_index;
+		int									parent_index;
 		DirectX::XMFLOAT3		scale;			// ローカルの変換行列?
 		DirectX::XMFLOAT4		rotate;
 		DirectX::XMFLOAT3		translate;
@@ -43,7 +43,7 @@ public:
 		unsigned int		start_index = 0;
 		unsigned int		index_count = 0;
 		unsigned int		material_index = 0;
-		Material* material = nullptr;	// モデルを読み込んだ時にマテリアルを関連ずける
+		Material*			material = nullptr;	// モデルを読み込んだ時にマテリアルを関連ずける
 
 		template<class Archive>
 		void serialize(Archive& archive, int version);
@@ -56,7 +56,7 @@ public:
 		DirectX::XMFLOAT3		normal{};		// ローカル座標
 		DirectX::XMFLOAT2		texcoord{};		// UV coordinates
 		DirectX::XMFLOAT4		bone_weight = { 1.0f,0.0f,0.0f,0.0f };
-		DirectX::XMUINT4		bone_index = { 0,0,0,0 };
+		DirectX::XMUINT4			bone_index = { 0,0,0,0 };
 
 		template<class Archive>
 		void serialize(Archive& archive, int version);
@@ -67,12 +67,12 @@ public:
 		Microsoft::WRL::ComPtr<ID3D11Buffer>	vertex_buffer;	// シリアライズの対象外
 		Microsoft::WRL::ComPtr<ID3D11Buffer>	index_buffer;	// シリアライズの対象外
 
-		std::vector<Vertex>						vertices;
-		std::vector<UINT>						indices;
-		std::vector<Subset>						subsets;
-		std::string										name;
-		int												node_index;
-		std::vector<int>								node_indices;
+		std::vector<Vertex>								vertices;
+		std::vector<UINT>								indices;
+		std::vector<Subset>								subsets;
+		std::string											name;
+		int														node_index;
+		std::vector<int>									node_indices;
 		std::vector<DirectX::XMFLOAT4X4>		inverse_transforms;
 
 		template<class Archive>
@@ -99,9 +99,9 @@ public:
 	};
 	struct Animation
 	{
-		float									seconds_length;
+		float								seconds_length;
 		std::vector<Keyframe>		keyframes;
-		//	std::string						name;
+		//	std::string					name;
 		template<class Archive>
 		void serialize(Archive& archive, int version);
 	};
@@ -154,5 +154,5 @@ private:
 	std::vector<Mesh>			meshes;
 	std::vector<Animation>	animations;
 	int									root_motion_node_index = -1;
-	const char* ignore_root_motion_node_name;
+	const char*						ignore_root_motion_node_name;
 };

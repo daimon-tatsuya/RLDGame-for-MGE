@@ -8,7 +8,7 @@ class ResourceManager
 {
 private:
 	ResourceManager() {}
-	~ResourceManager() {}
+	~ResourceManager();
 public:
 	// 唯一のインスタンス取得
 	static ResourceManager& Instance()

@@ -2,6 +2,7 @@
 
 #include "Engine/Systems/Object.h"
 // キャラクター
+//Todo コメント
 class Character : public Object
 {
 private:
@@ -16,35 +17,6 @@ private:
 
 	// 水平移動更新処理
 	void UpdateHorizontalMove(float elapsedTime);
-
-public:
-	Character() {}
-	virtual ~Character() {}
-
-	// 半径を取得
-	float GetRadius() const { return radius; }
-
-	// 地面に接地しているか
-	bool IsGround() const { return is_ground; }
-
-	// 高さを取得
-	float GetHeight()const { return height; };
-
-	// 健康状態を設定
-	void SetHealth(const int health) { this->health = health; }
-
-	// 健康状態を取得
-	int GetHealth() const { return health; }
-
-	// 最大健康状態を取得
-	int GetMaxHealth() const { return max_health; }
-
-	// ダメージを与える
-	bool ApplyDamage(int damage, float invincible_time);
-
-	// 衝撃を与える
-	void AddImpulse(const DirectX::XMFLOAT3& impulse);
-
 protected:
 	// 着地した時に呼ばれる
 	virtual void OnLanding() {}
@@ -76,14 +48,41 @@ protected:
 	// 目標地点へ移動
 	//void MoveToTarget(float elapsed_time, float speed_rate);
 
+public:
+	Character() {}
+	// 例えデストラクタが空でも
+	// virtual なデストラクタは明示的に定義する
+	virtual ~Character() {}
+
+	// 地面に接地しているか
+	bool IsGround() const { return is_ground; }
+
+	// 健康状態を取得
+	int GetHealth() const { return health; }
+
+	// 健康状態を設定
+	void SetHealth(const int health) { this->health = health; }
+
+	// 最大健康状態を取得
+	int GetMaxHealth() const { return max_health; }
+
+	// 最大健康状態を取得
+	void SetMaxHealth() { this->max_health = max_health; }
+
+	// ダメージを与える
+	bool ApplyDamage(int damage, float invincible_time);
+
+	// 衝撃を与える
+	void AddImpulse(const DirectX::XMFLOAT3& impulse);
+
+
 private:
 
 public:
 
 protected:
 	DirectX::XMFLOAT3	velocity = { 0, 0, 0 };
-	float				radius = 0.5f;
-	float				height = 2.0f;
+
 	float				gravity = -1.0f;
 	float				gravity_cut_time = 0;//重力を無視するときに使う
 	bool				is_ground = false;

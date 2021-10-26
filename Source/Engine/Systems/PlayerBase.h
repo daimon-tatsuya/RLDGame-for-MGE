@@ -2,20 +2,23 @@
 #include "Engine/Systems/Shader.h"
 #include "Engine/Objects/Model.h"
 #include "Engine/Systems/Character.h"
-
+//Todo　コメント
 class PlayerBase : public Character
 {
 private:
 
-protected:
-	// 着地した時に呼ばれる
-	virtual void OnLanding() override;
+public:
 
-	// ダメージを受けた時に呼ばれる
-	virtual void OnDamaged() override;
+	PlayerBase() {};
+	// 例えデストラクタが空でも
+	// virtual なデストラクタは明示的に定義する
+	~PlayerBase()override {};
 
-	// 死亡した時に呼ばれる
-	virtual void OnDead() override;
+	// 更新処理
+	virtual void Update(float elapsedTime)override = 0;
+
+	// 描画処理
+	virtual void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)override = 0;
 
 	// スティック入力値から移動ベクトルを取得
 	DirectX::XMFLOAT3 GetMoveVec(const DirectX::XMFLOAT3& cameraRight, const DirectX::XMFLOAT3& cameraFront) const;
@@ -29,27 +32,9 @@ protected:
 	// 攻撃入力処理
 	bool InputAttack();
 
-public:
-	PlayerBase() {};
-	~PlayerBase()override {};
-
-	// 更新処理
-	virtual void Update(float elapsedTime)override = 0;
-
-	// 描画処理
-	virtual void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)override = 0;
-
 	// プレイヤーとエネミーとの衝突判定
 	void CollisionPlayerToEnemis();
 
-	// デバッグ用GUI描画
-	virtual void DrawDebugGUI()override;
-
-	// デバッグプリミティブ描画
-	virtual void DrawDebugPrimitive()override;
-
-	//メッセージ受信処理
-	virtual bool OnMessage(const Telegram& msg) override;
 private:
 
 	float				move_speed = 5.0f;

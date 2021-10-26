@@ -2,7 +2,7 @@
 #include "Engine/Systems/StageManager.h"
 #include "Engine/Systems/Math.h"
 
-// 行列更新処理
+
 void Object::UpdateTransform()
 {
 	// スケール行列を作成

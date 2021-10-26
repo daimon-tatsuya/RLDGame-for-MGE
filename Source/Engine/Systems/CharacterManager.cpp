@@ -2,10 +2,18 @@
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/Collision.h"
 #include "Engine/AI/MetaAI.h"
+
+
+CharacterManager::~CharacterManager()
+{
+	this->Clear();
+}
+
+
 // 更新処理
 void CharacterManager::Update(float elapsed_time)
 {
-	for (Character* character : characteres)
+	for (auto& character : characteres)
 	{
 		character->Update(elapsed_time);
 	}
@@ -13,7 +21,7 @@ void CharacterManager::Update(float elapsed_time)
 	// 破棄処理
 	//    characteresの範囲for文中でerase()すると不具合が発生してしまうため、
 	// 　更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
-	for (Character* character : removes)
+	for (auto& character : removes)
 	{
 		// std::vectorから要素を削除する場合はイテレーターで削除しなければならない
 		std::vector<Character*>::iterator it = std::find(characteres.begin(), characteres.end(), character);
@@ -35,7 +43,7 @@ void CharacterManager::Update(float elapsed_time)
 // 描画処理
 void CharacterManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader)
 {
-	for (Character* character : characteres)
+	for (auto& character : characteres)
 	{
 		character->Render(context, shader);
 	}
@@ -44,7 +52,7 @@ void CharacterManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shad
 // デバッグプリミティブ描画
 void CharacterManager::DrawDebugPrimitive()
 {
-	for (Character* character : characteres)
+	for (auto& character : characteres)
 	{
 		character->DrawDebugPrimitive();
 	}
@@ -53,7 +61,7 @@ void CharacterManager::DrawDebugPrimitive()
 // デバッグ用GUI描画
 void CharacterManager::DrawDebugGUI()
 {
-	for (Character* character : characteres)
+	for (auto& character : characteres)
 	{
 		character->DrawDebugGUI();
 	}
@@ -90,8 +98,12 @@ void CharacterManager::Register(Character* character, int character_type)
 // キャラクターの全削除
 void CharacterManager::Clear()
 {
-	for (Character* character : characteres)
+	for (auto& character : characteres)
 	{
+		if (character->GetId()==static_cast<int>(Meta::Identity::Player))
+		{
+			continue;
+		}
 		delete character;
 	}
 	characteres.clear();
@@ -115,7 +127,7 @@ void CharacterManager::Remove(Character* character)
 // IDからキャラクターを取得する
 Character* CharacterManager::GetCharacterFromId(int id)
 {
-	for (Character* character : characteres)
+	for (auto& character : characteres)
 	{
 		if (character->GetId() == id)
 			return character;

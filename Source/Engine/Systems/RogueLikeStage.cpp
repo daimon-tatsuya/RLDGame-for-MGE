@@ -26,9 +26,9 @@ void RogueLikeStage::Update(float elapsedTime)
 	for (auto& stage : stage_chip)
 	{
 		// オブジェクト行列を更新
-		stage->UpdateTransform();
+		stage.UpdateTransform();
 		// モデル行列更新
-		stage->GetModel()->UpdateTransform(stage->GetTransform());
+		stage.GetModel()->UpdateTransform(stage.GetTransform());
 	}
 }
 
@@ -36,7 +36,7 @@ void RogueLikeStage::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> sha
 {
 	for (auto& stage : stage_chip)
 	{
-		shader->Draw(dc, stage->GetModel());
+		shader->Draw(dc, stage.GetModel());
 	}
 }
 
@@ -45,7 +45,7 @@ bool RogueLikeStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFL
 	for (auto& stage : stage_chip)
 	{
 		//trueの時のHitResultを返す
-		if (Collision::IntersectRayToModel(start, end, stage->GetModel(), hit))
+		if (Collision::IntersectRayToModel(start, end, stage.GetModel(), hit))
 		{
 			return true;
 		}
@@ -103,17 +103,30 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 	{
 		for (int x = 0; x < MapSize_X; x++)
 		{
-			//map_dataが0の時、床を配置
-			if (map_role[y][x].map_data==0)
+			////map_dataが0の時、床を配置
+			//if (map_role[y][x].map_data==0)
+			//{
+			//	st[object_num] = new Stage("Assets/FBX/geometry/wall.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
+			//	stage_chip.push_back(st[object_num]);
+			//}
+
+			//else if (map_role[y][x].map_data > 0)
+			//{
+			//	st[object_num] = new Stage("Assets/FBX/geometry/floor.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
+			//	stage_chip.push_back(st[object_num]);
+			//}
+			//object_num++;
+			//map_dataが0の時、壁を配置
+			if (map_role[y][x].map_data == 0)
 			{
-				st[object_num] = new Stage("Assets/FBX/geometry/wall.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
-				stage_chip.push_back(st[object_num]);
+				Stage st("Assets/FBX/geometry/wall.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
+				stage_chip.push_back(st);
 			}
 
 			else if (map_role[y][x].map_data > 0)
 			{
-				st[object_num] = new Stage("Assets/FBX/geometry/floor.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
-				stage_chip.push_back(st[object_num]);
+				Stage st("Assets/FBX/geometry/floor.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
+				stage_chip.push_back(st);
 			}
 			object_num++;
 		}
@@ -122,9 +135,5 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 
 void RogueLikeStage::Clear()
 {
-	for (Stage* stage : stage_chip)
-	{
-		delete stage;
-	}
 	stage_chip.clear();
 }

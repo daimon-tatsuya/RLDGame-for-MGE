@@ -12,6 +12,7 @@ RogueLikeDungeon::RogueLikeDungeon()
 }
 RogueLikeDungeon::~RogueLikeDungeon()
 {
+	map_role.clear();
 }
 void RogueLikeDungeon::InitializeMapSize()
 {

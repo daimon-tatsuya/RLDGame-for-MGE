@@ -2,9 +2,9 @@
 
 #include <d3d11.h>
 #include <wrl.h>
-// テクスチャの生成
 
-#include "misc.h"
+
+#include "Engine/Systems/misc.h"
 //Todo　コンストラクタをcppに実装する
 class Blender
 {

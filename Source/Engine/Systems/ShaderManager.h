@@ -16,7 +16,7 @@ public:
 	//	return instance;
 	//}
 	ShaderManager() {}
-	~ShaderManager() {}
+	~ShaderManager();
 	enum class ShaderName : int
 	{
 		Lambert = 0,

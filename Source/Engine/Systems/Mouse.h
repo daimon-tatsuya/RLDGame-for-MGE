@@ -62,10 +62,10 @@ private:
 	MouseButton		button_state[2] = { 0 };
 	MouseButton		button_down = 0;
 	MouseButton		button_up = 0;
-	int				positionX[2];
-	int				positionY[2];
-	int				wheel[2];
-	int				screen_width = 0;
-	int				screen_height = 0;
-	HWND			hWnd = nullptr;
+	int						positionX[2];
+	int						positionY[2];
+	int						wheel[2];
+	int						screen_width = 0;
+	int						screen_height = 0;
+	HWND				hWnd = nullptr;
 };

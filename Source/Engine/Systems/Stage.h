@@ -11,13 +11,19 @@ public:
 	Stage() {}
 	Stage(const char* filename, DirectX::XMFLOAT3& pos,int id)
 	{
-		this->model = new Model(filename);
-		this->position = pos;
-		this->angle = { 0,0,0 };
-		this->scale = { 1,1,1 };
-		this->id = id;
+		SetModel(filename);
+		SetPosition(pos);
+		SetAngle({ 0,0,0 });
+		SetScale({ 1,1,1 });
+		SetId(id);
+		//this->model = stModel(filename);
+		//this->position = pos;
+		//this->angle = { 0,0,0 };
+		//this->scale = { 1,1,1 };
+		//this->id = id;
 	}
-
+	// 例えデストラクタが空でも
+	// virtual なデストラクタは明示的に定義する
 	virtual ~Stage() {}
 
 	// 更新処理

@@ -3,14 +3,14 @@
 StageMain::StageMain()
 {
 	// ステージモデルを読み込み
-	model = new Model("Assets/FBX/geometry/floor.bin");
+	model = std::make_shared<Model>("Assets/FBX/geometry/floor.bin");
 	scale.x = scale.y = scale.z = 1.f;
 
 }
 
 StageMain::~StageMain()
 {
-	delete model;
+//	delete model;
 }
 
 void StageMain::Update(float elapsedTime)
@@ -25,12 +25,12 @@ void StageMain::Update(float elapsedTime)
 
 void StageMain::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
 {
-	shader->Draw(dc, model);
+	shader->Draw(dc, model.get());
 }
 
 bool StageMain::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
 {
-	return Collision::IntersectRayToModel(start, end, model, hit);
+	return Collision::IntersectRayToModel(start, end, model.get(), hit);
 }
 
 bool StageMain::OnMessage(const Telegram& msg)

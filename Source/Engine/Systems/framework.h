@@ -33,8 +33,8 @@ private:
 	void CalculateFrameStats();
 
 private:
-	const HWND hwnd;
-	HighResolutionTimer timer;
-	Graphics				graphics;
-	Input                       input;
+	const HWND				hwnd;
+	HighResolutionTimer	timer;
+	Graphics					graphics;
+	Input							input;
 };

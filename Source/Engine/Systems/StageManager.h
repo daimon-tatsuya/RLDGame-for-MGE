@@ -8,7 +8,7 @@ class StageManager
 {
 private:
 	StageManager() {}
-	~StageManager() {}
+	~StageManager();
 
 public:
 	// 唯一のインスタンス取得

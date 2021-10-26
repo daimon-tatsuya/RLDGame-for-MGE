@@ -19,7 +19,7 @@ void HierarchicalStateBase::RegisterSubState(StateBase* state)
 int HierarchicalStateBase::GetSubStateIndex()
 {
 	int i = 0;
-	for (StateBase* state : sub_state_pool)
+	for (auto& state : sub_state_pool)
 	{
 		if (state == sub_state)
 		{
