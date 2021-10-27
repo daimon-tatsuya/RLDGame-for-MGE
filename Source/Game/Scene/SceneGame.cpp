@@ -101,8 +101,8 @@ void SceneGame::Update(float elapsed_time)
 	GamePad& game_pad = Input::Instance().GetGamePad();
 
 	// なにかボタンを押したらローディングシーンへ切り替えにんしきずみ
-	const GamePadButton any_button = GamePad::BTN_A;
-	if (game_pad.GetButtonDown() & any_button)
+	//const GamePadButton any_button = GamePad::BTN_LEFT_SHOULDER;
+	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
 	}

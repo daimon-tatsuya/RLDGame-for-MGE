@@ -1,8 +1,11 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "Engine//Systems/Character.h"
+//#include "Engine//Systems/Character.h"
 #include "Engine/Systems/StateBase.h"
+
+//‘O•ûéŒ¾
+class Character;
 
 class StateMachine
 {

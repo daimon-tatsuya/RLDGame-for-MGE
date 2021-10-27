@@ -6,22 +6,34 @@ using GamePadButton = unsigned int;
 class GamePad
 {
 public:
-	static const GamePadButton BTN_UP = (1 << 0);
-	static const GamePadButton BTN_RIGHT = (1 << 1);
-	static const GamePadButton BTN_DOWN = (1 << 2);
-	static const GamePadButton BTN_LEFT = (1 << 3);
-	static const GamePadButton BTN_A = (1 << 4);
-	static const GamePadButton BTN_B = (1 << 5);
-	static const GamePadButton BTN_X = (1 << 6);
-	static const GamePadButton BTN_Y = (1 << 7);
-	static const GamePadButton BTN_START = (1 << 8);
-	static const GamePadButton BTN_BACK = (1 << 9);
-	static const GamePadButton BTN_LEFT_THUMB = (1 << 10);
-	static const GamePadButton BTN_RIGHT_THUMB = (1 << 11);
-	static const GamePadButton BTN_LEFT_SHOULDER = (1 << 12);
-	static const GamePadButton BTN_RIGHT_SHOULDER = (1 << 13);
-	static const GamePadButton BTN_LEFT_TRIGGER = (1 << 14);
-	static const GamePadButton BTN_RIGHT_TRIGGER = (1 << 15);
+	static const GamePadButton BTN_UP = (1 << 0);        //十字キー上
+	static const GamePadButton BTN_RIGHT = (1 << 1);  //十字キー右
+	static const GamePadButton BTN_DOWN = (1 << 2);	 //十字キー下
+	static const GamePadButton BTN_LEFT = (1 << 3);	 //十字キー左
+	static const GamePadButton BTN_A = (1 << 4);//Aボタン
+	static const GamePadButton BTN_B = (1 << 5);//Bボタン
+	static const GamePadButton BTN_X = (1 << 6);//Xボタン
+	static const GamePadButton BTN_Y = (1 << 7);//Yボタン
+	static const GamePadButton BTN_START = (1 << 8);//右スタートボタン
+	static const GamePadButton BTN_BACK = (1 << 9);  //左スタートボタン
+	static const GamePadButton BTN_LEFT_THUMB = (1 << 10); //左スティック押し込み
+	static const GamePadButton BTN_RIGHT_THUMB = (1 << 11); //右スティック押し込み
+	static const GamePadButton BTN_LEFT_SHOULDER = (1 << 12); //LB：L1
+	static const GamePadButton BTN_RIGHT_SHOULDER = (1 << 13); //RB：R1
+	static const GamePadButton BTN_LEFT_TRIGGER = (1 << 14); //LT：L2
+	static const GamePadButton BTN_RIGHT_TRIGGER = (1 << 15);//RT：R2
+
+	static const GamePadButton AnyBTN =
+		  GamePad::BTN_A
+		| GamePad::BTN_B
+		| GamePad::BTN_X
+		| GamePad::BTN_Y;//ABXY
+
+	static const GamePadButton AnyDPad =
+		  GamePad::BTN_UP
+		| GamePad::BTN_RIGHT
+		| GamePad::BTN_DOWN
+		| GamePad::BTN_LEFT;//十字キー
 
 public:
 	GamePad() {}

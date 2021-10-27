@@ -1,4 +1,3 @@
-#include "Game/Characters/Player.h"
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Camera.h"
@@ -6,15 +5,16 @@
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/AI/MetaAI.h"
 
+#include "Game/Characters/Player.h"
+#include "Game/Characters/DerivedPlayerState.h"
 Player::Player(RogueLikeDungeon& rogue_like_dungeon)
 {
 	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
 	scale.x = scale.y = scale.z = 1.f;
 	position.y = 15.f;
-	//初期ステート
 
-	//position.x = mob_role.position.x;// *Cell_Size;
-	//position.z = mob_role.position.y;// *Cell_Size;
+	//初期ステート
+	FSMInitialize();
 
 	//オブジェクト配置
 	for (int y = 0; y < MapSize_Y; y++)
@@ -39,7 +39,7 @@ Player::Player()
 
 Player::~Player()
 {
-	//delete model;
+
 }
 
 void Player::Update(float elapsedTime)
@@ -76,6 +76,32 @@ void Player::Update(float elapsedTime)
 void Player::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
 {
 	shader->Draw(dc, model.get());
+}
+
+void Player::FSMInitialize()
+{
+	state_machine = std::make_unique<StateMachine>(this);
+	//親ステート
+	state_machine->RegisterState(new EntryState(this));
+	state_machine->RegisterState(new ReactionState(this));
+	state_machine->RegisterState(new  ReceiveState(this));
+
+	//子ステート
+	//Entry
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new SelectState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new WayChangeState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new MoveState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new AttackState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new MenuState(this));
+
+	//Reaction
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Reaction), new DamagedState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Reaction), new DeathState(this));
+
+	//Receive
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Receive), new CalledState(this));
+
+	state_machine->SetState(static_cast<int>(Player::ParentState::Entry));
 }
 
 void Player::DrawDebugGUI()

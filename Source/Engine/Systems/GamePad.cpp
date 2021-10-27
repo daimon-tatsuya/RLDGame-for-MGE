@@ -20,20 +20,20 @@ void GamePad::Update()
 		//XInputGetCapabilities(m_slot, XINPUT_FLAG_GAMEPAD, &caps);
 		XINPUT_GAMEPAD& pad = xinputState.Gamepad;
 
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_UP)					newButtonState |= BTN_UP;
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)				newButtonState |= BTN_RIGHT;
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)				newButtonState |= BTN_DOWN;
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)				newButtonState |= BTN_LEFT;
-		if (pad.wButtons & XINPUT_GAMEPAD_A)						newButtonState |= BTN_A;
-		if (pad.wButtons & XINPUT_GAMEPAD_B)						newButtonState |= BTN_B;
-		if (pad.wButtons & XINPUT_GAMEPAD_X)						newButtonState |= BTN_X;
-		if (pad.wButtons & XINPUT_GAMEPAD_Y)						newButtonState |= BTN_Y;
-		if (pad.wButtons & XINPUT_GAMEPAD_START)					newButtonState |= BTN_START;
-		if (pad.wButtons & XINPUT_GAMEPAD_BACK)						newButtonState |= BTN_BACK;
-		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)				newButtonState |= BTN_LEFT_THUMB;
-		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)				newButtonState |= BTN_RIGHT_THUMB;
-		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)			newButtonState |= BTN_LEFT_SHOULDER;
-		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)			newButtonState |= BTN_RIGHT_SHOULDER;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_UP)								newButtonState |= BTN_UP;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)						newButtonState |= BTN_RIGHT;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)						newButtonState |= BTN_DOWN;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)							newButtonState |= BTN_LEFT;
+		if (pad.wButtons & XINPUT_GAMEPAD_A)											newButtonState |= BTN_A;
+		if (pad.wButtons & XINPUT_GAMEPAD_B)											newButtonState |= BTN_B;
+		if (pad.wButtons & XINPUT_GAMEPAD_X)											newButtonState |= BTN_X;
+		if (pad.wButtons & XINPUT_GAMEPAD_Y)											newButtonState |= BTN_Y;
+		if (pad.wButtons & XINPUT_GAMEPAD_START)									newButtonState |= BTN_START;
+		if (pad.wButtons & XINPUT_GAMEPAD_BACK)									newButtonState |= BTN_BACK;
+		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)						newButtonState |= BTN_LEFT_THUMB;
+		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)					newButtonState |= BTN_RIGHT_THUMB;
+		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)					newButtonState |= BTN_LEFT_SHOULDER;
+		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)				newButtonState |= BTN_RIGHT_SHOULDER;
 		if (pad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)	newButtonState |= BTN_LEFT_TRIGGER;
 		if (pad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)	newButtonState |= BTN_RIGHT_TRIGGER;
 

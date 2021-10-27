@@ -18,6 +18,9 @@ public:
 	// 描画処理
 	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)override;
 
+	//有限ステートマシンの初期化
+	void FSMInitialize() override;
+
 	// デバッグ用GUI描画
 	void DrawDebugGUI()override;
 
@@ -43,4 +46,48 @@ public:
 private:
 
 public:
+
+	//親ステート
+	enum class ParentState :int
+	{
+		Entry = 0,
+		Reaction,
+		Receive,
+		StateEnd
+	};
+
+	//子ステート
+	enum class Entry :int
+	{
+		Select = 0,
+		WayChange,
+		Move,
+		Attack,
+		Menu,
+		//Map,
+		//MessageLog,
+		//Inventry,
+		//View,
+		//Step,
+
+		StateEnd
+	};
+
+	//子ステート
+	enum class Reaction :int
+	{
+		Damaged=0,
+		Death,
+
+		StateEnd
+	};
+
+
+
+	//子ステート
+	enum class Receive
+	{
+		Called,
+		StateEnd
+	};
 };

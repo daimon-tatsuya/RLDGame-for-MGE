@@ -17,38 +17,38 @@ public:
 	~Node();
 
 	/// <summary>
-	/// start_node_flagの設定
-	/// HeuristicSearchで使用
-	/// trueのnodeからHeuristicSearchを行う
+	/// <para>start_node_flagの設定</para>
+	/// <para>HeuristicSearchで使用</para>
+	/// <para>trueのnodeからHeuristicSearchを行う</para>
 	/// </summary>
 	/// <param name="set"></param>
 	void SetStartNodeFlag(bool set) { start_node_flag = set; }
 
 	/// <summary>
-	/// HeuristicSearchで使用
-	/// trueのnodeからHeuristicSearchを行う
+	/// <para>HeuristicSearchで使用</para>
+	/// <para>trueのnodeからHeuristicSearchを行う</para>
 	/// </summary>
 	/// <returns>start_node_flag</returns>
 	bool GetStartNodeFlag() { return start_node_flag; }
 
 	/// <summary>
-	/// goal_node_flagの設定
-	/// HeuristicSearchで使用
-	/// trueのnodeを目的地としてHeuristicSearchを行う
+	/// <para>goal_node_flagの設定</para>
+	/// <para>HeuristicSearchで使用</para>
+	/// <para>trueのnodeを目的地としてHeuristicSearchを行う</para>
 	/// </summary>
 	/// <param name="set"></param>
 	void SetGoalNodeFlag(bool set) { goal_node_flag = set; }
 
 	/// <summary>
-	/// HeuristicSearchで使用
-	/// trueのnodeを目的地としてHeuristicSearchを行う
+	/// <para>HeuristicSearchで使用</para>
+	/// <para>trueのnodeを目的地としてHeuristicSearchを行う</para>
 	/// </summary>
 	/// <returns>goal_node_flag</returns>
 	bool GetGoalNodeFlag() { return goal_node_flag; }
 
 	/// <summary>
-	/// player_node_flagの設定
-	/// trueならこのnodeはプレイヤーがいる
+	/// <para>player_node_flagの設定</para>
+	/// <para>trueならこのnodeはプレイヤーがいる</para>
 	/// </summary>
 	/// <param name="set"></param>
 	void SetPlayerNodeFlag(bool set) { player_node_flag = set; }
@@ -60,8 +60,8 @@ public:
 	bool GetPlayerNodeFlag() { return player_node_flag; }
 
 	/// <summary>
-	/// enemy_node_flagの設定
-	/// trueならこのnodeは敵がいる
+	/// <para>enemy_node_flagの設定</para>
+	/// <para>trueならこのnodeは敵がいる</para>
 	/// </summary>
 	/// <param name="set"></param>
 	void SetEnemyNodeFlag(bool set) { enemy_node_flag = set; }
@@ -73,8 +73,8 @@ public:
 	bool GetEnemyNodeFlag() { return enemy_node_flag; }
 
 	/// <summary>
-	/// wall_node_flagの設定
-	/// trueならこのnodeは壁
+	/// <para>wall_node_flagの設定</para>
+	/// <para>trueならこのnodeは壁</para>
 	/// </summary>
 	/// <param name="set"></param>
 	void SetWallNodeFlag(bool set) { wall_node_flag = set; }
@@ -86,8 +86,8 @@ public:
 	bool GetWallNodeFlag() { return wall_node_flag; }
 
 	/// <summary>
-	/// item_node_flagの設定
-	/// trueならこのnodeにはアイテムが置かれている
+	/// <para>item_node_flagの設定</para>
+	/// <para>trueならこのnodeにはアイテムが置かれている</para>
 	/// </summary>
 	/// <param name="set"></param>
 	void SetItemNodeFlag(bool set) { item_node_flag = set; }
@@ -99,8 +99,8 @@ public:
 	bool GetItemNodeFlag() { return item_node_flag; }
 
 	/// <summary>
-	/// searched_node_flagの設定
-	/// trueならこのnodeは探索済み
+	/// <para>searched_node_flagの設定</para>
+	/// <para>trueならこのnodeは探索済み</para>
 	/// </summary>
 	/// <param name="set"></param>
 	void SetSearchedNodeFlag(bool set) { searched_node_flag = set; }

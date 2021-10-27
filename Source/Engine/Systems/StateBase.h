@@ -1,5 +1,10 @@
 #pragma once
-#include "Engine/Systems/Character.h"
+
+#include <memory>
+#include <vector>
+
+//前方宣言
+class Character;
 //全てステートクラスの基底クラス
 class StateBase
 {
@@ -51,5 +56,6 @@ protected:
 	// 各サブステートを保持する配列
 	std::vector<StateBase*> sub_state_pool;
 	// サブステート
+	//std::unique_ptr<StateBase>sub_state = nullptr;
 	StateBase* sub_state = nullptr;
 };

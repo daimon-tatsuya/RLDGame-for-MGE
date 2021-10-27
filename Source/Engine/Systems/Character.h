@@ -1,11 +1,19 @@
 #pragma once
 
 #include "Engine/Systems/Object.h"
+#include "Engine/Systems/StateMachine.h"
+//Todo コメントの書き換え
+
 // キャラクター
-//Todo コメント
+
+// 使わない関数があるが、あくまでアクションゲームベースなので消さない
 class Character : public Object
 {
 private:
+
+	//有限ステートマシンの初期化
+	virtual void FSMInitialize() {};
+
 	// 垂直速力更新処理
 	void UpdateVerticalVelocity(float elapsedFrame);
 
@@ -17,15 +25,10 @@ private:
 
 	// 水平移動更新処理
 	void UpdateHorizontalMove(float elapsedTime);
+
+
+
 protected:
-	// 着地した時に呼ばれる
-	virtual void OnLanding() {}
-
-	// ダメージを受けた時に呼ばれる
-	virtual void OnDamaged() {}
-
-	// 死亡した時に呼ばれる
-	virtual void OnDead() {}
 
 	// 移動処理
 	void Move(float vx, float vz, float speed);
@@ -39,14 +42,20 @@ protected:
 	// 空中ダッシュ処理
 	void AirDush(float vx, float vz, float gravity_cut_time);
 
+	// 着地した時に呼ばれる
+	virtual void OnLanding() {}
+
+	// ダメージを受けた時に呼ばれる
+	virtual void OnDamaged() {}
+
+	// 死亡した時に呼ばれる
+	virtual void OnDead() {}
+
 	// 速力更新処理
 	void UpdateVelocity(float elapsed_time);
 
 	// 無敵時間更新
 	void UpdateInvincibleTimer(float elapsed_time);
-
-	// 目標地点へ移動
-	//void MoveToTarget(float elapsed_time, float speed_rate);
 
 public:
 	Character() {}
@@ -69,6 +78,9 @@ public:
 	// 最大健康状態を取得
 	void SetMaxHealth() { this->max_health = max_health; }
 
+	//ステートマシンをを取得
+	StateMachine* GetStateMachine() { return state_machine.get(); }
+
 	// ダメージを与える
 	bool ApplyDamage(int damage, float invincible_time);
 
@@ -82,7 +94,7 @@ public:
 
 protected:
 	DirectX::XMFLOAT3	velocity = { 0, 0, 0 };
-
+	std::unique_ptr<StateMachine> state_machine = nullptr;
 	float				gravity = -1.0f;
 	float				gravity_cut_time = 0;//重力を無視するときに使う
 	bool				is_ground = false;
