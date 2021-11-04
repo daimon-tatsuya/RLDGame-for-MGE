@@ -2,7 +2,7 @@
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/Collision.h"
 #include "Engine/AI/MetaAI.h"
-
+#include "Engine/Systems/Math.h"
 
 CharacterManager::~CharacterManager()
 {

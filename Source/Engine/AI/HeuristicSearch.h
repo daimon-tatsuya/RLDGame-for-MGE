@@ -18,7 +18,8 @@ private:
 
 public:
 
-	HeuristicSearch();
+	HeuristicSearch() {};
+	HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon);
 	~HeuristicSearch();
 
 	std::vector<int> Search(int start_id, int goal_id);

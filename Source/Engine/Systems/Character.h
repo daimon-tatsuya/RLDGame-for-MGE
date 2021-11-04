@@ -2,6 +2,7 @@
 
 #include "Engine/Systems/Object.h"
 #include "Engine/Systems/StateMachine.h"
+#include "Engine/Systems/DungeonMake.h"
 //Todo コメントの書き換え
 
 // キャラクター
@@ -63,8 +64,11 @@ public:
 	// virtual なデストラクタは明示的に定義する
 	virtual ~Character() {}
 
-	// 地面に接地しているか
-	bool IsGround() const { return is_ground; }
+	// ダメージを与える
+	bool ApplyDamage(int damage, float invincible_time);
+
+	// 衝撃を与える
+	void AddImpulse(const DirectX::XMFLOAT3& impulse);
 
 	// 健康状態を取得
 	int GetHealth() const { return health; }
@@ -72,29 +76,30 @@ public:
 	// 健康状態を設定
 	void SetHealth(const int health) { this->health = health; }
 
+// 地面に接地しているか
+	bool IsGround() const { return is_ground; }
+
 	// 最大健康状態を取得
 	int GetMaxHealth() const { return max_health; }
 
-	// 最大健康状態を取得
+	void MoveChack(float mx, float mz);
+
+		// 最大健康状態を取得
 	void SetMaxHealth() { this->max_health = max_health; }
 
 	//ステートマシンをを取得
 	StateMachine* GetStateMachine() { return state_machine.get(); }
 
-	// ダメージを与える
-	bool ApplyDamage(int damage, float invincible_time);
-
-	// 衝撃を与える
-	void AddImpulse(const DirectX::XMFLOAT3& impulse);
-
-
+	RogueLikeDungeon* GetStageInformations(){ return stage_informations; }
 private:
+
 
 public:
 
 protected:
-	DirectX::XMFLOAT3	velocity = { 0, 0, 0 };
+	RogueLikeDungeon* stage_informations = nullptr;
 	std::unique_ptr<StateMachine> state_machine = nullptr;
+	DirectX::XMFLOAT3	velocity = { 0, 0, 0 };
 	float				gravity = -1.0f;
 	float				gravity_cut_time = 0;//重力を無視するときに使う
 	bool				is_ground = false;

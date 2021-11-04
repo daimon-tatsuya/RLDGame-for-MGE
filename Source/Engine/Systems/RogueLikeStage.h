@@ -10,7 +10,7 @@ class RogueLikeStage : public Stage
 {
 private:
 public:
-	 RogueLikeStage(RogueLikeDungeon& rogue_like_dungeon);
+	 RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon);
 	 ~RogueLikeStage();
 
 	// XVˆ—
@@ -37,6 +37,6 @@ public:
 private:
 protected:
 	std::vector <Stage> stage_chip;
-	RogueLikeDungeon  db_rogue_like_dungeon;
+	RogueLikeDungeon*  db_rogue_like_dungeon;
 public:
 };

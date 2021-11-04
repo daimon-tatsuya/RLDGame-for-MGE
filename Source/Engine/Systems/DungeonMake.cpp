@@ -7,7 +7,7 @@
 
 RogueLikeDungeon::RogueLikeDungeon()
 {
-	srand(static_cast<unsigned int>(time(nullptr)));
+ srand(static_cast<unsigned int>(time(nullptr)));
 
 }
 RogueLikeDungeon::~RogueLikeDungeon()
@@ -18,7 +18,6 @@ void RogueLikeDungeon::InitializeMapSize()
 {
 	map_role.resize(MapSize_Y, std::vector<RogueLikeMap>(MapSize_X, 0));
 }
-
 void RogueLikeDungeon::DungeonMake(DungeonMapRole* dungeon_map_role)
 {
 	for (int i = 0; i < Mob_Max; i++)

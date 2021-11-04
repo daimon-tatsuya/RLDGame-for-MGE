@@ -7,11 +7,8 @@ HeuristicSearch& HeuristicSearch::Instance()
 	return *instance;
 }
 
-HeuristicSearch::HeuristicSearch()
+HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
 {
-	//マップ情報を生じしているクラスの実体
-	RogueLikeDungeon rogue_like_dungeon;// = RogueLikeDungeon::Instance();
-
 	//nodeの初期化
 	searched_edge.clear();
 	int node_id = 0;
@@ -21,7 +18,7 @@ HeuristicSearch::HeuristicSearch()
 		{
 			auto piece = std::make_shared<Node>();
 			piece->node_id = node_id;
-			piece->SetNodePosition(static_cast<float>(x), static_cast<float>(y));
+			piece->SetNodePosition(static_cast<float>(x * Cell_Size), static_cast<float>(y * Cell_Size));
 
 			//マップデータからデータを取り出す
 
@@ -34,13 +31,16 @@ HeuristicSearch::HeuristicSearch()
 			//敵(保留)
 			for (int i = 1; i < Mob_Max; i++)
 			{
-				if (rogue_like_dungeon.mobs[i].position.y == y && rogue_like_dungeon.mobs[i].position.x == x)
+				if (rogue_like_dungeon.map_role[y][x].map_data == 3)
 				{
 					piece->SetEnemyNodeFlag(true);
 				}
 			}
 
 			nodes.push_back(std::move(piece));
+
+			advance.push_back(-1);
+			node_id++;
 		}
 	}
 

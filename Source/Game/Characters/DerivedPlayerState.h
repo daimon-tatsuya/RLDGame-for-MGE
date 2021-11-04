@@ -1,8 +1,36 @@
 #pragma once
+#include<memory>
 #include "Engine/AI/MetaAI.h"
 #include "Engine/Systems/StateBase.h"
 
 #include "Game/Characters/Player.h"
+
+
+class PlayerState :
+	public StateBase
+{
+private:
+public:
+	PlayerState(Player* player) :owner(player) {};
+	virtual ~PlayerState() {};
+
+
+
+protected:
+	//参照用のため解放しない
+	Player* owner = nullptr;// 所有者
+
+};
+class PlayerHierarchicalState :
+	public  PlayerState ,public HierarchicalStateBase
+{
+private:
+public:
+	PlayerHierarchicalState(Player*	player):PlayerState(player) {};
+	virtual ~PlayerHierarchicalState() {};
+protected:
+
+};
 
 
 //-------------------------------------
@@ -13,7 +41,7 @@
 /// プレイヤーの入力を受け付ける
 /// </summary>
 class EntryState :
-	public HierarchicalStateBase
+	public PlayerHierarchicalState
 {
 private:
 public:
@@ -21,7 +49,7 @@ public:
 	/// プレイヤーの入力を受け付けるステート
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	EntryState(Character* character) : HierarchicalStateBase(character) {}
+	EntryState(Player* player) : PlayerHierarchicalState(player) {}
 	virtual ~EntryState() ;
 
 	// ステートに入った時のメソッド
@@ -36,7 +64,7 @@ public:
 /// プレイヤーの受動を管理する
 /// </summary>
 class ReactionState :
-	public HierarchicalStateBase
+	public PlayerHierarchicalState
 {
 private:
 public:
@@ -44,7 +72,7 @@ public:
 	/// プレイヤーの受動を管理するステート
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	ReactionState(Character* character) : HierarchicalStateBase(character) {}
+	ReactionState(Player* player) : PlayerHierarchicalState(player) {}
 	virtual ~ReactionState() ;
 
 	// ステートに入った時のメソッド
@@ -59,7 +87,7 @@ public:
 ///	 MetaAIからメッセージを受信したとき
 /// </summary>
 class ReceiveState :
-	public HierarchicalStateBase
+	public PlayerHierarchicalState
 {
 private:
 public:
@@ -67,7 +95,7 @@ public:
 	///	 MetaAIからメッセージを受信したときのステート
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	ReceiveState(Character* character) : HierarchicalStateBase(character) {}
+	ReceiveState(Player* player) : PlayerHierarchicalState(player) {}
 	virtual ~ReceiveState() ;
 
 	// ステートに入った時のメソッド
@@ -84,7 +112,7 @@ public:
 
 //Inputの子ステート
 class SelectState :
-	public StateBase
+	public PlayerState
 {
 private:
 public:
@@ -92,7 +120,7 @@ public:
 	///	 入力を受け付け、それに応じてステートを遷移させるステート
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	SelectState(Character* character) : StateBase(character) {}
+	SelectState(Player* player) : PlayerState(player) {}
 	virtual ~SelectState() {};
 
 	// ステートに入った時のメソッド
@@ -104,7 +132,7 @@ public:
 };
 //Inputの子ステート
 class WayChangeState
-	:public StateBase
+	:public PlayerState
 {
 private:
 public:
@@ -113,7 +141,7 @@ public:
 	/// このステートはMoveに遷移しないがAttackには遷移できる
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	WayChangeState(Character* character) : StateBase(character) {}
+	WayChangeState(Player* player) : PlayerState(player) {}
 	virtual ~WayChangeState() {};
 
 	// ステートに入った時のメソッド
@@ -127,7 +155,7 @@ public:
 };
 //Inputの子ステート
 class MoveState
-	:public StateBase
+	:public PlayerState
 {
 private:
 public:
@@ -135,7 +163,7 @@ public:
 	/// 1マス移動するステート
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	MoveState(Character* character) : StateBase(character) {}
+	MoveState(Player* player) : PlayerState(player) {}
 	virtual ~MoveState() {};
 
 	// ステートに入った時のメソッド
@@ -149,7 +177,7 @@ public:
 };
 //Inputの子ステート
 class AttackState
-	:public StateBase
+	:public PlayerState
 {
 private:
 public:
@@ -157,7 +185,7 @@ public:
 	/// プレイヤーの前方を攻撃するステート
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	AttackState(Character* character) : StateBase(character) {}
+	AttackState(Player* player) : PlayerState(player) {}
 	virtual ~AttackState() {};
 
 	// ステートに入った時のメソッド
@@ -171,7 +199,7 @@ public:
 };
 //Inputの子ステート
 class MenuState
-	:public StateBase
+	:public PlayerState
 {
 private:
 public:
@@ -180,7 +208,7 @@ public:
 	///  <para>閉じたときSelectに遷移する</para>
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	MenuState(Character* character) : StateBase(character) {}
+	MenuState(Player* player) : PlayerState(player) {}
 	virtual ~MenuState() {};
 
 	// ステートに入った時のメソッド
@@ -195,7 +223,7 @@ public:
 
 //Reactionの子ステート
 class DamagedState
-	:public StateBase
+	:public PlayerState
 {
 private:
 public:
@@ -203,7 +231,7 @@ public:
 	/// プレイヤーの前方を攻撃するステート
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	DamagedState(Character* character) : StateBase(character) {}
+	DamagedState(Player* player) : PlayerState(player) {}
 	virtual ~DamagedState() {};
 
 	// ステートに入った時のメソッド
@@ -217,7 +245,7 @@ public:
 };
 //Reactionの子ステート
 class DeathState
-	:public StateBase
+	:public PlayerState
 {
 private:
 public:
@@ -226,7 +254,7 @@ public:
 	///  <para>閉じたときSelectに遷移する</para>
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	DeathState(Character* character) : StateBase(character) {}
+	DeathState(Player* player) : PlayerState(player) {}
 	virtual ~DeathState() {};
 
 	// ステートに入った時のメソッド
@@ -241,7 +269,7 @@ public:
 
 //Receiveの子ステート
 class CalledState
-	:public StateBase
+	:public PlayerState
 {
 private:
 public:
@@ -250,7 +278,7 @@ public:
 	///  <para></para>
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	CalledState(Character* character) : StateBase(character) {}
+	CalledState(Player* player) : PlayerState(player) {}
 	virtual ~CalledState() {};
 
 	// ステートに入った時のメソッド

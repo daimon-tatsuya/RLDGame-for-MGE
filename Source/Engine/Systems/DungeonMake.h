@@ -11,7 +11,7 @@
 
 /*マップ系データ*/
 const static size_t MapSize_Y = 64; //マップ縦サイズ
-const static size_t MapSize_X = 32;   //マップ横サイズ
+const static size_t MapSize_X = 64;   //マップ横サイズ
 const static int MapSize = MapSize_Y * MapSize_X;
 
 const static int Mob_Max = 25;//mobの出現最大値
@@ -133,10 +133,12 @@ public:
 	/// 0:壁、1:床、2:プレイヤー、3:敵, 4:アイテム, 5:罠
 	/// </summary>
 	std::vector<std::vector<RogueLikeMap>> map_role;
+
 	/// <summary>
 	/// マップ情報の雛形　マッププール
 	/// </summary>
 	DungeonMapRole dungeon_map_role = {};
+
 	/// <summary>
 	/// マップ上に存在するmobの情報
 	/// </summary>

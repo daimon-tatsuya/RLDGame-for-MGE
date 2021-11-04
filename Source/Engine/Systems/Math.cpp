@@ -1,21 +1,63 @@
 #include <stdlib.h>
 #include "Engine/Systems/Math.h"
 
-float Math::ClampFloat(float n, float min, float max)
+float Math::ClampFloat(float check, float min, float max)
 {
-	if (n < min)
+	if (check < min)
 	{
 		return min;
 	}
 
-	if (n > max)
+	if (check > max)
 	{
 		return max;
 	}
 
-	return n;
+	return check;
 }
 
+float Math::ClampAnyFloat(float check, float Any, float min, float max)
+{
+	if (check < min)
+	{
+		return min;
+	}
+	else if (check > max)
+	{
+		return max;
+	}
+
+	return Any;
+}
+
+float Math::StepAnyFloat(float check, float Any, float min, float max, bool revers)
+{
+	if (revers == false)
+	{
+		if (check < min)
+		{
+			return 0.f;
+		}
+		else if (check > max)
+		{
+			return 1.f;
+		}
+		return Any;
+	}
+	else
+	{
+		if (check < min)
+		{
+			return -1.f;
+		}
+		else if (check > max)
+		{
+			return 0.f;
+		}
+		return Any * -1;
+	}
+	return Any;
+}
 // üŒ`•âŠ®
 float Math::LerpFloat(float a, float b, float t)
 {
@@ -32,7 +74,7 @@ float Math::RandomRangeFloat(float min, float max)
 
 
 	// min`max‚Ü‚Å‚Ìƒ‰ƒ“ƒ_ƒ€’l‚É•ÏŠ·
-	 calculated = min + (max - min) * value;
+	calculated = min + (max - min) * value;
 	return calculated;
 }
 
@@ -45,7 +87,7 @@ int Math::RandomInt(int max)
 		return calculated;
 	}
 
-	 calculated = rand() % max;
+	calculated = rand() % max;
 	return calculated;
 }
 
@@ -57,7 +99,7 @@ int Math::RandomRangeInt(int min, int max)
 		return calculated;
 	}
 
-	calculated = min + rand() % (max-min);
+	calculated = min + rand() % (max - min);
 	return calculated;
 }
 
@@ -89,4 +131,26 @@ float Math::NormalizeRadianAngle(float radian)
 	}
 
 	return radian;
+}
+
+float Math::ConvertToRadianAngle(float degree)
+{
+	return DirectX::XMConvertToRadians(degree);
+}
+
+float Math::ConvertToDegreeAngle(float radian)
+{
+	return  DirectX::XMConvertToDegrees(radian);
+}
+
+bool Math::BoolianFloat(float a, float b)
+{
+	if (fabsf(a - b) <= FLT_EPSILON * fmaxf(1.f, fmaxf(fabsf(a), fabsf(b))))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

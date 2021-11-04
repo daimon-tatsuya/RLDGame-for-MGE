@@ -23,3 +23,15 @@ void Object::UpdateTransform()
 	// 計算したワールド行列を取り出す
 	DirectX::XMStoreFloat4x4(&transform, W);
 }
+
+float Object::NormalizeAnyAngle(float radian)
+{
+	return Math::NormalizeRadianAngle(radian);
+}
+
+void Object::NormalizeAngle()
+{
+	angle.x=NormalizeAnyAngle(angle.x);
+	angle.y=NormalizeAnyAngle(angle.y);
+	angle.z=NormalizeAnyAngle(angle.z);
+}

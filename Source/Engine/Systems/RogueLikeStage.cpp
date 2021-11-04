@@ -1,14 +1,15 @@
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/RogueLikeStage.h"
 
-RogueLikeStage::RogueLikeStage(RogueLikeDungeon& rogue_like_dungeon)
+RogueLikeStage::RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon)
 {
 
 	scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
 	position = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
 	angle = DirectX::XMFLOAT3(0.f, 0.f, 0.f);;
 	db_rogue_like_dungeon = rogue_like_dungeon;
-	SetStageObject(rogue_like_dungeon.map_role);
+	//SetStageObject(rogue_like_dungeon.map_role);
+	SetStageObject(rogue_like_dungeon->map_role);
 }
 
 RogueLikeStage::~RogueLikeStage()
@@ -65,7 +66,7 @@ void RogueLikeStage::DrawDebugGUI()
 	if (ImGui::Begin("RogueLikeStage", nullptr, ImGuiWindowFlags_None))
 	{
 		// トランスフォーム
-		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_OpenOnArrow))
 		{
 			// 位置
 			ImGui::InputFloat3("Position", &this->position.x);
@@ -78,16 +79,22 @@ void RogueLikeStage::DrawDebugGUI()
 			ImGui::InputFloat3("Degree", &a.x);
 			// スケール
 			ImGui::InputFloat3("Scale", &this->scale.x);
-			//モデル数
+		}
+		//モデル数
 			ImGui::Text(u8"モデル数:%d", static_cast<int>(stage_chip.size()));
 			//プレイヤー初期位置
-			ImGui::Text(u8"SetPlayerMapPosition	:%f %f", db_rogue_like_dungeon.mobs[0].position.x, db_rogue_like_dungeon.mobs[0].position.y);
-			float PlayerFirstPosition_x = db_rogue_like_dungeon.mobs[0].position.x * 2.f;
-			float PlayerFirstPosition_y = db_rogue_like_dungeon.mobs[0].position.y * 2.f;
+			//ImGui::Text(u8"SetPlayerMapPosition	:%f %f", db_rogue_like_dungeon.mobs[0].position.x, db_rogue_like_dungeon.mobs[0].position.y);
+			//float PlayerFirstPosition_x = db_rogue_like_dungeon.mobs[0].position.x * 2.f;
+			//float PlayerFirstPosition_y = db_rogue_like_dungeon.mobs[0].position.y * 2.f;
+			//ImGui::Text(u8"PlayerFirstPosition:%f %f", PlayerFirstPosition_x, PlayerFirstPosition_y);
+			//ImGui::Text(u8"PlayerPointAttribute:%d", db_rogue_like_dungeon.map_role[db_rogue_like_dungeon.mobs[0].position.y][db_rogue_like_dungeon.mobs[0].position.x]);
+
+			ImGui::Text(u8"SetPlayerMapPosition	:%f %f", db_rogue_like_dungeon->mobs[0].position.x, db_rogue_like_dungeon->mobs[0].position.y);
+			float PlayerFirstPosition_x = db_rogue_like_dungeon->mobs[0].position.x * 2.f;
+			float PlayerFirstPosition_y = db_rogue_like_dungeon->mobs[0].position.y * 2.f;
 			ImGui::Text(u8"PlayerFirstPosition:%f %f", PlayerFirstPosition_x, PlayerFirstPosition_y);
-			ImGui::Text(u8"PlayerPointAttribute:%d", db_rogue_like_dungeon.map_role[db_rogue_like_dungeon.mobs[0].position.y][db_rogue_like_dungeon.mobs[0].position.x]);
-			//ImGui::Text(u8"MobRolePlayerExist:%d", db_rogue_like_dungeon.mobs[0].id);
-		}
+			ImGui::Text(u8"PlayerPointAttribute:%d", db_rogue_like_dungeon->map_role[db_rogue_like_dungeon->mobs[0].position.y][db_rogue_like_dungeon->mobs[0].position.x]);
+		
 	}
 	ImGui::End();
 }

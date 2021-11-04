@@ -97,7 +97,11 @@ void CameraController::DrawDebugGUI()
 			ImGui::InputFloat3("Degree", &a.x);
 			//íçéãì_
 			ImGui::InputFloat3("target", &target.x);
-
+			ImGui::Checkbox("ViewMap", &ViewMap);
+			if (ViewMap)
+			{
+				position.y = 400.f;
+			}
 		}
 	}
 	ImGui::End();

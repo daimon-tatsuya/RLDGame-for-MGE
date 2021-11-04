@@ -8,7 +8,7 @@ private:
 
 public:
 
-	Player(RogueLikeDungeon& rogue_like_dungeon);
+	Player(RogueLikeDungeon* rogue_like_dungeon);
 	Player();
 	~Player()override;
 

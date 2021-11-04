@@ -40,18 +40,38 @@ public:
 
 	// ˆÊ’u‚ğİ’è
 	void SetPosition(const DirectX::XMFLOAT3& position) { this->position = position; }
+	void SetPositionX(const float x) { this->position.x = x; }
+	void SetPositionY(const float y) { this->position.y = y; }
+	void SetPositionZ(const float z) { this->position.z = z; }
+
+	//Œ»İ‚ÌˆÊ’u‚©‚ç“®‚©‚·
+	void AddPosition(const DirectX::XMFLOAT3& position)
+	{
+		this->position.x += position.x;
+		this->position.y += position.y;
+		this->position.z += position.z;
+	}
+	void AddPositionX(const float x) { this->position.x += x; }
+	void AddPositionY(const float y) { this->position.y += y; }
+	void AddPositionZ(const float z) { this->position.z += z; }
 
 	// ‰ñ“]Šp“x‚ğæ“¾
 	const DirectX::XMFLOAT3& GetAngle() const { return angle; }
 
 	// ‰ñ“]Šp“x‚ğİ’è
 	void SetAngle(const DirectX::XMFLOAT3& angle) { this->angle = angle; }
+	void SetAngleX(const float x) { this->angle.x = x; }
+	void SetAngleY(const float y) { this->angle.y = y; }
+	void SetAngleZ(const float z) { this->angle.z = z; }
 
 	// ƒXƒP[ƒ‹‚ğæ“¾
 	const DirectX::XMFLOAT3& GetScale() const { return scale; }
 
 	// ƒXƒP[ƒ‹‚ğİ’è
 	void SetScale(const DirectX::XMFLOAT3& scale) { this->scale = scale; }
+	void SetScaleX(const float x) { this->scale.x = x; }
+	void SetScaleY(const float y) { this->scale.y = y; }
+	void SetScaleZ(const float z) { this->scale.z = z; }
 
 	//character‚²‚Æ‚Éid‚ğƒZƒbƒg‚µ‚ÄŠÇ—‚·‚é
 	void	SetId(int id) { this->id = id; }
@@ -80,11 +100,17 @@ public:
 
 	// ‚‚³‚ğİ’è
 	void SetHeight(float height) { this->height = height; };
+
+	//”CˆÓ‚Ì‰ñ“]Šp‚ğ0~360‚É³‹K‰»
+	float NormalizeAnyAngle(float radian);
+
+	//‰ñ“]Šp‚ğ0~360‚É³‹K‰»
+	void NormalizeAngle();
 private:
 
 protected:
 	DirectX::XMFLOAT3		position = { 0, 0, 0 };
-	DirectX::XMFLOAT3		angle = { 0, 0, 0 };
+	DirectX::XMFLOAT3		angle = { 0, 0, 0 };//ƒ‰ƒWƒAƒ“Šp
 	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 	DirectX::XMFLOAT4X4	transform =
 	{ 1, 0, 0, 0,
@@ -92,9 +118,8 @@ protected:
 		0, 0, 1, 0,
 		0, 0, 0, 1 };
 	int					id = 0;
-	float				radius = 0.5f;
-	float				height = 2.0f;
+	float				radius = 0.5f;//”¼Œa
+	float				height = 2.0f;//‚‚³
 	std::shared_ptr<Model> model = nullptr;
-//	Model*			model = nullptr;
 public:
 };

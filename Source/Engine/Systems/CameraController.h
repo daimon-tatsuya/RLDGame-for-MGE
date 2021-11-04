@@ -30,4 +30,6 @@ private:
 	float				range = 10.0f;
 	float				max_angleX = DirectX::XMConvertToRadians(+45);
 	float				min_angleX = DirectX::XMConvertToRadians(-45);
+	//ImGui
+	bool               ViewMap = false;
 };

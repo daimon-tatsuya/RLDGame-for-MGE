@@ -25,7 +25,7 @@ private:
 public:
 	std::unique_ptr<Player>   player = nullptr;
 	std::unique_ptr<CameraController> camera_controller = nullptr;
-
+	RogueLikeDungeon storage_dungeon;
 	//CameraController* camera_controller = nullptr;
 	//Player* player = nullptr;
 

@@ -2,6 +2,14 @@
 
 StateMachine::~StateMachine()
 {
+	// 登録されたサブステートを順番に削除
+	for (auto& state : state_pool)
+	{
+		delete state;
+		state = nullptr;
+	}
+	state_pool.clear();
+
 }
 
 void StateMachine::Update(float elapsedTime)

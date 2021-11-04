@@ -375,9 +375,6 @@
     <ClCompile Include="Source\Engine\Systems\ResourceManager.cpp">
       <Filter>Source Files\Engine\Systems\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Characters\Player.cpp">
-      <Filter>Source Files\Game\Characters\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Characters\DerivedPlayerState.cpp">
       <Filter>Source Files\Game\Characters\Player\State</Filter>
     </ClCompile>
@@ -416,6 +413,9 @@
     </ClCompile>
     <ClCompile Include="Source\Game\Characters\EnemySnake.cpp">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Characters\Player.cpp">
+      <Filter>Source Files\Game\Characters\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

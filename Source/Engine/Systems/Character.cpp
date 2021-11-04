@@ -55,8 +55,57 @@ void Character::Move(float vx, float vz, float speed)
 	max_move_speed = speed;
 }
 
+void Character::MoveChack(float mx, float mz)
+{
+	// レイの開始位置と終点位置
+	DirectX::XMFLOAT3 start = { position.x, position.y + step_offset, position.z };
+	DirectX::XMFLOAT3 end = { position.x + mx, position.y + step_offset, position.z + mz };
+
+	// レイキャストによる壁判定
+	HitResult hit;
+	if (StageManager::Instance().RayCast(start, end, hit))
+	{
+		// 壁までのベクトル
+		DirectX::XMVECTOR v_start = DirectX::XMLoadFloat3(&start);
+		DirectX::XMVECTOR v_end = DirectX::XMLoadFloat3(&end);
+		DirectX::XMVECTOR v_vec = DirectX::XMVectorSubtract(v_end, v_start);
+
+		// 壁の法線
+		DirectX::XMVECTOR v_normal = DirectX::XMLoadFloat3(&hit.normal);
+
+		// 入射ベクトルを法線に射影
+		DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(DirectX::XMVectorNegate(v_vec), v_normal);
+
+		// 補正位置の計算
+		DirectX::XMVECTOR CollectPosition = DirectX::XMVectorMultiplyAdd(v_normal, Dot, v_end);
+		DirectX::XMFLOAT3 collect_position;
+		DirectX::XMStoreFloat3(&collect_position, CollectPosition);
+
+		// 壁ずり方向へレイキャスト
+		HitResult hit2;
+		if (!StageManager::Instance().RayCast(hit.position, collect_position, hit2))
+		{
+			// 壁ずり方向で壁に当たらなかったら補正位置に移動
+			position.x = collect_position.x;
+			position.z = collect_position.z;
+		}
+		else
+		{
+			position.x = hit2.position.x;
+			position.z = hit2.position.z;
+		}
+	}
+	else
+	{
+		// 移動
+		position.x += mx;
+		position.z += mz;
+	}
+
+}
+
 // 旋回処理
-//Todo https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
+//Todo アクションゲームようなので後回し https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
 
 //https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
 void Character::Turn(float elapsedTime, float vx, float vz, float speed)
@@ -305,49 +354,7 @@ void Character::UpdateHorizontalMove(float elapsed_time)
 		float mx = velocity.x * elapsed_time;
 		float mz = velocity.z * elapsed_time;
 
-		// レイの開始位置と終点位置
-		DirectX::XMFLOAT3 start = { position.x, position.y + step_offset, position.z };
-		DirectX::XMFLOAT3 end = { position.x + mx, position.y + step_offset, position.z + mz };
-
-		// レイキャストによる壁判定
-		HitResult hit;
-		if (StageManager::Instance().RayCast(start, end, hit))
-		{
-			// 壁までのベクトル
-			DirectX::XMVECTOR v_start = DirectX::XMLoadFloat3(&start);
-			DirectX::XMVECTOR v_end = DirectX::XMLoadFloat3(&end);
-			DirectX::XMVECTOR v_vec = DirectX::XMVectorSubtract(v_end, v_start);
-
-			// 壁の法線
-			DirectX::XMVECTOR v_normal = DirectX::XMLoadFloat3(&hit.normal);
-
-			// 入射ベクトルを法線に射影
-			DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(DirectX::XMVectorNegate(v_vec), v_normal);
-
-			// 補正位置の計算
-			DirectX::XMVECTOR CollectPosition = DirectX::XMVectorMultiplyAdd(v_normal, Dot, v_end);
-			DirectX::XMFLOAT3 collect_position;
-			DirectX::XMStoreFloat3(&collect_position, CollectPosition);
-
-			// 壁ずり方向へレイキャスト
-			HitResult hit2;
-			if (!StageManager::Instance().RayCast(hit.position, collect_position, hit2))
-			{
-				// 壁ずり方向で壁に当たらなかったら補正位置に移動
-				position.x = collect_position.x;
-				position.z = collect_position.z;
-			}
-			else
-			{
-				position.x = hit2.position.x;
-				position.z = hit2.position.z;
-			}
-		}
-		else
-		{
-			// 移動
-			position.x += mx;
-			position.z += mz;
-		}
+		MoveChack(mx, mz);
 	}
 }
+

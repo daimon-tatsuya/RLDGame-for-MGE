@@ -8,18 +8,44 @@ class Math
 public:
 
 	/// <summary>
-	/// minからmaxまでのクランプ
-	/// nがmax以上ならmax,min未満ならmin,その他はn
+	/// <para>minからmaxまでのクランプ</para>
+	/// <para>nがmax以上ならmax,min未満ならmin,その他はn</para>
 	/// </summary>
-	/// <param name="n"></param>
+	/// <param name="check"></param>
 	/// <param name="min">最小値</param>
 	/// <param name="max">最大値</param>
-	/// <returns>n,min,maxの何れか</returns>
-	static float ClampFloat(float n, float min, float max);
+	/// <returns>n,min,maxのいずれか</returns>
+	static float ClampFloat(float check, float min, float max);
 
 	/// <summary>
-	/// aをtの大きさでb方向に補完する(線形補完)
-	/// a * (1 - t) + (b * t)
+	/// <para>minからmaxまでのクランプ</para>
+	/// <para>nがmax以上ならmax,min未満ならmin,その他はAny</para>
+	/// </summary>
+	/// <param name="check"></param>
+	/// <param name="Any"></param>
+	/// <param name="min">最小値</param>
+	/// <param name="max">最大値</param>
+	/// <returns>Any,min,maxのいずれか</returns>
+	static float ClampAnyFloat(float check, float Any, float min, float max);
+
+
+	/// <summary>
+/// <para>minからmaxまでのステップ</para>
+/// <para>nがmax以上なら1,min未満なら0,その他はAny</para>
+/// <para>0~1の範囲のものにつかう</para>
+/// <para>主にスティック</para>
+/// </summary>
+/// <param name="check"></param>
+/// <param name="Any"></param>
+/// <param name="min">最小値</param>
+/// <param name="max">最大値</param>
+/// <param name="revers">trueの時-1~0の範囲にする</param>
+/// <returns>Any,0,1のいずれか</returns>
+	static float StepAnyFloat(float check, float Any, float min, float max, bool revers = false);
+
+	/// <summary>
+	/// <para>aをtの大きさでb方向に補完する(線形補完)</para>
+	/// <para>a * (1 - t) + (b * t)</para>
 	/// </summary>
 	/// <param name="a"></param>
 	/// <param name="b"></param>
@@ -48,7 +74,7 @@ public:
 	/// </summary>
 	/// <param name="max">最大値</param>
 	/// <returns></returns>
-	static int RandomRangeInt(int min,int max);
+	static int RandomRangeInt(int min, int max);
 
 	/// <summary>
 	/// degree角を０から360で正規化する
@@ -63,4 +89,27 @@ public:
 	/// <param name="radian">radian角</param>
 	/// <returns></returns>
 	static float NormalizeRadianAngle(float radian);
+
+	/// <summary>
+	/// degree角をradian角にコンバート
+	/// </summary>
+	/// <param name="degree">degree角</param>
+	/// <returns></returns>
+	static float ConvertToRadianAngle(float degree);
+
+	/// <summary>
+	/// radian角をdegree角にコンバート
+	/// </summary>
+	/// <param name="radian">radian角</param>
+	/// <returns></returns>
+	static float ConvertToDegreeAngle(float radian);
+
+
+	/// <summary>
+	/// 浮動小数点数の誤差を考慮した比較
+	/// </summary>
+	/// <param name="a"></param>
+	/// <param name="b"></param>
+	/// <returns></returns>
+	static bool BoolianFloat(float a, float b);
 };

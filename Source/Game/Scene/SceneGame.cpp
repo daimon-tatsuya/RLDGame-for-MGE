@@ -23,11 +23,10 @@ SceneGame::SceneGame()
 
 SceneGame::~SceneGame()
 {
-
-	// キャラクター終了化
-	CharacterManager::Instance().Clear();
 	// ステージ終了化
 	StageManager::Instance().Clear();
+	// キャラクター終了化
+	CharacterManager::Instance().Clear();
 
 }
 
@@ -56,18 +55,18 @@ void SceneGame::Initialize()
 	RogueLikeDungeon rogue_like_dungeon;
 	struct DungeonMapRole dungeon_map_role;
 	rogue_like_dungeon.MapReMake(&dungeon_map_role);
-
+	storage_dungeon = rogue_like_dungeon;
 	// ステージ初期化
 	StageManager& stage_manager = StageManager::Instance();
-	RogueLikeStage* rogue_like_stage = new RogueLikeStage(rogue_like_dungeon);
+	RogueLikeStage* rogue_like_stage = new RogueLikeStage(&storage_dungeon);
 	stage_manager.Register(rogue_like_stage);
 
 	// キャラクター生成処理
 	CharacterManager& character_manager = CharacterManager::Instance();
 	{
 		// プレイヤー
-		player = std::make_unique<Player>(rogue_like_dungeon);
-		//player = new Player();
+		player = std::make_unique<Player>(&storage_dungeon);
+
 		character_manager.Register(player.get(), static_cast<int>(Meta::Identity::Player));
 
 		//// エネミー初期化
@@ -101,11 +100,12 @@ void SceneGame::Update(float elapsed_time)
 	GamePad& game_pad = Input::Instance().GetGamePad();
 
 	// なにかボタンを押したらローディングシーンへ切り替えにんしきずみ
-	//const GamePadButton any_button = GamePad::BTN_LEFT_SHOULDER;
+	const GamePadButton any_button = GamePad::BTN_LEFT_SHOULDER;
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
 	}
+
 }
 
 void SceneGame::Render()

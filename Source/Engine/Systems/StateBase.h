@@ -14,7 +14,7 @@ protected:
 
 public:
 	// コンストラクタ
-	StateBase(Character* character) : owner(character) {}
+	StateBase() {}
 	virtual ~StateBase() {}
 
 	// 全て継承先で実装させる必要があるため純粋仮想関数で実装
@@ -28,8 +28,7 @@ public:
 private:
 
 protected:
-
-	Character* owner = nullptr;// 所有者
+//継承先で所持者のポインタを設定する
 
 public:
 };
@@ -39,7 +38,7 @@ class HierarchicalStateBase : public StateBase
 {
 public:
 	// コンストラクタ
-	HierarchicalStateBase(Character* character) : StateBase(character) {}
+	HierarchicalStateBase() {}
 	// デストラクタ
 	virtual ~HierarchicalStateBase() {}
 	// サブステート変更関数
