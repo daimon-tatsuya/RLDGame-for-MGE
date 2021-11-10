@@ -319,7 +319,10 @@
     <ClInclude Include="Source\Game\Characters\DerivedEnemyState.h" />
     <ClInclude Include="Source\Game\Characters\DerivedPlayerState.h" />
     <ClInclude Include="Source\Game\Characters\EnemySnake.h" />
+    <ClInclude Include="Source\Game\Characters\EnemySnakeState.h" />
+    <ClInclude Include="Source\Game\Characters\EnemyState.h" />
     <ClInclude Include="Source\Game\Characters\Player.h" />
+    <ClInclude Include="Source\Game\Characters\PlayerState.h" />
     <ClInclude Include="Source\Game\Scene\SceneGame.h" />
     <ClInclude Include="Source\Game\Scene\SceneLoading.h" />
     <ClInclude Include="Source\Game\Scene\SceneTitle.h" />

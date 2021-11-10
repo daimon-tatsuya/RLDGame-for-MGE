@@ -40,24 +40,33 @@ public:
 class HierarchicalStateBase : public StateBase
 {
 public:
+
 	// コンストラクタ
 	HierarchicalStateBase() {}
+
 	// デストラクタ
 	virtual ~HierarchicalStateBase() {}
+
 	// サブステート変更関数
-	virtual void ChangeSubState(int newState);
+	 void ChangeSubState(int newState);
+
 	// サブステート登録関数
-	virtual void RegisterSubState(StateBase* state);
-	// サブステート取得関数
-	virtual StateBase* GetSubState() { return sub_state; }
+	 void RegisterSubState(StateBase* state);
+
 	// サブステート番号取得関数
-	virtual int GetSubStateIndex();
+	 int GetSubStateIndex();
+
+	// サブステート取得関数
+	 StateBase* GetSubState() { return sub_state; }
+
 	// サブステート設定関数
-	virtual void SetSubState(int setState);
+	 void SetSubState(int setState);
+
 protected:
+
 	// 各サブステートを保持する配列
 	std::vector<StateBase*> sub_state_pool;
+
 	// サブステート
-	//std::unique_ptr<StateBase>sub_state = nullptr;
 	StateBase* sub_state = nullptr;
 };

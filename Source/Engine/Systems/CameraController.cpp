@@ -3,7 +3,7 @@
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/AI/MetaAI.h"
-
+#include "Engine/Systems/CharacterManager.h"
 CameraController::CameraController()
 {
 	position = Camera::Instance().GetEye();

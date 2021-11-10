@@ -256,6 +256,9 @@
     <Filter Include="Source Files\Engine\Systems\Character\EnemyManager">
       <UniqueIdentifier>{67a8db17-d5f6-4749-87f5-75ecab2004da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Characters\Enemis\Snake\State">
+      <UniqueIdentifier>{21dc3dc4-6382-4271-b60e-2391985080c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp">
@@ -411,9 +414,6 @@
     <ClCompile Include="Source\Engine\Systems\RogueLikeStage.cpp">
       <Filter>Source Files\Engine\Systems\Stage\RogueLikeStage</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Characters\DerivedEnemyState.cpp">
-      <Filter>Source Files\Game\Characters\Enemis</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Characters\EnemySnake.cpp">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
     </ClCompile>
@@ -434,6 +434,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\EnemyManager.cpp">
       <Filter>Source Files\Engine\Systems\Character\EnemyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Characters\DerivedEnemyState.cpp">
+      <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -614,9 +617,6 @@
     <ClInclude Include="Source\Engine\Systems\RogueLikeStage.h">
       <Filter>Source Files\Engine\Systems\Stage\RogueLikeStage</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Characters\DerivedEnemyState.h">
-      <Filter>Source Files\Game\Characters\Enemis</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Characters\EnemySnake.h">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
     </ClInclude>
@@ -634,6 +634,18 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\EnemyManager.h">
       <Filter>Source Files\Engine\Systems\Character\EnemyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\DerivedEnemyState.h">
+      <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\EnemyState.h">
+      <Filter>Source Files\Game\Characters\Enemis</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\EnemySnakeState.h">
+      <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\PlayerState.h">
+      <Filter>Source Files\Game\Characters\Player\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

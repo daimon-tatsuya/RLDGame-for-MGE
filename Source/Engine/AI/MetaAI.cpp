@@ -1,6 +1,8 @@
 #include "Engine/AI/MetaAI.h"
+#include "Engine/Systems/CharacterManager.h"
 
 static Meta* instance = nullptr;
+
 Meta& Meta::Instance()
 {
 	return *instance;

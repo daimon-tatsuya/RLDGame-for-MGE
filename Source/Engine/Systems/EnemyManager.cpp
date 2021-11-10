@@ -66,7 +66,7 @@ void EnemyManager::DrawDebugGUI()
 }
 
 // キャラクターの登録
-void EnemyManager::Register(Character* character, int character_type)
+void EnemyManager::Register(EnemyBase* character, int character_type)
 {
 	//登録するキャラクターが敵なら
 	if (character_type >= static_cast<int>(Meta::Identity::Enemy))
@@ -97,7 +97,7 @@ void EnemyManager::Clear()
 }
 
 // キャラクターの削除
-void EnemyManager::Remove(Character* character)
+void EnemyManager::Remove(EnemyBase* character)
 {
 	// 破棄リストにすでにあれば弾く
 	for (auto& it : removes)

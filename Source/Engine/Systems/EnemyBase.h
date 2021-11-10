@@ -9,9 +9,7 @@ class EnemyBase :public Character
 private:
 
 protected:
-	int	 state = 0;
 	bool attack_flg = false;
-	int id = 0;
 	float search_range = 0.0f;
 	float attack_range = 0.0f;
 public:
@@ -28,8 +26,6 @@ public:
 	// 破棄
 	void Destroy();
 
-	// デバッグプリミティブ描画
-	//virtual void DrawDebugPrimitive() override;
 
 	// 攻撃フラグ取得
 	bool	GetAttackFlg() { return attack_flg; }

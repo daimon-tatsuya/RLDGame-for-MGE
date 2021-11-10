@@ -5,6 +5,7 @@
 #include "Engine/AI/MetaAI.h"
 
 #include "Game/Characters/EnemySnake.h"
+
 //Rattlesnake.fbx
 
 EnemySnake::EnemySnake(RogueLikeDungeon* rogue_like_dungeon)
@@ -24,6 +25,10 @@ void EnemySnake::Update(float elapsedTime)
 }
 
 void EnemySnake::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
+{
+}
+
+void EnemySnake::FSMInitialize()
 {
 }
 

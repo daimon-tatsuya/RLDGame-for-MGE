@@ -82,18 +82,10 @@ public:
 	//メッセージ受信処理
 	bool OnMessage(const Telegram& msg) override;
 
-	// 着地した時に呼ばれる
-	void OnLanding() override;
-
 	// ダメージを受けた時に呼ばれる
 	void OnDamaged() override;
 
 	// 死亡した時に呼ばれる
 	void OnDead() override;
-
-
-	//Todo 左右上下斜めの方向に一定の大きさ進む
-	//bool InputMove(float elapsedTime) override;
-
 
 };

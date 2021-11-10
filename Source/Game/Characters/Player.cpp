@@ -54,7 +54,6 @@ void Player::Update(float elapsedTime)
 {
 	position.y = 0.f;
 
-	//InputMove(elapsedTime);
 	state_machine->Update(elapsedTime);
 	{
 		//--追加---------------------------------------
@@ -122,8 +121,8 @@ void Player::DrawDebugGUI()
 	float ax = game_pad.GetAxisLX();
 	float ay = game_pad.GetAxisLY();
 
-	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_Appearing);
 	if (ImGui::Begin("Player", nullptr, ImGuiWindowFlags_None))
 	{
 		// トランスフォーム
@@ -195,10 +194,6 @@ bool Player::OnMessage(const Telegram& msg)
 	return false;
 }
 
-void Player::OnLanding()
-{
-}
-
 void Player::OnDamaged()
 {
 }
@@ -207,18 +202,3 @@ void Player::OnDead()
 {
 }
 
-//bool Player::InputMove(float elapsedTime)
-//{
-//	// カメラ方向とスティックの入力値によって進行方向を計算する
-//	Camera& camera = Camera::Instance();
-//	DirectX::XMFLOAT3 camera_right = camera.GetRight();
-//	DirectX::XMFLOAT3 camera_front = camera.GetFront();
-//
-//	// 進行ベクトル取得
-//	DirectX::XMFLOAT3 move_vec = GetMoveVec(camera_right, camera_front);
-//
-//	// 移動処理
-//	Move(move_vec.x, move_vec.z, 1.0f);
-//	// 進行ベクトルがゼロベクトルでない場合は入力された
-//	return move_vec.x != 0.0f || move_vec.y != 0.0f || move_vec.z != 0.0f;
-//}

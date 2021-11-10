@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Engine/Systems/EnemyBase.h"
+
 //Todo EnemyBase コメント
+
 class EnemySnake :
 	public EnemyBase
 {
@@ -31,6 +33,9 @@ public:
 	// 描画処理
 	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)override;
 
+	//有限ステートマシンの初期化
+	void FSMInitialize() override;
+
 	// 破棄
 	void Destroy();
 
@@ -39,8 +44,6 @@ public:
 
 	// デバッグプリミティブ描画
 	void DrawDebugPrimitive() override;
-
-
 
 	// ダメージを受けた時に呼ばれる
 	void OnDamaged()override;

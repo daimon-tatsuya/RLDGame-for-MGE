@@ -1,12 +1,14 @@
 #pragma once
 
 #include <set>
-#include "Telegram.h"
-#include "Engine/Systems/CharacterManager.h"
+#include "Engine/AI/Telegram.h"
 #include "Engine/Systems/EnemyBase.h"
 #include "Engine/Systems/PlayerBase.h"
 
 //ToDo Meta‚ªs‚¤‚±‚Æ‚ğ‘‚­
+
+//‘O•ûéŒ¾
+class CharacterManager;
 
 class Meta final
 {

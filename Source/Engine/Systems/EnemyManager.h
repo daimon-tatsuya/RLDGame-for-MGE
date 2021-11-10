@@ -13,7 +13,7 @@ private:
 	std::vector<EnemyBase*>	 enemies;// ƒGƒlƒ~[‚¾‚¯‚ğŠi”[‚·‚é
 	std::vector<EnemyBase*>	 removes;
 
-	int enemy_number = 0;	// •t—^‚·‚éID‚Ì’l(‚±‚Ì’l‚ÉMetaAI::Identity::Enemy‚ğ‰ÁZ‚µ‚Ä•t—^‚·‚é)
+	int enemy_number = 0;	// •t—^‚·‚éID‚Ì’l(‚±‚Ì’l‚ÉMetaAI::Identity::Enemy‚ğ‰ÁZ‚µ‚ÄId‚ğ•t—^‚·‚é)
 
 public:
 
@@ -50,10 +50,10 @@ public:
 	void DrawDebugGUI();
 
 	// “G‚ğ“o˜^
-	void Register(Character* character, int character_type);
+	void Register(EnemyBase* character, int character_type);
 
 	// “G‚ğíœ
-	void Remove(Character* character);
+	void Remove(EnemyBase* character);
 
 	// “G‚ğ”æ“¾
 	int GetEnemyCount() { return static_cast<int>(enemies.size()); }
@@ -72,5 +72,5 @@ public:
 	/// </summary>
 	/// <param name="number">ƒvƒŒƒCƒ„[‚Ì”Ô†:0~3</param>
 	/// <returns>number”Ô–Ú‚ÌPlayer</returns>
-	Character* GetPlayer(int number = 0);
+	//Character* GetPlayer(int number = 0);
 };

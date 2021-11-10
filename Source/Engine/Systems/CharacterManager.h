@@ -1,4 +1,4 @@
-#pragma oncezb
+#pragma
 
 #include <vector>
 #include "Engine/Systems/Shader.h"
