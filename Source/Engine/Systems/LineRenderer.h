@@ -3,21 +3,13 @@
 #include <vector>
 #include <wrl.h>
 #include <d3d11.h>
-#include <DirectXMath.h>
+
+#include "Engine/Systems/Math.h"
+
+//ToDo LineRenderer コメント
 
 class LineRenderer
 {
-public:
-	LineRenderer(ID3D11Device* device, UINT vertexCount);
-	~LineRenderer() {}
-
-public:
-	// 描画実行
-	void Render(ID3D11DeviceContext* deviceContext, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection);
-
-	// 頂点追加
-	void AddVertex(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT4& color);
-
 private:
 	struct ConstantBuffer
 	{
@@ -43,4 +35,22 @@ private:
 
 	std::vector<Vertex>			vertices;
 	UINT							capacity = 0;
+
+public:
+
+private:
+
+
+public:
+
+	LineRenderer(ID3D11Device* device, UINT vertexCount);
+	~LineRenderer() {}
+
+	// 描画実行
+	void Render(ID3D11DeviceContext* deviceContext, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection);
+
+	// 頂点追加
+	void AddVertex(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT4& color);
+
+
 };

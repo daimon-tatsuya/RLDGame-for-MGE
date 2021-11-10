@@ -1,13 +1,18 @@
-#include "DungeonMake.h"
+
 #include <windows.h>
 #include <memory>
 #include <assert.h>
 #include <tchar.h>
 #include <time.h>
 
+#include "Engine/Systems/DungeonMake.h"
+
+#include "Engine/Systems/CharacterManager.h"
+
+
 RogueLikeDungeon::RogueLikeDungeon()
 {
- srand(static_cast<unsigned int>(time(nullptr)));
+	srand(static_cast<unsigned int>(time(nullptr)));
 
 }
 RogueLikeDungeon::~RogueLikeDungeon()
@@ -18,6 +23,64 @@ void RogueLikeDungeon::InitializeMapSize()
 {
 	map_role.resize(MapSize_Y, std::vector<RogueLikeMap>(MapSize_X, 0));
 }
+void RogueLikeDungeon::UpdateMapRolePlayer()
+{
+	//更新前のプレイヤーのデータの書き換え
+	//オブジェクト配置
+	for (int y = 0; y < MapSize_Y; y++)
+	{
+		for (int x = 0; x < MapSize_X; x++)
+		{
+			//属性がプレイヤーなら
+			if (map_role[y][x].map_data == 2)
+			{
+				//足元にアイテムか罠があったら4,5
+				//床に書き換え
+				map_role[y][x].map_data = 1;
+			}
+		}
+	}
+
+	//更新
+	CharacterManager& character_manager = CharacterManager::Instance();
+
+	Character* player = character_manager.GetPlayer();
+
+	DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(player->GetPosition().x / Cell_Size, player->GetPosition().z / Cell_Size);//データ上の値にするためCell_Sizeで割る
+
+	//更新後のプレイヤーのデータの書き換え
+	map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x)].map_data = 2;
+
+}
+
+void RogueLikeDungeon::UpdateMapRoleEnemis()
+{
+	//オブジェクト配置
+	for (int y = 0; y < MapSize_Y; y++)
+	{
+		for (int x = 0; x < MapSize_X; x++)
+		{
+			//属性が敵なら
+			if (map_role[y][x].map_data == 3)
+			{
+				//足元にアイテムか罠があったら4,5
+				//床に書き換え
+				map_role[y][x].map_data = 1;
+			}
+		}
+	}
+	//更新
+	CharacterManager& character_manager = CharacterManager::Instance();
+	for (auto& enemy : character_manager.GetEnemis())
+	{
+		DirectX::XMFLOAT2 enemy_pos = DirectX::XMFLOAT2(enemy->GetPosition().x / Cell_Size, enemy->GetPosition().z / Cell_Size);//データ上の値にするためCell_Sizeで割る
+
+	//更新後のプレイヤーのデータの書き換え
+		map_role[static_cast<size_t>(enemy_pos.y)][static_cast<size_t>(enemy_pos.x)].map_data = 3;
+	}
+
+}
+
 void RogueLikeDungeon::DungeonMake(DungeonMapRole* dungeon_map_role)
 {
 	for (int i = 0; i < Mob_Max; i++)

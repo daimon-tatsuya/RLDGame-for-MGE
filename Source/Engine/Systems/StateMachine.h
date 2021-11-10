@@ -1,8 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <memory>
-//#include "Engine//Systems/Character.h"
 #include "Engine/Systems/StateBase.h"
+
+//ToDo StateMachine ƒRƒƒ“ƒg
 
 //‘O•ûéŒ¾
 class Character;

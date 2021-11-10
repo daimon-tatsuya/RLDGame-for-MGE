@@ -73,9 +73,9 @@ void CharacterManager::Register(Character* character, int character_type)
 	if (character_type >= static_cast<int>(Meta::Identity::Player))
 	{
 		// IDを設定
-		character->SetId(player_identity + static_cast<int>(Meta::Identity::Player));
+		character->SetId(player_number + static_cast<int>(Meta::Identity::Player));
 
-		player_identity++;//設定したらインクリメントする
+		player_number++;//設定したらインクリメントする
 
 		// 登録
 		characteres.emplace_back(character);
@@ -85,9 +85,9 @@ void CharacterManager::Register(Character* character, int character_type)
 	if (character_type >= static_cast<int>(Meta::Identity::Enemy))
 	{
 		// IDを設定
-		character->SetId(enemy_identity + static_cast<int>(Meta::Identity::Enemy));
+		character->SetId(enemy_number + static_cast<int>(Meta::Identity::Enemy));
 
-		enemy_identity++;//設定したらインクリメントする
+		enemy_number++;//設定したらインクリメントする
 
 		// 登録
 		characteres.emplace_back(character);
@@ -107,8 +107,8 @@ void CharacterManager::Clear()
 		delete character;
 	}
 	characteres.clear();
-	player_identity = 0;
-	enemy_identity = 0;
+	player_number = 0;
+	enemy_number = 0;
 }
 
 // キャラクターの削除
@@ -130,6 +130,16 @@ Character* CharacterManager::GetCharacterFromId(int id)
 	for (auto& character : characteres)
 	{
 		if (character->GetId() == id)
+			return character;
+	}
+	return nullptr;
+}
+
+Character* CharacterManager::GetPlayer(int number)
+{
+	for (auto& character : characteres)
+	{
+		if (character->GetId() == static_cast<int>(Meta::Identity::Player) + number)
 			return character;
 	}
 	return nullptr;

@@ -3,13 +3,15 @@
 #include <d3d11.h>
 #include <wrl.h>
 
-class Framebuffer
+//ToDo FrameBufferをディファードレンダリングをするときに使えるようにするためにコメントを書く
+
+class FrameBuffer
 {
 public:
-	Framebuffer(ID3D11Device* device, int width, int height, bool generateMips);
-	virtual ~Framebuffer() = default;
-	Framebuffer(Framebuffer&) = delete;
-	Framebuffer& operator=(Framebuffer&) = delete;
+	FrameBuffer(ID3D11Device* device, int width, int height, bool generateMips);
+	virtual ~FrameBuffer() = default;
+	FrameBuffer(FrameBuffer&) = delete;
+	FrameBuffer& operator=(FrameBuffer&) = delete;
 
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target_view;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view;

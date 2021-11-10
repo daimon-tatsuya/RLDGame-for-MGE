@@ -1,6 +1,8 @@
 #pragma once
+
 #include <DirectXMath.h>
-//Todo DirectXMath.hをincludeしているファイルは全てMath.hに置き換える
+
+//ToDo Mathが行うことを書く
 
 // 算術class
 class Math

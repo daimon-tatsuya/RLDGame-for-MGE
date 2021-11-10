@@ -1,28 +1,26 @@
-#pragma oncezb
+#pragma once
 
 #include <vector>
 #include "Engine/Systems/Shader.h"
 #include "Engine/Systems/Character.h"
 #include "Engine/Systems/EnemyBase.h"
-#include "Engine/Systems/PlayerBase.h"
 //ToDo CharacterManager コメント
 
-class CharacterManager
+class EnemyManager
 {
 private:
 
-	std::vector<Character*>	 characteres;
-	std::vector<Character*>	 removes;
-	std::vector<Character*>  enemies;// エネミーだけを格納する
+	std::vector<EnemyBase*>	 enemies;// エネミーだけを格納する
+	std::vector<EnemyBase*>	 removes;
+
 	int enemy_number = 0;	// 付与するIDの値(この値にMetaAI::Identity::Enemyを加算して付与する)
-	int player_number = 0; // 付与するIDの値(この値にMetaAI::Identity::Playerを加算して付与する)
 
 public:
 
 private:
 
-	CharacterManager() {}
-	~CharacterManager();
+	EnemyManager() {}
+	~EnemyManager();
 
 	// キャラクター同士の衝突処理
 	void CollisionCharacterToCharacter();
@@ -30,9 +28,9 @@ private:
 public:
 
 	// 唯一のインスタンス取得
-	static CharacterManager& Instance()
+	static EnemyManager& Instance()
 	{
-		static CharacterManager instance;
+		static EnemyManager instance;
 		return instance;
 	}
 
@@ -42,7 +40,7 @@ public:
 	// 描画処理
 	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader);
 
-	// キャラクターのを全削除
+	// 敵のを全削除
 	void Clear();
 
 	// デバッグプリミティブ描画
@@ -51,29 +49,23 @@ public:
 	// デバッグ用GUI描画
 	void DrawDebugGUI();
 
-	// キャラクターを登録
+	// 敵を登録
 	void Register(Character* character, int character_type);
 
-	// キャラクターを削除
+	// 敵を削除
 	void Remove(Character* character);
 
-	// キャラクターを数取得
-	int GetCharacterCount() const { return static_cast<int>(characteres.size()); }
-
-	// キャラクターを取得
-	Character* GetCharacter(int index) { return characteres.at(index); }
-
-	// キャラクターを数取得
+	// 敵を数取得
 	int GetEnemyCount() { return static_cast<int>(enemies.size()); }
 
 	// 敵配列を取得
-	std::vector<Character*> GetEnemis() { return enemies; }
+	std::vector<EnemyBase*> GetEnemis() { return enemies; }
 
 	// 敵を取得
-	Character* GetEnemy(int index) { return enemies.at(index); }
+	EnemyBase* GetEnemy(int index) { return enemies.at(index); }
 
-	//IDからキャラクターを取得
-	Character* GetCharacterFromId(int id);
+	// IDから敵を取得
+	EnemyBase* GetEnemyFromId(int id);
 
 	/// <summary>
 	/// プレイヤーの取得

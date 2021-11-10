@@ -1,12 +1,31 @@
 #pragma once
-#include <DirectXMath.h>
+
+
 #include <memory>
+#include "Engine/Systems/Math.h"
 #include "Engine/Systems/Shader.h"
 #include "Engine/AI/Telegram.h"
 #include "Engine/Objects/Model.h"
-//Todo ƒRƒƒ“ƒg
+
+//Todo Object ƒRƒƒ“ƒg
 class Object
 {
+private:
+
+protected:
+	DirectX::XMFLOAT3		position = { 0, 0, 0 };
+	DirectX::XMFLOAT3		angle = { 0, 0, 0 };//ƒ‰ƒWƒAƒ“Šp
+	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
+	DirectX::XMFLOAT4X4	transform =
+	{ 1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1 };
+	int					id = 0;
+	float				radius = 0.5f;//”¼Œa
+	float				height = 2.0f;//‚‚³
+	std::shared_ptr<Model> model = nullptr;
+public:
 private:
 
 protected:
@@ -106,20 +125,5 @@ public:
 
 	//‰ñ“]Šp‚ğ0~360‚É³‹K‰»
 	void NormalizeAngle();
-private:
 
-protected:
-	DirectX::XMFLOAT3		position = { 0, 0, 0 };
-	DirectX::XMFLOAT3		angle = { 0, 0, 0 };//ƒ‰ƒWƒAƒ“Šp
-	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
-	DirectX::XMFLOAT4X4	transform =
-	{ 1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1 };
-	int					id = 0;
-	float				radius = 0.5f;//”¼Œa
-	float				height = 2.0f;//‚‚³
-	std::shared_ptr<Model> model = nullptr;
-public:
 };

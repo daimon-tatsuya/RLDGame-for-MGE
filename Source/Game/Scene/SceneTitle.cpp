@@ -25,13 +25,7 @@ void SceneTitle::Update(float elapsedTime)
 	GamePad& gamePad = Input::Instance().GetGamePad();
 
 	// なにかボタンを押したらローディングシーンへ切り替え
-	const GamePadButton anyButton =
-		GamePad::BTN_A
-		| GamePad::BTN_B
-		| GamePad::BTN_X
-		| GamePad::BTN_Y
-		;
-	if (gamePad.GetButtonDown() & anyButton)
+	if (gamePad.GetButtonDown() & static_cast<GamePadButton>(GamePad::AnyBTN))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 	}
@@ -160,7 +154,7 @@ void SceneTitle::Render()
 		float textureWidth = 32.f;// static_cast<float>(font->GetTextureWidth());
 		float textureHeight = 32.f;// static_cast<float>(font->GetTextureHeight());
 		float positionX = screenWidth / 3;// - textureWidth;// * (textureWidth / 2);
-		float positionY = screenHeight / 2 - textureHeight;
+		float positionY =( screenHeight / 2 )- textureHeight;
 
 		font->TextOutW(device_context, message, positionX, positionY, 128, 128);
 	}

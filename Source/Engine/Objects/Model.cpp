@@ -64,7 +64,7 @@ void Model::UpdateAnimation(float elapsed_time)
 	for (int key_index = 0; key_index < key_count - 1; key_index++)
 	{
 		// 現在の時間がどのキーフレームの間にいるか判定する
-		//Todo
+		//ToDo
 		const ModelResource::Keyframe& keyframe0 = keyframes.at(key_index);
 		const ModelResource::Keyframe& keyframe1 = keyframes.at(key_index + 1);
 		if (current_seconds >= keyframe0.seconds && current_seconds < keyframe1.seconds)
@@ -82,7 +82,7 @@ void Model::UpdateAnimation(float elapsed_time)
 
 				Node& node = nodes[node_index];
 
-				//Todo　ブレンド補完(現在の姿勢と次のキーフレームとの姿勢の補完)
+				//ToDo ブレンド補完(現在の姿勢と次のキーフレームとの姿勢の補完)
 
 				// 前のキーフレームと次のキーフレームの姿勢を補完
 				DirectX::XMVECTOR S0 = DirectX::XMLoadFloat3(&key0.scale);

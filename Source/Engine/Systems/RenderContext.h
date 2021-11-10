@@ -1,6 +1,9 @@
 #pragma once
 
-#include <DirectXMath.h>
+#include "Engine/Systems/Math.h"
+
+//ToDo この,hが行うことを書く
+
 
 // レンダーコンテキスト
 struct RenderContext

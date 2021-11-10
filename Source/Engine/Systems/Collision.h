@@ -1,6 +1,11 @@
 #pragma once
-#include <DirectXMath.h>
+
+#include "Engine/Systems/Math.h"
+
 #include "Engine/Objects/Model.h"
+
+
+//ToDo Collision コメント
 
 //ヒット結果
 struct HitResult
@@ -33,9 +38,12 @@ public:
 		HitResult& result
 	);
 
-	//Todo
-	//カプセルとカプセルの交差判定
+	//Todo カプセルとカプセルの交差判定
 
-	//Todo
-	//カプセルと球の交差判定
+
+	//Todo カプセルと球の交差判定
+
+
+	//Todo AABB
+
 };

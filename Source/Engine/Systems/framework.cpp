@@ -17,19 +17,18 @@ Framework::Framework(HWND hwnd)
 	graphics(hwnd),
 	input(hwnd)
 {
-	//// シーン初期化
+	// シーン初期化
 	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
-//	_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
+
 }
 
-void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
+void Framework::Update(float elapsedTime/*最後のフレームからの経過秒数*/)
 {
 	// 入力更新処理
 	input.Update();
 
 	// シーン更新処理
 	SceneManager::Instance().Update(elapsedTime);
-//	_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
 }
 
 void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/)
@@ -51,7 +50,6 @@ void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/)
 
 	// バックバッファに描画した画を画面に表示する。
 	graphics.GetSwapChain()->Present(syncInterval, 0);
-//	_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
 }
 
 int Framework::Run()
@@ -76,23 +74,25 @@ int Framework::Run()
 
 			Update(timer.TimeInterval());
 			Render(timer.TimeInterval());
+			//_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示解放
 		}
 	}
+
 	//_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
+
 	return static_cast<int>(msg.wParam);
 }
 
 void Framework::CalculateFrameStats()
 {
-	// Code computes the average frames per second, and also the
-	// average time it takes to render one frame.  These stats
-	// are appended to the window caption bar.
+	// 1 秒あたりの平均フレーム数と、1 つのフレームをレンダリングするのにかかる平均時間を計算します。
+	// これらの統計情報は、ウィンドウのキャプションバーに追加されます。
 	static int frames = 0;
 	static float time_tlapsed = 0.0f;
 
 	frames++;
 
-	// Compute averages over one second period.
+	// 1秒ごとの平均値を計算する。
 	if ((timer.TimeStamp() - time_tlapsed) >= 1.0f)
 	{
 		float fps = static_cast<float>(frames); // fps = frameCnt / 1
@@ -102,7 +102,7 @@ void Framework::CalculateFrameStats()
 		outs << "FPS : " << fps << " / " << "Frame Time : " << mspf << " (ms)";
 		SetWindowTextA(hwnd, outs.str().c_str());
 
-		// Reset for next average.
+		// 次の平均値のためにリセットします。
 		frames = 0;
 		time_tlapsed += 1.0f;
 	}
@@ -133,11 +133,14 @@ LRESULT Framework::HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 		break;
 	case WM_ENTERSIZEMOVE:
 		// WM_EXITSIZEMOVE is sent when the user grabs the resize bars.
+		// WM_EXITSIZEMOVEは、ユーザーがリサイズバーを掴んだときに送られます。
 		timer.Stop();
 		break;
 	case WM_EXITSIZEMOVE:
 		// WM_EXITSIZEMOVE is sent when the user releases the resize bars.
 		// Here we reset everything based on the new window dimensions.
+		// WM_EXITSIZEMOVEは、ユーザがリサイズバーを離したときに送られます。
+		// ここで、新しいウィンドウの寸法に基づいてすべてをリセットします。
 		timer.Start();
 		break;
 	default:

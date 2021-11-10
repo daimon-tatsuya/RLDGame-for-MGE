@@ -6,7 +6,7 @@
 #include <string>
 #include <assert.h>
 
-#include "rasterizer.h"
+#include "Engine/Systems/Rasterizer.h"
 
 Rasterizer::Rasterizer(ID3D11Device* device, D3D11_FILTER samplerFilter, D3D11_TEXTURE_ADDRESS_MODE samplerTextureAddressMode, DirectX::XMFLOAT4 samplerBoarderColour)
 {

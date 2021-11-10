@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Engine/Systems/scene.h"
 
 #include "Engine/Objects/sprite.h"
@@ -15,6 +16,9 @@
 #include "Engine/Objects/Model.h"
 #include "Engine/Objects/ModelResource.h"
 #include "Engine/Systems/LambertShader.h"
+
+//Todo SceneTitle ƒRƒƒ“ƒg
+
 class SceneTitle : public Scene
 {
 private:

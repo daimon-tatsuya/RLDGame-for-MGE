@@ -33,7 +33,7 @@ void SceneLoading::Update(float elapsedTime)
 		timer = 0.1f;
 
 		strcpy_s(message, "Now Loading");
-		counter = (counter + 1) % 3;
+		counter = (counter + 1) % 6;
 		for (int i = 0; i < counter; i++)
 		{
 			strcat_s(message, ".");
@@ -68,12 +68,12 @@ void SceneLoading::Render()
 		Sprite* font = graphics.GetFont();
 
 		// 画面右下にローディングアイコンを描画
-		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
-		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
-		float textureWidth = 32.f;// static_cast<float>(font->GetTextureWidth());
-		float textureHeight = 32.f;// static_cast<float>(font->GetTextureHeight());
-		float positionX = screenWidth - textureWidth * (textureWidth / 2);
-		float positionY = screenHeight - textureHeight;
+		float screen_width = static_cast<float>(graphics.GetScreenWidth());
+		float screen_height = static_cast<float>(graphics.GetScreenHeight());
+		float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
+		float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
+		float positionX = screen_width - texture_width * (texture_width / 2);
+		float positionY = screen_height - texture_height;
 
 		font->TextOutW(device_context, message, positionX, positionY, 32, 32);
 	}
@@ -85,6 +85,8 @@ void SceneLoading::LoadingThread(SceneLoading* scene)
 	//シリアライズしていてロードが速すぎるのでミリ秒単位で止める
 	Sleep(3000);
 	// COM関連の初期化でスレッド毎に呼ぶ必要がある
+
+	//ToDo
 
 	/*HRSULT hr =*/ CoInitialize(nullptr);
 

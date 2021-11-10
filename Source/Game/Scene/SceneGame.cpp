@@ -78,6 +78,10 @@ void SceneGame::Initialize()
 		//}
 	}
 
+	//生成されなかったオブジェクトをマップデータから消す
+	storage_dungeon.UpdateMapRolePlayer();
+	storage_dungeon.UpdateMapRoleEnemis();
+
 }
 
 void SceneGame::Finalize()
@@ -96,6 +100,8 @@ void SceneGame::Update(float elapsed_time)
 
 	// キャラクター更新処理
 	CharacterManager::Instance().Update(elapsed_time);
+
+	storage_dungeon.UpdateMapRolePlayer();
 
 	GamePad& game_pad = Input::Instance().GetGamePad();
 

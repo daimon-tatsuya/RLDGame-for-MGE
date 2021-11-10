@@ -1,7 +1,7 @@
 #include <assert.h>
-#include "framebuffer.h"
+#include "Engine/Systems/FrameBuffer.h"
 
-Framebuffer::Framebuffer(ID3D11Device* device, int width, int height, bool generateMips)
+FrameBuffer::FrameBuffer(ID3D11Device* device, int width, int height, bool generateMips)
 {
 	HRESULT hr = S_OK;
 	{

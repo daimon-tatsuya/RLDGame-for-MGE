@@ -3,6 +3,9 @@
 #include <memory>
 #include <vector>
 
+
+//ToDo StateBase コメント
+
 //前方宣言
 class Character;
 //全てステートクラスの基底クラス

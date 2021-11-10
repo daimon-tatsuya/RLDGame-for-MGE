@@ -1,5 +1,8 @@
 #pragma once
+
 #include "Engine/Systems/Shader.h"
+
+//ToDo WireLambertShader‚ªs‚¤‚±‚Æ‚ğ‘‚­
 
 class WireLambertShader : public Shader
 {

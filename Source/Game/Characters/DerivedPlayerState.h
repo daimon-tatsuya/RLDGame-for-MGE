@@ -1,11 +1,12 @@
 #pragma once
+
 #include<memory>
 #include "Engine/AI/MetaAI.h"
 #include "Engine/Systems/StateBase.h"
 
 #include "Game/Characters/Player.h"
 
-
+// ToDo PlayerState ƒRƒƒ“ƒg
 class PlayerState :
 	public StateBase
 {
@@ -21,6 +22,8 @@ protected:
 	Player* owner = nullptr;// Š—LÒ
 
 };
+
+
 class PlayerHierarchicalState :
 	public  PlayerState ,public HierarchicalStateBase
 {

@@ -1,10 +1,37 @@
 #pragma once
-#include <DirectXMath.h>
+
+#include "Engine/Systems/Math.h"
 
 //カメラ
+//ToDo Camera コメント
 class Camera
 {
 private:
+	DirectX::XMFLOAT4X4		view =
+	{
+		0,0,0,0,
+		0,0,0,0,
+		0,0,0,0,
+		0,0,0,0
+	};
+	DirectX::XMFLOAT4X4		projection =
+	{
+		0,0,0,0,
+		0,0,0,0,
+		0,0,0,0,
+		0,0,0,0
+	};
+
+	DirectX::XMFLOAT3		eye = { 0,0,0 };
+	DirectX::XMFLOAT3		focus = { 0,0,0 };
+
+	DirectX::XMFLOAT3		up = { 0,0,0 };
+	DirectX::XMFLOAT3		front = { 0,0,0 };
+	DirectX::XMFLOAT3		right = { 0,0,0 };
+public:
+
+private:
+
 	Camera() {};
 	~Camera() {};
 
@@ -43,27 +70,5 @@ public:
 	// 右方向取得
 	const DirectX::XMFLOAT3& GetRight() const { return right; }
 
-private:
-	DirectX::XMFLOAT4X4		view =
-	{
-		0,0,0,0,
-		0,0,0,0,
-		0,0,0,0,
-		0,0,0,0
-	};
-	DirectX::XMFLOAT4X4		projection =
-	{
-		0,0,0,0,
-		0,0,0,0,
-		0,0,0,0,
-		0,0,0,0
-	};
 
-	DirectX::XMFLOAT3		eye = { 0,0,0 };
-	DirectX::XMFLOAT3		focus = { 0,0,0 };
-
-	DirectX::XMFLOAT3		up = { 0,0,0 };
-	DirectX::XMFLOAT3		front = { 0,0,0 };
-	DirectX::XMFLOAT3		right = { 0,0,0 };
-public:
 };

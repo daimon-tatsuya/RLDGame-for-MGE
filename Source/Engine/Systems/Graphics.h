@@ -1,4 +1,5 @@
 #pragma once
+
 #include <memory>
 #include <d3d11.h>
 #include <wrl.h>
@@ -10,59 +11,11 @@
 #include "Engine/Systems/LineRenderer.h"
 #include "Engine/Objects/Sprite.h"
 
+//ToDo Graphics コメント
+
 class Graphics
 {
-private:
 
-public:
-	Graphics(HWND hWnd);
-	~Graphics();
-
-	// インスタンス取得
-	static Graphics& Instance() { return *instance; }
-
-	// ミューテックス取得
-	std::mutex& GetMutex() { return mutex; }
-
-	// デバイス取得
-	ID3D11Device* GetDevice() const { return device.Get(); }
-
-	// デバイスコンテキスト取得
-	ID3D11DeviceContext* GetDeviceContext() const { return immediate_context.Get(); }
-
-	// スワップチェーン取得
-	IDXGISwapChain* GetSwapChain() const { return swapchain.Get(); }
-
-	// レンダーターゲットビュー取得
-	ID3D11RenderTargetView* GetRenderTargetView() const { return render_target_view.Get(); }
-
-	// デプスステンシルビュー取得
-	ID3D11DepthStencilView* GetDepthStencilView() const { return depth_stencil_view.Get(); }
-
-	// スクリーン幅取得
-	float GetScreenWidth() const { return screenWidth; }
-
-	// スクリーン高さ取得
-	float GetScreenHeight() const { return screenHeight; }
-
-	// デバッグレンダラ取得
-	DebugRenderer* GetDebugRenderer() const { return debug_renderer.get(); }
-
-	// ラインレンダラ取得
-	LineRenderer* GetLineRenderer() const { return line_renderer.get(); }
-
-	// ImGuiレンダラ取得
-	ImGuiRenderer* GetImGuiRenderer() const { return imgui_renderer.get(); }
-
-	// シェーダーマネージャー取得
-	ShaderManager* GetShaderManager() const { return shader_manager.get(); }
-	//フォントの取得
-	Sprite* GetFont() const { return font.get(); }
-
-	////デバッグモードの設定
-	//bool GetDebugMode() { return debug_mode; }
-
-	//void SetDebugMode(bool setMode) { debug_mode = setMode; }
 private:
 	static Graphics* instance;
 	std::mutex			mutex;
@@ -87,4 +40,59 @@ private:
 	float	screenHeight;
 	//	bool debug_mode = false;
 public:
+
+
+private:
+
+public:
+	Graphics(HWND hWnd);
+	~Graphics();
+
+	// インスタンス取得
+	static Graphics& Instance() { return *instance; }
+
+	// デバイス取得
+	ID3D11Device* GetDevice() const { return device.Get(); }
+
+	// デバイスコンテキスト取得
+	ID3D11DeviceContext* GetDeviceContext() const { return immediate_context.Get(); }
+
+	// スワップチェーン取得
+	IDXGISwapChain* GetSwapChain() const { return swapchain.Get(); }
+
+	// ミューテックス取得
+	std::mutex& GetMutex() { return mutex; }
+
+	// レンダーターゲットビュー取得
+	ID3D11RenderTargetView* GetRenderTargetView() const { return render_target_view.Get(); }
+
+	// デプスステンシルビュー取得
+	ID3D11DepthStencilView* GetDepthStencilView() const { return depth_stencil_view.Get(); }
+
+	// スクリーン幅取得
+	float GetScreenWidth() const { return screenWidth; }
+
+	// スクリーン高さ取得
+	float GetScreenHeight() const { return screenHeight; }
+
+	// デバッグレンダラ取得
+	DebugRenderer* GetDebugRenderer() const { return debug_renderer.get(); }
+
+	// ラインレンダラ取得
+	LineRenderer* GetLineRenderer() const { return line_renderer.get(); }
+
+	// ImGuiレンダラ取得
+	ImGuiRenderer* GetImGuiRenderer() const { return imgui_renderer.get(); }
+
+	// シェーダーマネージャー取得
+	ShaderManager* GetShaderManager() const { return shader_manager.get(); }
+
+	//フォントの取得
+	Sprite* GetFont() const { return font.get(); }
+
+	////デバッグモードの設定
+	//bool GetDebugMode() { return debug_mode; }
+
+	//void SetDebugMode(bool setMode) { debug_mode = setMode; }
+
 };

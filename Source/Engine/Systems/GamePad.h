@@ -2,10 +2,26 @@
 
 using GamePadButton = unsigned int;
 
+//ToDo GamePad コメント
+
 // ゲームパッド
 class GamePad
 {
+private:
+
+	GamePadButton		button_state[2] = { 0 };
+	GamePadButton		button_down = 0;
+	GamePadButton		button_up = 0;
+	float				axisLx = 0.0f;
+	float				axisLy = 0.0f;
+	float				axisRx = 0.0f;
+	float				axisRy = 0.0f;
+	float				triggerL = 0.0f;
+	float				triggerR = 0.0f;
+	int					slot = 0;
+
 public:
+
 	static const GamePadButton BTN_UP = (1 << 0);        //十字キー上
 	static const GamePadButton BTN_RIGHT = (1 << 1);  //十字キー右
 	static const GamePadButton BTN_DOWN = (1 << 2);	 //十字キー下
@@ -35,7 +51,10 @@ public:
 		| GamePad::BTN_DOWN
 		| GamePad::BTN_LEFT;//十字キー
 
+private:
+
 public:
+
 	GamePad() {}
 	~GamePad() {}
 
@@ -72,15 +91,5 @@ public:
 	// 右トリガー入力状態の取得
 	float GetTriggerR() const { return triggerR; }
 
-private:
-	GamePadButton		button_state[2] = { 0 };
-	GamePadButton		button_down = 0;
-	GamePadButton		button_up = 0;
-	float				axisLx = 0.0f;
-	float				axisLy = 0.0f;
-	float				axisRx = 0.0f;
-	float				axisRy = 0.0f;
-	float				triggerL = 0.0f;
-	float				triggerR = 0.0f;
-	int					slot = 0;
+
 };

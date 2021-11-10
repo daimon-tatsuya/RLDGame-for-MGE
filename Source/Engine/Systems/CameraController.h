@@ -1,16 +1,12 @@
 #pragma once
-#include <windows.h>
-#include <DirectXMath.h>
 
+#include <windows.h>
+#include "Engine/Systems/Math.h"
+
+
+//	ToDo CameraController コメント
 class CameraController
 {
-public:
-	CameraController();
-	~CameraController();
-
-	void Update(float elapsed_time);
-
-	void DrawDebugGUI();
 private:
 	// モード
 	enum class Mode
@@ -32,4 +28,16 @@ private:
 	float				min_angleX = DirectX::XMConvertToRadians(-45);
 	//ImGui
 	bool               ViewMap = false;
+public:
+
+private:
+
+public:
+	CameraController();
+	~CameraController();
+
+	void Update(float elapsed_time);
+
+	void DrawDebugGUI();
+
 };

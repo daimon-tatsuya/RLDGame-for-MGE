@@ -1,8 +1,13 @@
 #pragma once
+
 #include <wrl.h>
-#include <directXMath.h>
 #include <d3d11.h>
 
+
+#include "Engine/Systems/Math.h"
+
+
+//ToDo GeometricPrimitive コメント
 class GeometricPrimitive
 {
 private:
@@ -16,6 +21,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState>     rasterizer_states[2];       //線描画
 	//Microsoft::WRL::ComPtr<ID3D11RasterizerState>     fill_rasterizer_state;        //塗りつぶし描画
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depth_stencil_state;
+
+public:
+
+private:
 
 public:
 	GeometricPrimitive(ID3D11Device* device);    //コンストラクタ
@@ -52,16 +61,19 @@ class GeometricCube : public GeometricPrimitive
 {
 public:
 	GeometricCube(ID3D11Device* device);
+	virtual ~GeometricCube() {}
 };
 
 class GeometricCylinder : public GeometricPrimitive
 {
 public:
 	GeometricCylinder(ID3D11Device* device, u_int slices);
+	virtual ~GeometricCylinder() {}
 };
 
 class GeometricSphere : public GeometricPrimitive
 {
 public:
 	GeometricSphere(ID3D11Device* device, u_int slices, u_int stacks);
+	virtual ~GeometricSphere() {}
 };

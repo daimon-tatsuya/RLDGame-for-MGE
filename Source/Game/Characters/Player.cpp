@@ -9,6 +9,8 @@
 #include "Game/Characters/DerivedPlayerState.h"
 
 const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
+
+
 Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 {
 	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
@@ -27,7 +29,10 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 		{
 			if (stage_informations->map_role[y][x].map_data == 2)
 			{
-				position = DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size);
+				float pos_x = static_cast<float>(x * Cell_Size);
+				float pos_z = static_cast<float> (y * Cell_Size);
+
+				position = DirectX::XMFLOAT3(pos_x, 0, pos_z);
 			}
 		}
 	}
@@ -163,10 +168,10 @@ void Player::DrawDebugGUI()
 		}
 		ImGui::Text(u8"GamePadAxisOnStep: x:%f y:%f", ax, ay);
 		DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / Cell_Size, GetPosition().z / Cell_Size);//データ上の値にするためCell_Sizeで割る
-		int up_data		= GetStageInformations()->map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
-		int down_data = GetStageInformations()->map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
-		int right_data	= GetStageInformations()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
-		int left_data	= GetStageInformations()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
+		size_t up_data		= GetStageInformations()->map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
+		size_t down_data = GetStageInformations()->map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
+		size_t right_data	= GetStageInformations()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
+		size_t left_data	= GetStageInformations()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
 		ImGui::Text(u8"OmniMapData");
 		ImGui::Text(u8"            up:%d", up_data);
 		ImGui::Text(u8"  left:%d          right:%d ", left_data,right_data);
@@ -185,7 +190,7 @@ void Player::DrawDebugPrimitive()
 
 bool Player::OnMessage(const Telegram& msg)
 {
-	//Todo　メタAIからの受信処理
+	//ToDo メタAIからの受信処理
 
 	return false;
 }

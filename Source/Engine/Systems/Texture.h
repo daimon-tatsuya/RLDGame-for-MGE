@@ -7,4 +7,4 @@ HRESULT MakeDummyTexture(ID3D11Device* device, ID3D11ShaderResourceView** shader
 void CombineResourcePath(wchar_t(&combinedResourcePath)[256], const wchar_t* referrerFilename, const wchar_t* referentFilename);
 
 
-//ToDo　Textureクラス ShaderResouceViewを持つ　ディファード用
+//ToDo Textureクラス ShaderResouceViewを持つ　ディファード用

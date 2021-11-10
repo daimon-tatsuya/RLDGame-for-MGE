@@ -11,8 +11,5 @@ Node::Node()
 
 Node::~Node()
 {
-	//for (auto& edge : edge)
-	//{
-	//
-	//}
+
 }

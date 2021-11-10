@@ -3,32 +3,14 @@
 #include <vector>
 #include <wrl.h>
 #include <d3d11.h>
-#include <DirectXMath.h>
-#include <imgui.h>
 
+#include <imgui.h>
+#include "Engine/Systems/Math.h"
+
+
+//Todo ImGuiRenderer コメント
 class ImGuiRenderer
 {
-public:
-	ImGuiRenderer(HWND hWnd, ID3D11Device* device);
-	~ImGuiRenderer();
-
-	//フレーム開始処理
-	void NewFrame();
-
-	// 描画実行
-	void Render(ID3D11DeviceContext* device_context);
-
-	// WIN32メッセージハンドラー
-	LRESULT HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-private:
-
-	// マウスカーソル更新
-	bool UpdateMouseCursor();
-
-	// マウス座標更新
-	void UpdateMousePos();
-
 private:
 
 	struct ConstantBuffer
@@ -58,4 +40,30 @@ private:
 
 	int													vertex_count = 0;
 	int													index_count = 0;
+public:
+
+private:
+
+	// マウスカーソル更新
+	bool UpdateMouseCursor();
+
+	// マウス座標更新
+	void UpdateMousePos();
+
+
+public:
+
+	ImGuiRenderer(HWND hWnd, ID3D11Device* device);
+	~ImGuiRenderer();
+
+	//フレーム開始処理
+	void NewFrame();
+
+	// 描画実行
+	void Render(ID3D11DeviceContext* device_context);
+
+	// WIN32メッセージハンドラー
+	LRESULT HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+
 };

@@ -2,13 +2,16 @@
 
 #include <d3d11.h>
 #include <wrl.h>
-#include <directxmath.h>
-
 #include <vector>
+
+#include "Engine/Systems/Math.h"
 
 #define MAX_BONE_INFLUENCES 4
 
 #define MAX_BONES 32
+
+//ToDo SkinnedMesh ƒRƒƒ“ƒg
+
 class SkinnedMesh
 {
 public:

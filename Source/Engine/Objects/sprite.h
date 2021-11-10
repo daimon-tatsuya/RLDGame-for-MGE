@@ -2,8 +2,11 @@
 
 #include <d3d11.h>
 #include <wrl.h>
-#include <directxmath.h>
 #include <string>
+
+#include "Engine/Systems/Math.h"
+
+//ToDo Sprite コメント
 
 // スプライト
 class Sprite

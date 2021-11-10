@@ -12,6 +12,9 @@
 #define  _ASSERT_EXPR_A(expr, expr_str) ((void)0)
 #endif
 
+//ToDo ‚±‚Ì.h‚ªs‚¤‚±‚Æ‚ğ‘‚­(Œã‰ñ‚µ)
+
+
 inline LPWSTR hr_Trace(HRESULT hr)
 {
 	LPWSTR msg;

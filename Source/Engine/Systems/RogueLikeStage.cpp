@@ -81,20 +81,22 @@ void RogueLikeStage::DrawDebugGUI()
 			ImGui::InputFloat3("Scale", &this->scale.x);
 		}
 		//モデル数
-			ImGui::Text(u8"モデル数:%d", static_cast<int>(stage_chip.size()));
-			//プレイヤー初期位置
-			//ImGui::Text(u8"SetPlayerMapPosition	:%f %f", db_rogue_like_dungeon.mobs[0].position.x, db_rogue_like_dungeon.mobs[0].position.y);
-			//float PlayerFirstPosition_x = db_rogue_like_dungeon.mobs[0].position.x * 2.f;
-			//float PlayerFirstPosition_y = db_rogue_like_dungeon.mobs[0].position.y * 2.f;
-			//ImGui::Text(u8"PlayerFirstPosition:%f %f", PlayerFirstPosition_x, PlayerFirstPosition_y);
-			//ImGui::Text(u8"PlayerPointAttribute:%d", db_rogue_like_dungeon.map_role[db_rogue_like_dungeon.mobs[0].position.y][db_rogue_like_dungeon.mobs[0].position.x]);
+		ImGui::Text(u8"モデル数:%d", static_cast<int>(stage_chip.size()));
 
-			ImGui::Text(u8"SetPlayerMapPosition	:%f %f", db_rogue_like_dungeon->mobs[0].position.x, db_rogue_like_dungeon->mobs[0].position.y);
-			float PlayerFirstPosition_x = db_rogue_like_dungeon->mobs[0].position.x * 2.f;
-			float PlayerFirstPosition_y = db_rogue_like_dungeon->mobs[0].position.y * 2.f;
-			ImGui::Text(u8"PlayerFirstPosition:%f %f", PlayerFirstPosition_x, PlayerFirstPosition_y);
-			ImGui::Text(u8"PlayerPointAttribute:%d", db_rogue_like_dungeon->map_role[db_rogue_like_dungeon->mobs[0].position.y][db_rogue_like_dungeon->mobs[0].position.x]);
-		
+		//プレイヤー初期位置
+		ImGui::Text(u8"SetPlayerMapPosition	:%f %f",
+			db_rogue_like_dungeon->mobs[0].position.x, db_rogue_like_dungeon->mobs[0].position.y);
+
+		float PlayerFirstPosition_x = db_rogue_like_dungeon->mobs[0].position.x * 2.f;
+		float PlayerFirstPosition_y = db_rogue_like_dungeon->mobs[0].position.y * 2.f;
+
+		ImGui::Text(u8"PlayerFirstPosition:%f %f", PlayerFirstPosition_x, PlayerFirstPosition_y);
+		ImGui::Text(u8"PlayerPointAttribute:%d",
+			db_rogue_like_dungeon->map_role
+				[static_cast<size_t>(db_rogue_like_dungeon->mobs[0].position.y)]
+				[static_cast<size_t>(db_rogue_like_dungeon->mobs[0].position.x)]
+				.map_data);
+
 	}
 	ImGui::End();
 }
@@ -124,15 +126,22 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 			//}
 			//object_num++;
 			//map_dataが0の時、壁を配置
+
 			if (map_role[y][x].map_data == 0)
 			{
-				Stage st("Assets/FBX/geometry/wall.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
+				float pos_x = static_cast<float>(x * Cell_Size);
+				float pos_z = static_cast<float> (y * Cell_Size);
+
+				Stage st("Assets/FBX/geometry/wall.bin", DirectX::XMFLOAT3(pos_x, 0, pos_z), object_num);
 				stage_chip.push_back(st);
 			}
 
 			else if (map_role[y][x].map_data > 0)
 			{
-				Stage st("Assets/FBX/geometry/floor.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
+				float pos_x = static_cast<float>(x * Cell_Size);
+				float pos_z = static_cast<float> (y * Cell_Size);
+
+				Stage st("Assets/FBX/geometry/floor.bin", DirectX::XMFLOAT3(pos_x, 0, pos_z), object_num);
 				stage_chip.push_back(st);
 			}
 			object_num++;

@@ -4,10 +4,13 @@
 #include <tchar.h>
 #include <time.h>
 
-#include "Engine/Systems/framework.h"
+#include "Engine/Systems/Framework.h"
 
-const static LONG SCREEN_WIDTH = 1280;
-const static LONG SCREEN_HEIGHT = 720;
+//const static LONG SCREEN_WIDTH  = 1980;
+//const static LONG SCREEN_HEIGHT = 1080;
+
+const static LONG SCREEN_WIDTH = 1080;
+const static LONG SCREEN_HEIGHT = 640;
 
 LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {

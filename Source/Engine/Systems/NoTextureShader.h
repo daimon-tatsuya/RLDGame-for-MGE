@@ -1,5 +1,9 @@
 #pragma once
+
 #include "Engine/Systems/Shader.h"
+
+//ToDo NoTextureShader‚ªs‚¤‚±‚Æ‚ğ‘‚­
+
 class NoTextureShader :
 	public Shader
 {

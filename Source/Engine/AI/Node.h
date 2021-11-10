@@ -1,12 +1,13 @@
 #pragma once
+
 #include <d3d11.h>
-#include <DirectXMath.h>
 #include <vector>
 #include <memory>
 
+#include "Engine/Systems/Math.h"
 #include "Engine/AI/Edge.h"
 
-const int EDGE_NUM = 8;
+//ToDo Node‚ªs‚¤‚±‚Æ‚ğ‘‚­
 
 class Node
 {

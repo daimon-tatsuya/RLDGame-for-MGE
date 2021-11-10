@@ -105,7 +105,7 @@ void Character::MoveChack(float mx, float mz)
 }
 
 // 旋回処理
-//Todo アクションゲームようなので後回し https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
+//ToDo アクションゲームようなので後回し https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
 
 //https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
 void Character::Turn(float elapsedTime, float vx, float vz, float speed)

@@ -1,9 +1,11 @@
 #pragma once
-#pragma once
 
 #include "Engine/Systems/Stage.h"
 #include "Engine/Systems/Collision.h"
 #include "Engine/Systems/DungeonMake.h"
+
+//Todo RogueLikeStage コメント
+
 
 // ローグライクステージ
 class RogueLikeStage : public Stage

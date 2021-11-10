@@ -1,5 +1,8 @@
 #pragma once
+
 #include	 "Engine/Systems/scene.h"
+
+//Todo SceneManager コメント
 
 // シーンマネージャー
 class SceneManager

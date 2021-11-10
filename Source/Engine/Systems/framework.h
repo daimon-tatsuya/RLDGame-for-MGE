@@ -10,11 +10,30 @@
 
 #include "Engine/Systems/HighResolutionTimer.h"
 #include "Engine/Systems/Graphics.h"
-#include "Engine/Systems/Scene.h"
 #include "Engine/Systems/Input.h"
+
+
+//ToDo Framework コメント
 class Framework
 {
+
+private:
+
+	const HWND				hwnd;
+	HighResolutionTimer	timer;
+	Graphics					graphics;
+	Input							input;
+
 public:
+
+
+private:
+
+	void Update(float elapsed_time/*最後のフレームからの経過秒数*/);
+
+	void Render(float elapsed_time/*最後のフレームからの経過秒数*/);
+
+	void CalculateFrameStats();
 
 public:
 
@@ -22,19 +41,8 @@ public:
 
 	~Framework() {}
 
-	int Run();
-
 	LRESULT CALLBACK HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-private:
+	int Run();
 
-	void Update(float elapsed_time/*Elapsed seconds from last frame*/);
-	void Render(float elapsed_time/*Elapsed seconds from last frame*/);
-	void CalculateFrameStats();
-
-private:
-	const HWND				hwnd;
-	HighResolutionTimer	timer;
-	Graphics					graphics;
-	Input							input;
 };

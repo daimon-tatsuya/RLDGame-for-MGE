@@ -3,8 +3,10 @@
 #include <memory>
 #include <vector>
 #include <d3d11.h>
-#include <DirectXMath.h>
 #include "Engine/Objects/ModelResource.h"
+#include "Engine/Systems/Math.h"
+
+//ToDo Model コメント
 
 class Model
 {
@@ -34,9 +36,10 @@ public:
 	void UpdateAnimation(float elapsed_time);
 
 	// 行列計算
-	void UpdateTransform(const DirectX::XMFLOAT4X4& transform);
 	void CalculateLocalTransform();
 	void CalculateWorldTransform(const DirectX::XMMATRIX& world_transform);
+	void UpdateTransform(const DirectX::XMFLOAT4X4& transform);
+
 
 	// ノードリスト取得
 	const std::vector<Node>& GetNodes() const { return nodes; }

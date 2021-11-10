@@ -174,7 +174,7 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
 		//nowEdgeの接続先のノードを取得する。
 		std::shared_ptr<Node>node = nodes[now_edge->distnation_node];
 
-		for (int edge_num = 0; edge_num < EdgeNum; edge_num++)
+		for (int edge_num = 0; edge_num < EDGE_NUM; edge_num++)
 		{
 			std::shared_ptr<Edge> edge = node->edge[edge_num];
 			if (edge->distnation_node >= 0)//このedgeが有効なら

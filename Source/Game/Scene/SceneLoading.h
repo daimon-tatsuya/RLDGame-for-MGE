@@ -3,6 +3,8 @@
 #include "Engine/Objects//Sprite.h"
 #include "Engine/Systems/Scene.h"
 
+//Todo SceneLoad コメント
+
 // ローディングシーン
 class SceneLoading : public Scene
 {

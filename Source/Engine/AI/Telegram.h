@@ -1,5 +1,7 @@
 #pragma once
 
+//ToDo Telegramが行うことを書く
+
 // 送信するメッセージの種類
 enum class MESSAGE_TYPE : int
 {

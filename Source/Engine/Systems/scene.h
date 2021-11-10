@@ -1,9 +1,14 @@
 #pragma once
+
 #include <windows.h>
 #include <wrl.h>
-#include <directXMath.h>
 #include <d3d11.h>
 #include <memory>
+
+#include "Engine/Systems/Math.h"
+
+//Todo Scene ƒRƒƒ“ƒg
+
 class Scene
 {
 public:

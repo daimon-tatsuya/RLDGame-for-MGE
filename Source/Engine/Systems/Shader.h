@@ -1,12 +1,14 @@
 #pragma once
 
 #include <d3d11.h>
-#include <DirectXMath.h>
-#include "Engine/Objects/Model.h"
 #include "Engine/Systems/RenderContext.h"
+#include "Engine/Objects/Model.h"
 
-HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* csoname, ID3D11VertexShader** vertexShader, ID3D11InputLayout** inputLayout, D3D11_INPUT_ELEMENT_DESC* inputElementDesc, UINT numElements);
-HRESULT CreatePixelShaderFromCso(ID3D11Device* device, const char* csoname, ID3D11PixelShader** pixelShader);
+
+ HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* csoname, ID3D11VertexShader** vertexShader, ID3D11InputLayout** inputLayout, D3D11_INPUT_ELEMENT_DESC* inputElementDesc, UINT numElements);
+ HRESULT CreatePixelShaderFromCso(ID3D11Device* device, const char* csoname, ID3D11PixelShader** pixelShader);
+
+//Todo Shader ÉRÉÅÉìÉg
 
 class Shader
 {

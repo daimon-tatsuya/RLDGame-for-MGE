@@ -4,9 +4,12 @@
 #include <vector>
 #include <wrl.h>
 #include <d3d11.h>
-#include <DirectXMath.h>
 #include <fbxsdk.h>
+#include "Engine/Systems/Math.h"
 
+/* ToDo ModelResource コメント
+ テクスチャーを入れれるようにする(後回し)
+*/
 class ModelResource
 {
 public:

@@ -211,6 +211,7 @@
     <ClCompile Include="Source\Engine\Objects\SkinnedMesh.cpp" />
     <ClCompile Include="Source\Engine\Objects\Sprite.cpp" />
     <ClCompile Include="Source\Engine\Objects\StaticMesh.cpp" />
+    <ClCompile Include="Source\Engine\Systems\Blender.cpp" />
     <ClCompile Include="Source\Engine\Systems\Camera.cpp" />
     <ClCompile Include="Source\Engine\Systems\CameraController.cpp" />
     <ClCompile Include="Source\Engine\Systems\Character.cpp" />
@@ -219,10 +220,12 @@
     <ClCompile Include="Source\Engine\Systems\DebugRenderer.cpp" />
     <ClCompile Include="Source\Engine\Systems\DungeonMake.cpp" />
     <ClCompile Include="Source\Engine\Systems\EnemyBase.cpp" />
-    <ClCompile Include="Source\Engine\Systems\Framebuffer.cpp" />
+    <ClCompile Include="Source\Engine\Systems\EnemyManager.cpp" />
+    <ClCompile Include="Source\Engine\Systems\FrameBuffer.cpp" />
     <ClCompile Include="Source\Engine\Systems\Framework.cpp" />
     <ClCompile Include="Source\Engine\Systems\GamePad.cpp" />
     <ClCompile Include="Source\Engine\Systems\Graphics.cpp" />
+    <ClCompile Include="Source\Engine\Systems\HighResolutionTimer.cpp" />
     <ClCompile Include="Source\Engine\Systems\ImGuiRenderer.cpp" />
     <ClCompile Include="Source\Engine\Systems\Input.cpp" />
     <ClCompile Include="Source\Engine\Systems\LambertShader.cpp" />
@@ -281,7 +284,8 @@
     <ClInclude Include="Source\Engine\Systems\DebugRenderer.h" />
     <ClInclude Include="Source\Engine\Systems\DungeonMake.h" />
     <ClInclude Include="Source\Engine\Systems\EnemyBase.h" />
-    <ClInclude Include="Source\Engine\Systems\Framebuffer.h" />
+    <ClInclude Include="Source\Engine\Systems\EnemyManager.h" />
+    <ClInclude Include="Source\Engine\Systems\FrameBuffer.h" />
     <ClInclude Include="Source\Engine\Systems\Framework.h" />
     <ClInclude Include="Source\Engine\Systems\GamePad.h" />
     <ClInclude Include="Source\Engine\Systems\Graphics.h" />

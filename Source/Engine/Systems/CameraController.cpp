@@ -60,7 +60,7 @@ void CameraController::Update(float elapsed_time)
 
 	// 注視点から後ろベクトル方向に一定距離離れたカメラ視点を求める
 	new_position.x = target.x - front.x * range;
-	//Todo　マジックナンバー
+	//ToDo マジックナンバー
 	new_position.y = target.y - front.y * range + 50;
 	new_position.z = target.z - front.z * range;
 

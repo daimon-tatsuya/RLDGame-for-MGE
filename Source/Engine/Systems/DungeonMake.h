@@ -1,23 +1,31 @@
 #pragma once
+
 #include <cstdint>
 #include <vector>
-#include <DirectXMath.h>
 #include "Engine/Systems/Math.h"
+
 //参考資料
 //https://qiita.com/gis/items/f760a1fb27aa4c3659cf
 //https://qiita.com/gis/items/b9cf998db63b465d9f50
 
-#define ONE 1 //DXlibのGetRand関数を使わない場合+1する必要がある
+//ToDo DungeonMake のする内容を書く
 
+
+//グローバル変数
 /*マップ系データ*/
 const static size_t MapSize_Y = 64; //マップ縦サイズ
 const static size_t MapSize_X = 64;   //マップ横サイズ
 const static int MapSize = MapSize_Y * MapSize_X;
 
+const static int	 ONE = 1; //DXlibのGetRand関数を使わない場合+1する必要がある
+
 const static int Mob_Max = 25;//mobの出現最大値
 const static int Cell_Size = 2;//world座標での升目の大きさ
+
 /// <summary>
 /// mobのマップ情報
+/// つかわないかも
+/// ToDo 消すかも
 /// </summary>
 struct MobRole
 {
@@ -66,10 +74,39 @@ public:
 /// </summary>
 class  RogueLikeDungeon
 {
+private:
+
+public:
+	/// <summary>
+	/// マップの通路の軸
+	/// </summary>
+	enum class  Road : int
+	{
+		Axis_Y = 0,
+		Axis_X
+	};
+
+	/// <summary>
+	/// マップ情報を保存するコンテナ
+	/// 0:壁、1:床、2:プレイヤー、3:敵, 4:アイテム, 5:罠
+	/// </summary>
+	std::vector<std::vector<RogueLikeMap>> map_role;
+
+	/// <summary>
+	/// マップ情報の雛形　マッププール
+	/// </summary>
+	DungeonMapRole dungeon_map_role = {};
+
+	/// <summary>
+	/// マップ上に存在するmobの情報
+	/// </summary>
+	MobRole mobs[Mob_Max] = {};
+
+private:
+
 public:
 	RogueLikeDungeon();
 	~RogueLikeDungeon();
-
 
 	/// <summary>
 	/// マップのサイズを初期化する
@@ -77,14 +114,20 @@ public:
 	void InitializeMapSize();
 
 	/// <summary>
-	///  インスタンス取得
+	/// 敵の更新の前にプレイヤーのマップ情報を更新する
 	/// </summary>
-	/// <returns>このクラスの実体</returns>
-	//static RogueLikeDungeon& Instance()
-	//{
-	//	static RogueLikeDungeon instance;
-	//	return instance;
-	//}
+	//void UpdateMapRolePlayer();
+
+	/// <summary>
+	/// 敵の更新の前にプレイヤーのマップ情報を更新する
+	/// </summary>
+	void UpdateMapRolePlayer();
+
+	/// <summary>
+	/// 敵のマップ情報を更新する
+	/// </summary>
+	void UpdateMapRoleEnemis();
+
 
 	/// <summary>
 	/// マップ生成関数
@@ -116,31 +159,5 @@ public:
 	/// マップ情報を初期化
 	/// </summary>
 	void MapReMake(DungeonMapRole* dungeon_map_role);
-private:
 
-public:
-	/// <summary>
-	/// マップの通路の軸
-	/// </summary>
-	enum class  Road : int
-	{
-		Axis_Y = 0,
-		Axis_X
-	};
-
-	/// <summary>
-	/// マップ情報を保存するコンテナ
-	/// 0:壁、1:床、2:プレイヤー、3:敵, 4:アイテム, 5:罠
-	/// </summary>
-	std::vector<std::vector<RogueLikeMap>> map_role;
-
-	/// <summary>
-	/// マップ情報の雛形　マッププール
-	/// </summary>
-	DungeonMapRole dungeon_map_role = {};
-
-	/// <summary>
-	/// マップ上に存在するmobの情報
-	/// </summary>
-	MobRole mobs[Mob_Max] = {};
 };

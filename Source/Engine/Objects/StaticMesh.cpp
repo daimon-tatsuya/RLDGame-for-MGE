@@ -196,7 +196,7 @@ StaticMesh::StaticMesh(ID3D11Device* device, const wchar_t* objFilename, bool fl
 		iterator->index_count = (iterator - 1)->index_start - iterator->index_start;
 	}
 
-	CreateBuffers(device, vertices.data(), /*Todo*/vertices.size(), indices.data(), indices.size());
+	CreateBuffers(device, vertices.data(), /*ToDo*/vertices.size(), indices.data(), indices.size());
 
 	//std::wstring texture_filename;
 	// parse MTL file
@@ -438,7 +438,7 @@ StaticMesh::StaticMesh(ID3D11Device* device, const wchar_t* objFilename, bool fl
 	sampler_desc.MipLODBias = 0;
 	sampler_desc.MaxAnisotropy = 16;
 	sampler_desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	//Todo SetBorderColor
+	//ToDo SetBorderColor
 	sampler_desc.BorderColor[0] = 0.f;
 	sampler_desc.BorderColor[1] = 0.f;
 	sampler_desc.BorderColor[2] = 0.f;

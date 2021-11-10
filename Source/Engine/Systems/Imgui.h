@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Engine/Systems/misc.h"
 //デバッグ時のみ有効
 #if defined( DEBUG ) || defined( _DEBUG )

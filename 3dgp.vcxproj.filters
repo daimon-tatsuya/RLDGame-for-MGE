@@ -199,9 +199,6 @@
     <Filter Include="Source Files\Engine\Systems\StateMachine\StateBase">
       <UniqueIdentifier>{50b0b10c-fe8b-48d2-b3b4-4102e11d2495}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\FrameWork">
-      <UniqueIdentifier>{3f50b83f-a4ff-467d-b356-2243f3db2a9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\NotUsing">
       <UniqueIdentifier>{2634d080-ac7c-447e-8fb1-001fa808de41}</UniqueIdentifier>
     </Filter>
@@ -247,6 +244,18 @@
     <Filter Include="Source Files\Engine\Systems\Character\CharacterManager">
       <UniqueIdentifier>{2d38a632-97a5-4cee-83aa-5abc48a96ded}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Systems\Framework">
+      <UniqueIdentifier>{3f50b83f-a4ff-467d-b356-2243f3db2a9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\HighResolutionTimer">
+      <UniqueIdentifier>{2ec1b6c0-0678-4abf-8d2d-56c673dde1d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\BehaviorTree\Blender">
+      <UniqueIdentifier>{6739962c-a840-4691-9aae-2657ab236654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Character\EnemyManager">
+      <UniqueIdentifier>{67a8db17-d5f6-4749-87f5-75ecab2004da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp">
@@ -263,12 +272,6 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Objects\StaticMesh.cpp">
       <Filter>Source Files\NotUsing\Engine\Objects\StaticMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Framebuffer.cpp">
-      <Filter>Source Files\NotUsing\Engine\Systems\FrameBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Framework.cpp">
-      <Filter>Source Files\Engine\Systems\FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Rasterizer.cpp">
       <Filter>Source Files\NotUsing\Engine\Systems\Rasterizer</Filter>
@@ -417,6 +420,21 @@
     <ClCompile Include="Source\Game\Characters\Player.cpp">
       <Filter>Source Files\Game\Characters\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Blender.cpp">
+      <Filter>Source Files\Engine\Systems\BehaviorTree\Blender</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\FrameBuffer.cpp">
+      <Filter>Source Files\NotUsing\Engine\Systems\FrameBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Framework.cpp">
+      <Filter>Source Files\Engine\Systems\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\HighResolutionTimer.cpp">
+      <Filter>Source Files\Engine\Systems\HighResolutionTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\EnemyManager.cpp">
+      <Filter>Source Files\Engine\Systems\Character\EnemyManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Scene\SceneTitle.h">
@@ -434,20 +452,8 @@
     <ClInclude Include="Source\Engine\Objects\StaticMesh.h">
       <Filter>Source Files\NotUsing\Engine\Objects\StaticMesh</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Framebuffer.h">
-      <Filter>Source Files\NotUsing\Engine\Systems\FrameBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Framework.h">
-      <Filter>Source Files\Engine\Systems\FrameWork</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Rasterizer.h">
       <Filter>Source Files\NotUsing\Engine\Systems\Rasterizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Blender.h">
-      <Filter>Source Files\Engine\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\HighResolutionTimer.h">
-      <Filter>Source Files\Engine\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Imgui.h">
       <Filter>Source Files\Engine\Systems</Filter>
@@ -613,6 +619,21 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Characters\EnemySnake.h">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Blender.h">
+      <Filter>Source Files\Engine\Systems\BehaviorTree\Blender</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\FrameBuffer.h">
+      <Filter>Source Files\NotUsing\Engine\Systems\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Framework.h">
+      <Filter>Source Files\Engine\Systems\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\HighResolutionTimer.h">
+      <Filter>Source Files\Engine\Systems\HighResolutionTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\EnemyManager.h">
+      <Filter>Source Files\Engine\Systems\Character\EnemyManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

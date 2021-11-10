@@ -3,13 +3,37 @@
 #include "Engine/Systems/Object.h"
 #include "Engine/Systems/StateMachine.h"
 #include "Engine/Systems/DungeonMake.h"
-//Todo コメントの書き換え
 
-// キャラクター
-
+//ToDo Character コメント
+//ToDo Charactor ゲームに共通するものだけ残し、あとはこのクラスを継承して、アクションゲームのキャラクターベースと分ける仕様にする
 // 使わない関数があるが、あくまでアクションゲームベースなので消さない
 class Character : public Object
 {
+
+private:
+
+public:
+
+protected:
+	RogueLikeDungeon* stage_informations = nullptr;
+	std::unique_ptr<StateMachine> state_machine = nullptr;
+
+	DirectX::XMFLOAT3	velocity = { 0, 0, 0 };
+	float				gravity = -1.0f;
+	float				gravity_cut_time = 0;//重力を無視するときに使う
+	bool				is_ground = false;
+	int					health = 5;
+	int					max_health = 5;
+	float				invincible_timer = 0.0f;//無敵時間
+	float				friction = 0.5f;
+	float				acceleration = 1.0f;
+	float				max_move_speed = 5.0f;
+	float				move_vecX = 0.0f;
+	float				move_vecZ = 0.0f;
+	float				air_control = 0.3f;
+	float				step_offset = 1.0f;
+	float				slope_rate = 0.0f;
+
 private:
 
 	//有限ステートマシンの初期化
@@ -27,21 +51,19 @@ private:
 	// 水平移動更新処理
 	void UpdateHorizontalMove(float elapsedTime);
 
-
-
 protected:
+
+	// 空中ダッシュ処理
+	void AirDush(float vx, float vz, float gravity_cut_time);
+
+	// ジャンプ処理
+	void Jump(float speed);
 
 	// 移動処理
 	void Move(float vx, float vz, float speed);
 
 	// 旋回処理
 	void Turn(float elapsed_time, float vx, float vz, float speed);
-
-	// ジャンプ処理
-	void Jump(float speed);
-
-	// 空中ダッシュ処理
-	void AirDush(float vx, float vz, float gravity_cut_time);
 
 	// 着地した時に呼ばれる
 	virtual void OnLanding() {}
@@ -82,36 +104,16 @@ public:
 	// 最大健康状態を取得
 	int GetMaxHealth() const { return max_health; }
 
+	//プレイヤーが移動できるかチェックする
 	void MoveChack(float mx, float mz);
 
 		// 最大健康状態を取得
 	void SetMaxHealth() { this->max_health = max_health; }
 
-	//ステートマシンをを取得
+	//ステートマシンを取得
 	StateMachine* GetStateMachine() { return state_machine.get(); }
 
+	//マップ情報を取得
 	RogueLikeDungeon* GetStageInformations(){ return stage_informations; }
-private:
 
-
-public:
-
-protected:
-	RogueLikeDungeon* stage_informations = nullptr;
-	std::unique_ptr<StateMachine> state_machine = nullptr;
-	DirectX::XMFLOAT3	velocity = { 0, 0, 0 };
-	float				gravity = -1.0f;
-	float				gravity_cut_time = 0;//重力を無視するときに使う
-	bool				is_ground = false;
-	int					health = 5;
-	int					max_health = 5;
-	float				invincible_timer = 0.0f;//無敵時間
-	float				friction = 0.5f;
-	float				acceleration = 1.0f;
-	float				max_move_speed = 5.0f;
-	float				move_vecX = 0.0f;
-	float				move_vecZ = 0.0f;
-	float				air_control = 0.3f;
-	float				step_offset = 1.0f;
-	float				slope_rate = 0.0f;
 };

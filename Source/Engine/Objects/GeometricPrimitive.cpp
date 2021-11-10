@@ -575,7 +575,7 @@ GeometricCylinder::GeometricCylinder(ID3D11Device* device, u_int slices) : Geome
 	indices.push_back(base_index + (0) * 2 + 0);
 	indices.push_back(base_index + (0) * 2 + 1);
 
-	CreateBuffers(device, vertices.data(), /*Todo*/vertices.size(), indices.data(), indices.size());
+	CreateBuffers(device, vertices.data(), /*ToDo*/vertices.size(), indices.data(), indices.size());
 }
 
 GeometricSphere::GeometricSphere(ID3D11Device* device, u_int slices, u_int stacks) : GeometricPrimitive(device)
@@ -682,5 +682,5 @@ GeometricSphere::GeometricSphere(ID3D11Device* device, u_int slices, u_int stack
 		indices.push_back(base_index + i + 1);
 	}
 
-	CreateBuffers(device, vertices.data(), /*Todo*/vertices.size(), indices.data(), indices.size());
+	CreateBuffers(device, vertices.data(), /*ToDo*/vertices.size(), indices.data(), indices.size());
 }
