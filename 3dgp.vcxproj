@@ -248,7 +248,7 @@
     <ClCompile Include="Source\Engine\Systems\StateMachine.cpp" />
     <ClCompile Include="Source\Engine\Systems\Texture.cpp" />
     <ClCompile Include="Source\Engine\Systems\WireframeLambert.cpp" />
-    <ClCompile Include="Source\Game\Characters\DerivedEnemyState.cpp" />
+    <ClCompile Include="Source\Game\Characters\DerivedEnemySnakeState.cpp" />
     <ClCompile Include="Source\Game\Characters\DerivedPlayerState.cpp" />
     <ClCompile Include="Source\Game\Characters\EnemySnake.cpp" />
     <ClCompile Include="Source\Game\Characters\Player.cpp" />
@@ -316,7 +316,7 @@
     <ClInclude Include="Source\Engine\Systems\StateMachine.h" />
     <ClInclude Include="Source\Engine\Systems\Texture.h" />
     <ClInclude Include="Source\Engine\Systems\WireframeLambert.h" />
-    <ClInclude Include="Source\Game\Characters\DerivedEnemyState.h" />
+    <ClInclude Include="Source\Game\Characters\DerivedEnemySnakeState.h" />
     <ClInclude Include="Source\Game\Characters\DerivedPlayerState.h" />
     <ClInclude Include="Source\Game\Characters\EnemySnake.h" />
     <ClInclude Include="Source\Game\Characters\EnemySnakeState.h" />

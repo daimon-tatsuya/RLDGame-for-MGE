@@ -1,6 +1,5 @@
 #pragma once
 
-#include<memory>
 #include "Engine/AI/MetaAI.h"
 #include "Game/Characters/Player.h"
 #include "Game/Characters/PlayerState.h"
@@ -11,70 +10,82 @@
 //--------------------------------------
 
 /// <summary>
-/// プレイヤーの入力を受け付ける
+/// プレイヤーの入力を受け付けるステート
 /// </summary>
-class EntryState :
+class PlayerEntryState :
 	public PlayerHierarchicalState
 {
 private:
+
 public:
+
 	/// <summary>
-	/// プレイヤーの入力を受け付けるステート
+	/// プレイヤーの入力を受け付ける
 	/// </summary>
 	/// <param name="character">所持者のポインタ</param>
-	EntryState(Player* player) : PlayerHierarchicalState(player) {}
-	virtual ~EntryState() ;
+	PlayerEntryState(Player* player) : PlayerHierarchicalState(player) {}
+
+	virtual ~PlayerEntryState() ;
 
 	// ステートに入った時のメソッド
 	void Enter()override;
+
 	// ステートで実行するメソッド
 	void Execute(float elapsedTime)override;
+
 	// ステートから出ていくときのメソッド
 	void Exit()override;
 };
 
 /// <summary>
-/// プレイヤーの受動を管理する
+/// プレイヤーの受動を管理するステート
 /// </summary>
-class ReactionState :
+class PlayerReactionState :
 	public PlayerHierarchicalState
 {
 private:
 public:
 	/// <summary>
-	/// プレイヤーの受動を管理するステート
+	/// プレイヤーの受動を管理する
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	ReactionState(Player* player) : PlayerHierarchicalState(player) {}
-	virtual ~ReactionState() ;
+	/// <param name="player">所持者のポインタ</param>
+	PlayerReactionState(Player* player) : PlayerHierarchicalState(player) {}
+
+	virtual ~PlayerReactionState() ;
 
 	// ステートに入った時のメソッド
 	void Enter()override;
+
 	// ステートで実行するメソッド
 	void Execute(float elapsedTime)override;
+
 	// ステートから出ていくときのメソッド
 	void Exit()override;
 };
 
 /// <summary>
-///	 MetaAIからメッセージを受信したとき
+///	 MetaAIからメッセージを受信したときのステート
 /// </summary>
-class ReceiveState :
+class PlayerReceiveState :
 	public PlayerHierarchicalState
 {
 private:
+
 public:
 	/// <summary>
-	///	 MetaAIからメッセージを受信したときのステート
+	///	 MetaAIからメッセージを受信したとき
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	ReceiveState(Player* player) : PlayerHierarchicalState(player) {}
-	virtual ~ReceiveState() ;
+	/// <param name="player">所持者のポインタ</param>
+	PlayerReceiveState(Player* player) : PlayerHierarchicalState(player) {}
+
+	virtual ~PlayerReceiveState() ;
 
 	// ステートに入った時のメソッド
 	void Enter()override;
+
 	// ステートで実行するメソッド
 	void Execute(float elapsedTime)override;
+
 	// ステートから出ていくときのメソッド
 	void Exit()override;
 };
@@ -84,17 +95,18 @@ public:
 //--------------------------------------
 
 //Inputの子ステート
-class SelectState :
+class PlayerSelectState :
 	public PlayerState
 {
 private:
+
 public:
 	/// <summary>
 	///	 入力を受け付け、それに応じてステートを遷移させるステート
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	SelectState(Player* player) : PlayerState(player) {}
-	virtual ~SelectState() {};
+	/// <param name="player">所持者のポインタ</param>
+	PlayerSelectState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerSelectState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -104,7 +116,7 @@ public:
 	void Exit()override;
 };
 //Inputの子ステート
-class WayChangeState
+class PlayerWayChangeState
 	:public PlayerState
 {
 private:
@@ -113,9 +125,9 @@ public:
 	/// <para>方向を変えるステート</para>
 	/// このステートはMoveに遷移しないがAttackには遷移できる
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	WayChangeState(Player* player) : PlayerState(player) {}
-	virtual ~WayChangeState() {};
+	/// <param name="player">所持者のポインタ</param>
+	PlayerWayChangeState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerWayChangeState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -127,7 +139,7 @@ public:
 
 };
 //Inputの子ステート
-class MoveState
+class PlayerMoveState
 	:public PlayerState
 {
 private:
@@ -135,9 +147,9 @@ public:
 	/// <summary>
 	/// 1マス移動するステート
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	MoveState(Player* player) : PlayerState(player) {}
-	virtual ~MoveState() {};
+	/// <param name="player">所持者のポインタ</param>
+	PlayerMoveState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerMoveState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -149,7 +161,7 @@ public:
 
 };
 //Inputの子ステート
-class AttackState
+class PlayerAttackState
 	:public PlayerState
 {
 private:
@@ -157,9 +169,9 @@ public:
 	/// <summary>
 	/// プレイヤーの前方を攻撃するステート
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	AttackState(Player* player) : PlayerState(player) {}
-	virtual ~AttackState() {};
+	/// <param name="player">所持者のポインタ</param>
+	PlayerAttackState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerAttackState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -171,7 +183,7 @@ public:
 
 };
 //Inputの子ステート
-class MenuState
+class PlayerMenuState
 	:public PlayerState
 {
 private:
@@ -180,9 +192,9 @@ public:
 	/// <para>メニューを開いているステート</para>
 	///  <para>閉じたときSelectに遷移する</para>
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	MenuState(Player* player) : PlayerState(player) {}
-	virtual ~MenuState() {};
+	/// <param name="player">所持者のポインタ</param>
+	PlayerMenuState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerMenuState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -195,7 +207,7 @@ public:
 };
 
 //Reactionの子ステート
-class DamagedState
+class PlayerDamagedState
 	:public PlayerState
 {
 private:
@@ -203,9 +215,9 @@ public:
 	/// <summary>
 	/// プレイヤーの前方を攻撃するステート
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	DamagedState(Player* player) : PlayerState(player) {}
-	virtual ~DamagedState() {};
+	/// <param name="player">所持者のポインタ</param>
+	PlayerDamagedState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerDamagedState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -217,7 +229,7 @@ public:
 
 };
 //Reactionの子ステート
-class DeathState
+class PlayerDeathState
 	:public PlayerState
 {
 private:
@@ -226,9 +238,9 @@ public:
 	/// <para>メニューを開いているステート</para>
 	///  <para>閉じたときSelectに遷移する</para>
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	DeathState(Player* player) : PlayerState(player) {}
-	virtual ~DeathState() {};
+	/// <param name="player">所持者のポインタ</param>
+	PlayerDeathState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerDeathState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -241,7 +253,31 @@ public:
 };
 
 //Receiveの子ステート
-class CalledState
+class PlayerWaitState
+	:public PlayerState
+{
+private:
+public:
+	/// <summary>
+	/// <para>MetaAIから送られてくるメッセージを待つステート</para>
+	///  <para></para>
+	/// </summary>
+	/// <param name="player">所持者のポインタ</param>
+	PlayerWaitState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerWaitState() {};
+
+	// ステートに入った時のメソッド
+	void Enter()override;
+	// ステートで実行するメソッド
+	void Execute(float elapsedTime)override;
+	// ステートから出ていくときのメソッド
+	void Exit()override;
+
+
+};
+
+//Receiveの子ステート
+class PlayerCalledState
 	:public PlayerState
 {
 private:
@@ -250,9 +286,9 @@ public:
 	/// <para>MetaAIから送られてくるメッセージによってステートを遷移させる</para>
 	///  <para></para>
 	/// </summary>
-	/// <param name="character">所持者のポインタ</param>
-	CalledState(Player* player) : PlayerState(player) {}
-	virtual ~CalledState() {};
+	/// <param name="player">所持者のポインタ</param>
+	PlayerCalledState(Player* player) : PlayerState(player) {}
+	virtual ~PlayerCalledState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;

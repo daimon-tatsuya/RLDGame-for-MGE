@@ -15,7 +15,7 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 {
 	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
 	scale.x = scale.y = scale.z = 1.f;
-	position.y = 3.f;
+	position.y = 0.f;
 
 	//初期ステート
 	FSMInitialize();
@@ -38,14 +38,6 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 	}
 }
 
-Player::Player()
-{
-	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
-	scale.x = scale.y = scale.z = 1.f;
-	position = DirectX::XMFLOAT3(0, 3, 0);
-
-}
-
 Player::~Player()
 {
 }
@@ -64,11 +56,11 @@ void Player::Update(float elapsedTime)
 
 	//--消す予定----------------------------------
 	// 速力更新処理
-	UpdateVelocity(elapsedTime);
+	//UpdateVelocity(elapsedTime);
 
-	// 無敵時間更新
-	UpdateInvincibleTimer(elapsedTime);
-	//------------------------------------------------
+	//// 無敵時間更新
+	//UpdateInvincibleTimer(elapsedTime);
+	////------------------------------------------------
 
 	//回転角の正規化
 	NormalizeAngle();
@@ -92,24 +84,25 @@ void Player::FSMInitialize()
 {
 	state_machine = std::make_unique<StateMachine>(this);
 	//親ステート
-	state_machine->RegisterState(new EntryState(this));
-	state_machine->RegisterState(new ReactionState(this));
-	state_machine->RegisterState(new  ReceiveState(this));
+	state_machine->RegisterState(new PlayerEntryState(this));
+	state_machine->RegisterState(new PlayerReactionState(this));
+	state_machine->RegisterState(new  PlayerReceiveState(this));
 
 	////子ステート
 	//Entry
-	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new SelectState(this));
-	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new WayChangeState(this));
-	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new MoveState(this));
-	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new AttackState(this));
-	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new MenuState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new PlayerSelectState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new PlayerWayChangeState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new PlayerMoveState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new PlayerAttackState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new PlayerMenuState(this));
 
 	//Reaction
-	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Reaction), new DamagedState(this));
-	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Reaction), new DeathState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Reaction), new PlayerDamagedState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Reaction), new PlayerDeathState(this));
 
 	//Receive
-	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Receive), new CalledState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Receive), new PlayerWaitState(this));
+	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Receive), new PlayerCalledState(this));
 
 	state_machine->SetState(static_cast<int>(Player::ParentState::Entry));
 }
@@ -122,7 +115,7 @@ void Player::DrawDebugGUI()
 	float ay = game_pad.GetAxisLY();
 
 	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Appearing);
-	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2(300, 350), ImGuiCond_Appearing);
 	if (ImGui::Begin("Player", nullptr, ImGuiWindowFlags_None))
 	{
 		// トランスフォーム

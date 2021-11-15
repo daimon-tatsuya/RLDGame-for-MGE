@@ -11,6 +11,8 @@ class Player :
 {
 private:
 
+protected:
+
 public:
 
 	//親ステート
@@ -31,6 +33,7 @@ public:
 		Attack,
 		Menu,
 		//Map,
+		//Ability,
 		//MessageLog,
 		//Inventry,
 		//View,
@@ -48,20 +51,21 @@ public:
 		StateEnd
 	};
 
-
-
 	//子ステート
 	enum class Receive
 	{
+		Wait,
 		Called,
 		StateEnd
 	};
+
 private:
+
+protected:
 
 public:
 
 	Player(RogueLikeDungeon* rogue_like_dungeon);
-	Player();
 	~Player()override;
 
 	// 更新処理

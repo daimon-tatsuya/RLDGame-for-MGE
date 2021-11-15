@@ -22,14 +22,12 @@ void CameraController::Update(float elapsed_time)
 	Character* pl = character_manager.GetCharacterFromId(static_cast<int>(Meta::Identity::Player));
 	this->new_target = pl->GetPosition();
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	float ax = gamePad.GetAxisRX();
-	float ay = gamePad.GetAxisRY();
 	// カメラの回転速度
 	float speed = roll_speed * elapsed_time;
 
 	// スティックの入力値に合わせてX軸とY軸を回転
-	angle.x += ay *speed;
-	angle.y += ax *speed;
+	//angle.x += ay *speed;
+	//angle.y += ax *speed;
 
 	// X軸のカメラ回転を制限
 	if (angle.x < min_angleX)

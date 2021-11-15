@@ -10,13 +10,14 @@ class EnemyBaseState :
 	public StateBase
 {
 private:
+
 public:
+
 	EnemyBaseState(EnemyBase* enemy_base) :owner(enemy_base) {};
 	virtual ~EnemyBaseState() {};
 
-
-
 protected:
+
 	//QÆ—p‚Ì‚½‚ß‰ğ•ú‚µ‚È‚¢
 	EnemyBase* owner = nullptr;// Š—LÒ
 
@@ -27,9 +28,13 @@ class EnemyBaseHierarchicalState :
 	public  EnemyBaseState, public HierarchicalStateBase
 {
 private:
+
 public:
+
 	EnemyBaseHierarchicalState(EnemyBase* enemy_base) :EnemyBaseState(enemy_base) {};
 	virtual ~EnemyBaseHierarchicalState() {};
+
 protected:
+
 
 };

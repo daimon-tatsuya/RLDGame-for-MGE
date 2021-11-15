@@ -5,12 +5,13 @@
 
 
 const float cos45 = cosf(Math::ConvertToRadianAngle(45.f));
-//const float
+
+
 //-------------------------------------
 //親ステート
 //--------------------------------------
 
-EntryState::~EntryState()
+PlayerEntryState::~PlayerEntryState()
 {
 	// 登録されたサブステートを順番に削除
 	for (auto& state : sub_state_pool)
@@ -20,25 +21,25 @@ EntryState::~EntryState()
 	sub_state_pool.clear();
 }
 
-void EntryState::Enter()
+void PlayerEntryState::Enter()
 {
 	// 初期に入るサブステート
 	SetSubState(static_cast<int>(Player::Entry::Select));
 }
 
-void EntryState::Execute(float elapsedTime)
+void PlayerEntryState::Execute(float elapsedTime)
 {
 	// サブステートの実行
 	sub_state->Execute(elapsedTime);
 
 }
 
-void EntryState::Exit()
+void PlayerEntryState::Exit()
 {
 
 }
 
-ReactionState::~ReactionState()
+PlayerReactionState::~PlayerReactionState()
 {
 	// 登録されたサブステートを順番に削除
 	for (auto& state : sub_state_pool)
@@ -49,7 +50,7 @@ ReactionState::~ReactionState()
 	owner = nullptr;
 }
 
-void ReactionState::Enter()
+void PlayerReactionState::Enter()
 {
 	if (owner->GetHealth() > 0)
 	{
@@ -62,17 +63,17 @@ void ReactionState::Enter()
 	}
 }
 
-void ReactionState::Execute(float elapsedTime)
+void PlayerReactionState::Execute(float elapsedTime)
 {
 	// サブステートの実行
 	sub_state->Execute(elapsedTime);
 }
 
-void ReactionState::Exit()
+void PlayerReactionState::Exit()
 {
 }
 
-ReceiveState::~ReceiveState()
+PlayerReceiveState::~PlayerReceiveState()
 {
 	// 登録されたサブステートを順番に削除
 	for (auto& state : sub_state_pool)
@@ -84,18 +85,18 @@ ReceiveState::~ReceiveState()
 	owner = nullptr;
 }
 
-void ReceiveState::Enter()
+void PlayerReceiveState::Enter()
 {
 
 }
 
-void ReceiveState::Execute(float elapsedTime)
+void PlayerReceiveState::Execute(float elapsedTime)
 {
 	// サブステートの実行
 	sub_state->Execute(elapsedTime);
 }
 
-void ReceiveState::Exit()
+void PlayerReceiveState::Exit()
 {
 }
 
@@ -104,12 +105,12 @@ void ReceiveState::Exit()
 //--------------------------------------
 
 
-void SelectState::Enter()
+void PlayerSelectState::Enter()
 {
 
 }
 
-void SelectState::Execute(float elapsedTime)
+void PlayerSelectState::Execute(float elapsedTime)
 {
 	GamePad& game_pad = Input::Instance().GetGamePad();
 
@@ -146,17 +147,17 @@ void SelectState::Execute(float elapsedTime)
 	}
 }
 
-void SelectState::Exit()
+void PlayerSelectState::Exit()
 {
 }
 
 
 
-void WayChangeState::Enter()
+void PlayerWayChangeState::Enter()
 {
 }
 
-void WayChangeState::Execute(float elapsedTime)
+void PlayerWayChangeState::Execute(float elapsedTime)
 {
 
 	GamePad& game_pad = Input::Instance().GetGamePad();
@@ -241,17 +242,17 @@ void WayChangeState::Execute(float elapsedTime)
 	}
 }
 
-void WayChangeState::Exit()
+void PlayerWayChangeState::Exit()
 {
 }
 
 
 
-void MoveState::Enter()
+void PlayerMoveState::Enter()
 {
 }
 
-void MoveState::Execute(float elapsedTime)
+void PlayerMoveState::Execute(float elapsedTime)
 {
 	GamePad& game_pad = Input::Instance().GetGamePad();
 
@@ -360,76 +361,91 @@ void MoveState::Execute(float elapsedTime)
 	owner->GetStateMachine()->GetState()->ChangeSubState(static_cast<int>(Player::Entry::Select));
 }
 
-void MoveState::Exit()
+void PlayerMoveState::Exit()
 {
 	//	Meta meta = Meta::Instance();
 }
 
 
-void AttackState::Enter()
+void PlayerAttackState::Enter()
 {
 }
 
-void AttackState::Execute(float elapsedTime)
+void PlayerAttackState::Execute(float elapsedTime)
 {
 	owner->GetStateMachine()->GetState()->ChangeSubState(static_cast<int>(Player::Entry::Select));
 }
 
-void AttackState::Exit()
+void PlayerAttackState::Exit()
 {
 	//	Meta meta = Meta::Instance();
 }
 
 
 
-void MenuState::Enter()
+void PlayerMenuState::Enter()
 {
 }
 
-void MenuState::Execute(float elapsedTime)
+void PlayerMenuState::Execute(float elapsedTime)
 {
 	owner->GetStateMachine()->GetState()->ChangeSubState(static_cast<int>(Player::Entry::Select));
 }
 
-void MenuState::Exit()
+void PlayerMenuState::Exit()
 {
 }
 
 
 
-void DamagedState::Enter()
+void PlayerDamagedState::Enter()
 {
 }
 
-void DamagedState::Execute(float elapsedTime)
+void PlayerDamagedState::Execute(float elapsedTime)
 {
 }
 
-void DamagedState::Exit()
+void PlayerDamagedState::Exit()
 {
 }
 
 
-void DeathState::Enter()
+void PlayerDeathState::Enter()
 {
 }
 
-void DeathState::Execute(float elapsedTime)
+void PlayerDeathState::Execute(float elapsedTime)
 {
 }
 
-void DeathState::Exit()
+void PlayerDeathState::Exit()
 {
 }
 
-void CalledState::Enter()
+void PlayerCalledState::Enter()
 {
 }
 
-void CalledState::Execute(float elapsedTime)
+void PlayerWaitState::Enter()
 {
 }
 
-void CalledState::Exit()
+void PlayerWaitState::Execute(float elapsedTime)
 {
 }
+
+void PlayerWaitState::Exit()
+{
+}
+
+
+void PlayerCalledState::Execute(float elapsedTime)
+{
+}
+
+void PlayerCalledState::Exit()
+{
+}
+
+

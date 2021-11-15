@@ -435,7 +435,7 @@
     <ClCompile Include="Source\Engine\Systems\EnemyManager.cpp">
       <Filter>Source Files\Engine\Systems\Character\EnemyManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Characters\DerivedEnemyState.cpp">
+    <ClCompile Include="Source\Game\Characters\DerivedEnemySnakeState.cpp">
       <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
     </ClCompile>
   </ItemGroup>
@@ -635,9 +635,6 @@
     <ClInclude Include="Source\Engine\Systems\EnemyManager.h">
       <Filter>Source Files\Engine\Systems\Character\EnemyManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Characters\DerivedEnemyState.h">
-      <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Characters\EnemyState.h">
       <Filter>Source Files\Game\Characters\Enemis</Filter>
     </ClInclude>
@@ -646,6 +643,9 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Characters\PlayerState.h">
       <Filter>Source Files\Game\Characters\Player\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\DerivedEnemySnakeState.h">
+      <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

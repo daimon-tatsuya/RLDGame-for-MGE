@@ -9,13 +9,49 @@ class EnemySnake :
 {
 private:
 
-
 protected:
 
-
 public:
+
 	//親ステート
+	enum class ParentState :int
+	{
+		Select = 0,
+		Reaction,
+		Receive,
+
+		StateEnd
+	};
+
 	//子ステート
+	enum class Select :int
+	{
+		Move = 0,
+		Attack,
+		Ability,
+		UseItem,
+
+		StateEnd
+	};
+
+	//子ステート
+	enum class Reaction :int
+	{
+		Damaged = 0,
+		Death,
+
+		StateEnd
+	};
+
+	//子ステート
+	enum class Receive
+	{
+		Wait,
+		Called,
+		StateEnd
+	};
+
+
 private:
 
 
@@ -25,7 +61,6 @@ protected:
 public:
 
 	EnemySnake(RogueLikeDungeon* rogue_like_dungeon);
-	EnemySnake();
 	virtual ~EnemySnake();
 
 	void Update(float elapsedTime)override;
