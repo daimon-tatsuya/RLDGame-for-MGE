@@ -1,18 +1,26 @@
-#include "Engine/Systems/CameraController.h"
-#include "Engine/Systems/Camera.h"
+//**********************************************************
+//
+//		CameraControllerクラス
+//
+//**********************************************************
+
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/Graphics.h"
-#include "Engine/AI/MetaAI.h"
+
+#include "Engine/Systems/Camera.h"
+#include "Engine/Systems/CameraController.h"
+
 #include "Engine/Systems/CharacterManager.h"
+#include "Engine/AI/MetaAI.h"
+
+
+
 CameraController::CameraController()
 {
 	position = Camera::Instance().GetEye();
 	new_position = Camera::Instance().GetEye();
 	angle.x = DirectX::XMConvertToRadians(15);
 }
-
-CameraController::~CameraController()
-{}
 
 // 更新処理
 void CameraController::Update(float elapsed_time)
@@ -24,6 +32,7 @@ void CameraController::Update(float elapsed_time)
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	// カメラの回転速度
 	float speed = roll_speed * elapsed_time;
+
 
 	// スティックの入力値に合わせてX軸とY軸を回転
 	//angle.x += ay *speed;
@@ -58,8 +67,8 @@ void CameraController::Update(float elapsed_time)
 
 	// 注視点から後ろベクトル方向に一定距離離れたカメラ視点を求める
 	new_position.x = target.x - front.x * range;
-	//ToDo マジックナンバー
-	new_position.y = target.y - front.y * range + 50;
+
+	new_position.y = target.y - front.y * range + camera_heght;
 	new_position.z = target.z - front.z * range;
 
 	// 徐々に目標に近づける
@@ -95,10 +104,12 @@ void CameraController::DrawDebugGUI()
 			ImGui::InputFloat3("Degree", &a.x);
 			//注視点
 			ImGui::InputFloat3("target", &target.x);
+			//カメラの高さ
+			ImGui::DragFloat("Height", &camera_heght);
 			ImGui::Checkbox("ViewMap", &ViewMap);
 			if (ViewMap)
 			{
-				position.y = 400.f;
+				camera_heght = 400.f;
 			}
 		}
 	}

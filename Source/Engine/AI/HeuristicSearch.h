@@ -14,14 +14,14 @@ private:
 
 public:
 
-	//全ノードを保持するベクター
-	std::vector<std::shared_ptr<Node>> nodes;
+	std::vector<std::shared_ptr<Node>> nodes;//全ノードを保持するベクター
 
-	//探索済みのエッジを保存
-	std::vector<std::shared_ptr<Edge>> searched_edge;
+	std::vector<std::shared_ptr<Edge>> searched_edge;//探索済みのエッジを保存
 
-	//進行ルートのエッジをを記憶する
-	std::vector<int>  advance;
+	std::vector<int>  advance;//進行ルートのエッジをを記憶する
+
+	static HeuristicSearch* instance;//唯一のインスタンス
+
 
 private:
 	/// <summary>
@@ -39,8 +39,14 @@ public:
 	~HeuristicSearch();
 
 	//唯一のインスタンス取得
-	static HeuristicSearch& Instance();
+	static HeuristicSearch& Instance() { return *instance; };
 
+	/// <summary>
+	/// start_idからgoal_idのコストを抑えた最短経路を計算
+	/// </summary>
+	/// <param name="start_id">マップ情報を見た時のスタ―ト地点</param>
+	/// <param name="goal_id">マップ情報を見た時のスタ―ト地点</param>
+	/// <returns>最短経路</returns>
 	std::vector<int> Search(int start_id, int goal_id);
 
 };

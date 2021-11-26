@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		ModelƒNƒ‰ƒX
+//
+//**********************************************************
 #include "Engine/Systems/misc.h"
 #include "Engine/Objects/Model.h"
 #include  "Engine/Systems/ResourceManager.h"

@@ -1,5 +1,9 @@
 #include "Engine/Systems/StateBase.h"
-
+//**********************************************************
+//
+//		CharacterƒNƒ‰ƒX
+//
+//**********************************************************
 void HierarchicalStateBase::ChangeSubState(int newState)
 {
 	sub_state->Exit();

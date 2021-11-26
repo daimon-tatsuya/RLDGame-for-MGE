@@ -1,9 +1,14 @@
 #pragma once
-
+//**********************************************************
+//
+//		WireLambertShader
+//
+//**********************************************************
 #include "Engine/Systems/Shader.h"
 
-//ToDo WireLambertShaderが行うことを書く
-
+/// <summary>
+/// ワイヤーフレームで表示
+/// </summary>
 class WireLambertShader : public Shader
 {
 public:

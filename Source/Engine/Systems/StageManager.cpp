@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		StageManagerƒNƒ‰ƒX
+//
+//**********************************************************
 #include "Engine/Systems/StageManager.h"
 
 StageManager::~StageManager()

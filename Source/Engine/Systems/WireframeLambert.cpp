@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		WireLambertShader
+//
+//**********************************************************
 #include "Engine/Systems/misc.h"
 #include "Engine/Systems/WireframeLambert.h"
 

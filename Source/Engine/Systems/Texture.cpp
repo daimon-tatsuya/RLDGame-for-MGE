@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		Texture
+//
+//**********************************************************
 #include <WICTextureLoader11.h>
 #include <DDSTextureLoader11.h>
 #include <DirectXTex.h>

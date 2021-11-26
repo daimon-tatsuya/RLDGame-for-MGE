@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		Characterクラス
+//
+//**********************************************************
+
 #include "Engine/Systems/Character.h"
 #include "Engine/Systems/StageManager.h"
 #include "Engine/Systems/Math.h"
@@ -105,9 +111,7 @@ void Character::MoveChack(float mx, float mz)
 }
 
 // 旋回処理
-//ToDo アクションゲームようなので後回し https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
-
-//https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
+//ToDo アクションゲーム用なので後回し https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
 void Character::Turn(float elapsedTime, float vx, float vz, float speed)
 {
 	speed *= elapsedTime;
@@ -170,13 +174,13 @@ void Character::UpdateVelocity(float elapsed_time)
 	float elapsed_frame = 60.0f * elapsed_time;
 
 	// 垂直速力更新処理
-	//UpdateVerticalVelocity(elapsed_frame);
+	UpdateVerticalVelocity(elapsed_frame);
 
 	// 水平速力更新処理
 	UpdateHorizontalVelocity(elapsed_frame);
 
 	// 垂直移動更新処理
-	//UpdateVerticalMove(elapsed_time);
+	UpdateVerticalMove(elapsed_time);
 
 	// 水平移動更新処理
 	UpdateHorizontalMove(elapsed_time);

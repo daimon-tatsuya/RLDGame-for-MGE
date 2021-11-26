@@ -1,5 +1,9 @@
 #pragma once
-
+//**********************************************************
+//
+//		Player‚ÌStateƒNƒ‰ƒX
+//
+//**********************************************************
 #include "Engine/AI/MetaAI.h"
 #include "Game/Characters/Player.h"
 #include "Game/Characters/PlayerState.h"

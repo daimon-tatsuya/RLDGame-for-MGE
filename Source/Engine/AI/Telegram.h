@@ -1,8 +1,14 @@
 #pragma once
+//**********************************************************
+//
+//		Telegramクラス
+//
+//**********************************************************
 
-//ToDo Telegramが行うことを書く
 
-// 送信するメッセージの種類
+/// <summary>
+/// 送信するメッセージの種類
+/// </summary>
 enum class MESSAGE_TYPE : int
 {
 	MSG_CALL_HELP,				// 仲間を呼ぶ(Enemy、メタAIの両方で使用)
@@ -11,6 +17,9 @@ enum class MESSAGE_TYPE : int
 	MSG_ASK_ATTACK_RIGHT,		// 攻撃権を要求(EnemyからメタAIへのメッセージ用)
 };
 
+/// <summary>
+/// メッセージを設定するクラス
+/// </summary>
 class Telegram
 {
 public:

@@ -2,10 +2,9 @@
 
 #include "Engine/Systems/Math.h"
 
-//ToDo この,hが行うことを書く
-
-
-// レンダーコンテキスト
+/// <summary>
+/// 描画のリソース
+/// </summary>
 struct RenderContext
 {
 	DirectX::XMFLOAT4X4		view;

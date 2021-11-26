@@ -1,4 +1,9 @@
 #pragma once
+//**********************************************************
+//
+//		Graphicsクラス
+//
+//**********************************************************
 
 #include <memory>
 #include <d3d11.h>
@@ -11,8 +16,10 @@
 #include "Engine/Systems/LineRenderer.h"
 #include "Engine/Objects/Sprite.h"
 
-//ToDo Graphics コメント
 
+/// <summary>
+/// 描画周り管理クラス
+/// </summary>
 class Graphics
 {
 
@@ -33,14 +40,15 @@ private:
 	std::unique_ptr<ShaderManager>								shader_manager;
 	std::unique_ptr<Sprite>											font;
 
+	// Shader
 	std::shared_ptr<Shader>											lambert_shader;
 	std::shared_ptr<Shader>											wireframe_lambert_shader;
 	std::shared_ptr<Shader>											no_texture_shader;
-	float	screenWidth;
-	float	screenHeight;
-	//	bool debug_mode = false;
-public:
 
+	float	screen_width;
+	float	screen_height;
+
+public:
 
 private:
 
@@ -48,8 +56,13 @@ public:
 	Graphics(HWND hWnd);
 	~Graphics();
 
-	// インスタンス取得
+	// 唯一のインスタンス取得
 	static Graphics& Instance() { return *instance; }
+//------------------------------------------------
+//
+//	Getter Setter
+//
+//------------------------------------------------
 
 	// デバイス取得
 	ID3D11Device* GetDevice() const { return device.Get(); }
@@ -70,10 +83,10 @@ public:
 	ID3D11DepthStencilView* GetDepthStencilView() const { return depth_stencil_view.Get(); }
 
 	// スクリーン幅取得
-	float GetScreenWidth() const { return screenWidth; }
+	float GetScreenWidth() const { return screen_width; }
 
 	// スクリーン高さ取得
-	float GetScreenHeight() const { return screenHeight; }
+	float GetScreenHeight() const { return screen_height; }
 
 	// デバッグレンダラ取得
 	DebugRenderer* GetDebugRenderer() const { return debug_renderer.get(); }

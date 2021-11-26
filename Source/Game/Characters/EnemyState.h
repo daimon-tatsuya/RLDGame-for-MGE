@@ -1,11 +1,18 @@
 #pragma once
-#pragma once
-#pragma once
+
+//****************************************************
+//
+//		EnemyBaseStateクラス
+//		EnemyBaseHierarchicalStateクラス
+//
+//****************************************************
 #include "Engine/Systems/StateBase.h"
 #include "Engine/Systems/EnemyBase.h"
 
-// ToDo EnemyBaseState コメント
 
+/// <summary>
+/// 敵クラスのStateの基底クラス
+/// </summary>
 class EnemyBaseState :
 	public StateBase
 {
@@ -24,6 +31,9 @@ protected:
 };
 
 
+/// <summary>
+/// 敵クラスの親Stateの基底クラス
+/// </summary>
 class EnemyBaseHierarchicalState :
 	public  EnemyBaseState, public HierarchicalStateBase
 {

@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		ShaderManagerƒNƒ‰ƒX
+//
+//**********************************************************
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/ShaderManager.h"
 

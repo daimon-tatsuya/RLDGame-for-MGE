@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		Cameraクラス
+//
+//**********************************************************
+
 #include "Engine/Systems/Camera.h"
 
 void Camera::SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& focus, const DirectX::XMFLOAT3& up)
@@ -36,5 +42,12 @@ void Camera::SetPerspectiveFov(float fovY, float aspect, float nearZ, float farZ
 {
 	// 画角、画面比率、クリップ距離からプロジェクション行列を作成
 	DirectX::XMMATRIX Projection = DirectX::XMMatrixPerspectiveFovLH(fovY, aspect, nearZ, farZ);
+	DirectX::XMStoreFloat4x4(&projection, Projection);
+}
+
+void Camera::SetOrthFov(float fovY, float aspect, float nearZ, float farZ)
+{
+	// 画角、画面比率、クリップ距離からプロジェクション行列を作成
+	DirectX::XMMATRIX Projection = DirectX::XMMatrixOrthographicLH(fovY, aspect, nearZ, farZ);
 	DirectX::XMStoreFloat4x4(&projection, Projection);
 }

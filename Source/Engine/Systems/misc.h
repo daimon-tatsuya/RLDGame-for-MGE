@@ -12,9 +12,6 @@
 #define  _ASSERT_EXPR_A(expr, expr_str) ((void)0)
 #endif
 
-//ToDo ‚±‚Ì.h‚ªs‚¤‚±‚Æ‚ğ‘‚­(Œã‰ñ‚µ)
-
-
 inline LPWSTR hr_Trace(HRESULT hr)
 {
 	LPWSTR msg;
@@ -22,6 +19,9 @@ inline LPWSTR hr_Trace(HRESULT hr)
 	return msg;
 }
 
+/// <summary>
+///
+/// </summary>
 class Benchmark
 {
 	LARGE_INTEGER ticks_per_second;

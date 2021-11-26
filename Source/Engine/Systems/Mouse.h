@@ -1,10 +1,17 @@
 #pragma once
+//**********************************************************
+//
+//		Mouseクラス
+//
+//**********************************************************
 
 #include <Windows.h>
 
 using MouseButton = unsigned int;
 
-//ToDo Mouse コメント
+/// <summary>
+///マウスの操作入力を検知するクラス
+/// </summary>
 class Mouse
 {
 public:

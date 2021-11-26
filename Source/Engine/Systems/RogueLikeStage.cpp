@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		RogueLikeStageƒNƒ‰ƒX
+//
+//**********************************************************
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/RogueLikeStage.h"
 

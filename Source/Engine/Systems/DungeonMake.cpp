@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		RogueLikeDungeonクラス
+//
+//**********************************************************
 
 #include <windows.h>
 #include <memory>
@@ -5,8 +10,8 @@
 #include <tchar.h>
 #include <time.h>
 
-#include "Engine/Systems/DungeonMake.h"
 
+#include "Engine/Systems/DungeonMake.h"
 #include "Engine/Systems/CharacterManager.h"
 
 
@@ -15,14 +20,17 @@ RogueLikeDungeon::RogueLikeDungeon()
 	srand(static_cast<unsigned int>(time(nullptr)));
 
 }
+
 RogueLikeDungeon::~RogueLikeDungeon()
 {
 	map_role.clear();
 }
+
 void RogueLikeDungeon::InitializeMapSize()
 {
 	map_role.resize(MapSize_Y, std::vector<RogueLikeMap>(MapSize_X, 0));
 }
+
 void RogueLikeDungeon::UpdateMapRolePlayer()
 {
 	//更新前のプレイヤーのデータの書き換え
@@ -71,13 +79,13 @@ void RogueLikeDungeon::UpdateMapRoleEnemis()
 	}
 	//更新
 	CharacterManager& character_manager = CharacterManager::Instance();
-	for (auto& enemy : character_manager.GetEnemis())
-	{
-		DirectX::XMFLOAT2 enemy_pos = DirectX::XMFLOAT2(enemy->GetPosition().x / Cell_Size, enemy->GetPosition().z / Cell_Size);//データ上の値にするためCell_Sizeで割る
+	//for (auto& enemy : character_manager.GetEnemis())
+	//{
+	//	DirectX::XMFLOAT2 enemy_pos = DirectX::XMFLOAT2(enemy->GetPosition().x / Cell_Size, enemy->GetPosition().z / Cell_Size);//データ上の値にするためCell_Sizeで割る
 
-	//更新後のプレイヤーのデータの書き換え
-		map_role[static_cast<size_t>(enemy_pos.y)][static_cast<size_t>(enemy_pos.x)].map_data = 3;
-	}
+	////更新後のプレイヤーのデータの書き換え
+	//	map_role[static_cast<size_t>(enemy_pos.y)][static_cast<size_t>(enemy_pos.x)].map_data = 3;
+	//}
 
 }
 
@@ -111,7 +119,7 @@ void RogueLikeDungeon::MapReMake(DungeonMapRole* dungeon_map_role)
 bool RogueLikeDungeon::MobMake(DungeonMapRole* const dungeon_map_role, std::vector<std::vector<RogueLikeMap>>& map_role, int id)
 {
 	//Mobを設置する
-	int random_room_id = dungeon_map_role->map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role->map_room_count)))]; //マップ上の部屋をランダムに指定する
+	int random_room_id = static_cast<int>(dungeon_map_role->map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role->map_room_count)))]); //マップ上の部屋をランダムに指定する
 
 	int random_pos_y = (Math::RandomInt(static_cast<int>(dungeon_map_role->map_room[random_room_id][0] - dungeon_map_role->map_room[random_room_id][2]))); //マップのY座標の長さの中からランダムに指定
 	int position_y = static_cast<int>(dungeon_map_role->map_room[random_room_id][2]) + random_pos_y; //マップ上の部屋のランダムなY座標
@@ -125,14 +133,14 @@ bool RogueLikeDungeon::MobMake(DungeonMapRole* const dungeon_map_role, std::vect
 		//	プレイヤーの位置
 		map_role[position_y][position_x].map_data = 2;
 		mobs[id].position = { static_cast<float>(position_x),static_cast<float>(position_y) };
-		dungeon_map_role->map_room_player[random_room_id] = 1; //部屋にプレイヤーがいる(侵入)
+		dungeon_map_role->map_room_player[random_room_id] = 1; //部屋にプレイヤーがいる
 	}
-	else//id!=0
+	else
 	{
 		while (((mobs[0].position.y == position_y) && (mobs[0].position.x == position_x)))//プレイヤーと重なっているなら
 		{
 			//Mobを設置する
-			random_room_id = dungeon_map_role->map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role->map_room_count)))]; //マップ上の部屋をランダムに指定する
+			random_room_id = static_cast<int>(dungeon_map_role->map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role->map_room_count)))]); //マップ上の部屋をランダムに指定する
 
 			random_pos_y = (Math::RandomInt(static_cast<int>(dungeon_map_role->map_room[random_room_id][0] - dungeon_map_role->map_room[random_room_id][2]))); //マップのY座標の長さの中からランダムに指定
 			position_y = static_cast<int>(dungeon_map_role->map_room[random_room_id][2]) + random_pos_y; //マップ上の部屋のランダムなY座標
@@ -252,7 +260,12 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 		//0.軸の右端(iR)の座標(divAfter*R/3~2divAfter*R/3)
 		dungeon_map_role->map_division[i][count] = dungeon_map_role->map_division[division_after][count + 2] +
 			(dungeon_map_role->map_division[division_after][count] - dungeon_map_role->map_division[division_after][count + 2]) / 3 +
-			static_cast<size_t>(Math::RandomInt(((dungeon_map_role->map_division[division_after][count] - dungeon_map_role->map_division[division_after][count + 2]) / 3)));
+			static_cast<size_t>
+			(Math::RandomInt
+				(
+					((static_cast<int>(dungeon_map_role->map_division[division_after][count]) - static_cast<int>(dungeon_map_role->map_division[division_after][count + 2]))/ 3)
+				)
+			);
 
 		dungeon_map_role->map_division[i][count + 2] = dungeon_map_role->map_division[division_after][count + 2]; //0.軸の左端(iL)の座標(divAfterL)
 		dungeon_map_role->map_division[division_after][count + 2] = dungeon_map_role->map_division[i][count]; //divAfter軸の左端(divAfterL)の座標(iR)
@@ -295,7 +308,7 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 			dungeon_map_role->map_room[i][0] = dungeon_map_role->map_division[i][2] + 1;
 			dungeon_map_role->map_room[i][1] = dungeon_map_role->map_division[i][3] + 1;
 		}
-		//Todo マジックナンバー
+
 		size_t l = static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role->map_division[i][0] - dungeon_map_role->map_room[i][0] - 5)) + static_cast<size_t>(2));
 		size_t m = static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role->map_division[i][1] - dungeon_map_role->map_room[i][1] - 5)) + static_cast<size_t>(2));
 		dungeon_map_role->map_room[i][0] += l;

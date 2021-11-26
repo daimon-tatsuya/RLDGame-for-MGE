@@ -1,4 +1,9 @@
 #pragma once
+//**********************************************************
+//
+//		ImGuiRendererクラス
+//
+//**********************************************************
 
 #include <vector>
 #include <wrl.h>
@@ -7,8 +12,9 @@
 #include <imgui.h>
 #include "Engine/Systems/Math.h"
 
-
-//Todo ImGuiRenderer コメント
+/// <summary>
+/// Imguiを描画を行うクラス
+/// </summary>
 class ImGuiRenderer
 {
 private:

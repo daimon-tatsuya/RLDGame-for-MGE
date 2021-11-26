@@ -1,10 +1,17 @@
 #pragma once
+//**********************************************************
+//
+//		Blenderクラス
+//
+//**********************************************************
 
 #include <d3d11.h>
 #include <wrl.h>
 #include "Engine/Systems/Misc.h"
 
-//ToDo Blender コメント
+/// <summary>
+/// BlendStateを作成するクラス
+/// </summary>
 class Blender
 {
 private:

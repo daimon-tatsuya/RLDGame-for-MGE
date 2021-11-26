@@ -1,12 +1,16 @@
 #pragma once
-
+//**********************************************************
+//
+//		Stageクラス
+//
+//**********************************************************
 #include "Engine/Systems/Object.h"
 
 #include "Engine/Systems/Collision.h"
 
-//ToDo Stage コメント
-
-// ステージ
+/// <summary>
+/// ステージの基底クラス
+/// </summary>
 class Stage : public Object
 {
 public:

@@ -1,11 +1,14 @@
 #pragma once
+//**********************************************************
+//
+//		LambertShaderƒNƒ‰ƒX
+//
+//**********************************************************
 
 #include "Engine/Systems/Shader.h"
 
-//ToDo LambertShader‚ªs‚¤‚±‚Æ‚ğ‘‚­
-
 /// <summary>
-///
+///	 ŠgU”½Ë
 /// </summary>
 class LambertShader : public Shader
 {

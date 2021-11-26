@@ -91,7 +91,7 @@ void CharacterManager::Register(Character* character, int character_type)
 
 		// “o˜^
 		characteres.emplace_back(character);
-		enemies.emplace_back(static_cast<EnemyBase*>(character));
+		//enemy_manager.Register(character);
 	}
 }
 

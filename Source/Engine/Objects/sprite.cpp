@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		SpriteƒNƒ‰ƒX
+//
+//**********************************************************
 #include <stdio.h>
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/misc.h"

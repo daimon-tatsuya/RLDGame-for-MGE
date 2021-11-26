@@ -1,10 +1,16 @@
 #pragma once
+//**********************************************************
+//
+//		GamePadクラス
+//
+//**********************************************************
 
 using GamePadButton = unsigned int;
 
-//ToDo GamePad コメント
-
-// ゲームパッド
+/// <summary>
+/// <para>ゲームパッドの入力を検知する。 </para>
+/// <para>PCコントローラー、キーボード </para>
+/// </summary>
 class GamePad
 {
 private:
@@ -60,6 +66,12 @@ public:
 
 	// 更新
 	void Update();
+
+	//------------------------------------------------
+	//
+	// Getter Setter
+	//
+	//------------------------------------------------
 
 	// スロット設定
 	void SetSlot(int slot) { this->slot = slot; }

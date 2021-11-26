@@ -1,23 +1,23 @@
 #pragma once
-
+//**********************************************************
+//
+//		ShaderManagerクラス
+//
+//**********************************************************
 #include <memory>
 #include <string>
 #include <map>
 #include "Engine/Systems/Shader.h"
 
-//Todo ShaderManager コメント
-
+/// <summary>
+/// Shaderを管理するクラス
+/// </summary>
 class ShaderManager
 {
 private:
 
 public:
-	//// 唯一のインスタンス取得
-	//static ShaderManager& Instance()
-	//{
-	//	static ShaderManager instance;
-	//	return instance;
-	//}
+
 	ShaderManager() {}
 	~ShaderManager();
 	enum class ShaderName : int

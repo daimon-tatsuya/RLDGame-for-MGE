@@ -1,6 +1,14 @@
+
+//**********************************************************
+//
+//		GamePadクラス
+//
+//**********************************************************
+
 #include <windows.h>
 #include <math.h>
 #include <Xinput.h>
+
 #include "Engine/Systems/GamePad.h"
 
 // 更新

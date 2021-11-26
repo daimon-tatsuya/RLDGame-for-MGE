@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		StateMachineƒNƒ‰ƒX
+//
+//**********************************************************
+
 #include "Engine/Systems/StateMachine.h"
 
 StateMachine::~StateMachine()

@@ -1,14 +1,14 @@
 #include "Engine/AI/HeuristicSearch.h"
 #include "Engine/Systems/DungeonMake.h"
 
-static HeuristicSearch* instance = nullptr;
-HeuristicSearch& HeuristicSearch::Instance()
-{
-	return *instance;
-}
+ HeuristicSearch* HeuristicSearch::instance = nullptr;
 
 HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
 {
+	// インスタンス設定
+	_ASSERT_EXPR(instance == nullptr, "already instantiated");
+	instance = this;
+
 	//nodeの初期化
 	searched_edge.clear();
 	int node_id = 0;
@@ -142,6 +142,10 @@ HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
 
 HeuristicSearch::~HeuristicSearch()
 {
+	if (advance.size())
+	{
+		advance.clear();
+	}
 }
 
 std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
@@ -234,7 +238,7 @@ std::shared_ptr<Edge> HeuristicSearch::SearchMinCost(std::vector<std::shared_ptr
 		//	float AstarCost = heuristicCulc(distnation_node, goalNode);
 
 			distnation_node->cost_from_start = total_cost;
-			front_cost = total_cost;// +AstarCost;
+			front_cost = total_cost; //+AstarCost;
 		}
 
 		//front_costが、今調べているエッジの接続先のトータルコスト以上のもの中で

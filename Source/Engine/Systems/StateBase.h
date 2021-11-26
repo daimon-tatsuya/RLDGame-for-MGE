@@ -1,14 +1,19 @@
 #pragma once
-
+//**********************************************************
+//
+//		 StateBaseクラス
+//		 HierarchicalStateBaseクラス
+//
+//**********************************************************
 #include <memory>
 #include <vector>
 
-
-//ToDo StateBase コメント
-
 //前方宣言
 class Character;
-//全てステートクラスの基底クラス
+
+/// <summary>
+/// 全てステートクラスの基底クラス
+/// </summary>
 class StateBase
 {
 private:
@@ -36,7 +41,10 @@ protected:
 public:
 };
 
-// 親階層用のステート
+
+/// <summary>
+/// 親階層用のステートクラス
+/// </summary>
 class HierarchicalStateBase : public StateBase
 {
 public:

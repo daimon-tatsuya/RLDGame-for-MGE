@@ -205,12 +205,9 @@
     <ClCompile Include="Source\Engine\AI\HeuristicSearch.cpp" />
     <ClCompile Include="Source\Engine\AI\MetaAI.cpp" />
     <ClCompile Include="Source\Engine\AI\Node.cpp" />
-    <ClCompile Include="Source\Engine\Objects\GeometricPrimitive.cpp" />
     <ClCompile Include="Source\Engine\Objects\Model.cpp" />
     <ClCompile Include="Source\Engine\Objects\ModelResource.cpp" />
-    <ClCompile Include="Source\Engine\Objects\SkinnedMesh.cpp" />
     <ClCompile Include="Source\Engine\Objects\Sprite.cpp" />
-    <ClCompile Include="Source\Engine\Objects\StaticMesh.cpp" />
     <ClCompile Include="Source\Engine\Systems\Blender.cpp" />
     <ClCompile Include="Source\Engine\Systems\Camera.cpp" />
     <ClCompile Include="Source\Engine\Systems\CameraController.cpp" />
@@ -221,7 +218,6 @@
     <ClCompile Include="Source\Engine\Systems\DungeonMake.cpp" />
     <ClCompile Include="Source\Engine\Systems\EnemyBase.cpp" />
     <ClCompile Include="Source\Engine\Systems\EnemyManager.cpp" />
-    <ClCompile Include="Source\Engine\Systems\FrameBuffer.cpp" />
     <ClCompile Include="Source\Engine\Systems\Framework.cpp" />
     <ClCompile Include="Source\Engine\Systems\GamePad.cpp" />
     <ClCompile Include="Source\Engine\Systems\Graphics.cpp" />
@@ -237,7 +233,6 @@
     <ClCompile Include="Source\Engine\Systems\NoTextureShader.cpp" />
     <ClCompile Include="Source\Engine\Systems\Object.cpp" />
     <ClCompile Include="Source\Engine\Systems\PlayerBase.cpp" />
-    <ClCompile Include="Source\Engine\Systems\Rasterizer.cpp" />
     <ClCompile Include="Source\Engine\Systems\ResourceManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\RogueLikeStage.cpp" />
     <ClCompile Include="Source\Engine\Systems\SceneManager.cpp" />
@@ -255,7 +250,6 @@
     <ClCompile Include="Source\Game\Scene\SceneGame.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneLoading.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp" />
-    <ClCompile Include="Source\Game\Stages\StageMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h" />
@@ -269,12 +263,9 @@
     <ClInclude Include="Source\Engine\AI\MetaAI.h" />
     <ClInclude Include="Source\Engine\AI\Node.h" />
     <ClInclude Include="Source\Engine\AI\Telegram.h" />
-    <ClInclude Include="Source\Engine\Objects\GeometricPrimitive.h" />
     <ClInclude Include="Source\Engine\Objects\Model.h" />
     <ClInclude Include="Source\Engine\Objects\ModelResource.h" />
-    <ClInclude Include="Source\Engine\Objects\SkinnedMesh.h" />
     <ClInclude Include="Source\Engine\Objects\Sprite.h" />
-    <ClInclude Include="Source\Engine\Objects\StaticMesh.h" />
     <ClInclude Include="Source\Engine\Systems\Blender.h" />
     <ClInclude Include="Source\Engine\Systems\Camera.h" />
     <ClInclude Include="Source\Engine\Systems\CameraController.h" />
@@ -285,7 +276,6 @@
     <ClInclude Include="Source\Engine\Systems\DungeonMake.h" />
     <ClInclude Include="Source\Engine\Systems\EnemyBase.h" />
     <ClInclude Include="Source\Engine\Systems\EnemyManager.h" />
-    <ClInclude Include="Source\Engine\Systems\FrameBuffer.h" />
     <ClInclude Include="Source\Engine\Systems\Framework.h" />
     <ClInclude Include="Source\Engine\Systems\GamePad.h" />
     <ClInclude Include="Source\Engine\Systems\Graphics.h" />
@@ -302,7 +292,6 @@
     <ClInclude Include="Source\Engine\Systems\NoTextureShader.h" />
     <ClInclude Include="Source\Engine\Systems\Object.h" />
     <ClInclude Include="Source\Engine\Systems\PlayerBase.h" />
-    <ClInclude Include="Source\Engine\Systems\Rasterizer.h" />
     <ClInclude Include="Source\Engine\Systems\RenderContext.h" />
     <ClInclude Include="Source\Engine\Systems\ResourceManager.h" />
     <ClInclude Include="Source\Engine\Systems\RogueLikeStage.h" />
@@ -319,14 +308,12 @@
     <ClInclude Include="Source\Game\Characters\DerivedEnemySnakeState.h" />
     <ClInclude Include="Source\Game\Characters\DerivedPlayerState.h" />
     <ClInclude Include="Source\Game\Characters\EnemySnake.h" />
-    <ClInclude Include="Source\Game\Characters\EnemySnakeState.h" />
     <ClInclude Include="Source\Game\Characters\EnemyState.h" />
     <ClInclude Include="Source\Game\Characters\Player.h" />
     <ClInclude Include="Source\Game\Characters\PlayerState.h" />
     <ClInclude Include="Source\Game\Scene\SceneGame.h" />
     <ClInclude Include="Source\Game\Scene\SceneLoading.h" />
     <ClInclude Include="Source\Game\Scene\SceneTitle.h" />
-    <ClInclude Include="Source\Game\Stages\StageMain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\DebugRender.hlsli" />

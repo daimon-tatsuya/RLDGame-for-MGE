@@ -1,10 +1,19 @@
+
+//**********************************************************
+//
+//		Frameworkクラス
+//
+//**********************************************************
+
 #include <crtdbg.h>
 #include <stdlib.h>
 #include <memory>
 
 #include "Engine/Systems/framework.h"
 #include "Engine/Systems/Shader.h"
-#include "Engine/Systems/blender.h"
+#include "Engine/Systems/Blender.h"
+#include "Engine/Systems/Logger.h"
+
 #include "Engine/Systems/SceneManager.h"
 #include "Game/Scene/SceneTitle.h"
 #include "Game/Scene/SceneLoading.h"
@@ -33,7 +42,6 @@ void Framework::Update(float elapsedTime/*最後のフレームからの経過秒数*/)
 
 void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/)
 {
-	//Todo lockを設定する
 	// 別スレッド中にデバイスコンテキストが使われていた場合に
 	// 同時アクセスしないように排他制御する
 	std::lock_guard<std::mutex> lock(graphics.GetMutex());
@@ -79,7 +87,7 @@ int Framework::Run()
 	}
 
 	//_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
-
+	LOG("model deserialize failed");
 	return static_cast<int>(msg.wParam);
 }
 
@@ -111,8 +119,9 @@ void Framework::CalculateFrameStats()
 LRESULT Framework::HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	if (Graphics::Instance().GetImGuiRenderer()->HandleMessage(hwnd, msg, wparam, lparam))
+	{
 		return true;
-
+	}
 	switch (msg)
 	{
 	case WM_PAINT:
@@ -132,13 +141,10 @@ LRESULT Framework::HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 		if (wparam == VK_ESCAPE) PostMessage(hwnd, WM_CLOSE, 0, 0);
 		break;
 	case WM_ENTERSIZEMOVE:
-		// WM_EXITSIZEMOVE is sent when the user grabs the resize bars.
 		// WM_EXITSIZEMOVEは、ユーザーがリサイズバーを掴んだときに送られます。
 		timer.Stop();
 		break;
 	case WM_EXITSIZEMOVE:
-		// WM_EXITSIZEMOVE is sent when the user releases the resize bars.
-		// Here we reset everything based on the new window dimensions.
 		// WM_EXITSIZEMOVEは、ユーザがリサイズバーを離したときに送られます。
 		// ここで、新しいウィンドウの寸法に基づいてすべてをリセットします。
 		timer.Start();

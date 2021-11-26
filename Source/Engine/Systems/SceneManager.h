@@ -1,10 +1,14 @@
 #pragma once
-
+//**********************************************************
+//
+//		SceneManagerクラス
+//
+//**********************************************************
 #include	 "Engine/Systems/scene.h"
 
-//Todo SceneManager コメント
-
-// シーンマネージャー
+/// <summary>
+/// シーンを管理するクラス
+/// </summary>
 class SceneManager
 {
 private:

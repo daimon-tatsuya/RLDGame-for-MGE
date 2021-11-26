@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		SceneLoadingƒNƒ‰ƒX
+//
+//**********************************************************
 #include <thread>
 #include <chrono>
 #include "Engine/Systems/Graphics.h"

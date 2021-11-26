@@ -1,15 +1,21 @@
 #pragma once
-
+//**********************************************************
+//
+//		Inputクラス
+//
+//**********************************************************
 #include "Engine/Systems/GamePad.h"
 #include "Engine/Systems/Mouse.h"
 
-// ToDo Inputが行うことを書く
+/// <summary>
+/// 入力管理クラス
+/// </summary>
 class Input
 {
 private:
-	static Input*			 instance;
-	GamePad				game_pad;
-	Mouse					mouse;
+	static Input* instance;
+	GamePad	  game_pad;
+	Mouse		  mouse;
 
 public:
 

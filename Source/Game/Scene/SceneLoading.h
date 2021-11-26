@@ -1,11 +1,15 @@
 #pragma once
-
+//**********************************************************
+//
+//		SceneLoadingクラス
+//
+//**********************************************************
 #include "Engine/Objects//Sprite.h"
 #include "Engine/Systems/Scene.h"
 
-//Todo SceneLoad コメント
-
-// ローディングシーン
+/// <summary>
+/// シーンの読み込みのシーン
+/// </summary>
 class SceneLoading : public Scene
 {
 public:

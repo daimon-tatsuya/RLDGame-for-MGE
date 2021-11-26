@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		Graphicsクラス
+//
+//**********************************************************
+
 #include "Engine//Systems/misc.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/LambertShader.h"
@@ -20,8 +26,8 @@ Graphics::Graphics(HWND hWnd)
 	UINT screenWidth = rc.right - rc.left;
 	UINT screenHeight = rc.bottom - rc.top;
 
-	this->screenWidth = static_cast<float>(screenWidth);
-	this->screenHeight = static_cast<float>(screenHeight);
+	this->screen_width = static_cast<float>(screenWidth);
+	this->screen_height = static_cast<float>(screenHeight);
 	// デバイス＆スワップチェーンの生成
 	{
 		UINT createDeviceFlags = 0;

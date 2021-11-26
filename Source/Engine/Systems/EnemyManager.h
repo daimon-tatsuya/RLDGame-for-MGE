@@ -1,38 +1,37 @@
 #pragma once
 
+//**********************************************************
+//
+//		EnemyManagerクラス
+//
+//**********************************************************
+
+
 #include <vector>
 #include "Engine/Systems/Shader.h"
 #include "Engine/Systems/Character.h"
 #include "Engine/Systems/EnemyBase.h"
-//ToDo CharacterManager コメント
 
 class EnemyManager
 {
 private:
 
 	std::vector<EnemyBase*>	 enemies;// エネミーだけを格納する
-	std::vector<EnemyBase*>	 removes;
+	std::vector<EnemyBase*>	 removes; // 削除するEnemyBaseを格納するして, characteresのindexを指定して直接削除するのを回避
 
 	int enemy_number = 0;	// 付与するIDの値(この値にMetaAI::Identity::Enemyを加算してIdを付与する)
 
 public:
 
 private:
-
 	EnemyManager() {}
 	~EnemyManager();
+public:
+	//EnemyManagerの生成と削除は全てCharacterManagerから行う
+	 friend class CharacterManager;
 
 	// キャラクター同士の衝突処理
-	void CollisionCharacterToCharacter();
-
-public:
-
-	// 唯一のインスタンス取得
-	static EnemyManager& Instance()
-	{
-		static EnemyManager instance;
-		return instance;
-	}
+	void CollisionEnemyToEnemy();
 
 	// 更新処理
 	void Update(float elapsed_time);
@@ -50,10 +49,10 @@ public:
 	void DrawDebugGUI();
 
 	// 敵を登録
-	void Register(EnemyBase* character, int character_type);
+	void Register(EnemyBase* enemy_base);
 
 	// 敵を削除
-	void Remove(EnemyBase* character);
+	void Remove(EnemyBase* enemy_base);
 
 	// 敵を数取得
 	int GetEnemyCount() { return static_cast<int>(enemies.size()); }

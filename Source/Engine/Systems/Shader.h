@@ -1,5 +1,9 @@
 #pragma once
-
+//**********************************************************
+//
+//		Shaderクラス
+//
+//**********************************************************
 #include <d3d11.h>
 #include "Engine/Systems/RenderContext.h"
 #include "Engine/Objects/Model.h"
@@ -8,8 +12,9 @@
  HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* csoname, ID3D11VertexShader** vertexShader, ID3D11InputLayout** inputLayout, D3D11_INPUT_ELEMENT_DESC* inputElementDesc, UINT numElements);
  HRESULT CreatePixelShaderFromCso(ID3D11Device* device, const char* csoname, ID3D11PixelShader** pixelShader);
 
-//Todo Shader コメント
-
+/// <summary>
+/// シェーダーの基底クラス
+/// </summary>
 class Shader
 {
 public:

@@ -1,14 +1,20 @@
 #pragma once
-
+//**********************************************************
+//
+//		SceneGameクラス
+//
+//**********************************************************
 #include <memory>
 #include "Engine/Systems/Scene.h"
 #include "Engine/Systems/CameraController.h"
 #include "Engine/Systems/DungeonMake.h"
+#include "Engine/AI/HeuristicSearch.h"
 
 #include"Game/Characters/Player.h"
 
-//Todo SceneGame コメント
-
+/// <summary>
+/// ゲームシーン
+/// </summary>
 class SceneGame :
 	public Scene
 {

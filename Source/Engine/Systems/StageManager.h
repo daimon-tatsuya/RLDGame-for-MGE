@@ -1,9 +1,16 @@
 #pragma once
-
+//**********************************************************
+//
+//		StageManagerクラス
+//
+//**********************************************************
 #include <vector>
 #include "Engine/Systems/Stage.h"
 #include "Engine/Systems/DungeonMake.h"
-// ステージマネージャー
+
+/// <summary>
+/// Stageを管理するクラス
+/// </summary>
 class StageManager
 {
 private:

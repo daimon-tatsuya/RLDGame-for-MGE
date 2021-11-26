@@ -1,6 +1,13 @@
+//**********************************************************
+//
+//		EnemySnakeのStateの派生クラス
+//
+//**********************************************************
+
 
 #include "Engine/AI/MetaAI.h"
 #include "Game/Characters/DerivedEnemySnakeState.h"
+
 
 //-------------------------------------
 //親ステート
@@ -12,6 +19,7 @@ void EnemySnakeSelectState::Enter()
 
 void EnemySnakeSelectState::Execute(float elapsedTime)
 {
+
 }
 
 void EnemySnakeSelectState::Exit()

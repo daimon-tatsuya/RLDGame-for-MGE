@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		RogueLikeDungeonクラス
+//
+//**********************************************************
+
 #pragma once
 
 #include <cstdint>
@@ -7,9 +13,6 @@
 //参考資料
 //https://qiita.com/gis/items/f760a1fb27aa4c3659cf
 //https://qiita.com/gis/items/b9cf998db63b465d9f50
-
-//ToDo DungeonMake のする内容を書く
-
 
 //グローバル変数
 /*マップ系データ*/
@@ -24,8 +27,7 @@ const static int Cell_Size = 2;//world座標での升目の大きさ
 
 /// <summary>
 /// mobのマップ情報
-/// つかわないかも
-/// ToDo 消すかも
+///  消すかも
 /// </summary>
 struct MobRole
 {
@@ -38,7 +40,7 @@ struct MobRole
 struct DungeonMapRole
 {
 	//生成される部屋の数 (正確に言うと生成される区域の数)
-	size_t division_count_min = 3; //マップの区分け最小数
+	size_t division_count_min = 4; //マップの区分け最小数
 	size_t division_count_rand = 4; //マップの区分け数加算
 
 	//生成される部屋のサイズ
@@ -65,7 +67,7 @@ class RogueLikeMap
 public:
 	RogueLikeMap(const size_t var_) :map_data(var_) {}
 	RogueLikeMap() = default;
-	//Todo enum classを作る
+	//属性の enum classを作る
 	size_t map_data = 1;// 0:壁、1:床、2:プレイヤー、3:敵, 4 : アイテム, 5 : 罠
 };
 
@@ -77,10 +79,8 @@ class  RogueLikeDungeon
 private:
 
 public:
-	/// <summary>
-	/// マップの通路の軸
-	/// </summary>
-	enum class  Road : int
+
+	enum class  Road : int// マップの通路の軸
 	{
 		Axis_Y = 0,
 		Axis_X
@@ -92,40 +92,24 @@ public:
 	/// </summary>
 	std::vector<std::vector<RogueLikeMap>> map_role;
 
-	/// <summary>
-	/// マップ情報の雛形　マッププール
-	/// </summary>
-	DungeonMapRole dungeon_map_role = {};
+	DungeonMapRole dungeon_map_role = {};// マップ情報の雛形　マッププール
 
-	/// <summary>
-	/// マップ上に存在するmobの情報
-	/// </summary>
-	MobRole mobs[Mob_Max] = {};
+	MobRole mobs[Mob_Max] = {};// マップ上に存在するmobの情報
 
 private:
 
 public:
+
 	RogueLikeDungeon();
 	~RogueLikeDungeon();
 
-	/// <summary>
-	/// マップのサイズを初期化する
-	/// </summary>
+	// マップのサイズを初期化する
 	void InitializeMapSize();
 
-	/// <summary>
 	/// 敵の更新の前にプレイヤーのマップ情報を更新する
-	/// </summary>
-	//void UpdateMapRolePlayer();
-
-	/// <summary>
-	/// 敵の更新の前にプレイヤーのマップ情報を更新する
-	/// </summary>
 	void UpdateMapRolePlayer();
 
-	/// <summary>
 	/// 敵のマップ情報を更新する
-	/// </summary>
 	void UpdateMapRoleEnemis();
 
 
@@ -150,14 +134,11 @@ public:
 	/// <param name="dungeon_map_role">マップ情報</param>
 	void DungeonMake(DungeonMapRole* dungeon_map_role);
 
-	/// <summary>
-	/// マップ情報を消去
-	/// </summary>
+
+	// マップ情報を消去
 	void MapClear();
 
-	/// <summary>
-	/// マップ情報を初期化
-	/// </summary>
+	// マップ情報を初期化
 	void MapReMake(DungeonMapRole* dungeon_map_role);
 
 };

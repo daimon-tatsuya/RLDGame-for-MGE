@@ -1,5 +1,9 @@
 #pragma once
-
+//**********************************************************
+//
+//		ModelResourceクラス
+//
+//**********************************************************
 #include <string>
 #include <vector>
 #include <wrl.h>
@@ -7,9 +11,9 @@
 #include <fbxsdk.h>
 #include "Engine/Systems/Math.h"
 
-/* ToDo ModelResource コメント
- テクスチャーを入れれるようにする(後回し)
-*/
+/// <summary>
+/// モデルの読み込み、シリアライズを行うクラス
+/// </summary>
 class ModelResource
 {
 public:

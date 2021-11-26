@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		PlayerƒNƒ‰ƒX
+//
+//**********************************************************
+
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Camera.h"
@@ -8,8 +14,8 @@
 #include "Game/Characters/Player.h"
 #include "Game/Characters/DerivedPlayerState.h"
 
-const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
 
+const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
 
 Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 {
@@ -40,6 +46,7 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 
 Player::~Player()
 {
+
 }
 
 void Player::Update(float elapsedTime)

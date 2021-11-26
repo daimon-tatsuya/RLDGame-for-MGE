@@ -1,3 +1,10 @@
+
+//**********************************************************
+//
+//		EnemyManagerƒNƒ‰ƒX
+//
+//**********************************************************
+
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Camera.h"
 #include "Engine/Systems/Collision.h"

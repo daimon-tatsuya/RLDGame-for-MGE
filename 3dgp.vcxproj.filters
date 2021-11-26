@@ -34,18 +34,6 @@
     <Filter Include="HLSL\geometric_primitive">
       <UniqueIdentifier>{f0797ecd-eefd-4e67-8786-be0b4e1fa2a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HLSL\skinned_mesh">
-      <UniqueIdentifier>{be26542f-13a1-485c-ab49-a52a1b729009}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HLSL\sprite">
-      <UniqueIdentifier>{7c2840ed-f9cc-4519-a407-b3607e0559fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HLSL\static_mesh">
-      <UniqueIdentifier>{2e472d2c-55ea-4afc-bf1c-f32d776380c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HLSL\sprite_batch">
-      <UniqueIdentifier>{e64027c8-fb70-4465-bf95-506c7adf03a3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems">
       <UniqueIdentifier>{aaebcfaf-a2cf-490b-904e-925ef68293d5}</UniqueIdentifier>
     </Filter>
@@ -124,9 +112,6 @@
     <Filter Include="Source Files\Engine\Systems\Math">
       <UniqueIdentifier>{5a259069-7fc2-4673-881e-08e4686fc037}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\BehaviorTree">
-      <UniqueIdentifier>{78c0efff-7ff8-4485-9f90-198c6b3fa9e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Scenes\SceneGame">
       <UniqueIdentifier>{e73a9ebd-b7a2-4e0c-b3c9-884a00e62933}</UniqueIdentifier>
     </Filter>
@@ -184,62 +169,11 @@
     <Filter Include="Source Files\Game\Characters\Enemis\Snake">
       <UniqueIdentifier>{0f9bd635-0d41-4002-9a31-61d296cd6430}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Objects">
-      <UniqueIdentifier>{2e576be6-555c-4764-b57a-629d1d0ec899}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Objects\Model">
-      <UniqueIdentifier>{7dec8eb9-05e3-4c81-9649-71a3a7515621}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Objects\ModelResource">
-      <UniqueIdentifier>{db1451e0-7b59-4844-ad5f-d2ad259611dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\StateMachine">
       <UniqueIdentifier>{e2eea2b4-c833-4bf3-886e-b1efb4362056}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Systems\StateMachine\StateBase">
       <UniqueIdentifier>{50b0b10c-fe8b-48d2-b3b4-4102e11d2495}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing">
-      <UniqueIdentifier>{2634d080-ac7c-447e-8fb1-001fa808de41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine">
-      <UniqueIdentifier>{cb6d3581-d2f5-4ca6-bde4-855d2bcadfa1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Systems">
-      <UniqueIdentifier>{d87423c2-051a-4f77-b517-df85aa40dadd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Systems\Logger">
-      <UniqueIdentifier>{bd3ff42b-eadc-45b9-9313-dbc6f22e2959}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Systems\FrameBuffer">
-      <UniqueIdentifier>{c90690ce-3a1b-48df-b812-213fa22b4e62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Systems\Rasterizer">
-      <UniqueIdentifier>{cce47734-c4ad-4638-b0dc-a719d10fd904}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Objects">
-      <UniqueIdentifier>{bac9de6e-19db-480d-b7ce-134ab5c3c398}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Objects\GeometricPrimitive">
-      <UniqueIdentifier>{51804cf8-b0a8-474d-a265-06939923c579}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Objects\SkinnedMesh">
-      <UniqueIdentifier>{08e72cd9-82ea-4e85-a873-591782bb301e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Objects\Sprite">
-      <UniqueIdentifier>{f9dacbfb-171f-4cb6-ae89-368ad3c08061}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Engine\Objects\StaticMesh">
-      <UniqueIdentifier>{cb723e18-78bc-4cc6-98b7-aecbd0d2b9cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Game">
-      <UniqueIdentifier>{67655e2d-8f6b-40b1-97e9-17f74ebd2afd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Game\Stages">
-      <UniqueIdentifier>{1c4e1277-6c37-43aa-b949-82bf0cea9c39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotUsing\Game\Stages\StageMain %28サンプル%29">
-      <UniqueIdentifier>{20be4b45-22cf-47d2-9cc2-58fe5382a4d3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Systems\Character\CharacterManager">
       <UniqueIdentifier>{2d38a632-97a5-4cee-83aa-5abc48a96ded}</UniqueIdentifier>
@@ -250,43 +184,61 @@
     <Filter Include="Source Files\Engine\Systems\HighResolutionTimer">
       <UniqueIdentifier>{2ec1b6c0-0678-4abf-8d2d-56c673dde1d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\BehaviorTree\Blender">
-      <UniqueIdentifier>{6739962c-a840-4691-9aae-2657ab236654}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Character\EnemyManager">
       <UniqueIdentifier>{67a8db17-d5f6-4749-87f5-75ecab2004da}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Game\Characters\Enemis\Snake\State">
       <UniqueIdentifier>{21dc3dc4-6382-4271-b60e-2391985080c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSL\NoUsing">
+      <UniqueIdentifier>{80fbfaa6-5dd7-4d87-a781-7b8599e491ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\NoUsing\skinned_mesh">
+      <UniqueIdentifier>{be26542f-13a1-485c-ab49-a52a1b729009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\NoUsing\sprite">
+      <UniqueIdentifier>{7c2840ed-f9cc-4519-a407-b3607e0559fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\NoUsing\sprite_batch">
+      <UniqueIdentifier>{e64027c8-fb70-4465-bf95-506c7adf03a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\NoUsing\static_mesh">
+      <UniqueIdentifier>{2e472d2c-55ea-4afc-bf1c-f32d776380c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Load Objects">
+      <UniqueIdentifier>{2e576be6-555c-4764-b57a-629d1d0ec899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Load Objects\Model">
+      <UniqueIdentifier>{7dec8eb9-05e3-4c81-9649-71a3a7515621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Load Objects\ModelResource">
+      <UniqueIdentifier>{db1451e0-7b59-4844-ad5f-d2ad259611dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Blender">
+      <UniqueIdentifier>{6739962c-a840-4691-9aae-2657ab236654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Load Objects\Sprite">
+      <UniqueIdentifier>{f9dacbfb-171f-4cb6-ae89-368ad3c08061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Logger">
+      <UniqueIdentifier>{d6a2edb5-9593-4f44-8925-50d3b1307d87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp">
       <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Objects\GeometricPrimitive.cpp">
-      <Filter>Source Files\NotUsing\Engine\Objects\GeometricPrimitive</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Objects\SkinnedMesh.cpp">
-      <Filter>Source Files\NotUsing\Engine\Objects\SkinnedMesh</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Objects\Sprite.cpp">
-      <Filter>Source Files\NotUsing\Engine\Objects\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Objects\StaticMesh.cpp">
-      <Filter>Source Files\NotUsing\Engine\Objects\StaticMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Rasterizer.cpp">
-      <Filter>Source Files\NotUsing\Engine\Systems\Rasterizer</Filter>
+      <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Main.cpp">
       <Filter>Source Files\Engine\Systems</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Objects\ModelResource.cpp">
-      <Filter>Source Files\Engine\Objects\ModelResource</Filter>
+      <Filter>Source Files\Engine\Load Objects\ModelResource</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Objects\Model.cpp">
-      <Filter>Source Files\Engine\Objects\Model</Filter>
+      <Filter>Source Files\Engine\Load Objects\Model</Filter>
     </ClCompile>
     <ClCompile Include="External\imgui\imgui.cpp">
       <Filter>External\imgui</Filter>
@@ -357,9 +309,6 @@
     <ClCompile Include="Source\Game\Scene\SceneLoading.cpp">
       <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Logger.cpp">
-      <Filter>Source Files\NotUsing\Engine\Systems\Logger</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Math.cpp">
       <Filter>Source Files\Engine\Systems\Math</Filter>
     </ClCompile>
@@ -390,9 +339,6 @@
     <ClCompile Include="Source\Engine\Systems\ShaderManager.cpp">
       <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Stages\StageMain.cpp">
-      <Filter>Source Files\NotUsing\Game\Stages\StageMain %28サンプル%29</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Object.cpp">
       <Filter>Source Files\Engine\Systems\Object</Filter>
     </ClCompile>
@@ -421,10 +367,7 @@
       <Filter>Source Files\Game\Characters\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Blender.cpp">
-      <Filter>Source Files\Engine\Systems\BehaviorTree\Blender</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\FrameBuffer.cpp">
-      <Filter>Source Files\NotUsing\Engine\Systems\FrameBuffer</Filter>
+      <Filter>Source Files\Engine\Systems\Blender</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Framework.cpp">
       <Filter>Source Files\Engine\Systems\Framework</Filter>
@@ -438,25 +381,16 @@
     <ClCompile Include="Source\Game\Characters\DerivedEnemySnakeState.cpp">
       <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Logger.cpp">
+      <Filter>Source Files\Engine\Systems\Logger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Scene\SceneTitle.h">
       <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Objects\GeometricPrimitive.h">
-      <Filter>Source Files\NotUsing\Engine\Objects\GeometricPrimitive</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Objects\SkinnedMesh.h">
-      <Filter>Source Files\NotUsing\Engine\Objects\SkinnedMesh</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Objects\Sprite.h">
-      <Filter>Source Files\NotUsing\Engine\Objects\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Objects\StaticMesh.h">
-      <Filter>Source Files\NotUsing\Engine\Objects\StaticMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Rasterizer.h">
-      <Filter>Source Files\NotUsing\Engine\Systems\Rasterizer</Filter>
+      <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Imgui.h">
       <Filter>Source Files\Engine\Systems</Filter>
@@ -465,10 +399,10 @@
       <Filter>Source Files\Engine\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Objects\ModelResource.h">
-      <Filter>Source Files\Engine\Objects\ModelResource</Filter>
+      <Filter>Source Files\Engine\Load Objects\ModelResource</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Objects\Model.h">
-      <Filter>Source Files\Engine\Objects\Model</Filter>
+      <Filter>Source Files\Engine\Load Objects\Model</Filter>
     </ClInclude>
     <ClInclude Include="External\imgui\imconfig.h">
       <Filter>External\imgui</Filter>
@@ -557,9 +491,6 @@
     <ClInclude Include="Source\Game\Scene\SceneLoading.h">
       <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Logger.h">
-      <Filter>Source Files\NotUsing\Engine\Systems\Logger</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Math.h">
       <Filter>Source Files\Engine\Systems\Math</Filter>
     </ClInclude>
@@ -593,9 +524,6 @@
     <ClInclude Include="Source\Engine\Systems\ShaderManager.h">
       <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Stages\StageMain.h">
-      <Filter>Source Files\NotUsing\Game\Stages\StageMain %28サンプル%29</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Object.h">
       <Filter>Source Files\Engine\Systems\Object</Filter>
     </ClInclude>
@@ -621,10 +549,7 @@
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Blender.h">
-      <Filter>Source Files\Engine\Systems\BehaviorTree\Blender</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\FrameBuffer.h">
-      <Filter>Source Files\NotUsing\Engine\Systems\FrameBuffer</Filter>
+      <Filter>Source Files\Engine\Systems\Blender</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Framework.h">
       <Filter>Source Files\Engine\Systems\Framework</Filter>
@@ -638,14 +563,14 @@
     <ClInclude Include="Source\Game\Characters\EnemyState.h">
       <Filter>Source Files\Game\Characters\Enemis</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Characters\EnemySnakeState.h">
+    <ClInclude Include="Source\Game\Characters\DerivedEnemySnakeState.h">
       <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Characters\PlayerState.h">
-      <Filter>Source Files\Game\Characters\Player\State</Filter>
+      <Filter>Source Files\Game\Characters\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Characters\DerivedEnemySnakeState.h">
-      <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
+    <ClInclude Include="Source\Engine\Systems\Logger.h">
+      <Filter>Source Files\Engine\Systems\Logger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -653,16 +578,16 @@
       <Filter>HLSL\geometric_primitive</Filter>
     </None>
     <None Include="Shaders\skinned_mesh.hlsli">
-      <Filter>HLSL\skinned_mesh</Filter>
+      <Filter>HLSL\NoUsing\skinned_mesh</Filter>
     </None>
     <None Include="Shaders\sprite.hlsli">
-      <Filter>HLSL\sprite</Filter>
+      <Filter>HLSL\NoUsing\sprite</Filter>
     </None>
     <None Include="Shaders\sprite_batch.hlsli">
-      <Filter>HLSL\sprite_batch</Filter>
+      <Filter>HLSL\NoUsing\sprite_batch</Filter>
     </None>
     <None Include="Shaders\static_mesh.hlsli">
-      <Filter>HLSL\static_mesh</Filter>
+      <Filter>HLSL\NoUsing\static_mesh</Filter>
     </None>
     <None Include="Shaders\ImGui.hlsli">
       <Filter>HLSL\ImguiRenderer</Filter>
@@ -688,28 +613,28 @@
       <Filter>HLSL\geometric_primitive</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\skinned_mesh_ps.hlsl">
-      <Filter>HLSL\skinned_mesh</Filter>
+      <Filter>HLSL\NoUsing\skinned_mesh</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\skinned_mesh_vs.hlsl">
-      <Filter>HLSL\skinned_mesh</Filter>
+      <Filter>HLSL\NoUsing\skinned_mesh</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\sprite_ps.hlsl">
-      <Filter>HLSL\sprite</Filter>
+      <Filter>HLSL\NoUsing\sprite</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\sprite_vs.hlsl">
-      <Filter>HLSL\sprite</Filter>
+      <Filter>HLSL\NoUsing\sprite</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\sprite_batch_ps.hlsl">
-      <Filter>HLSL\sprite_batch</Filter>
+      <Filter>HLSL\NoUsing\sprite_batch</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\sprite_batch_vs.hlsl">
-      <Filter>HLSL\sprite_batch</Filter>
+      <Filter>HLSL\NoUsing\sprite_batch</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\static_mesh_ps.hlsl">
-      <Filter>HLSL\static_mesh</Filter>
+      <Filter>HLSL\NoUsing\static_mesh</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\static_mesh_vs.hlsl">
-      <Filter>HLSL\static_mesh</Filter>
+      <Filter>HLSL\NoUsing\static_mesh</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\ImGui_ps.hlsl">
       <Filter>HLSL\ImguiRenderer</Filter>

@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		DebugRendererƒNƒ‰ƒX
+//
+//**********************************************************
+
 #include <stdio.h>
 #include <memory>
 #include "Engine/Systems/Misc.h"
@@ -217,10 +223,10 @@ void DebugRenderer::DrawCylinder(const DirectX::XMFLOAT3& position, float radius
 	cylinders.emplace_back(cylinder);
 }
 
-void DebugRenderer::CreateCubeMesh(ID3D11Device* device)
-{
-	cube_vertex_count;
-}
+//void DebugRenderer::CreateCubeMesh(ID3D11Device* device)
+//{
+//	cube_vertex_count;
+//}
 
 void DebugRenderer::CreateSphereMesh(ID3D11Device* device, float radius, int slices, int stacks)
 {

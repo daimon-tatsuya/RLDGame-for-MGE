@@ -1,5 +1,9 @@
 #pragma once
-
+//**********************************************************
+//
+//		Scenesクラス
+//
+//**********************************************************
 #include <windows.h>
 #include <wrl.h>
 #include <d3d11.h>
@@ -7,8 +11,9 @@
 
 #include "Engine/Systems/Math.h"
 
-//Todo Scene コメント
-
+/// <summary>
+/// シーンの基底クラス
+/// </summary>
 class Scene
 {
 public:

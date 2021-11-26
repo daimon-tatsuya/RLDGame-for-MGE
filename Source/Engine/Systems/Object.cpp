@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		ObjectƒNƒ‰ƒX
+//
+//**********************************************************
+
 #include "Engine/Systems/Object.h"
 #include "Engine/Systems/StageManager.h"
 #include "Engine/Systems/Math.h"

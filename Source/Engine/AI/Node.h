@@ -1,4 +1,9 @@
 #pragma once
+//**********************************************************
+//
+//		NodeƒNƒ‰ƒX
+//
+//**********************************************************
 
 #include <d3d11.h>
 #include <vector>
@@ -7,7 +12,6 @@
 #include "Engine/Systems/Math.h"
 #include "Engine/AI/Edge.h"
 
-//ToDo Node‚ªs‚¤‚±‚Æ‚ğ‘‚­
 
 class Node
 {

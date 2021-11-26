@@ -1,4 +1,9 @@
 #pragma once
+//**********************************************************
+//
+//		DebugRendererクラス
+//
+//**********************************************************
 
 #include <vector>
 #include <wrl.h>
@@ -6,7 +11,6 @@
 #include "Engine/Systems/Math.h"
 
 
-//ToDo DebugRendererコメント
 class DebugRenderer
 {
 private:
@@ -56,12 +60,13 @@ private:
 	UINT	cube_vertex_count = 0;
 	UINT	sphere_vertex_count = 0;
 	UINT	cylinder_vertex_count = 0;
+
 public:
 
 private:
-	// Todo 箱メッシュ作成
+
 	// 箱メッシュ作成
-	void CreateCubeMesh(ID3D11Device* device);
+	//void CreateCubeMesh(ID3D11Device* device);
 
 	// 球メッシュ作成
 	void CreateSphereMesh(ID3D11Device* device, float radius, int slices, int stacks);
@@ -84,7 +89,6 @@ public:
 	// 円柱描画
 	void DrawCylinder(const DirectX::XMFLOAT3& position, float radius, float height, const DirectX::XMFLOAT4& color);
 
-	//Todo カプセル描画
 	//カプセル描画
 
 

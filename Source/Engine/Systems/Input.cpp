@@ -1,3 +1,10 @@
+//**********************************************************
+//
+//		Inputクラス
+//
+//**********************************************************
+#include <d3d11.h>
+#include <memory>
 #include "Engine/Systems/Input.h"
 
 Input* Input::instance = nullptr;
@@ -6,6 +13,8 @@ Input* Input::instance = nullptr;
 Input::Input(HWND hWnd)
 	: mouse(hWnd)
 {
+	// インスタンス設定
+	_ASSERT_EXPR(instance == nullptr, "already instantiated");
 	instance = this;
 }
 

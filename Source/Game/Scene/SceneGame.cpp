@@ -1,16 +1,23 @@
+//**********************************************************
+//
+//		SceneGameクラス
+//
+//**********************************************************
+
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Input.h"
-#include "Engine/Systems/blender.h"
+#include "Engine/Systems/Blender.h"
 #include "Engine/AI/MetaAI.h"
 #include "Engine/Systems/DungeonMake.h"
+
 
 #include "Engine/Systems/Camera.h"
 #include "Engine/Systems/CameraController.h"
 
+
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/StageManager.h"
 #include "Engine/Systems/RogueLikeStage.h"
-#include "Game/Stages/StageMain.h"
 
 #include "Engine/Systems/SceneManager.h"
 #include "Game/Scene/SceneGame.h"
@@ -64,18 +71,18 @@ void SceneGame::Initialize()
 	// キャラクター生成処理
 	CharacterManager& character_manager = CharacterManager::Instance();
 	{
-		// プレイヤー
+	//	 プレイヤー
 		player = std::make_unique<Player>(&storage_dungeon);
 
 		character_manager.Register(player.get(), static_cast<int>(Meta::Identity::Player));
 
-		//// エネミー初期化
-		//for (int i = 0; i < 3; ++i)
-		//{
-		//	EnemySlime* slime = new EnemySlime();
-		//	slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
-		//	characterManager.Register(slime);
-		//}
+	//	// エネミー初期化
+	//	for (int i = 0; i < 3; ++i)
+	//	{
+	//		EnemySlime* slime = new EnemySlime();
+	//		slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
+	//		characterManager.Register(slime);
+	//	}
 	}
 
 	//生成されなかったオブジェクトをマップデータから消す
@@ -96,8 +103,6 @@ void SceneGame::Update(float elapsed_time)
 	// ステージ更新処理
 	StageManager::Instance().Update(elapsed_time);
 
-
-
 	// キャラクター更新処理
 	CharacterManager::Instance().Update(elapsed_time);
 
@@ -106,7 +111,6 @@ void SceneGame::Update(float elapsed_time)
 	GamePad& game_pad = Input::Instance().GetGamePad();
 
 	// なにかボタンを押したらローディングシーンへ切り替えにんしきずみ
-	const GamePadButton any_button = GamePad::BTN_LEFT_SHOULDER;
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
@@ -154,10 +158,12 @@ void SceneGame::Render()
 	}
 	// 3Dエフェクト描画
 	{
+
 	}
 	// 2Dスプライト描画
 	{
 		// HUD更新
+
 	}
 
 	// 3Dデバッグ描画

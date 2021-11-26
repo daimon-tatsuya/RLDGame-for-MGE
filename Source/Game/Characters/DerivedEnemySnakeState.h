@@ -1,7 +1,16 @@
 #pragma once
+
+//**********************************************************
+//
+//		EnemySnakeのStateの派生クラス
+//
+//**********************************************************
+
 #include "Engine/AI/MetaAI.h"
-#include "Game/Characters/EnemySnakeState.h"
+#include "Game/Characters/EnemyState.h"
 #include "Game/Characters/EnemySnake.h"
+
+
 
 //---------------------------------------------------------
 //親ステート
@@ -11,7 +20,7 @@
 /// ヘビ(敵)の行動選択ステート
 /// </summary>
 class EnemySnakeSelectState
-	: public EnemySnakeHierarchicalState
+	: public EnemyBaseHierarchicalState
 {
 private:
 
@@ -21,7 +30,7 @@ public:
 	/// ヘビ(敵)の行動を選択する
 	/// </summary>
 	/// <param name="snake">所持者のポインタ</param>
-	EnemySnakeSelectState(EnemySnake* snake) : EnemySnakeHierarchicalState(snake) {};
+	EnemySnakeSelectState(EnemySnake* snake) : EnemyBaseHierarchicalState(snake) {};
 
 	virtual ~EnemySnakeSelectState() {};
 
@@ -40,7 +49,7 @@ public:
 /// ヘビ(敵)の受動を管理するステート
 /// </summary>
 class EnemySnakeReactionState
-	: public EnemySnakeHierarchicalState
+	: public EnemyBaseHierarchicalState
 {
 private:
 
@@ -50,7 +59,7 @@ public:
 	/// ヘビ(敵)の受動を管理する
 	/// </summary>
 	/// <param name="snake">所持者のポインタ</param>
-	EnemySnakeReactionState(EnemySnake* snake) : EnemySnakeHierarchicalState(snake) {};
+	EnemySnakeReactionState(EnemySnake* snake) : EnemyBaseHierarchicalState(snake) {};
 
 	virtual ~EnemySnakeReactionState() {};
 
@@ -69,7 +78,7 @@ public:
 ///	 MetaAIからメッセージを受信したときのステート
 /// </summary>
 class EnemySnakeReceiveState
-	:public EnemySnakeHierarchicalState
+	:public EnemyBaseHierarchicalState
 {
 private:
 
@@ -79,7 +88,7 @@ public:
 	/// MetaAIからメッセージを受信したとき
 	/// </summary>
 	/// <param name="snake">所持者のポインタ</param>
-	EnemySnakeReceiveState(EnemySnake* snake) : EnemySnakeHierarchicalState(snake) {};
+	EnemySnakeReceiveState(EnemySnake* snake) : EnemyBaseHierarchicalState(snake) {};
 
 	virtual ~EnemySnakeReceiveState() {};
 
@@ -99,7 +108,7 @@ public:
 
 //Selectの子ノード
 class EnemySnakeMoveState
-	:public EnemySnakeState
+	:public EnemyBaseState
 {
 private:
 
@@ -109,7 +118,7 @@ public:
 	/// 1マス移動する
 	/// </summary>
 	/// <param name="snake"></param>
-	EnemySnakeMoveState(EnemySnake* snake) : EnemySnakeState(snake) {};
+	EnemySnakeMoveState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
 	virtual ~EnemySnakeMoveState() {};
 
@@ -126,7 +135,7 @@ public:
 
 //Selectの子ノード
 class EnemySnakeAttackState
-	:public EnemySnakeState
+	:public EnemyBaseState
 {
 private:
 
@@ -136,7 +145,7 @@ public:
 	/// ヘビ(敵)の敵を攻撃する
 	/// </summary>
 	/// <param name="snake"></param>
-	EnemySnakeAttackState(EnemySnake* snake) : EnemySnakeState(snake) {};
+	EnemySnakeAttackState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
 	virtual ~EnemySnakeAttackState() {};
 
@@ -153,13 +162,13 @@ public:
 
 //Selectの子ノード
 class EnemySnakeAbilityState
-	:public EnemySnakeState
+	:public EnemyBaseState
 {
 private:
 
 public:
 
-	EnemySnakeAbilityState(EnemySnake* snake) : EnemySnakeState(snake) {};
+	EnemySnakeAbilityState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
 	virtual ~EnemySnakeAbilityState() {};
 
@@ -176,13 +185,13 @@ public:
 
 //Selectの子ノード
 class EnemySnakeUseItemState
-	:public EnemySnakeState
+	:public EnemyBaseState
 {
 private:
 
 public:
 
-	EnemySnakeUseItemState(EnemySnake* snake) : EnemySnakeState(snake) {};
+	EnemySnakeUseItemState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
 	virtual ~EnemySnakeUseItemState() {};
 
@@ -199,13 +208,13 @@ public:
 
 //Reactionの子ノード
 class EnemySnakeDamagedState
-	:public EnemySnakeState
+	:public EnemyBaseState
 {
 private:
 
 public:
 
-	EnemySnakeDamagedState(EnemySnake* snake) : EnemySnakeState(snake) {};
+	EnemySnakeDamagedState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
 	virtual ~EnemySnakeDamagedState() {};
 
@@ -222,13 +231,13 @@ public:
 
 //reactionの子ノード
 class EnemySnakeDeathState
-	:public EnemySnakeState
+	:public EnemyBaseState
 {
 private:
 
 public:
 
-	EnemySnakeDeathState(EnemySnake* snake) : EnemySnakeState(snake) {};
+	EnemySnakeDeathState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
 	virtual ~EnemySnakeDeathState() {};
 
@@ -245,13 +254,13 @@ public:
 
 //Receiveの子ノード
 class EnemySnakeWaitState
-	:public EnemySnakeState
+	:public EnemyBaseState
 {
 private:
 
 public:
 
-	EnemySnakeWaitState(EnemySnake* snake) : EnemySnakeState(snake) {};
+	EnemySnakeWaitState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
 	virtual ~EnemySnakeWaitState() {};
 
@@ -268,13 +277,13 @@ public:
 
 //Receiveの子ノード
 class EnemySnakeCalledState
-	:public EnemySnakeState
+	:public EnemyBaseState
 {
 private:
 
 public:
 
-	EnemySnakeCalledState(EnemySnake* snake) : EnemySnakeState(snake) {};
+	EnemySnakeCalledState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
 	virtual ~EnemySnakeCalledState() {};
 

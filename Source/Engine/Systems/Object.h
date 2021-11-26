@@ -1,5 +1,9 @@
 #pragma once
-
+//**********************************************************
+//
+//		Objectクラス
+//
+//**********************************************************
 
 #include <memory>
 #include "Engine/Systems/Math.h"
@@ -7,7 +11,9 @@
 #include "Engine/AI/Telegram.h"
 #include "Engine/Objects/Model.h"
 
-//Todo Object コメント
+/// <summary>
+/// ゲーム中のオブジェクトの基底クラス
+/// </summary>
 class Object
 {
 private:
@@ -21,11 +27,25 @@ protected:
 		0, 1, 0, 0,
 		0, 0, 1, 0,
 		0, 0, 0, 1 };
+	DirectX::XMFLOAT3	velocity = { 0, 0, 0 };
+	std::shared_ptr<Model> model = nullptr;
 	int					id = 0;
 	float				radius = 0.5f;//半径
 	float				height = 2.0f;//高さ
-	std::shared_ptr<Model> model = nullptr;
+
 public:
+	float				gravity = -1.0f;
+	float				gravity_cut_time = 0;//重力を無視するときに使う
+	bool				is_ground = false;//地面判定用
+	float				invincible_timer = 0.0f;//無敵時間
+	float				friction = 0.5f;
+	float				acceleration = 1.0f;
+	float				max_move_speed = 5.0f;
+	float				move_vecX = 0.0f;
+	float				move_vecZ = 0.0f;
+	float				air_control = 0.3f;
+	float				step_offset = 1.0f;
+	float				slope_rate = 0.0f;
 private:
 
 protected:

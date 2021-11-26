@@ -1,13 +1,19 @@
 #pragma once
-
+//**********************************************************
+//
+//		LineRendererクラス
+//
+//**********************************************************
 #include <vector>
 #include <wrl.h>
 #include <d3d11.h>
 
 #include "Engine/Systems/Math.h"
 
-//ToDo LineRenderer コメント
 
+/// <summary>
+/// ラインを描画するクラス
+/// </summary>
 class LineRenderer
 {
 private:

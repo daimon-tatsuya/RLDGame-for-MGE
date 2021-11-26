@@ -1,13 +1,19 @@
 #pragma once
-
+//**********************************************************
+//
+//		Modelクラス
+//
+//**********************************************************
 #include <memory>
 #include <vector>
 #include <d3d11.h>
 #include "Engine/Objects/ModelResource.h"
 #include "Engine/Systems/Math.h"
 
-//ToDo Model コメント
 
+/// <summary>
+/// モデルのアニメーションなどを行うクラス
+/// </summary>
 class Model
 {
 public:

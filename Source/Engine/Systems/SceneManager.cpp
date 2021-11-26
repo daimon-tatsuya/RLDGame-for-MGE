@@ -1,5 +1,9 @@
 #include "SceneManager.h"
-
+//**********************************************************
+//
+//		SceneManagerƒNƒ‰ƒX
+//
+//**********************************************************
 void SceneManager::Update(float elapsedTime)
 {
 	if (current_scene != nullptr)

@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		Mathクラス
+//
+//**********************************************************
+
 #include "Engine/AI/MetaAI.h"
 #include "Engine/Systems/CharacterManager.h"
 
@@ -15,6 +21,7 @@ Meta::Meta(CharacterManager* c_manager)
 void Meta::Update()
 {
 	//メタAIが監視している処理
+
 }
 
 // このメソッドはtelegramクラスを作成して
@@ -52,7 +59,7 @@ bool Meta::OnMessage(const Telegram& telegram)
 {
 	//std::vector<Enemy*> enmVec;
 	//enmVec.clear();
-	int enemy_count = character_manager->GetEnemyCount();
+	//int enemy_count = character_manager->GetEnemyCount();
 	switch (telegram.msg)
 	{
 	default:

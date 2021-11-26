@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		PlayerのStateクラス
+//
+//**********************************************************
+
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/StageManager.h"
 #include "Engine/Systems/Math.h"
@@ -219,7 +225,7 @@ void PlayerWayChangeState::Execute(float elapsedTime)
 		owner->SetAngleY(Math::ConvertToRadianAngle(45));
 	}
 	//左上
-	else if (ax == 1.f && ay == -1.f)
+	else if (ax == -1.f && ay == 1.f)
 	{
 		owner->SetAngleY(Math::ConvertToRadianAngle(315));
 	}
@@ -259,10 +265,11 @@ void PlayerMoveState::Execute(float elapsedTime)
 	float ax = game_pad.GetAxisLX();
 	float ay = game_pad.GetAxisLY();
 
-	DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(owner->GetPosition().x / Cell_Size, owner->GetPosition().z / Cell_Size);//データ上の値にするためCell_Sizeで割る
+	DirectX::XMFLOAT2 player_pos =//データ上の値にするためCell_Sizeで割る
+		DirectX::XMFLOAT2(owner->GetPosition().x / Cell_Size, owner->GetPosition().z / Cell_Size);
 
-		//ステップをして　左スティックの入力を0, 1 , -1 , 1 / √2(約0.71)にする
-		//左スティックのx軸のステップ
+	//ステップをして　左スティックの入力を0, 1 , -1 , 1 / √2(約0.71)にする
+	//左スティックのx軸のステップ
 	if (ax > 0.f)
 	{
 		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f)); ;
@@ -282,12 +289,116 @@ void PlayerMoveState::Execute(float elapsedTime)
 		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true); ;
 	}
 
+	//移動処理
+
+	//右上
+	if (ax == 1.f && ay == 1.f)
+	{
+		owner->SetAngleY(Math::ConvertToRadianAngle(45));
+		size_t map_data_diagonal = owner->GetStageInformations()->//現在のステージの情報から一つ右上の升目を見る
+			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x) + 1].map_data;
+
+		size_t map_data_horizon = owner->GetStageInformations()->//現在のステージの情報から一つ右の升目を見る
+			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;
+
+		size_t map_data_vertical = owner->GetStageInformations()->//現在のステージの情報から一つ上の升目を見る
+			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
+
+
+		//壁か敵でないなら
+		//ななめの移動なので上下左右の位置も確認する
+		if (
+			(map_data_diagonal == 1 || map_data_diagonal == 4 || map_data_diagonal == 5) &&
+			(map_data_horizon == 1 || map_data_horizon == 4 || map_data_horizon == 5) &&
+			(map_data_vertical == 1 || map_data_vertical == 4 || map_data_vertical == 5)
+			)
+		{
+			owner->AddPositionZ(Cell_Size);
+			owner->AddPositionX(Cell_Size);
+		}
+	}
+	//左上
+	else if (ax == -1.f && ay == 1.f)
+	{
+		owner->SetAngleY(Math::ConvertToRadianAngle(315));
+		size_t map_data_diagonal = owner->GetStageInformations()->//現在のステージの情報から一つ左上の升目を見る
+			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x) - 1].map_data;
+
+		size_t map_data_horizon = owner->GetStageInformations()->//現在のステージの情報から一つ左の升目を見る
+			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;
+
+		size_t map_data_vertical = owner->GetStageInformations()->//現在のステージの情報から一つ上の升目を見る
+			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
+
+		//壁か敵でないなら
+		//ななめの移動なので上下左右の位置も確認する
+		if (
+			(map_data_diagonal == 1 || map_data_diagonal == 4 || map_data_diagonal == 5) &&
+			(map_data_horizon == 1 || map_data_horizon == 4 || map_data_horizon == 5) &&
+			(map_data_vertical == 1 || map_data_vertical == 4 || map_data_vertical == 5)
+			)
+		{
+			owner->AddPositionZ(Cell_Size);
+			owner->AddPositionX(-Cell_Size);
+		}
+	}
+	//左下
+	else if (ax == -1.f && ay == -1.f)
+	{
+		owner->SetAngleY(Math::ConvertToRadianAngle(225));
+		size_t map_data_diagonal = owner->GetStageInformations()->//現在のステージの情報から一つ左下の升目を見る
+			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x) - 1].map_data;
+
+		size_t map_data_horizon = owner->GetStageInformations()->//現在のステージの情報から一つ左の升目を見る
+			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;
+
+		size_t map_data_vertical = owner->GetStageInformations()->//現在のステージの情報から一つ下の升目を見る
+			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;
+
+		//壁か敵でないなら
+		//ななめの移動なので上下左右の位置も確認する
+		if (
+			(map_data_diagonal == 1 || map_data_diagonal == 4 || map_data_diagonal == 5) &&
+			(map_data_horizon == 1 || map_data_horizon == 4 || map_data_horizon == 5) &&
+			(map_data_vertical == 1 || map_data_vertical == 4 || map_data_vertical == 5)
+			)
+		{
+			owner->AddPositionZ(-Cell_Size);
+			owner->AddPositionX(-Cell_Size);
+		}
+	}
+	//右下
+	else if (ax == 1.f && ay == -1.f)
+	{
+		owner->SetAngleY(Math::ConvertToRadianAngle(135));
+		size_t map_data_diagonal = owner->GetStageInformations()->//現在のステージの情報から一つ右下の升目を見る
+			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x) + 1].map_data;
+
+		size_t map_data_horizon = owner->GetStageInformations()->//現在のステージの情報から一つ右の升目を見る
+			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;
+
+		size_t map_data_vertical = owner->GetStageInformations()->//現在のステージの情報から一つ下の升目を見る
+			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;
+
+		//壁か敵でないなら
+		//ななめの移動なので上下左右の位置も確認する
+		if (
+			(map_data_diagonal == 1 || map_data_diagonal == 4 || map_data_diagonal == 5) &&
+			(map_data_horizon == 1 || map_data_horizon == 4 || map_data_horizon == 5) &&
+			(map_data_vertical == 1 || map_data_vertical == 4 || map_data_vertical == 5)
+			)
+		{
+			owner->AddPositionZ(-Cell_Size);
+			owner->AddPositionX(Cell_Size);
+		}
+	}
 
 	//上
 	if (ax == 0.f && ay == 1.f)
 	{
 		owner->SetAngleY(Math::ConvertToRadianAngle(0));
-		size_t map_data = owner->GetStageInformations()->map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
+		size_t map_data = owner->GetStageInformations()->
+			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
 		//壁か敵でないなら
 		if (map_data == 1 || map_data == 4 || map_data == 5)
 		{
@@ -298,7 +409,8 @@ void PlayerMoveState::Execute(float elapsedTime)
 	else if (ax == 0.f && ay == -1.f)
 	{
 		owner->SetAngleY(Math::ConvertToRadianAngle(180));
-		size_t map_data = owner->GetStageInformations()->map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
+		size_t map_data = owner->GetStageInformations()->
+			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
 		//壁か敵でないなら
 		if (map_data == 1 || map_data == 4 || map_data == 5)
 		{
@@ -309,7 +421,8 @@ void PlayerMoveState::Execute(float elapsedTime)
 	else if (ax == 1.f && ay == 0.f)
 	{
 		owner->SetAngleY(Math::ConvertToRadianAngle(90));
-		size_t map_data = owner->GetStageInformations()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ上の升目を見る
+		size_t map_data = owner->GetStageInformations()->
+			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
 	//壁か敵でないなら
 		if (map_data == 1 || map_data == 4 || map_data == 5)
 		{
@@ -321,41 +434,13 @@ void PlayerMoveState::Execute(float elapsedTime)
 	{
 		owner->SetAngleY(Math::ConvertToRadianAngle(270));
 
-		size_t map_data = owner->GetStageInformations()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ上の升目を見る
+		size_t map_data = owner->GetStageInformations()->
+			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
 		//壁か敵でないなら
 		if (map_data == 1 || map_data == 4 || map_data == 5)
 		{
 			owner->AddPositionX(-Cell_Size);
 		}
-	}
-
-
-	//右上
-	if (ax == 1.f && ay == 1.f)
-	{
-		owner->SetAngleY(Math::ConvertToRadianAngle(45));
-	}
-	//左上
-	else if (ax == 1.f && ay == -1.f)
-	{
-		owner->SetAngleY(Math::ConvertToRadianAngle(315));
-	}
-	//左下
-	else if (ax == -1.f && ay == -1.f)
-	{
-		owner->SetAngleY(Math::ConvertToRadianAngle(225));
-	}
-	//右下
-	else if (ax == 1.f && ay == -1.f)
-	{
-		owner->SetAngleY(Math::ConvertToRadianAngle(135));
-	}
-
-	//攻撃
-	else	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
-	{
-		//Attackステートに遷移する
-		owner->GetStateMachine()->GetState()->ChangeSubState(static_cast<int>(Player::Entry::Attack));
 	}
 
 	owner->GetStateMachine()->GetState()->ChangeSubState(static_cast<int>(Player::Entry::Select));

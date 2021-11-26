@@ -20,7 +20,17 @@ struct HitResult
 class Collision
 {
 public:
-	// 球と球の交差判定
+
+	/// <summary>
+	/// 球と球の交差判定
+	/// </summary>
+	/// <param name="positionA">SphereAの位置</param>
+	/// <param name="radiusA">SphereAの半径</param>
+	/// <param name="positionB">SphereBの位置</param>
+	/// <param name="radiusB">SphereBの半径</param>
+	/// <param name="outPositionA">判定後のAの位置</param>
+	/// <param name="outPositionB">判定後のBの位置</param>
+	/// <returns>当たっているならtrue</returns>
 	static bool IntersectSphereToSphere(
 		const DirectX::XMFLOAT3& positionA,
 		float radiusA,
@@ -30,7 +40,14 @@ public:
 		DirectX::XMFLOAT3& outPositionB
 	);
 
-	// レイとモデルの交差判定
+	/// <summary>
+	/// レイとモデルの交差判定
+	/// </summary>
+	/// <param name="start">レイの始点</param>
+	/// <param name="end">レイの終点</param>
+	/// <param name="model">判定するmodel</param>
+	/// <param name="result">ヒット結果</param>
+	/// <returns>当たっているならtrue</returns>
 	static bool IntersectRayToModel(
 		const DirectX::XMFLOAT3& start,
 		const DirectX::XMFLOAT3& end,
@@ -38,12 +55,12 @@ public:
 		HitResult& result
 	);
 
-	//Todo カプセルとカプセルの交差判定
+	// カプセルとカプセルの交差判定
 
 
-	//Todo カプセルと球の交差判定
+	// カプセルと球の交差判定
 
 
-	//Todo AABB
+	// AABB
 
 };

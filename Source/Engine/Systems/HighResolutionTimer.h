@@ -1,9 +1,17 @@
 #pragma once
 
+//**********************************************************
+//
+//		HighResolutionTimerクラス
+//
+//**********************************************************
+
 #include <windows.h>
 
-//ToDo HighResolutionTimerコメント
 
+/// <summary>
+/// /フレーム管理クラス
+/// </summary>
 class HighResolutionTimer
 {
 private:

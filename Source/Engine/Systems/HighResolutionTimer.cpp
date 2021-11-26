@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		HighResolutionTimerƒNƒ‰ƒX
+//
+//**********************************************************
+
 #include "Engine/Systems/HighResolutionTimer.h"
 
 HighResolutionTimer::HighResolutionTimer() : delta_time(-1.0), paused_time(0), stopped(false), stop_time(0)

@@ -1,12 +1,18 @@
 #pragma once
-
+//**********************************************************
+//
+//		ResourceManagerクラス
+//
+//**********************************************************
 #include <memory>
 #include <string>
 #include <map>
 #include "Engine/Objects/ModelResource.h"
 
-//Todo ResourceManager コメント
 
+/// <summary>
+///	 2回目の読み込みを制限するクラス
+/// </summary>
 class ResourceManager
 {
 private:

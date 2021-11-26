@@ -1,9 +1,17 @@
 #pragma once
+//**********************************************************
+//
+//		EnemySnakeクラス
+//
+//**********************************************************
+
+
 
 #include "Engine/Systems/EnemyBase.h"
 
-//Todo EnemyBase コメント
-
+/// <summary>
+/// 敵クラス(ヘビ)
+/// </summary>
 class EnemySnake :
 	public EnemyBase
 {

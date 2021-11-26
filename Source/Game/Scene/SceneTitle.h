@@ -1,24 +1,20 @@
 #pragma once
+//**********************************************************
+//
+//		SceneTitleクラス
+//
+//**********************************************************
+#include "Engine/Systems/Scene.h"
 
-#include "Engine/Systems/scene.h"
+#include "Engine/Objects/Sprite.h"
 
-#include "Engine/Objects/sprite.h"
-
-#include "Engine/Objects/GeometricPrimitive.h"
-
-#include "Engine/Objects/StaticMesh.h"
-
-#include "Engine/Objects/SkinnedMesh.h"
-
-#include "Engine/Systems/rasterizer.h"
-
-#include "Engine/Systems/framebuffer.h"
 #include "Engine/Objects/Model.h"
 #include "Engine/Objects/ModelResource.h"
 #include "Engine/Systems/LambertShader.h"
 
-//Todo SceneTitle コメント
-
+/// <summary>
+/// タイトルシーン
+/// </summary>
 class SceneTitle : public Scene
 {
 private:

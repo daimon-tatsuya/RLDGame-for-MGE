@@ -1,5 +1,10 @@
 #include "Engine/Systems/misc.h"
 #include "Engine/Systems/NoTextureShader.h"
+//**********************************************************
+//
+//		NoTextureShaderƒNƒ‰ƒX
+//
+//**********************************************************
 
 NoTextureShader::NoTextureShader(ID3D11Device* device) :Shader(device)
 {

@@ -1,14 +1,19 @@
 #pragma once
-
+//**********************************************************
+//
+//		Spriteクラス
+//
+//**********************************************************
 #include <d3d11.h>
 #include <wrl.h>
 #include <string>
 
 #include "Engine/Systems/Math.h"
 
-//ToDo Sprite コメント
 
-// スプライト
+/// <summary>
+/// テクスチャーを描画するクラス
+/// </summary>
 class Sprite
 {
 public:

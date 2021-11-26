@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		EnemyManagerクラス
+//
+//**********************************************************
 #include <imgui.h>
 #include "Engine/Systems/Collision.h"
 #include "Engine/AI/MetaAI.h"
@@ -35,7 +40,7 @@ void EnemyManager::Update(float elapsed_time)
 	removes.clear();
 
 	// キャラクター同士の衝突処理
-	CollisionCharacterToCharacter();
+	CollisionEnemyToEnemy();
 }
 
 // 描画処理
@@ -66,19 +71,15 @@ void EnemyManager::DrawDebugGUI()
 }
 
 // キャラクターの登録
-void EnemyManager::Register(EnemyBase* character, int character_type)
+void EnemyManager::Register(EnemyBase* enemy_base)
 {
-	//登録するキャラクターが敵なら
-	if (character_type >= static_cast<int>(Meta::Identity::Enemy))
-	{
 		// IDを設定
-		character->SetId(enemy_number + static_cast<int>(Meta::Identity::Enemy));
+		enemy_base->SetId(enemy_number + static_cast<int>(Meta::Identity::Enemy));
 
 		enemy_number++;//設定したらインクリメントする
 
 		// 登録
-		enemies.emplace_back(static_cast<EnemyBase*>(character));
-	}
+		enemies.emplace_back(static_cast<EnemyBase*>(enemy_base));
 }
 
 // キャラクターの全削除
@@ -97,16 +98,16 @@ void EnemyManager::Clear()
 }
 
 // キャラクターの削除
-void EnemyManager::Remove(EnemyBase* character)
+void EnemyManager::Remove(EnemyBase* enemy_base)
 {
 	// 破棄リストにすでにあれば弾く
 	for (auto& it : removes)
 	{
-		if (it == character)
+		if (it == enemy_base)
 			break;
 	}
 	// 破棄リストに追加
-	removes.emplace_back(character);
+	removes.emplace_back(enemy_base);
 }
 
 // IDからキャラクターを取得する
@@ -122,7 +123,7 @@ EnemyBase* EnemyManager::GetEnemyFromId(int id)
 
 
 // キャラクター同士の衝突処理
-void EnemyManager::CollisionCharacterToCharacter()
+void EnemyManager::CollisionEnemyToEnemy()
 {
 	size_t count = enemies.size();
 	for (int i = 0; i < count; i++)

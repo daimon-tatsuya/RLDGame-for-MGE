@@ -1,5 +1,10 @@
 #include <stdlib.h>
 #include "Engine/Systems/Math.h"
+//**********************************************************
+//
+//		MathƒNƒ‰ƒX
+//
+//**********************************************************
 
 float Math::ClampFloat(float check, float min, float max)
 {

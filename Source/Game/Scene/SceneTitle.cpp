@@ -1,11 +1,20 @@
+//**********************************************************
+//
+//		SceneTitleƒNƒ‰ƒX
+//
+//**********************************************************
 #include "Engine/Systems/Graphics.h"
-#include "Game/Scene/SceneTitle.h"
-#include "Engine/Systems/blender.h"
-#include "Engine/Systems/CameraController.h"
-#include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/Input.h"
+#include "Engine/Systems/Blender.h"
+
+#include "Engine/Systems/CameraController.h"
+
+#include "Engine/Systems/CharacterManager.h"
+
+
 #include "Engine/Systems/SceneManager.h"
 #include "Game/Scene/SceneLoading.h"
+#include "Game/Scene/SceneTitle.h"
 #include "Game/Scene/SceneGame.h"
 SceneTitle::SceneTitle()
 {

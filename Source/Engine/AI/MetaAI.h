@@ -1,15 +1,21 @@
 #pragma once
+//**********************************************************
+//
+//		Mathクラス
+//
+//**********************************************************
 
 #include <set>
 #include "Engine/AI/Telegram.h"
 #include "Engine/Systems/EnemyBase.h"
 #include "Engine/Systems/PlayerBase.h"
 
-//ToDo Metaが行うことを書く
-
 //前方宣言
 class CharacterManager;
 
+/// <summary>
+/// メタAIクラス
+/// </summary>
 class Meta final
 {
 private:

@@ -1,13 +1,15 @@
 #pragma once
+//**********************************************************
+//
+//		Playerクラス
+//
+//**********************************************************
 
-#include "Engine/Systems/PlayerBase.h"
+#include "Engine/Systems/Character.h"
 #include "Engine/Systems/DungeonMake.h"
 
-//ToDo Playerが行うことを書く
-
-
 class Player :
-	public PlayerBase
+	public Character
 {
 private:
 
@@ -32,6 +34,7 @@ public:
 		Move,
 		Attack,
 		Menu,
+		//今後作る予定のステート
 		//Map,
 		//Ability,
 		//MessageLog,
@@ -68,10 +71,17 @@ public:
 	Player(RogueLikeDungeon* rogue_like_dungeon);
 	~Player()override;
 
-	// 更新処理
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="elapsedTime">経過時間</param>
 	void Update(float elapsedTime)override;
 
-	// 描画処理
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="dc"></param>
+	/// <param name="shader">描画方法</param>
 	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)override;
 
 	//有限ステートマシンの初期化

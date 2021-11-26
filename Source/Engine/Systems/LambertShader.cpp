@@ -1,3 +1,9 @@
+//**********************************************************
+//
+//		LambertShaderƒNƒ‰ƒX
+//
+//**********************************************************
+
 #include "Engine/Systems/misc.h"
 #include "Engine/Systems/LambertShader.h"
 
