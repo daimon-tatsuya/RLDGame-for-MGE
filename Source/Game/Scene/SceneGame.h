@@ -23,10 +23,15 @@ private:
 public:
 
 	SceneGame();
+
 	virtual ~SceneGame();
+
 	void Initialize()override;
+
 	void Finalize() override;
+
 	void Update(float elapsedTime)override;
+
 	void Render()override;
 
 private:

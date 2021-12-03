@@ -67,8 +67,23 @@ class RogueLikeMap
 public:
 	RogueLikeMap(const size_t var_) :map_data(var_) {}
 	RogueLikeMap() = default;
-	//属性の enum classを作る
-	size_t map_data = 1;// 0:壁、1:床、2:プレイヤー、3:敵, 4 : アイテム, 5 : 罠
+
+	enum class Attribute
+
+	{
+		Wall = 0,// 0:壁
+		Floor,    // 1:床
+		Player,   // 2:プレイヤー
+		Enemy,  // 3:敵
+		// 4 : アイテム
+		// 5 : 罠
+		// 6 : アイテムの上のプレイヤー
+		// 7 : アイテムの上の敵
+		// 8 : 地形の上のプレイヤー
+		// 9 :  地形の上の敵
+		EndAttribute
+	};
+	size_t map_data = static_cast<size_t>(Attribute::Floor);//マスの属性情報
 };
 
 /// <summary>

@@ -95,7 +95,7 @@ void Player::FSMInitialize()
 	state_machine->RegisterState(new PlayerReactionState(this));
 	state_machine->RegisterState(new  PlayerReceiveState(this));
 
-	////子ステート
+	//子ステート
 	//Entry
 	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new PlayerSelectState(this));
 	state_machine->RegisterSubState(static_cast<int>(Player::ParentState::Entry), new PlayerWayChangeState(this));
@@ -187,10 +187,19 @@ void Player::DrawDebugPrimitive()
 	debug_renderer->DrawSphere(this->position, this->radius, DirectX::XMFLOAT4(0, 0, 0, 1));
 }
 
-bool Player::OnMessage(const Telegram& msg)
+bool Player::OnMessage(const Telegram& telegram)
 {
-	//ToDo メタAIからの受信処理
+	//メタAIからの受信処理
 
+	switch (telegram.msg)
+	{
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+
+		state_machine->ChangeState(static_cast<int>(Player::ParentState::Entry));
+
+		return true;
+
+	}
 	return false;
 }
 

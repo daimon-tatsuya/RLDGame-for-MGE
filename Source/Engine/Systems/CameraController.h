@@ -47,10 +47,16 @@ public:
 	~CameraController() {};
 
 	/// <summary>
-	/// 更新処理
+	/// アクションゲーム用更新処理
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
-	void Update(float elapsed_time);
+	void ActionGameCameraUpdate(float elapsed_time);
+
+	/// <summary>
+	/// 追尾カメラ更新処理
+	/// </summary>
+	/// <param name="elapsed_time">経過時間</param>
+	void FollowCameraUpdate(float elapsed_time);
 
 	// デバッグ用GUI描画
 	void DrawDebugGUI();

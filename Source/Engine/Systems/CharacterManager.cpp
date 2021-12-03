@@ -37,7 +37,7 @@ void CharacterManager::Update(float elapsed_time)
 	removes.clear();
 
 	// ƒLƒƒƒ‰ƒNƒ^[“¯Žm‚ÌÕ“Ëˆ—
-	CollisionCharacterToCharacter();
+//	CollisionCharacterToCharacter();
 }
 
 // •`‰æˆ—
@@ -70,6 +70,7 @@ void CharacterManager::DrawDebugGUI()
 // ƒLƒƒƒ‰ƒNƒ^[‚Ì“o˜^
 void CharacterManager::Register(Character* character, int character_type)
 {
+	//“o˜^‚·‚éƒLƒƒƒ‰ƒNƒ^[‚ª	ƒvƒŒƒCƒ„[‚È‚ç
 	if (character_type >= static_cast<int>(Meta::Identity::Player))
 	{
 		// ID‚ðÝ’è
@@ -91,7 +92,7 @@ void CharacterManager::Register(Character* character, int character_type)
 
 		// “o˜^
 		characteres.emplace_back(character);
-		//enemy_manager.Register(character);
+		enemy_manager.Register(character);
 	}
 }
 
@@ -100,11 +101,15 @@ void CharacterManager::Clear()
 {
 	for (auto& character : characteres)
 	{
-		if (character->GetId()==static_cast<int>(Meta::Identity::Player))
+		if (character->GetId() == static_cast<int>(Meta::Identity::Player))
 		{
 			continue;
 		}
-		delete character;
+		if (character)
+		{
+			delete character;
+		}
+
 	}
 	characteres.clear();
 	player_number = 0;

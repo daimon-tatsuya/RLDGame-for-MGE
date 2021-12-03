@@ -7,7 +7,6 @@
 //**********************************************************
 
 #include "Engine/Systems/StateBase.h"
-// ToDo PlayerState ƒRƒƒ“ƒg
 //‘O•ûéŒ¾
 class Player;
 

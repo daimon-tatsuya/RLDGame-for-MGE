@@ -17,7 +17,7 @@
 #include "Engine/Systems/HighResolutionTimer.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Input.h"
-
+#include "Engine/AI/MetaAI.h"
 
 
 class Framework

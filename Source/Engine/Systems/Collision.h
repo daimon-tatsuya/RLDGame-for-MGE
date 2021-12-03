@@ -5,7 +5,7 @@
 #include "Engine/Objects/Model.h"
 
 
-//ToDo Collision コメント
+// Collision コメント
 
 //ヒット結果
 struct HitResult

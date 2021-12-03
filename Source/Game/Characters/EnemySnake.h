@@ -24,7 +24,7 @@ public:
 	//親ステート
 	enum class ParentState :int
 	{
-		Select = 0,
+		Entry = 0,
 		Reaction,
 		Receive,
 
@@ -32,9 +32,11 @@ public:
 	};
 
 	//子ステート
-	enum class Select :int
+	enum class Entry :int
 	{
-		Move = 0,
+		Select = 0,
+		Approach,
+		Explore,
 		Attack,
 		Ability,
 		UseItem,

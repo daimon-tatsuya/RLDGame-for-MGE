@@ -36,7 +36,7 @@ public:
 	// ステートを設定
 	void SetState(int setState);
 
-	// ステートを変更
+	// 親ステートを変更
 	void ChangeState(int newState);
 
 	// ステートの登録(登録するのは一層目)
@@ -49,7 +49,7 @@ public:
 	void StateMachine::RegisterSubState(int index, StateBase* subState);
 
 	// 現在のステート番号取得
-	int GetStateIndex();
+	int GetCurrentStateIndex();
 
 private:
 	Character* owner = nullptr; // 所持者

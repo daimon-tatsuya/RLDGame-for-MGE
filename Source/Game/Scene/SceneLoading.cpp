@@ -91,8 +91,6 @@ void SceneLoading::LoadingThread(SceneLoading* scene)
 	Sleep(3000);
 	// COM関連の初期化でスレッド毎に呼ぶ必要がある
 
-	//ToDo
-
 	/*HRSULT hr =*/ CoInitialize(nullptr);
 
 	// 次のシーンの初期化を行う

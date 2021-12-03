@@ -46,7 +46,18 @@ void StateMachine::RegisterSubState(int index, StateBase* subState)
 	state_pool.at(index)->RegisterSubState(subState);
 }
 
-int StateMachine::GetStateIndex()
+int StateMachine::GetCurrentStateIndex()
 {
-	return 0;
+	int i = 0;
+	for (HierarchicalStateBase* state : state_pool)
+	{
+		if (state == current_state)
+		{
+			// i番号目のステートをリターン
+			return i;
+		}
+		i++;
+	}
+	// ステートが見つからなかった時
+	return -1;
 }

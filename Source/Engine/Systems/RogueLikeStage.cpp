@@ -117,28 +117,13 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 	{
 		for (int x = 0; x < MapSize_X; x++)
 		{
-			////map_dataが0の時、床を配置
-			//if (map_role[y][x].map_data==0)
-			//{
-			//	st[object_num] = new Stage("Assets/FBX/geometry/wall.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
-			//	stage_chip.push_back(st[object_num]);
-			//}
-
-			//else if (map_role[y][x].map_data > 0)
-			//{
-			//	st[object_num] = new Stage("Assets/FBX/geometry/floor.bin", DirectX::XMFLOAT3(x * Cell_Size, 0, y * Cell_Size), object_num);
-			//	stage_chip.push_back(st[object_num]);
-			//}
-			//object_num++;
-			//map_dataが0の時、壁を配置
-
 			if (map_role[y][x].map_data == 0)
 			{
 				float pos_x = static_cast<float>(x * Cell_Size);
 				float pos_z = static_cast<float> (y * Cell_Size);
 
 				Stage st("Assets/FBX/geometry/wall.bin", DirectX::XMFLOAT3(pos_x, 0, pos_z), object_num);
-				stage_chip.push_back(st);
+				stage_chip.emplace_back(st);
 			}
 
 			else if (map_role[y][x].map_data > 0)
@@ -147,7 +132,7 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 				float pos_z = static_cast<float> (y * Cell_Size);
 
 				Stage st("Assets/FBX/geometry/floor.bin", DirectX::XMFLOAT3(pos_x, 0, pos_z), object_num);
-				stage_chip.push_back(st);
+				stage_chip.emplace_back(st);
 			}
 			object_num++;
 		}

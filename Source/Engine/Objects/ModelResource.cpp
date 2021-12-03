@@ -176,7 +176,7 @@ void ModelResource::Mesh::serialize(Archive& archive, int version)
 	);
 }
 
-// シリアライズ
+
 namespace DirectX
 {
 	template<class Archive>
@@ -578,7 +578,7 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* f
 		}
 	};
 	// 頂点影響力データを抽出する
-	//Todo: 影響力の合計が1以上になった時の処理と影響力が4つ以上あるときの処理
+	//影響力の合計が1以上になった時の処理と影響力が4つ以上あるときの処理
 	std::vector<BoneInfluence> boneInfluences;
 	{
 		boneInfluences.resize(fbxControlPointsCount);

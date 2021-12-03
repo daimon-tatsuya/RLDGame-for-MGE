@@ -93,7 +93,8 @@ PlayerReceiveState::~PlayerReceiveState()
 
 void PlayerReceiveState::Enter()
 {
-
+	// 初期に入るサブステート
+	SetSubState(static_cast<int>(Player::Receive::Wait));
 }
 
 void PlayerReceiveState::Execute(float elapsedTime)
@@ -444,6 +445,7 @@ void PlayerMoveState::Execute(float elapsedTime)
 	}
 
 	owner->GetStateMachine()->GetState()->ChangeSubState(static_cast<int>(Player::Entry::Select));
+	//owner->GetStateMachine()->ChangeState(static_cast<int>(Player::ParentState::Receive));
 }
 
 void PlayerMoveState::Exit()
@@ -514,6 +516,10 @@ void PlayerCalledState::Enter()
 
 void PlayerWaitState::Enter()
 {
+	//Meta& meta = Meta::Instance();
+	//meta.SendMessaging(owner->GetId(),
+	//	static_cast<int>(Meta::Identity::Meta),
+	//	MESSAGE_TYPE::MSG_END_PLAYER_TURN);
 }
 
 void PlayerWaitState::Execute(float elapsedTime)

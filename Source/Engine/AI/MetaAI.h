@@ -8,7 +8,7 @@
 #include <set>
 #include "Engine/AI/Telegram.h"
 #include "Engine/Systems/EnemyBase.h"
-#include "Engine/Systems/PlayerBase.h"
+#include "Game/Characters/Player.h"
 
 //前方宣言
 class CharacterManager;
@@ -18,6 +18,25 @@ class CharacterManager;
 /// </summary>
 class Meta final
 {
+private:
+	// PlayerやEnemyとの通信機能(Messaging)
+	// std::setは順序付けされたデータを複数保持することができる順序付集合
+	std::set<Telegram> priority;
+
+	static Meta* instance;
+
+public:
+	CharacterManager* character_manager = nullptr;
+
+	enum class Identity : int
+	{
+		Meta = 0,
+		Stage,
+		Player,			// プレイヤーIDは2
+		Team,			//仲間のIDは3~5
+		Camera = 6,
+		Enemy = 7		// 7以降は全て敵
+	};
 private:
 
 public:
@@ -47,20 +66,5 @@ public:
 	bool OnMessage(const Telegram& msg);
 	// メッセージ送信関数
 	void SendMessaging(int sender, int receiver, MESSAGE_TYPE msg);
-private:
-	// PlayerやEnemyとの通信機能(Messaging)
-	// std::setは順序付けされたデータを複数保持することができる順序付集合
-	std::set<Telegram> priority;
 
-public:
-	CharacterManager* character_manager = nullptr;
-
-	enum class Identity : int
-	{
-		Meta = 0,
-		Stage,
-		Player,			// プレイヤーIDは2～5
-		Camera = 6,
-		Enemy = 7		// 7以降は全て敵
-	};
 };

@@ -158,12 +158,12 @@ void SceneTitle::Render()
 		Sprite* font = graphics.GetFont();
 
 		// 「Title」を描画
-		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
-		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
-		float textureWidth = 32.f;// static_cast<float>(font->GetTextureWidth());
-		float textureHeight = 32.f;// static_cast<float>(font->GetTextureHeight());
-		float positionX = screenWidth / 3;// - textureWidth;// * (textureWidth / 2);
-		float positionY =( screenHeight / 2 )- textureHeight;
+		float screen_width = static_cast<float>(graphics.GetScreenWidth());
+		float screen_height = static_cast<float>(graphics.GetScreenHeight());
+		float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
+		float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
+		float positionX = screen_width / 3;// - textureWidth;// * (textureWidth / 2);
+		float positionY =( screen_height / 2 )- texture_height;
 
 		font->TextOutW(device_context, message, positionX, positionY, 128, 128);
 	}
@@ -172,15 +172,6 @@ void SceneTitle::Render()
 	{
 		CharacterManager::Instance().DrawDebugGUI();
 	}
-
-	//レンダーターゲットを変えて色々するやつ
-	//frame_buffer[0]->Clear(immediateContext.Get());
-	//frame_buffer[0]->Activate(immediateContext.Get());
-	//paintar_fullsdreen->blit(immediateContext.Get(), true, true, false);
-	////fbx_mesh->Render(immediateContext.Get(), world_view_projection, world, light_direction, material_color, wireframe, elapsedTime);
-	//frame_buffer[0]->Deactivate(immediateContext.Get());
-	//immediateContext->PSSetShaderResources(0, 1, frame_buffer[0]->render_target_shader_resource_view.GetAddressOf());
-	//paintar_fullsdreen->blit(immediateContext.Get(), true, true, true);
 }
 
 void SceneTitle::Finalize()

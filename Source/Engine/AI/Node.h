@@ -157,10 +157,11 @@ private:
 	bool item_node_flag = false;//アイテムのある地点
 	bool searched_node_flag = false;//探索済みの地点
 
-	DirectX::XMFLOAT2 position = { 0,0 };
+
 
 public:
 	int node_id = 0;
+	DirectX::XMFLOAT2 position = { 0,0 };
 	std::vector<std::shared_ptr<Edge>> edge;//このノードが所有するエッジ情報
 	float cost = 1.0f;					//ノード自体のコスト
 	float cost_from_start = 100.f;//A*を始めた地点からの合計コスト

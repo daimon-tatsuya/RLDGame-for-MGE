@@ -47,12 +47,19 @@ void SceneGame::Initialize()
 		DirectX::XMFLOAT3(0, 0, 0),
 		DirectX::XMFLOAT3(0, 1, 0));
 
-	camera.SetPerspectiveFov(
-		DirectX::XMConvertToRadians(45),
-		graphics.GetScreenWidth() / graphics.GetScreenHeight(),
-		0.1f,
-		1000.0f
-	);
+	//camera.SetPerspectiveFov(
+	//	DirectX::XMConvertToRadians(45),
+	//	graphics.GetScreenWidth() / graphics.GetScreenHeight(),
+	//	0.1f,
+	//	1000.0f
+	//);
+
+	//正射影カメラ
+	camera.SetOrthFov(
+		graphics.GetScreenWidth()/30 ,
+		graphics.GetScreenHeight()/30,
+		0.1f,100.f);
+
 
 	// カメラコントローラー初期化
 	camera_controller = std::make_unique<CameraController>();
@@ -63,10 +70,13 @@ void SceneGame::Initialize()
 	struct DungeonMapRole dungeon_map_role;
 	rogue_like_dungeon.MapReMake(&dungeon_map_role);
 	storage_dungeon = rogue_like_dungeon;
+
 	// ステージ初期化
 	StageManager& stage_manager = StageManager::Instance();
 	RogueLikeStage* rogue_like_stage = new RogueLikeStage(&storage_dungeon);
 	stage_manager.Register(rogue_like_stage);
+
+
 
 	// キャラクター生成処理
 	CharacterManager& character_manager = CharacterManager::Instance();
@@ -98,7 +108,7 @@ void SceneGame::Finalize()
 void SceneGame::Update(float elapsed_time)
 {
 	// カメラコントローラー更新処理
-	camera_controller->Update(elapsed_time);
+	camera_controller->FollowCameraUpdate(elapsed_time);
 
 	// ステージ更新処理
 	StageManager::Instance().Update(elapsed_time);
@@ -110,7 +120,7 @@ void SceneGame::Update(float elapsed_time)
 
 	GamePad& game_pad = Input::Instance().GetGamePad();
 
-	// なにかボタンを押したらローディングシーンへ切り替えにんしきずみ
+	// Aボタンを押したらローディングシーンへ切り替え
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));

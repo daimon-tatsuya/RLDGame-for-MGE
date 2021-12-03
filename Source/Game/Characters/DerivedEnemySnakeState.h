@@ -19,7 +19,7 @@
 /// <summary>
 /// ヘビ(敵)の行動選択ステート
 /// </summary>
-class EnemySnakeSelectState
+class EnemySnakeEntryState
 	: public EnemyBaseHierarchicalState
 {
 private:
@@ -30,9 +30,9 @@ public:
 	/// ヘビ(敵)の行動を選択する
 	/// </summary>
 	/// <param name="snake">所持者のポインタ</param>
-	EnemySnakeSelectState(EnemySnake* snake) : EnemyBaseHierarchicalState(snake) {};
+	EnemySnakeEntryState(EnemySnake* snake) : EnemyBaseHierarchicalState(snake) {};
 
-	virtual ~EnemySnakeSelectState() {};
+	virtual ~EnemySnakeEntryState();
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -61,7 +61,7 @@ public:
 	/// <param name="snake">所持者のポインタ</param>
 	EnemySnakeReactionState(EnemySnake* snake) : EnemyBaseHierarchicalState(snake) {};
 
-	virtual ~EnemySnakeReactionState() {};
+	virtual ~EnemySnakeReactionState();
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -90,7 +90,7 @@ public:
 	/// <param name="snake">所持者のポインタ</param>
 	EnemySnakeReceiveState(EnemySnake* snake) : EnemyBaseHierarchicalState(snake) {};
 
-	virtual ~EnemySnakeReceiveState() {};
+	virtual ~EnemySnakeReceiveState();
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -106,8 +106,8 @@ public:
 //子ステート
 //--------------------------------------
 
-//Selectの子ノード
-class EnemySnakeMoveState
+//Entryの子ノード
+class EnemySnakeSelectState
 	:public EnemyBaseState
 {
 private:
@@ -115,12 +115,12 @@ private:
 public:
 
 	/// <summary>
-	/// 1マス移動する
+	/// 行動選択
 	/// </summary>
 	/// <param name="snake"></param>
-	EnemySnakeMoveState(EnemySnake* snake) : EnemyBaseState(snake) {};
+	EnemySnakeSelectState(EnemySnake* snake) : EnemyBaseState(snake) {};
 
-	virtual ~EnemySnakeMoveState() {};
+	virtual ~EnemySnakeSelectState() {};
 
 	// ステートに入った時のメソッド
 	void Enter()override;
@@ -133,7 +133,62 @@ public:
 
 };
 
-//Selectの子ノード
+
+//Entryの子ノード
+class EnemySnakeApproachState
+	:public EnemyBaseState
+{
+private:
+
+public:
+
+	/// <summary>
+	/// 対象に近づく
+	/// </summary>
+	/// <param name="snake"></param>
+	EnemySnakeApproachState(EnemySnake* snake) : EnemyBaseState(snake) {};
+
+	virtual ~EnemySnakeApproachState() {};
+
+	// ステートに入った時のメソッド
+	void Enter()override;
+
+	// ステートで実行するメソッド
+	void Execute(float elapsedTime)override;
+
+	// ステートから出ていくときのメソッド
+	void Exit()override;
+
+};
+
+//Entryの子ノード
+class EnemySnakeExploreState
+	:public EnemyBaseState
+{
+private:
+
+public:
+
+	/// <summary>
+	/// 部屋の出口へ向かう＆道なりに進む
+	/// </summary>
+	/// <param name="snake"></param>
+	EnemySnakeExploreState(EnemySnake* snake) : EnemyBaseState(snake) {};
+
+	virtual ~EnemySnakeExploreState() {};
+
+	// ステートに入った時のメソッド
+	void Enter()override;
+
+	// ステートで実行するメソッド
+	void Execute(float elapsedTime)override;
+
+	// ステートから出ていくときのメソッド
+	void Exit()override;
+
+};
+
+//Entryの子ノード
 class EnemySnakeAttackState
 	:public EnemyBaseState
 {
@@ -160,7 +215,7 @@ public:
 
 };
 
-//Selectの子ノード
+//Entryの子ノード
 class EnemySnakeAbilityState
 	:public EnemyBaseState
 {
@@ -183,7 +238,7 @@ public:
 
 };
 
-//Selectの子ノード
+//Entryの子ノード
 class EnemySnakeUseItemState
 	:public EnemyBaseState
 {

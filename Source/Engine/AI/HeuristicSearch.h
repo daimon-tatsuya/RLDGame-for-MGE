@@ -7,7 +7,7 @@
 #include "Engine/AI/Node.h"
 #include "Engine/Systems/DungeonMake.h"
 
-//ToDo HeuristicSearch コメント
+
 class HeuristicSearch final
 {
 private:
@@ -22,7 +22,7 @@ public:
 
 	static HeuristicSearch* instance;//唯一のインスタンス
 
-
+    const	int AsterCostPercentage = 20;//A*のコスト計算時に割る値
 private:
 	/// <summary>
 	/// candidateからコストを考慮して最短エッジ候補を返す
@@ -34,19 +34,29 @@ private:
 
 public:
 
-	HeuristicSearch() {};
-	HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon);
+	HeuristicSearch();
 	~HeuristicSearch();
 
 	//唯一のインスタンス取得
 	static HeuristicSearch& Instance() { return *instance; };
+
+
+	void Reset(const RogueLikeDungeon& rogue_like_dungeon);
 
 	/// <summary>
 	/// start_idからgoal_idのコストを抑えた最短経路を計算
 	/// </summary>
 	/// <param name="start_id">マップ情報を見た時のスタ―ト地点</param>
 	/// <param name="goal_id">マップ情報を見た時のスタ―ト地点</param>
+	/// /// <param name="rogue_like_dungeon">マップ情報</param>
 	/// <returns>最短経路</returns>
-	std::vector<int> Search(int start_id, int goal_id);
+	std::vector<int> Search(int start_id, int goal_id, const RogueLikeDungeon& rogue_like_dungeon);
 
+	/// <summary>
+	/// //２つのノードの物理距離を出してその距離を返す
+	/// </summary>
+	/// <param name="N1">現在のノード</param>
+	/// <param name="N2">探索先(ゴール)のノード</param>
+	/// <returns>距離/20</returns>
+	float heuristicCulc(std::shared_ptr<Node> N1, std::shared_ptr<Node> N2);
 };

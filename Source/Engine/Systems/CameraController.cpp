@@ -19,11 +19,10 @@ CameraController::CameraController()
 {
 	position = Camera::Instance().GetEye();
 	new_position = Camera::Instance().GetEye();
-	angle.x = DirectX::XMConvertToRadians(15);
 }
 
 // 更新処理
-void CameraController::Update(float elapsed_time)
+void CameraController::ActionGameCameraUpdate(float elapsed_time)
 {
 	//	フリーカメラ
 	CharacterManager& character_manager = CharacterManager::Instance();
@@ -73,12 +72,32 @@ void CameraController::Update(float elapsed_time)
 
 	// 徐々に目標に近づける
 	static	constexpr	float	Speed = 1.0f / 8.0f;
-	position.x += (new_position.x - position.x) *Speed;
-	position.y += (new_position.y - position.y) *Speed;
-	position.z += (new_position.z - position.z) *Speed;
-	target.x += (new_target.x - target.x) *Speed;
-	target.y += (new_target.y - target.y) *Speed;
-	target.z += (new_target.z - target.z) *Speed;
+	position.x += (new_position.x - position.x) * Speed;
+	position.y += (new_position.y - position.y) * Speed;
+	position.z += (new_position.z - position.z) * Speed;
+	target.x += (new_target.x - target.x) * Speed;
+	target.y += (new_target.y - target.y) * Speed;
+	target.z += (new_target.z - target.z) * Speed;
+
+	// カメラに視点を注視点を設定
+	Camera::Instance().SetLookAt(position, target, DirectX::XMFLOAT3(0, 1, 0));
+}
+
+void CameraController::FollowCameraUpdate(float elapsed_time)
+{
+	//	フリーカメラ
+	CharacterManager& character_manager = CharacterManager::Instance();
+	Character* pl = character_manager.GetCharacterFromId(static_cast<int>(Meta::Identity::Player));
+	this->new_target = pl->GetPosition();
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	// カメラの回転速度
+	float speed = roll_speed * elapsed_time;
+
+	DirectX::XMFLOAT3 player_position = pl->GetPosition();
+	position.x = player_position.x;
+	position.y = camera_heght;
+	position.z = player_position.z-10;
+	target = pl->GetPosition();
 
 	// カメラに視点を注視点を設定
 	Camera::Instance().SetLookAt(position, target, DirectX::XMFLOAT3(0, 1, 0));
@@ -86,6 +105,7 @@ void CameraController::Update(float elapsed_time)
 
 void CameraController::DrawDebugGUI()
 {
+	Camera& camera = Camera::Instance();
 	ImGui::SetNextWindowPos(ImVec2(100, 10), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Camera", nullptr, ImGuiWindowFlags_None))
@@ -104,12 +124,22 @@ void CameraController::DrawDebugGUI()
 			ImGui::InputFloat3("Degree", &a.x);
 			//注視点
 			ImGui::InputFloat3("target", &target.x);
-			//カメラの高さ
-			ImGui::DragFloat("Height", &camera_heght);
-			ImGui::Checkbox("ViewMap", &ViewMap);
-			if (ViewMap)
+
+			//正射影カメラなら行わない
+			bool OrthMode = camera.GetOrthMode();
+			if (OrthMode == false)
 			{
-				camera_heght = 400.f;
+				//カメラの高さ
+				ImGui::DragFloat("Height", &camera_heght);
+				ImGui::Checkbox("ViewMap", &ViewMap);
+				if (ViewMap)
+				{
+					camera_heght = 400.f;
+				}
+				else
+				{
+					camera_heght = 50.f;
+				}
 			}
 		}
 	}

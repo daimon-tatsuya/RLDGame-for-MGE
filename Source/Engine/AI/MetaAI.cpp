@@ -4,10 +4,11 @@
 //
 //**********************************************************
 
+#include "Engine/Systems/Logger.h"
 #include "Engine/AI/MetaAI.h"
 #include "Engine/Systems/CharacterManager.h"
 
-static Meta* instance = nullptr;
+Meta* Meta::instance = nullptr;
 
 Meta& Meta::Instance()
 {
@@ -16,6 +17,8 @@ Meta& Meta::Instance()
 
 Meta::Meta(CharacterManager* c_manager)
 {
+	// インスタンス設定
+	_ASSERT_EXPR(instance == nullptr, "already instantiated");
 	instance = this;
 }
 void Meta::Update()
@@ -32,6 +35,7 @@ void Meta::Discharge(Character* receiver, const Telegram& telegram)
 	{
 		//受信できなかったときの処理
 		_RPT0(_CRT_WARN, "\n error:Enemy Receive Failed");
+
 	}
 }
 
@@ -57,101 +61,75 @@ bool Meta::HandleMessage(const Telegram& msg)
 // メッセージ受信したときの処理
 bool Meta::OnMessage(const Telegram& telegram)
 {
-	//std::vector<Enemy*> enmVec;
-	//enmVec.clear();
-	//int enemy_count = character_manager->GetEnemyCount();
+	std::vector<Character*> enemis;
+	enemis.clear();
+	CharacterManager& chracter_manager = CharacterManager::Instance();
+	int enemy_count = character_manager->GetEnemyManager().GetEnemyCount();
+	//ステートマシンにできるかも？
 	switch (telegram.msg)
 	{
-	default:
-		break;
+	case MESSAGE_TYPE::MSG_END_PLAYER_TURN://プレイヤーのターンが終わった
+		for (int i = 0; i < enemy_count; i++)
+		{
 
-		//case MESSAGE_TYPE::MSG_CALL_HELP://だれかがプレイヤーを発見したので他の敵を呼ぶ
-		//	for (int i = 0; i < enemyCount; i++)//全ての敵のリスト
-		//	{
-		//		int enemyId = enemyManager->GetEnemy(i)->GetId();
-		//		//送信者を除くエネミーにメッセージを送る
-		//		if (telegram.sender != enemyId)
-		//		{
-		//			// 誰かがプレイヤーを発見したので送信者を除く敵にメッセージを送る
-		//			// メタAIから各敵に送るメッセージも MSG_CALL_HELP です。
+			int enemy_id = character_manager->GetEnemyManager().GetEnemy(i)->GetId();
 
-		//			this->SendMessaging(static_cast<int>(Meta::Identity::Meta),
-		//				enemyId,
-		//				MESSAGE_TYPE::MSG_CALL_HELP);
-		//		}
-		//	}
-		//	return true;
-		//	break;
-		//case MESSAGE_TYPE::MSG_CHANGE_ATTACK_RIGHT:
-		//	//エネミーマネージャからATACK_RANGE以内のエネミーだけの配列を作成し
-		//	for (int i = 0; i < enemyCount; i++)
-		//	{
-		//		Enemy* enemy = enemyManager->GetEnemy(i);
-		//		DirectX::XMFLOAT3 position = enemy->GetPosition();
-		//		DirectX::XMFLOAT3 targetPosition = player->GetPosition();
-		//		float vx = targetPosition.x - position.x;
-		//		float vy = targetPosition.y - position.y;
-		//		float vz = targetPosition.z - position.z;
-		//		float dist = sqrtf(vx * vx + vy * vy + vz * vz);
+			//エネミーにメッセージを送る
+			this->SendMessaging(
+				static_cast<int>(Meta::Identity::Meta),
+				enemy_id,
+				MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+		}
+		return true;
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
 
-		//		if (dist < enemy->GetAttackRange())
-		//		{
-		//			enmVec.push_back(enemy);
-		//		}
-		//	}
-		//	if (enmVec.size() > 0)
-		//	{
-		//		// 攻撃権をenmVecに登録された敵の一人にランダムに与える
-		//		// enmVecのサイズで乱数で対象を決定、決定したエネミーに攻撃権の移譲メッセージを送信。
-		//		// 送信メッセージは MESSAGE_TYPE::MSG_GIVE_ATTACK_RIGHT
-		//		int who_attack = rand() % enmVec.size();
-		//		//Telegram tel(static_cast<int>(Meta::Identity::Meta), static_cast<int>(Meta::Identity::Enemy) + who_attack, MESSAGE_TYPE::MSG_GIVE_ATTACK_RIGHT);
-		//		this->SendMessaging(static_cast<int>(Meta::Identity::Meta),
-		//			static_cast<int>(Meta::Identity::Enemy) + who_attack,
-		//			MESSAGE_TYPE::MSG_GIVE_ATTACK_RIGHT);
-		//	}
-		//	return true;
-		//	break;
-		//case MESSAGE_TYPE::MSG_ASK_ATTACK_RIGHT: //敵から、最初の攻撃権を要求された
-		//	int count = 0;//全ての敵について、攻撃権を持っていないか調べる。
-		//	for (int i = 0; i < enemyCount; i++)
-		//	{
-		//		Enemy* enemy = enemyManager->GetEnemy(i);
-		//		if (enemy->GetAttackFlg()) count++;
-		//	}
-		//	//他に攻撃権持っている敵がいないなら、要求してきた敵に攻撃権を与えるメッセージを送る。
-		//	//要求してきた敵のidはtelegramから取得出来ます。
-		//	if (count < 1)
-		//	{
-		//		// 誰も攻撃権を持っていなければMetaAIから送信者に攻撃権付与のメッセージを送る
-		//		// メッセージはMSG_GIVE_ATTACK_RIGHT
-		//		this->SendMessaging(static_cast<int>(Meta::Identity::Meta),
-		//			telegram.sender,
-		//			MESSAGE_TYPE::MSG_GIVE_ATTACK_RIGHT);
-		//	}
-		//	return true;
-		//	break;
+		int player_id = character_manager->GetPlayer()->GetId();
+
+		//エネミーにメッセージを送る
+		this->SendMessaging(
+			static_cast<int>(Meta::Identity::Meta),
+			player_id,
+			MESSAGE_TYPE::MSG_END_ENEMY_TURN);
+		return true;
 	}
 	return false;
 }
 void Meta::SendMessaging(int sender, int receiver, MESSAGE_TYPE msg)
 {
+	//キャラクターマネージャー
+	CharacterManager& chracter_manager = CharacterManager::Instance();
+
+	// メッセージがMetaAI宛
 	if (receiver == static_cast<int>(Meta::Identity::Meta))
-	{// MetaAI宛の時
+	{
 		//メッセージデータを作成
 		Telegram telegram(sender, receiver, msg);
 		//ディレイ無しメッセージ（即時配送メッセージ）
 		Discharge(telegram);
 	}
-	else
-	{// エネミーが受信者のときどのエネミーに送信するか
-		// 受信者のポインタを取得
-		//Enemy* receiveEnemy = enemyManager->GetEnemyFromId(receiver);
-		//レシーバー居ないとき関数を終了する
-		//if (receiveEnemy == nullptr) return;
+
+	//メッセージがMetaAIから他オブジェクト宛
+	//プレイヤー宛
+	else if (receiver == static_cast<int>(Meta::Identity::Player))
+	{
 		//メッセージデータを作成
-		//Telegram telegram(sender, receiver, msg);
+		Telegram telegram(sender, receiver, msg);
 		//ディレイ無しメッセージ（即時配送メッセージ）
-		//Discharge(receiveEnemy, telegram);
+		Discharge(telegram);
+	}
+
+	//敵宛
+	else if (receiver >= static_cast<int>(Meta::Identity::Enemy))
+	{
+
+		// 受信者のポインタを取得
+		Character* receiveEnemy = chracter_manager.GetEnemyManager().GetEnemyFromId(receiver);
+		//レシーバー居ないとき関数を終了する
+		if (receiveEnemy == nullptr)
+		{ return; }
+		//メッセージデータを作成
+		Telegram telegram(sender, receiver, msg);
+		//ディレイ無しメッセージ（即時配送メッセージ）
+		Discharge(receiveEnemy, telegram);
 	}
 }

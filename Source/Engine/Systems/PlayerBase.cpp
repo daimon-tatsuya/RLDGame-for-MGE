@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//		PlayerBaseƒNƒ‰ƒX
+//
+//**********************************************************
 #include "Engine/Systems/PlayerBase.h"
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/Graphics.h"
@@ -8,7 +13,6 @@
 
 void PlayerBase::CollisionPlayerToEnemis()
 {
-	//ToDo EnemyManager
 	//CharacterManager& character_manager = CharacterManager::Instance();
 
 	//// ‘S‚Ä‚Ì“G‚Æ‘“–‚½‚è‚ÅÕ“Ëˆ—

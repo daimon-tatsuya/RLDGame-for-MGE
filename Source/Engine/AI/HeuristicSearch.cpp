@@ -3,12 +3,23 @@
 
  HeuristicSearch* HeuristicSearch::instance = nullptr;
 
-HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
+HeuristicSearch::HeuristicSearch()
 {
 	// インスタンス設定
 	_ASSERT_EXPR(instance == nullptr, "already instantiated");
 	instance = this;
+}
 
+HeuristicSearch::~HeuristicSearch()
+{
+	if (advance.size())
+	{
+		advance.clear();
+	}
+}
+
+void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
+{
 	//nodeの初期化
 	searched_edge.clear();
 	int node_id = 0;
@@ -37,9 +48,9 @@ HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
 				}
 			}
 
-			nodes.push_back(std::move(piece));
+			nodes.emplace_back(std::move(piece));
 
-			advance.push_back(-1);
+			advance.emplace_back(-1);
 			node_id++;
 		}
 	}
@@ -53,8 +64,10 @@ HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
 		for (int x = 0; x < static_cast<int>(MapSize_X); x++)
 		{
 			int node = MapSize_Y * y + x;
+
 			//edge上方向
 			std::shared_ptr<Edge> edge = nodes[node]->edge[static_cast<size_t>(EdgeDirection::TopCenter)];
+			//{関数化
 			edge->Initialize(node, distnation);
 			//一番上の段でなければ
 			if (!(y <= 0))
@@ -66,12 +79,14 @@ HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
 			//edge右上方向
 			edge = nodes[node]->edge[static_cast<size_t>(EdgeDirection::TopRight)];
 			edge->Initialize(node, distnation);
+
 			//一番上の段で右端でなければ
 			if (!(y <= 0) && !(x >= MapSize_X - 1))
 			{
 				distnation = node - MapSize_X + 1;
 			}
 			edge->distnation_node = distnation;
+
 			//edge->cost = 1.414f;
 
 			//edge右方向
@@ -98,6 +113,7 @@ HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
 			//edge下方向
 			edge = nodes[node]->edge[static_cast<int>(EdgeDirection::BottomCenter)];
 			edge->Initialize(node, distnation);
+
 			//一番下の段でなければ
 			if (!(y >= MapSize_Y - 1))
 			{
@@ -136,22 +152,17 @@ HeuristicSearch::HeuristicSearch(const RogueLikeDungeon& rogue_like_dungeon)
 			}
 			edge->distnation_node = distnation;
 			//edge->cost = 1.414f;
+
 		}
 	}
 }
 
-HeuristicSearch::~HeuristicSearch()
-{
-	if (advance.size())
-	{
-		advance.clear();
-	}
-}
-
-std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
+std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueLikeDungeon& rogue_like_dungeon)
 {
 	//サーチ候補の配列
 	std::vector<std::shared_ptr<Edge>> candidate;
+
+	Reset(rogue_like_dungeon);
 
 	//初期化
 	for (int i = 0; i < MapSize; i++)
@@ -197,7 +208,7 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
 				{
 					if (!next_node->GetWallNodeFlag())//探索候補が壁なら候補に入れない
 					{
-						candidate.push_back(edge);
+						candidate.emplace_back(edge);
 					}
 				}
 
@@ -235,10 +246,10 @@ std::shared_ptr<Edge> HeuristicSearch::SearchMinCost(std::vector<std::shared_ptr
 		if (front_cost == 0.f || front_cost >= total_cost)
 		{
 			std::shared_ptr<Node> goalNode = nodes[goal_id];//ゴールのノード
-		//	float AstarCost = heuristicCulc(distnation_node, goalNode);
+			float AstarCost = heuristicCulc(distnation_node, goalNode);
 
 			distnation_node->cost_from_start = total_cost;
-			front_cost = total_cost; //+AstarCost;
+			front_cost = total_cost+AstarCost;
 		}
 
 		//front_costが、今調べているエッジの接続先のトータルコスト以上のもの中で
@@ -256,4 +267,14 @@ std::shared_ptr<Edge> HeuristicSearch::SearchMinCost(std::vector<std::shared_ptr
 		}
 	}
 	return shortest;
+}
+
+//２つのノードの物理距離を出してその距離を返す
+float  HeuristicSearch::heuristicCulc(std::shared_ptr<Node> N1, std::shared_ptr<Node> N2)
+{
+	DirectX::XMFLOAT2 N1_pos = N1->GetNodePosition();
+	DirectX::XMFLOAT2 N2_pos = N2->GetNodePosition();
+	float y = N1_pos.y - N2_pos.y;
+	float x = N1_pos.x - N2_pos.x;
+	return  sqrtf((y * y) + (x * x)) / 20;
 }

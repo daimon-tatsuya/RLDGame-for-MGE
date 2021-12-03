@@ -1,9 +1,13 @@
 #pragma once
-
+//**********************************************************
+//
+//		PlayerBaseクラス
+//
+//**********************************************************
 
 #include "Engine/Systems/Character.h"
 
-//Todo PlayerBase コメント
+
 class PlayerBase : public Character
 {
 private:
@@ -19,7 +23,7 @@ private:
 	//LockonState			lockonState = LockonState::NotLocked;
 	//float							lockonTargetChangeTime = 0;
 	//float							lockonTargetChangeTimeMax = 8;
-	////Todo　characterだけじゃなくその他のものにもできるようにする
+	//characterだけじゃなくその他のものにもできるようにする
 	//Character* lockonCharacter = nullptr;
 	//DirectX::XMFLOAT3	lockDirection = { 0,0,0 };
 
