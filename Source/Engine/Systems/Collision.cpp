@@ -1,4 +1,11 @@
+//**********************************************************
+//
+//	Collisionクラス
+//
+//**********************************************************
 #include "Engine/Systems/Collision.h"
+#include "Engine/Objects/ModelResource.h"
+#include "Engine/Objects/Model.h"
 
 bool Collision::IntersectSphereToSphere(
 	const DirectX::XMFLOAT3& positionA,
@@ -116,7 +123,7 @@ bool Collision::IntersectRayToModel(
 				// 交点までの距離が今までに計算した最近距離より大きい時はスキップ
 				if (t<0.0f || t>neart)continue;
 
-				DirectX::XMVECTOR position = position = DirectX::XMVectorAdd(DirectX::XMVectorMultiply(dir, T), start);
+				DirectX::XMVECTOR position = DirectX::XMVectorAdd(DirectX::XMVectorMultiply(dir, T), start);
 
 				// 交点が三角形の内側にあるか判定
 				// １つめ

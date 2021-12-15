@@ -5,28 +5,30 @@
 //**********************************************************
 
 #include "Engine/Systems/Graphics.h"
-#include "Engine/Systems/Input.h"
-#include "Engine/Systems/Blender.h"
-#include "Engine/AI/MetaAI.h"
-#include "Engine/Systems/DungeonMake.h"
+#include "Engine/Systems/Shader.h"
+#include "Engine/Systems/ShaderManager.h"
+#include "Engine/Systems/DebugRenderer.h"
+#include "Engine/Systems/LineRenderer.h"
+#include "Engine/Systems/RenderContext.h"
 
+#include "Engine/Systems/Input.h"
+#include "Engine/AI/MetaAI.h"
+#include "Engine/AI/DungeonMake.h"
 
 #include "Engine/Systems/Camera.h"
 #include "Engine/Systems/CameraController.h"
 
-
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/StageManager.h"
 #include "Engine/Systems/RogueLikeStage.h"
+
+#include"Game/Characters/Player.h"
 
 #include "Engine/Systems/SceneManager.h"
 #include "Game/Scene/SceneGame.h"
 #include "Game/Scene/SceneTitle.h"
 #include "Game/Scene/SceneLoading.h"
 
-SceneGame::SceneGame()
-{
-}
 
 SceneGame::~SceneGame()
 {
@@ -40,7 +42,7 @@ SceneGame::~SceneGame()
 void SceneGame::Initialize()
 {
 	// カメラ初期設定
-	Graphics& graphics = Graphics::Instance();
+	const Graphics& graphics = Graphics::Instance();
 	Camera& camera = Camera::Instance();
 	camera.SetLookAt(
 		DirectX::XMFLOAT3(0, 10, -10),
@@ -55,10 +57,10 @@ void SceneGame::Initialize()
 	//);
 
 	//正射影カメラ
-	camera.SetOrthFov(
-		graphics.GetScreenWidth()/30 ,
-		graphics.GetScreenHeight()/30,
-		0.1f,100.f);
+		camera.SetOrthFov(
+			graphics.GetScreenWidth()/30 ,
+			graphics.GetScreenHeight()/30,
+			0.1f,100.f);
 
 
 	// カメラコントローラー初期化
@@ -79,9 +81,9 @@ void SceneGame::Initialize()
 
 
 	// キャラクター生成処理
-	CharacterManager& character_manager = CharacterManager::Instance();
 	{
-	//	 プレイヤー
+		CharacterManager& character_manager = CharacterManager::Instance();
+		//	 プレイヤー
 		player = std::make_unique<Player>(&storage_dungeon);
 
 		character_manager.Register(player.get(), static_cast<int>(Meta::Identity::Player));
@@ -118,7 +120,7 @@ void SceneGame::Update(float elapsed_time)
 
 	storage_dungeon.UpdateMapRolePlayer();
 
-	GamePad& game_pad = Input::Instance().GetGamePad();
+	const GamePad& game_pad = Input::Instance().GetGamePad();
 
 	// Aボタンを押したらローディングシーンへ切り替え
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
@@ -130,23 +132,23 @@ void SceneGame::Update(float elapsed_time)
 
 void SceneGame::Render()
 {
-	Graphics& graphics = Graphics::Instance();
+	const Graphics& graphics = Graphics::Instance();
 	ID3D11DeviceContext* device_context = graphics.GetDeviceContext();
 	ID3D11RenderTargetView* render_target_view = graphics.GetRenderTargetView();
 	ID3D11DepthStencilView* depth_stencil_view = graphics.GetDepthStencilView();
 
 	// 画面クリア＆レンダーターゲット設定
-	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
-	device_context->ClearRenderTargetView(render_target_view, color);
+	constexpr FLOAT clear_color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
+	device_context->ClearRenderTargetView(render_target_view, clear_color);
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
 
 	// 描画処理
-	RenderContext render_context;
-	render_context.lightDirection = { -0.5f, -1.0f, -0.5f, 0.0f };	// ライト方向（下方向）
+	RenderContext render_context{};
+	render_context.light_direction = { -0.5f, -1.0f, -0.5f, 0.0f };	// ライト方向（下方向）
 
 	// カメラパラメータ設定
-	Camera& camera = Camera::Instance();
+	const Camera& camera = Camera::Instance();
 	render_context.view = camera.GetView();
 	render_context.projection = camera.GetProjection();
 
@@ -157,13 +159,13 @@ void SceneGame::Render()
 		std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::NoTexture);
 
 		shader->Activate(device_context, render_context);
+		{
+			// ステージ描画
+			StageManager::Instance().Render(device_context, shader);
 
-		// ステージ描画
-		StageManager::Instance().Render(device_context, shader);
-
-		// キャラクター描画
-		CharacterManager::Instance().Render(device_context, shader);
-
+			// キャラクター描画
+			CharacterManager::Instance().Render(device_context, shader);
+		}
 		shader->Deactivate(device_context);
 	}
 	// 3Dエフェクト描画

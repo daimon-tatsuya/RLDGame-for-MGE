@@ -4,72 +4,73 @@
 //
 //**********************************************************
 
-#include <stdio.h>
-#include <memory>
-#include "Engine/Systems/Misc.h"
 #include "Engine/Systems/LineRenderer.h"
 
-LineRenderer::LineRenderer(ID3D11Device* device, UINT vertexCount)
-	: capacity(vertexCount)
+#include <cstdio>
+#include <memory>
+
+#include "Engine/Systems/Misc.h"
+
+LineRenderer::LineRenderer(ID3D11Device* device, UINT vertex_count)
+	: capacity(vertex_count)
 {
-	//頂点シェーダー
+	// 頂点シェーダー
 	{
-		//ファイルを開く
+		// ファイルを開く
 		FILE* fp = nullptr;
 		fopen_s(&fp, "Shaders\\LineRender_vs.cso", "rb");
 		_ASSERT_EXPR_A(fp, "CSO File not found");
 
-		//ファイルのサイズを求める
+		// ファイルのサイズを求める
 		fseek(fp, 0, SEEK_END);
-		long csoSize = ftell(fp);
+		long cso_size = ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
-		//メモリ上に頂点シェーダーデータを格納する領域を用意する
-		std::unique_ptr<u_char[]> csoData = std::make_unique<u_char[]>(csoSize);
-		fread(csoData.get(), csoSize, 1, fp);
+		// メモリ上に頂点シェーダーデータを格納する領域を用意する
+		std::unique_ptr<u_char[]> cso_data = std::make_unique<u_char[]>(cso_size);
+		fread(cso_data.get(), cso_size, 1, fp);
 		fclose(fp);
 
-		//頂点シェーダー生成
-		HRESULT hr = device->CreateVertexShader(csoData.get(), csoSize, nullptr, vertex_shader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		// 頂点シェーダー生成
+		HRESULT hr = device->CreateVertexShader(cso_data.get(), cso_size, nullptr, vertex_shader.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
-		//入力レイアウト
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
+		// 入力レイアウト
+		D3D11_INPUT_ELEMENT_DESC input_element_desc[] =
 		{
 			{ "POSITION",	0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "COLOR",		0, DXGI_FORMAT_R32G32B32A32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		hr = device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), csoData.get(), csoSize, input_layout.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		hr = device->CreateInputLayout(input_element_desc, ARRAYSIZE(input_element_desc), cso_data.get(), cso_size, input_layout.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//ピクセルシェーダー
+	// ピクセルシェーダー
 	{
-		//ファイルを開く
+		// ファイルを開く
 		FILE* fp = nullptr;
 		fopen_s(&fp, "Shaders\\LineRender_ps.cso", "rb");
 		_ASSERT_EXPR_A(fp, "CSO File not found");
 
 		// ファイルのサイズを求める
 		fseek(fp, 0, SEEK_END);
-		long csoSize = ftell(fp);
+		long cso_size = ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
-		//メモリ上に頂点シェーダーデータを格納する領域を用意する
-		std::unique_ptr<u_char[]> csoData = std::make_unique<u_char[]>(csoSize);
-		fread(csoData.get(), csoSize, 1, fp);
+		// メモリ上に頂点シェーダーデータを格納する領域を用意する
+		std::unique_ptr<u_char[]> cso_data = std::make_unique<u_char[]>(cso_size);
+		fread(cso_data.get(), cso_size, 1, fp);
 		fclose(fp);
 
-		//ピクセルシェーダー生成
-		HRESULT hr = device->CreatePixelShader(csoData.get(), csoSize, nullptr, pixel_shader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		// ピクセルシェーダー生成
+		HRESULT hr = device->CreatePixelShader(cso_data.get(), cso_size, nullptr, pixel_shader.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//定数バッファ
+	// 定数バッファ
 	{
-		//シーン用バッファ
-		D3D11_BUFFER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		// シーン用バッファ
+		D3D11_BUFFER_DESC desc = {};
 		desc.Usage = D3D11_USAGE_DEFAULT;
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		desc.CPUAccessFlags = 0;
@@ -78,13 +79,12 @@ LineRenderer::LineRenderer(ID3D11Device* device, UINT vertexCount)
 		desc.StructureByteStride = 0;
 
 		HRESULT hr = device->CreateBuffer(&desc, 0, constant_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//ブレンドステート
+	// ブレンドステート
 	{
-		D3D11_BLEND_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_BLEND_DESC desc = {};
 		desc.AlphaToCoverageEnable = false;
 		desc.IndependentBlendEnable = false;
 		desc.RenderTarget[0].BlendEnable = false;
@@ -97,25 +97,23 @@ LineRenderer::LineRenderer(ID3D11Device* device, UINT vertexCount)
 		desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		HRESULT hr = device->CreateBlendState(&desc, blend_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//深度ステンシルステート
+	// 深度ステンシルステート
 	{
-		D3D11_DEPTH_STENCIL_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_DEPTH_STENCIL_DESC desc = {};
 		desc.DepthEnable = true;
 		desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
 		HRESULT hr = device->CreateDepthStencilState(&desc, depth_stencil_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//ラスタライザーステート
+	// ラスタライザーステート
 	{
-		D3D11_RASTERIZER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_RASTERIZER_DESC desc = {};
 		desc.FrontCounterClockwise = true;
 		desc.DepthBias = 0;
 		desc.DepthBiasClamp = 0;
@@ -128,13 +126,13 @@ LineRenderer::LineRenderer(ID3D11Device* device, UINT vertexCount)
 		desc.AntialiasedLineEnable = false;
 
 		HRESULT hr = device->CreateRasterizerState(&desc, rasterizer_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//頂点バッファ
+	// 頂点バッファ
 	{
-		D3D11_BUFFER_DESC desc;
-		desc.ByteWidth = sizeof(Vertex) * vertexCount;
+		D3D11_BUFFER_DESC desc{};
+		desc.ByteWidth = sizeof(Vertex) * vertex_count;
 		desc.Usage = D3D11_USAGE_DYNAMIC;
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -142,72 +140,72 @@ LineRenderer::LineRenderer(ID3D11Device* device, UINT vertexCount)
 		desc.StructureByteStride = 0;
 
 		HRESULT hr = device->CreateBuffer(&desc, nullptr, vertex_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 }
 
-//描画開始
-void LineRenderer::Render(ID3D11DeviceContext* deviceContext, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
+// 描画開始
+void LineRenderer::Render(ID3D11DeviceContext* device_context, const DirectX::XMFLOAT4X4& view, const DirectX::XMFLOAT4X4& projection)
 {
-	//シェーダー設定
-	deviceContext->VSSetShader(vertex_shader.Get(), nullptr, 0);
-	deviceContext->PSSetShader(pixel_shader.Get(), nullptr, 0);
-	deviceContext->IASetInputLayout(input_layout.Get());
+	// シェーダー設定
+	device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
+	device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
+	device_context->IASetInputLayout(input_layout.Get());
 
-	//定数バッファ設定
-	deviceContext->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+	// 定数バッファ設定
+	device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 	//deviceContext->PSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
 
-	//レンダーステート設定
-	const float blendFactor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	deviceContext->OMSetBlendState(blend_state.Get(), blendFactor, 0xFFFFFFFF);
-	deviceContext->OMSetDepthStencilState(depth_stencil_state.Get(), 0);
-	deviceContext->RSSetState(rasterizer_state.Get());
+	// レンダーステート設定
+	constexpr float blend_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	device_context->OMSetBlendState(blend_state.Get(), blend_factor, 0xFFFFFFFF);
+	device_context->OMSetDepthStencilState(depth_stencil_state.Get(), 0);
+	device_context->RSSetState(rasterizer_state.Get());
 
-	//プリミティブ設定
+	// プリミティブ設定
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-	deviceContext->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
+	device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	device_context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
 
-	//定数バッファ更新
+	// 定数バッファ更新
 	DirectX::XMMATRIX V = DirectX::XMLoadFloat4x4(&view);
 	DirectX::XMMATRIX P = DirectX::XMLoadFloat4x4(&projection);
 	DirectX::XMMATRIX VP = V * P;
-	ConstantBuffer data;
+	ConstantBuffer data{};
 	DirectX::XMStoreFloat4x4(&data.wvp, VP);
-	deviceContext->UpdateSubresource(constant_buffer.Get(), 0, 0, &data, 0, 0);
+	device_context->UpdateSubresource(constant_buffer.Get(), 0, 0, &data, 0, 0);
 
-	//描画
-	UINT totalVertexCount = static_cast<UINT>(vertices.size());
+	// 描画
+	UINT total_vertex_count = static_cast<UINT>(vertices.size());
 	UINT start = 0;
-	UINT count = (totalVertexCount < capacity) ? totalVertexCount : capacity;
+	UINT count = (total_vertex_count < capacity) ? total_vertex_count : capacity;
 
-	while (start < totalVertexCount)
+	while (start < total_vertex_count)
 	{
-		D3D11_MAPPED_SUBRESOURCE mappedVB;
-		HRESULT hr = deviceContext->Map(vertex_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedVB);
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		D3D11_MAPPED_SUBRESOURCE mapped_vertex_buffer{};
+		HRESULT hr = device_context->Map(vertex_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_vertex_buffer);
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
-		memcpy(mappedVB.pData, &vertices[start], sizeof(Vertex) * count);
+		memcpy(mapped_vertex_buffer.pData, &vertices[start], sizeof(Vertex) * count);
 
-		deviceContext->Unmap(vertex_buffer.Get(), 0);
+		device_context->Unmap(vertex_buffer.Get(), 0);
 
-		deviceContext->Draw(count, 0);
+		device_context->Draw(count, 0);
 
 		start += count;
-		if ((start + count) > totalVertexCount)
+		if ((start + count) > total_vertex_count)
 		{
-			count = totalVertexCount - start;
+			count = total_vertex_count - start;
 		}
 	}
 	vertices.clear();
 }
 
-//頂点追加
+
 void LineRenderer::AddVertex(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT4& color)
 {
-	Vertex v;
+	Vertex v{};
 	v.position = position;
 	v.color = color;
 	vertices.emplace_back(v);

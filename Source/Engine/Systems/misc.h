@@ -1,6 +1,6 @@
 #pragma once
 
-#include <windows.h>
+#include <Windows.h>
 #include <crtdbg.h>
 
 #if defined( DEBUG ) || defined( _DEBUG )
@@ -12,7 +12,7 @@
 #define  _ASSERT_EXPR_A(expr, expr_str) ((void)0)
 #endif
 
-inline LPWSTR hr_Trace(HRESULT hr)
+inline LPWSTR HResultTrace(HRESULT hr)
 {
 	LPWSTR msg;
 	FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPWSTR>(&msg), 0, NULL);

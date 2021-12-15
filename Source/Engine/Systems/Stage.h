@@ -6,16 +6,18 @@
 //**********************************************************
 #include "Engine/Systems/Object.h"
 
-#include "Engine/Systems/Collision.h"
+struct HitResult;
 
 /// <summary>
 /// ステージの基底クラス
 /// </summary>
-class Stage : public Object
+class Stage
+: public Object
 {
 public:
-	Stage() {}
-	Stage(const char* filename, DirectX::XMFLOAT3& pos,int id)
+	Stage() = default;
+
+	Stage(const char* filename, DirectX::XMFLOAT3& pos, const int id)
 	{
 		SetModel(filename);
 		SetPosition(pos);
@@ -23,22 +25,21 @@ public:
 		SetScale({ 1,1,1 });
 		SetId(id);
 	}
-	// 例えデストラクタが空でも
-	// virtual なデストラクタは明示的に定義する
-	virtual ~Stage() {}
+
+	~Stage() override = default;
 
 	// 更新処理
-	virtual void Update(float elapsedTime) {};
+	void Update(float elapsed_time) override {}
 
 	// 描画処理
-	virtual void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader){};
+	void Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader) override {}
 
 	// レイキャスト
-	virtual bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) { return false; };
+	virtual bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) { return false; }
 
 	//メッセージ受信処理
-	virtual bool OnMessage(const Telegram& msg) override { return false; };
+	 bool OnMessage(const Telegram& msg) override { return false; }
 
 	// デバッグ用GUI描画
-	virtual void DrawDebugGUI()override {};
+	void DrawDebugGUI()override {}
 };

@@ -1,13 +1,13 @@
 //**********************************************************
 //
-//		Edgeクラス
+// 	Edgeクラス
 //
 //**********************************************************
 
 #include "Engine/AI/Edge.h"
 
-void Edge::Initialize(int node, int& distnation)
+void Edge::Initialize(const int node, int& destination)
 {
 	origin_node = node;
-	distnation = -1;
+	destination = -1;
 }

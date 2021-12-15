@@ -1,8 +1,10 @@
-#include <imgui.h>
+
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/Collision.h"
 #include "Engine/AI/MetaAI.h"
 #include "Engine/Systems/Math.h"
+#include "Engine/Systems/Shader.h"
+#include "Engine/Systems/Character.h"
 
 CharacterManager::~CharacterManager()
 {
@@ -10,17 +12,17 @@ CharacterManager::~CharacterManager()
 }
 
 
-// 更新処理
+
 void CharacterManager::Update(float elapsed_time)
 {
-	for (auto& character : characteres)
+	for (const auto& character : characteres)
 	{
 		character->Update(elapsed_time);
 	}
 
 	// 破棄処理
-	//    characteresの範囲for文中でerase()すると不具合が発生してしまうため、
-	// 　更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
+	// characteresの範囲for文中でerase()すると不具合が発生してしまうため、
+	// 更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
 	for (auto& character : removes)
 	{
 		// std::vectorから要素を削除する場合はイテレーターで削除しなければならない
@@ -36,20 +38,20 @@ void CharacterManager::Update(float elapsed_time)
 	// 破棄リストをクリア
 	removes.clear();
 
-	// キャラクター同士の衝突処理
-//	CollisionCharacterToCharacter();
+// キャラクター同士の衝突処理
+//x	CollisionCharacterToCharacter();
 }
 
-// 描画処理
+
 void CharacterManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader)
 {
-	for (auto& character : characteres)
+	for (const auto& character : characteres)
 	{
 		character->Render(context, shader);
 	}
 }
 
-// デバッグプリミティブ描画
+
 void CharacterManager::DrawDebugPrimitive()
 {
 	for (auto& character : characteres)
@@ -58,37 +60,36 @@ void CharacterManager::DrawDebugPrimitive()
 	}
 }
 
-// デバッグ用GUI描画
 void CharacterManager::DrawDebugGUI()
 {
-	for (auto& character : characteres)
+	for (const auto& character : characteres)
 	{
 		character->DrawDebugGUI();
 	}
 }
 
-// キャラクターの登録
+
 void CharacterManager::Register(Character* character, int character_type)
 {
-	//登録するキャラクターが	プレイヤーなら
+	// 登録するキャラクターが	プレイヤーなら
 	if (character_type >= static_cast<int>(Meta::Identity::Player))
 	{
 		// IDを設定
 		character->SetId(player_number + static_cast<int>(Meta::Identity::Player));
 
-		player_number++;//設定したらインクリメントする
+		player_number++;// 設定したらインクリメントする
 
 		// 登録
 		characteres.emplace_back(character);
 	}
 
-	//登録するキャラクターが敵なら
+	// 登録するキャラクターが敵なら
 	if (character_type >= static_cast<int>(Meta::Identity::Enemy))
 	{
 		// IDを設定
 		character->SetId(enemy_number + static_cast<int>(Meta::Identity::Enemy));
 
-		enemy_number++;//設定したらインクリメントする
+		enemy_number++;// 設定したらインクリメントする
 
 		// 登録
 		characteres.emplace_back(character);
@@ -96,31 +97,29 @@ void CharacterManager::Register(Character* character, int character_type)
 	}
 }
 
-// キャラクターの全削除
+
 void CharacterManager::Clear()
 {
-	for (auto& character : characteres)
+	for (const auto& character : characteres)
 	{
 		if (character->GetId() == static_cast<int>(Meta::Identity::Player))
 		{
 			continue;
 		}
-		if (character)
-		{
-			delete character;
-		}
 
+
+		delete character;
 	}
 	characteres.clear();
 	player_number = 0;
 	enemy_number = 0;
 }
 
-// キャラクターの削除
+
 void CharacterManager::Remove(Character* character)
 {
 	// 破棄リストにすでにあれば弾く
-	for (auto& it : removes)
+	for (const auto& it : removes)
 	{
 		if (it == character)
 			break;
@@ -129,10 +128,10 @@ void CharacterManager::Remove(Character* character)
 	removes.emplace_back(character);
 }
 
-// IDからキャラクターを取得する
+
 Character* CharacterManager::GetCharacterFromId(int id)
 {
-	for (auto& character : characteres)
+	for (const auto& character : characteres)
 	{
 		if (character->GetId() == id)
 			return character;
@@ -142,7 +141,7 @@ Character* CharacterManager::GetCharacterFromId(int id)
 
 Character* CharacterManager::GetPlayer(int number)
 {
-	for (auto& character : characteres)
+	for (const auto& character : characteres)
 	{
 		if (character->GetId() == static_cast<int>(Meta::Identity::Player) + number)
 			return character;
@@ -150,10 +149,10 @@ Character* CharacterManager::GetPlayer(int number)
 	return nullptr;
 }
 
-// キャラクター同士の衝突処理
+
 void CharacterManager::CollisionCharacterToCharacter()
 {
-	size_t count = characteres.size();
+	const size_t count = characteres.size();
 	for (int i = 0; i < count; i++)
 	{
 		Character* characterA = characteres.at(i);

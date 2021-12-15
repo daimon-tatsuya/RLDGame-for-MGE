@@ -3,17 +3,21 @@
 //		RogueLikeStageクラス
 //
 //**********************************************************
-#include "Engine/Systems/Graphics.h"
-#include "Engine/Systems/RogueLikeStage.h"
 
-RogueLikeStage::RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon)
+#include "Engine/Systems/Shader.h"
+#include "Engine/Objects/Model.h"
+#include "Engine/Systems/DebugRenderer.h"
+#include "Engine/Systems/ImGuiRenderer.h"
+#include "Engine/Systems/RogueLikeStage.h"
+#include "Engine/AI/DungeonMake.h"
+#include "Engine/Systems/Collision.h"
+
+RogueLikeStage::RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon) : rogue_like_dungeon_imgui(rogue_like_dungeon)
 {
 
-	scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
+	scale		= DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
 	position = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
-	angle = DirectX::XMFLOAT3(0.f, 0.f, 0.f);;
-	db_rogue_like_dungeon = rogue_like_dungeon;
-	//SetStageObject(rogue_like_dungeon.map_role);
+	angle		= DirectX::XMFLOAT3(0.f, 0.f, 0.f);
 	SetStageObject(rogue_like_dungeon->map_role);
 }
 
@@ -22,7 +26,7 @@ RogueLikeStage::~RogueLikeStage()
 	this->Clear();
 }
 
-void RogueLikeStage::Update(float elapsedTime)
+void RogueLikeStage::Update(float elapsed_time)
 {
 	// オブジェクト行列を更新
 	//UpdateTransform();
@@ -76,7 +80,7 @@ void RogueLikeStage::DrawDebugGUI()
 			// 位置
 			ImGui::InputFloat3("Position", &this->position.x);
 			// 回転
-			DirectX::XMFLOAT3 a;
+			DirectX::XMFLOAT3 a{};
 			a.x = DirectX::XMConvertToDegrees(this->angle.x);
 			a.y = DirectX::XMConvertToDegrees(this->angle.y);
 			a.z = DirectX::XMConvertToDegrees(this->angle.z);
@@ -86,20 +90,20 @@ void RogueLikeStage::DrawDebugGUI()
 			ImGui::InputFloat3("Scale", &this->scale.x);
 		}
 		//モデル数
-		ImGui::Text(u8"モデル数:%d", static_cast<int>(stage_chip.size()));
+		ImGui::Text("モデル数:%d", static_cast<int>(stage_chip.size()));
 
 		//プレイヤー初期位置
-		ImGui::Text(u8"SetPlayerMapPosition	:%f %f",
-			db_rogue_like_dungeon->mobs[0].position.x, db_rogue_like_dungeon->mobs[0].position.y);
+		ImGui::Text("SetPlayerMapPosition	:%f %f",
+			rogue_like_dungeon_imgui->mobs[0].position.x, rogue_like_dungeon_imgui->mobs[0].position.y);
 
-		float PlayerFirstPosition_x = db_rogue_like_dungeon->mobs[0].position.x * 2.f;
-		float PlayerFirstPosition_y = db_rogue_like_dungeon->mobs[0].position.y * 2.f;
+		const float player_first_position_x = rogue_like_dungeon_imgui->mobs[0].position.x * 2.f;
+		const float player_first_position_y = rogue_like_dungeon_imgui->mobs[0].position.y * 2.f;
 
-		ImGui::Text(u8"PlayerFirstPosition:%f %f", PlayerFirstPosition_x, PlayerFirstPosition_y);
-		ImGui::Text(u8"PlayerPointAttribute:%d",
-			db_rogue_like_dungeon->map_role
-				[static_cast<size_t>(db_rogue_like_dungeon->mobs[0].position.y)]
-				[static_cast<size_t>(db_rogue_like_dungeon->mobs[0].position.x)]
+		ImGui::Text("PlayerFirstPosition:%f %f", player_first_position_x, player_first_position_y);
+		ImGui::Text("PlayerPointAttribute:%d",
+			rogue_like_dungeon_imgui->map_role
+				[static_cast<size_t>(rogue_like_dungeon_imgui->mobs[0].position.y)]
+				[static_cast<size_t>(rogue_like_dungeon_imgui->mobs[0].position.x)]
 				.map_data);
 
 	}
@@ -117,21 +121,22 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 	{
 		for (int x = 0; x < MapSize_X; x++)
 		{
-			if (map_role[y][x].map_data == 0)
+			//壁
+			if (map_role[y][x].map_data == static_cast<size_t>(RogueLikeMap::Attribute::Wall))
 			{
-				float pos_x = static_cast<float>(x * Cell_Size);
-				float pos_z = static_cast<float> (y * Cell_Size);
-
-				Stage st("Assets/FBX/geometry/wall.bin", DirectX::XMFLOAT3(pos_x, 0, pos_z), object_num);
+				float pos_x = static_cast<float>(x * CellSize);
+				float pos_z = static_cast<float> (y * CellSize);
+				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
+				Stage st("Assets/FBX/geometry/wall.bin", pos, object_num);
 				stage_chip.emplace_back(st);
 			}
-
-			else if (map_role[y][x].map_data > 0)
+			//その他
+			else if (map_role[y][x].map_data > static_cast<size_t>(RogueLikeMap::Attribute::Wall))
 			{
-				float pos_x = static_cast<float>(x * Cell_Size);
-				float pos_z = static_cast<float> (y * Cell_Size);
-
-				Stage st("Assets/FBX/geometry/floor.bin", DirectX::XMFLOAT3(pos_x, 0, pos_z), object_num);
+				float pos_x = static_cast<float>(x * CellSize);
+				float pos_z = static_cast<float> (y * CellSize);
+				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
+				Stage st("Assets/FBX/geometry/floor.bin",pos, object_num);
 				stage_chip.emplace_back(st);
 			}
 			object_num++;

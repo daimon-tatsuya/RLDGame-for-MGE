@@ -5,6 +5,7 @@
 //**********************************************************
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/ShaderManager.h"
+#include "Engine/Systems/Shader.h"
 
 ShaderManager::~ShaderManager()
 {

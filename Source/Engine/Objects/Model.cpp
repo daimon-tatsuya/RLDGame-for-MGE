@@ -1,11 +1,14 @@
 //**********************************************************
 //
-//		Modelクラス
+//	!	Modelクラス
 //
 //**********************************************************
-#include "Engine/Systems/misc.h"
+
+
+#include "Engine/Objects/ModelResource.h"
 #include "Engine/Objects/Model.h"
 #include  "Engine/Systems/ResourceManager.h"
+
 Model::Model(const char* filename)
 {
 	resource = ResourceManager::Instance().LoadModelResource(filename);
@@ -31,19 +34,19 @@ Model::Model(const char* filename)
 		}
 	}
 
-	// 行列計算
-	//const DirectX::XMFLOAT4X4 transform =
-	//{ 1, 0, 0, 0,
-	//  0, 1, 0, 0,
-	//  0, 0, 1, 0,
-	//  0, 0, 0, 1 };
-	//UpdateTransform(transform);
+	//x 行列計算
+	//xconst DirectX::XMFLOAT4X4 transform =
+	//x{ 1, 0, 0, 0,
+	//x  0, 1, 0, 0,
+	//x  0, 0, 1, 0,
+	//x  0, 0, 0, 1 };
+	//xUpdateTransform(transform);
 }
 
 // アニメーション再生
-void Model::PlayAnimation(int animationIndex, bool loop)
+void Model::PlayAnimation(int animation_index, bool loop)
 {
-	current_animation = animationIndex;
+	current_animation = animation_index;
 	loop_animation = loop;
 	end_animation = false;
 	current_seconds = 0.0f;
@@ -86,7 +89,7 @@ void Model::UpdateAnimation(float elapsed_time)
 
 				Node& node = nodes[node_index];
 
-				//ブレンド補完(現在の姿勢と次のキーフレームとの姿勢の補完)
+				// ブレンド補完(現在の姿勢と次のキーフレームとの姿勢の補完)
 
 				// 前のキーフレームと次のキーフレームの姿勢を補完
 				DirectX::XMVECTOR S0 = DirectX::XMLoadFloat3(&key0.scale);
@@ -135,7 +138,7 @@ void Model::UpdateAnimation(float elapsed_time)
 
 void Model::UpdateTransform(const DirectX::XMFLOAT4X4& transform)
 {
-	DirectX::XMMATRIX m_transform = DirectX::XMLoadFloat4x4(&transform);
+	const DirectX::XMMATRIX m_transform = DirectX::XMLoadFloat4x4(&transform);
 
 	for (Node& node : nodes)
 	{
@@ -146,7 +149,7 @@ void Model::UpdateTransform(const DirectX::XMFLOAT4X4& transform)
 		DirectX::XMMATRIX local_transform = S * R * T;
 
 		// ワールド行列算出
-		DirectX::XMMATRIX parent_transform;
+		DirectX::XMMATRIX parent_transform{};
 		if (node.parent != nullptr)
 		{
 			parent_transform = DirectX::XMLoadFloat4x4(&node.parent->world_transform);
@@ -155,7 +158,7 @@ void Model::UpdateTransform(const DirectX::XMFLOAT4X4& transform)
 		{
 			parent_transform = m_transform;
 		}
-		DirectX::XMMATRIX world_transform = local_transform * parent_transform;
+		const DirectX::XMMATRIX world_transform = local_transform * parent_transform;
 
 		// 計算結果を格納
 		DirectX::XMStoreFloat4x4(&node.local_transform, local_transform);
@@ -168,7 +171,7 @@ void Model::CalculateLocalTransform()
 {
 	for (Node& node : nodes)
 	{
-		DirectX::XMMATRIX scale, rotate, translate;
+		DirectX::XMMATRIX scale, rotate{}, translate{};
 		scale = DirectX::XMMatrixScaling(node.scale.x, node.scale.y, node.scale.z);
 		rotate = DirectX::XMMatrixRotationQuaternion(DirectX::XMVectorSet(node.rotate.x, node.rotate.y, node.rotate.z, node.rotate.w));
 		translate = DirectX::XMMatrixTranslation(node.translate.x, node.translate.y, node.translate.z);
@@ -185,7 +188,7 @@ void Model::CalculateWorldTransform(const DirectX::XMMATRIX& world_transform)
 		DirectX::XMMATRIX local_transform = DirectX::XMLoadFloat4x4(&node.local_transform);
 		if (node.parent != nullptr)
 		{
-			DirectX::XMMATRIX parent_transform = DirectX::XMLoadFloat4x4(&node.parent->world_transform);
+			const DirectX::XMMATRIX parent_transform = DirectX::XMLoadFloat4x4(&node.parent->world_transform);
 			DirectX::XMStoreFloat4x4(&node.world_transform, local_transform * parent_transform);
 		}
 		else

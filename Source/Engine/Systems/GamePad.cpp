@@ -1,49 +1,49 @@
 
 //**********************************************************
 //
-//		GamePadクラス
+//	GamePadクラス
 //
 //**********************************************************
 
-#include <windows.h>
-#include <math.h>
+#include <Windows.h>
+#include <cmath>
 #include <Xinput.h>
 
 #include "Engine/Systems/GamePad.h"
 
-// 更新
+
 void GamePad::Update()
 {
-	axisLx = axisLy = 0.0f;
-	axisRx = axisRy = 0.0f;
+	axisLX = axisLY = 0.0f;
+	axisRX = axisRY = 0.0f;
 	triggerL = triggerR = 0.0f;
 
-	GamePadButton newButtonState = 0;
+	GamePadButton new_button_state = 0;
 
 	// ボタン情報取得
-	XINPUT_STATE xinputState;
-	if (XInputGetState(slot, &xinputState) == ERROR_SUCCESS)
+	XINPUT_STATE xinput_state{};
+	if (XInputGetState(slot, &xinput_state) == ERROR_SUCCESS)
 	{
-		//XINPUT_CAPABILITIES caps;
-		//XInputGetCapabilities(m_slot, XINPUT_FLAG_GAMEPAD, &caps);
-		XINPUT_GAMEPAD& pad = xinputState.Gamepad;
+		//! XINPUT_CAPABILITIES caps;
+		//! XInputGetCapabilities(m_slot, XINPUT_FLAG_GAMEPAD, &caps);
+		XINPUT_GAMEPAD& pad = xinput_state.Gamepad;
 
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_UP)								newButtonState |= BTN_UP;
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)						newButtonState |= BTN_RIGHT;
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)						newButtonState |= BTN_DOWN;
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)							newButtonState |= BTN_LEFT;
-		if (pad.wButtons & XINPUT_GAMEPAD_A)											newButtonState |= BTN_A;
-		if (pad.wButtons & XINPUT_GAMEPAD_B)											newButtonState |= BTN_B;
-		if (pad.wButtons & XINPUT_GAMEPAD_X)											newButtonState |= BTN_X;
-		if (pad.wButtons & XINPUT_GAMEPAD_Y)											newButtonState |= BTN_Y;
-		if (pad.wButtons & XINPUT_GAMEPAD_START)									newButtonState |= BTN_START;
-		if (pad.wButtons & XINPUT_GAMEPAD_BACK)									newButtonState |= BTN_BACK;
-		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)						newButtonState |= BTN_LEFT_THUMB;
-		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)					newButtonState |= BTN_RIGHT_THUMB;
-		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)					newButtonState |= BTN_LEFT_SHOULDER;
-		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)				newButtonState |= BTN_RIGHT_SHOULDER;
-		if (pad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)	newButtonState |= BTN_LEFT_TRIGGER;
-		if (pad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)	newButtonState |= BTN_RIGHT_TRIGGER;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_UP)							new_button_state |= BTN_UP;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)						new_button_state |= BTN_RIGHT;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)						new_button_state |= BTN_DOWN;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)							new_button_state |= BTN_LEFT;
+		if (pad.wButtons & XINPUT_GAMEPAD_A)										new_button_state |= BTN_A;
+		if (pad.wButtons & XINPUT_GAMEPAD_B)										new_button_state |= BTN_B;
+		if (pad.wButtons & XINPUT_GAMEPAD_X)										new_button_state |= BTN_X;
+		if (pad.wButtons & XINPUT_GAMEPAD_Y)										new_button_state |= BTN_Y;
+		if (pad.wButtons & XINPUT_GAMEPAD_START)									new_button_state |= BTN_START;
+		if (pad.wButtons & XINPUT_GAMEPAD_BACK)									new_button_state |= BTN_BACK;
+		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)						new_button_state |= BTN_LEFT_THUMB;
+		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)					new_button_state |= BTN_RIGHT_THUMB;
+		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)					new_button_state |= BTN_LEFT_SHOULDER;
+		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)				new_button_state |= BTN_RIGHT_SHOULDER;
+		if (pad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)		new_button_state |= BTN_LEFT_TRIGGER;
+		if (pad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)	new_button_state |= BTN_RIGHT_TRIGGER;
 
 		if ((pad.sThumbLX <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && pad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
 			(pad.sThumbLY <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && pad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE))
@@ -61,15 +61,15 @@ void GamePad::Update()
 
 		triggerL = static_cast<float>(pad.bLeftTrigger) / 255.0f;
 		triggerR = static_cast<float>(pad.bRightTrigger) / 255.0f;
-		axisLx = static_cast<float>(pad.sThumbLX) / static_cast<float>(0x8000);
-		axisLy = static_cast<float>(pad.sThumbLY) / static_cast<float>(0x8000);
-		axisRx = static_cast<float>(pad.sThumbRX) / static_cast<float>(0x8000);
-		axisRy = static_cast<float>(pad.sThumbRY) / static_cast<float>(0x8000);
+		axisLX = static_cast<float>(pad.sThumbLX) / static_cast<float>(0x8000);
+		axisLY = static_cast<float>(pad.sThumbLY) / static_cast<float>(0x8000);
+		axisRX = static_cast<float>(pad.sThumbRX) / static_cast<float>(0x8000);
+		axisRY = static_cast<float>(pad.sThumbRY) / static_cast<float>(0x8000);
 	}
 	else
 	{
 #if 0
-		// XInputで入力情報が取得出来なかった場合はWindowsAPIで取得する
+		//! XInputで入力情報が取得出来なかった場合はWindowsAPIで取得する
 		JOYINFOEX joyInfo;
 		joyInfo.dwSize = sizeof(JOYINFOEX);
 		joyInfo.dwFlags = JOY_RETURNALL;	// 全ての情報を取得
@@ -151,54 +151,54 @@ void GamePad::Update()
 		if (GetAsyncKeyState('J') & 0x8000) rx = -1.0f;
 		if (GetAsyncKeyState('K') & 0x8000) ry = -1.0f;
 		if (GetAsyncKeyState('L') & 0x8000) rx = 1.0f;
-		if (GetAsyncKeyState('Z') & 0x8000) newButtonState |= BTN_A;
-		if (GetAsyncKeyState('X') & 0x8000) newButtonState |= BTN_B;
-		if (GetAsyncKeyState('C') & 0x8000) newButtonState |= BTN_X;
-		if (GetAsyncKeyState('V') & 0x8000) newButtonState |= BTN_Y;
-		if (GetAsyncKeyState(VK_UP) & 0x8000)	newButtonState |= BTN_UP;
-		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)	newButtonState |= BTN_RIGHT;
-		if (GetAsyncKeyState(VK_DOWN) & 0x8000)	newButtonState |= BTN_DOWN;
-		if (GetAsyncKeyState(VK_LEFT) & 0x8000)	newButtonState |= BTN_LEFT;
+		if (GetAsyncKeyState('Z') & 0x8000) new_button_state |= BTN_A;
+		if (GetAsyncKeyState('X') & 0x8000) new_button_state |= BTN_B;
+		if (GetAsyncKeyState('C') & 0x8000) new_button_state |= BTN_X;
+		if (GetAsyncKeyState('V') & 0x8000) new_button_state |= BTN_Y;
+		if (GetAsyncKeyState(VK_UP) & 0x8000)			new_button_state |= BTN_UP;
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)	new_button_state |= BTN_RIGHT;
+		if (GetAsyncKeyState(VK_DOWN) & 0x8000)	new_button_state |= BTN_DOWN;
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000)		new_button_state |= BTN_LEFT;
 
-		//	テキトーに設定
-		if (GetAsyncKeyState('N') & 0x8000) newButtonState |= BTN_START;
-		if (GetAsyncKeyState('M') & 0x8000) newButtonState |= BTN_BACK;
+		// テキトーに設定
+		if (GetAsyncKeyState('N') & 0x8000) new_button_state |= BTN_START;
+		if (GetAsyncKeyState('M') & 0x8000) new_button_state |= BTN_BACK;
 
-		if (GetAsyncKeyState('Q') & 0x8000) newButtonState |= BTN_LEFT_THUMB;
-		if (GetAsyncKeyState('E') & 0x8000) newButtonState |= BTN_LEFT_SHOULDER;
-		if (GetAsyncKeyState('R') & 0x8000) newButtonState |= BTN_LEFT_TRIGGER;
-		if (GetAsyncKeyState('U') & 0x8000) newButtonState |= BTN_RIGHT_THUMB;
-		if (GetAsyncKeyState('O') & 0x8000) newButtonState |= BTN_RIGHT_SHOULDER;
-		if (GetAsyncKeyState('P') & 0x8000) newButtonState |= BTN_RIGHT_TRIGGER;
+		if (GetAsyncKeyState('Q') & 0x8000) new_button_state |= BTN_LEFT_THUMB;
+		if (GetAsyncKeyState('E') & 0x8000) new_button_state |= BTN_LEFT_SHOULDER;
+		if (GetAsyncKeyState('R') & 0x8000) new_button_state |= BTN_LEFT_TRIGGER;
+		if (GetAsyncKeyState('U') & 0x8000) new_button_state |= BTN_RIGHT_THUMB;
+		if (GetAsyncKeyState('O') & 0x8000) new_button_state |= BTN_RIGHT_SHOULDER;
+		if (GetAsyncKeyState('P') & 0x8000) new_button_state |= BTN_RIGHT_TRIGGER;
 
 #if 1
-		if (newButtonState & BTN_UP)    ly = 1.0f;
-		if (newButtonState & BTN_RIGHT) lx = 1.0f;
-		if (newButtonState & BTN_DOWN)  ly = -1.0f;
-		if (newButtonState & BTN_LEFT)  lx = -1.0f;
+		if (new_button_state & BTN_UP)    ly = 1.0f;
+		if (new_button_state & BTN_RIGHT) lx = 1.0f;
+		if (new_button_state & BTN_DOWN)  ly = -1.0f;
+		if (new_button_state & BTN_LEFT)  lx = -1.0f;
 #endif
 
 		if (lx >= 1.0f || lx <= -1.0f || ly >= 1.0f || ly <= -1.0)
 		{
-			float power = ::sqrtf(lx * lx + ly * ly);
-			axisLx = lx / power;
-			axisLy = ly / power;
+			const float power = ::sqrtf(lx * lx + ly * ly);
+			axisLX = lx / power;
+			axisLY = ly / power;
 		}
 
 		if (rx >= 1.0f || rx <= -1.0f || ry >= 1.0f || ry <= -1.0)
 		{
 			float power = ::sqrtf(rx * rx + ry * ry);
-			axisRx = rx / power;
-			axisRy = ry / power;
+			axisRX = rx / power;
+			axisRY = ry / power;
 		}
 	}
 
 	// ボタン情報の更新
 	{
 		button_state[1] = button_state[0];	// スイッチ履歴
-		button_state[0] = newButtonState;
+		button_state[0] = new_button_state;
 
-		button_down = ~button_state[1] & newButtonState;	// 押した瞬間
-		button_up = ~newButtonState & button_state[1];	// 離した瞬間
+		button_down = ~button_state[1] & new_button_state;	// 押した瞬間
+		button_up = ~new_button_state & button_state[1];			// 離した瞬間
 	}
 }

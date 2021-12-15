@@ -4,22 +4,28 @@
 //		Scenesクラス
 //
 //**********************************************************
-#include <windows.h>
-#include <wrl.h>
-#include <d3d11.h>
-#include <memory>
 
-#include "Engine/Systems/Math.h"
 
 /// <summary>
 /// シーンの基底クラス
 /// </summary>
 class Scene
 {
+private:
+
+	bool	ready = false;
+
 public:
 
-	Scene() {}
-	virtual ~Scene() {}
+private:
+
+public:
+
+	Scene() = default;
+	// 例えデストラクタが空でも
+	// virtual なデストラクタは明示的に定義する
+	virtual ~Scene() = default;
+
 	// 初期化
 	virtual void Initialize() = 0;
 	// 終了化
@@ -32,10 +38,7 @@ public:
 	bool IsReady() const { return ready; }
 	// 準備完了設定
 	void SetReady() { ready = true; }
-private:
 
-public:
 
-private:
-	bool	ready = false;
+
 };

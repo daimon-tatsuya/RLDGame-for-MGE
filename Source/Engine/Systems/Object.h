@@ -7,9 +7,11 @@
 
 #include <memory>
 #include "Engine/Systems/Math.h"
-#include "Engine/Systems/Shader.h"
 #include "Engine/AI/Telegram.h"
-#include "Engine/Objects/Model.h"
+
+//前方宣言
+class Model;
+class Shader;
 
 /// <summary>
 /// ゲーム中のオブジェクトの基底クラス
@@ -20,24 +22,26 @@ private:
 
 protected:
 	DirectX::XMFLOAT3		position = { 0, 0, 0 };
-	DirectX::XMFLOAT3		angle = { 0, 0, 0 };//ラジアン角
+	DirectX::XMFLOAT3		angle = { 0, 0, 0 };// ラジアン角
 	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 	DirectX::XMFLOAT4X4	transform =
-	{ 1, 0, 0, 0,
+	{
+		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		0, 0, 0, 1 };
-	DirectX::XMFLOAT3	velocity = { 0, 0, 0 };
+		0, 0, 0, 1
+	};
+	DirectX::XMFLOAT3		velocity = { 0, 0, 0 };
 	std::shared_ptr<Model> model = nullptr;
 	int					id = 0;
-	float				radius = 0.5f;//半径
-	float				height = 2.0f;//高さ
+	float				radius = 0.5f;// 半径
+	float				height = 2.0f;// 高さ
 
 public:
 	float				gravity = -1.0f;
-	float				gravity_cut_time = 0;//重力を無視するときに使う
-	bool				is_ground = false;//地面判定用
-	float				invincible_timer = 0.0f;//無敵時間
+	float				gravity_cut_time = 0;// 重力を無視するときに使う
+	bool				is_ground = false;// 地面判定用
+	float				invincible_timer = 0.0f;// 無敵時間
 	float				friction = 0.5f;
 	float				acceleration = 1.0f;
 	float				max_move_speed = 5.0f;
@@ -52,10 +56,11 @@ protected:
 
 public:
 
-	Object() {}
+	Object() = default;
+
 	// 例えデストラクタが空でも
 	// virtual なデストラクタは明示的に定義する
-	virtual ~Object() {}
+	virtual ~Object() = default;
 
 	// 行列更新処理
 	void UpdateTransform();
@@ -63,7 +68,7 @@ public:
 	virtual void Update(float elapsed_time) = 0;
 
 	// 描画処理
-	virtual void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader) = 0;
+	virtual void Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader) = 0;
 
 	// デバッグ用GUI描画
 	virtual	void DrawDebugGUI() {}
@@ -74,7 +79,19 @@ public:
 	//メッセージ受信処理
 	virtual bool OnMessage(const Telegram& msg) = 0;
 
-	// 位置を取得
+	// 任意の回転角を0~360に正規化
+	float NormalizeAnyAngle(float radian);
+
+	// 回転角を0~360に正規化
+	void NormalizeAngle();
+
+	//------------------------------------------------
+	//
+	// Getter Setter
+	//
+	//------------------------------------------------
+
+		// 位置を取得
 	const DirectX::XMFLOAT3& GetPosition() const { return position; }
 
 	// 位置を設定
@@ -113,20 +130,20 @@ public:
 	void SetScaleZ(const float z) { this->scale.z = z; }
 
 	//characterごとにidをセットして管理する
-	void	SetId(int id) { this->id = id; }
-	int		GetId() { return id; }
+	void	SetId(const int id) { this->id = id; }
+	int		GetId() const { return id; }
 
 	//モデルを取得
-	void	SetModel(const char* pass) { model = std::make_shared<Model>(pass); }
+	void	SetModel(const char* pass);
 
 	//モデルを設定
-	Model* GetModel() { return model.get(); }
+	Model* GetModel() const { return model.get(); }
 
 	//姿勢行列を取得
-	DirectX::XMFLOAT4X4 GetTransform() { return transform; }
+	DirectX::XMFLOAT4X4 GetTransform() const { return transform; }
 
 	//姿勢行列を設定
-	void SetTransform(DirectX::XMFLOAT4X4& transform) { this->transform = transform; }
+	void SetTransform(const DirectX::XMFLOAT4X4& transform) { this->transform = transform; }
 
 	// 半径を取得
 	float GetRadius() const { return radius; }
@@ -135,15 +152,9 @@ public:
 	void SetRadius(const float radius) { this->radius = radius; }
 
 	// 高さを取得
-	float GetHeight()const { return height; };
+	float GetHeight()const { return height; }
 
 	// 高さを設定
-	void SetHeight(float height) { this->height = height; };
-
-	//任意の回転角を0~360に正規化
-	float NormalizeAnyAngle(float radian);
-
-	//回転角を0~360に正規化
-	void NormalizeAngle();
+	void SetHeight(const float height) { this->height = height; }
 
 };

@@ -4,16 +4,11 @@
 //
 //**********************************************************
 
-#include <windows.h>
-#include <memory>
-#include <assert.h>
-#include <tchar.h>
-#include <time.h>
+#include <ctime>
 
-
-#include "Engine/Systems/DungeonMake.h"
+#include "Engine/AI/DungeonMake.h"
 #include "Engine/Systems/CharacterManager.h"
-
+#include "Engine//Systems/Character.h"
 
 RogueLikeDungeon::RogueLikeDungeon()
 {
@@ -40,11 +35,11 @@ void RogueLikeDungeon::UpdateMapRolePlayer()
 		for (int x = 0; x < MapSize_X; x++)
 		{
 			//属性がプレイヤーなら
-			if (map_role[y][x].map_data == 2)
+			if (map_role[y][x].map_data == static_cast<size_t>(RogueLikeMap::Attribute::Player))
 			{
 				//足元にアイテムか罠があったら4,5
 				//床に書き換え
-				map_role[y][x].map_data = 1;
+				map_role[y][x].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor);
 			}
 		}
 	}
@@ -52,12 +47,12 @@ void RogueLikeDungeon::UpdateMapRolePlayer()
 	//更新
 	CharacterManager& character_manager = CharacterManager::Instance();
 
-	Character* player = character_manager.GetPlayer();
+	const Character* player = character_manager.GetPlayer();
 
-	DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(player->GetPosition().x / Cell_Size, player->GetPosition().z / Cell_Size);//データ上の値にするためCell_Sizeで割る
+	const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(player->GetPosition().x / CellSize, player->GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
 
 	//更新後のプレイヤーのデータの書き換え
-	map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x)].map_data = 2;
+	map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x)].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Player);
 
 }
 
@@ -69,11 +64,11 @@ void RogueLikeDungeon::UpdateMapRoleEnemis()
 		for (int x = 0; x < MapSize_X; x++)
 		{
 			//属性が敵なら
-			if (map_role[y][x].map_data == 3)
+			if (map_role[y][x].map_data == static_cast<size_t>(RogueLikeMap::Attribute::Enemy))
 			{
 				//足元にアイテムか罠があったら4,5
 				//床に書き換え
-				map_role[y][x].map_data = 1;
+				map_role[y][x].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor);
 			}
 		}
 	}
@@ -91,13 +86,13 @@ void RogueLikeDungeon::UpdateMapRoleEnemis()
 
 void RogueLikeDungeon::DungeonMake(DungeonMapRole* dungeon_map_role)
 {
-	for (int i = 0; i < Mob_Max; i++)
+	for (auto& mob : mobs)
 	{
-		mobs[i].position = { 0 ,0 };
+		mob.position = { 0 ,0 };
 	}
 	MapMake(dungeon_map_role);
 
-	for (int i = 0; i < Mob_Max; i++)
+	for (int i = 0; i < MobMax; i++)
 	{
 		MobMake(dungeon_map_role, map_role, i);
 	}
@@ -116,7 +111,7 @@ void RogueLikeDungeon::MapReMake(DungeonMapRole* dungeon_map_role)
 	DungeonMake(dungeon_map_role);
 }
 
-bool RogueLikeDungeon::MobMake(DungeonMapRole* const dungeon_map_role, std::vector<std::vector<RogueLikeMap>>& map_role, int id)
+bool RogueLikeDungeon::MobMake(DungeonMapRole* const dungeon_map_role, std::vector<std::vector<RogueLikeMap>>& map_role, const int id)
 {
 	//Mobを設置する
 	int random_room_id = static_cast<int>(dungeon_map_role->map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role->map_room_count)))]); //マップ上の部屋をランダムに指定する
@@ -131,7 +126,7 @@ bool RogueLikeDungeon::MobMake(DungeonMapRole* const dungeon_map_role, std::vect
 	if (id == 0)
 	{
 		//	プレイヤーの位置
-		map_role[position_y][position_x].map_data = 2;
+		map_role[position_y][position_x].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Player);
 		mobs[id].position = { static_cast<float>(position_x),static_cast<float>(position_y) };
 		dungeon_map_role->map_room_player[random_room_id] = 1; //部屋にプレイヤーがいる
 	}
@@ -149,7 +144,7 @@ bool RogueLikeDungeon::MobMake(DungeonMapRole* const dungeon_map_role, std::vect
 			position_x = static_cast<int>(dungeon_map_role->map_room[random_room_id][3]) + random_pos_x; //マップ上の部屋のランダムなX座標
 		}
 		//敵の位置
-		map_role[position_y][position_x].map_data = 3;
+		map_role[position_y][position_x].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Enemy);
 		mobs[id].position = { static_cast<float>(position_x),static_cast<float>(position_y) };
 	}
 	//mobs[id].id = 1;
@@ -165,14 +160,17 @@ bool RogueLikeDungeon::MobMake(DungeonMapRole* const dungeon_map_role, std::vect
 	//	}
 	//}
 	//エラーチェック
-	if (!mobs) { return false; }
+	if (!mobs)
+	{
+		return false;
+	}
 
 	return true;
 }
 
 bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::vector<std::vector<RogueLikeMap>>& map_role*/)
 {
-	if (map_role.size() == 0 || map_role.front().size() == 0)
+	if (map_role.empty() || map_role.front().empty())
 	{
 		return false;
 	}
@@ -181,7 +179,7 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 	{
 		for (size_t j = 0; j < map_role[i].size(); j++)
 		{
-			map_role[i][j].map_data = 0;
+			map_role[i][j].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Wall);
 		}
 	}
 	//マップの区分け数 (部屋の個数) 0~nまでの部屋ID
@@ -207,8 +205,8 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 	dungeon_map_role->map_road[0][1] = 255;
 
 	/*マップを区分けしていく処理(区域を分割する処理)*/
-	size_t division_after;
-	int count; //(0:Y, 1:X) Y軸で分けるかX軸で分けるか決める
+	size_t division_after{};
+	int count{}; //(0:Y, 1:X) Y軸で分けるかX軸で分けるか決める
 
 	for (size_t i = 1; i < dungeon_map_role->map_division_count; i++)
 	{
@@ -262,10 +260,10 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 			(dungeon_map_role->map_division[division_after][count] - dungeon_map_role->map_division[division_after][count + 2]) / 3 +
 			static_cast<size_t>
 			(Math::RandomInt
-				(
-					((static_cast<int>(dungeon_map_role->map_division[division_after][count]) - static_cast<int>(dungeon_map_role->map_division[division_after][count + 2]))/ 3)
-				)
-			);
+			(
+				((static_cast<int>(dungeon_map_role->map_division[division_after][count]) - static_cast<int>(dungeon_map_role->map_division[division_after][count + 2])) / 3)
+			)
+				);
 
 		dungeon_map_role->map_division[i][count + 2] = dungeon_map_role->map_division[division_after][count + 2]; //0.軸の左端(iL)の座標(divAfterL)
 		dungeon_map_role->map_division[division_after][count + 2] = dungeon_map_role->map_division[i][count]; //divAfter軸の左端(divAfterL)の座標(iR)
@@ -320,7 +318,7 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 		{
 			for (size_t k = dungeon_map_role->map_room[i][3]; k < dungeon_map_role->map_room[i][1]; k++)
 			{
-				map_role[j][k].map_data = 1;
+				map_role[j][k].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor);
 				dungeon_map_role->map_room_area[i]++;
 			}
 		}
@@ -335,11 +333,11 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 	/*通路を生成する処理*/
 	/*通路は２部屋間の細い道のことを指す。
 	通路を作るために２部屋をそれぞれ前(Before)と後(After)で分ける。
-	for文で全ての部屋をチェックし、前後の部屋を繋ぐ通路を作る。
+	全ての部屋をチェックし、前後の部屋を繋ぐ通路を作る。
 	まず、前の通路を作り、次に後の通路を作る。
 	最後に前と後の通路を繋げる。
 	*/
-	size_t room_after;
+	size_t room_after{};
 	for (size_t room_before = 0; room_before < dungeon_map_role->map_division_count; room_before++)
 	{
 		room_after = dungeon_map_role->map_road[room_before][0];
@@ -355,17 +353,17 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 				//前の通路
 				for (size_t j = dungeon_map_role->map_room[room_before][0]; j < dungeon_map_role->map_division[room_before][0]; j++)
 				{
-					map_role[j][dungeon_map_role->map_road[room_before][2] + dungeon_map_role->map_room[room_before][3]].map_data = 1; //通路をマップチップに線画
+					map_role[j][dungeon_map_role->map_road[room_before][2] + dungeon_map_role->map_room[room_before][3]].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor); //通路をマップチップに線画
 				}
 				//後の通路
 				for (size_t j = dungeon_map_role->map_division[room_after][2]; j < dungeon_map_role->map_room[room_after][2]; j++)
 				{
-					map_role[j][dungeon_map_role->map_road[room_before][3] + dungeon_map_role->map_room[room_after][3]].map_data = 1; //通路をマップチップに線画
+					map_role[j][dungeon_map_role->map_road[room_before][3] + dungeon_map_role->map_room[room_after][3]].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor); //通路をマップチップに線画
 				}
 				//通路をつなぐ
 				for (size_t j = dungeon_map_role->map_road[room_before][2] + dungeon_map_role->map_room[room_before][3]; j <= dungeon_map_role->map_road[room_before][3] + dungeon_map_role->map_room[room_after][3]; j++)
 				{
-					map_role[dungeon_map_role->map_division[room_before][0]][j].map_data = 1; //通路をマップチップに線画 2から5(上から下)
+					map_role[dungeon_map_role->map_division[room_before][0]][j].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor); //通路をマップチップに線画 2から5(上から下)
 				}
 				for (size_t j = dungeon_map_role->map_road[room_before][3] + dungeon_map_role->map_room[room_after][3]; j <= dungeon_map_role->map_road[room_before][2] + dungeon_map_role->map_room[room_before][3]; j++)
 				{
@@ -381,21 +379,21 @@ bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::ve
 					//前の通路
 					for (size_t j = dungeon_map_role->map_room[room_before][1]; j < dungeon_map_role->map_division[room_before][1]; j++)
 					{
-						map_role[dungeon_map_role->map_road[room_before][2] + dungeon_map_role->map_room[room_before][2]][j].map_data = 1; //通路をマップチップに線画
+						map_role[dungeon_map_role->map_road[room_before][2] + dungeon_map_role->map_room[room_before][2]][j].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor); //通路をマップチップに線画
 					}
 					//後の通路
 					for (size_t j = dungeon_map_role->map_division[room_after][3]; j < dungeon_map_role->map_room[room_after][3]; j++)
 					{
-						map_role[dungeon_map_role->map_road[room_before][3] + dungeon_map_role->map_room[room_after][2]][j].map_data = 1; //通路をマップチップに線画
+						map_role[dungeon_map_role->map_road[room_before][3] + dungeon_map_role->map_room[room_after][2]][j].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor); //通路をマップチップに線画
 					}
 					//通路をつなぐ
 					for (size_t j = dungeon_map_role->map_road[room_before][2] + dungeon_map_role->map_room[room_before][2]; j <= dungeon_map_role->map_road[room_before][3] + dungeon_map_role->map_room[room_after][2]; j++)
 					{
-						map_role[j][dungeon_map_role->map_division[room_before][1]].map_data = 1; //通路をマップチップに線画
+						map_role[j][dungeon_map_role->map_division[room_before][1]].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor); //通路をマップチップに線画
 					}
 					for (size_t j = dungeon_map_role->map_road[room_before][3] + dungeon_map_role->map_room[room_after][2]; j <= dungeon_map_role->map_road[room_before][2] + dungeon_map_role->map_room[room_before][2]; j++)
 					{
-						map_role[j][dungeon_map_role->map_division[room_before][1]].map_data = 1; //通路をマップチップに線画
+						map_role[j][dungeon_map_role->map_division[room_before][1]].map_data = static_cast<size_t>(RogueLikeMap::Attribute::Floor); //通路をマップチップに線画
 					}
 					break;
 		}

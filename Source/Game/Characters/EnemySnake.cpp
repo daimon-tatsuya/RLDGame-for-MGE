@@ -6,34 +6,33 @@
 //**********************************************************
 
 #include "Engine/Systems/Graphics.h"
-#include "Engine/Systems/Camera.h"
-#include "Engine/Systems/Collision.h"
-#include "Engine/Systems/CharacterManager.h"
-#include "Engine/AI/MetaAI.h"
+#include "Engine/Systems/Shader.h"
+#include "Engine/Systems/ShaderManager.h"
+#include "Engine/Systems/DebugRenderer.h"
+#include "Engine/Objects/Model.h"
+#include "Engine/AI/DungeonMake.h"
 
 #include "Game/Characters/EnemySnake.h"
-
-#include "Game/Characters/DerivedEnemySnakeState.h"
 
 EnemySnake::EnemySnake(RogueLikeDungeon* rogue_like_dungeon)
 {
 	model = std::make_shared<Model>("Assets/FBX/Animals/Rattlesnake.bin");
 	scale.x = scale.y = scale.z = 1.f;
 	position.y = 0.f;
-	stage_informations = rogue_like_dungeon;
+	stage_information = rogue_like_dungeon;
 
 	//初期ステート
-	FSMInitialize();
+	EnemySnake::FSMInitialize();
 
 	//オブジェクト配置
 	for (int y = 0; y < MapSize_Y; y++)
 	{
 		for (int x = 0; x < MapSize_X; x++)
 		{
-			if (stage_informations->map_role[y][x].map_data == 3)
+			if (stage_information->map_role[y][x].map_data == 3)
 			{
-				float pos_x = static_cast<float>(x * Cell_Size);
-				float pos_z = static_cast<float> (y * Cell_Size);
+				const float pos_x = static_cast<float>(x * CellSize);
+				const float pos_z = static_cast<float> (y * CellSize);
 
 				position = DirectX::XMFLOAT3(pos_x, 0, pos_z);
 			}
@@ -41,15 +40,13 @@ EnemySnake::EnemySnake(RogueLikeDungeon* rogue_like_dungeon)
 	}
 }
 
-EnemySnake::~EnemySnake()
-{
-}
 
-void EnemySnake::Update(float elapsedTime)
+
+void EnemySnake::Update(float elapsed_time)
 {
 	position.y = 0.f;
 
-	state_machine->Update(elapsedTime);
+	//state_machine->Update(elapsedTime);
 
 	//回転角の正規化
 	NormalizeAngle();
@@ -68,30 +65,6 @@ void EnemySnake::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
 
 void EnemySnake::FSMInitialize()
 {
-	state_machine = std::make_unique<StateMachine>(this);
-
-	//親ステート
-	state_machine->RegisterState(new EnemySnakeEntryState(this));
-	state_machine->RegisterState(new EnemySnakeReactionState(this));
-	state_machine->RegisterState(new  EnemySnakeReceiveState(this));
-	//子ステート
-	//Select
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Entry), new EnemySnakeSelectState(this));
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Entry), new EnemySnakeApproachState(this));
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Entry), new EnemySnakeExploreState(this));
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Entry), new EnemySnakeAttackState(this));
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Entry), new EnemySnakeAbilityState(this));
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Entry), new EnemySnakeUseItemState(this));
-
-	//Reaction
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Reaction), new EnemySnakeDamagedState(this));
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Reaction), new EnemySnakeDeathState(this));
-
-	//Receive
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Receive), new EnemySnakeWaitState(this));
-	state_machine->RegisterSubState(static_cast<int>(EnemySnake::ParentState::Receive), new EnemySnakeCalledState(this));
-
-	state_machine->SetState(static_cast<int>(EnemySnake::ParentState::Receive));
 
 }
 
@@ -127,10 +100,11 @@ bool EnemySnake::OnMessage(const Telegram& telegram)
 	{
 	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
 
-			state_machine->ChangeState(static_cast<int>(EnemySnake::ParentState::Entry));
+		//		state_machine->ChangeState(static_cast<int>(EnemySnake::ParentState::Entry));
 
 		return true;
-
+	default:
+		;
 	}
 	return false;
 }

@@ -5,21 +5,44 @@
 //
 //**********************************************************
 
-#include <d3d11.h>
+
 #include <vector>
 #include <memory>
-
 #include "Engine/Systems/Math.h"
-#include "Engine/AI/Edge.h"
 
+
+//前方宣言
+class Edge;
 
 class Node
 {
 private:
+
+	bool start_node_flag = false;		// A*始める地点
+	bool goal_node_flag = false;		// 目標地点
+	bool player_node_flag = false;	// Playerのいる地点
+	bool enemy_node_flag = false;	// Enemyのいる地点
+	bool wall_node_flag = false;		// 壁のある地点
+	bool item_node_flag = false;		// アイテムのある地点
+	bool searched_node_flag = false;// 探索済みの地点
+
+
+
+public:
+	int node_id = 0;
+	DirectX::XMFLOAT2 position{ 0,0 };
+	std::vector<std::shared_ptr<Edge>> edge;// このノードが所有するエッジ情報
+	float cost = 1.0f;		                             // ノード自体のコスト
+	float cost_from_start = 100.f;                 // A*を始めた地点からの合計コスト
+
+
+private:
+
 public:
 
 	Node();
-	~Node();
+
+	~Node()= default;
 
 	/// <summary>
 	/// <para>start_node_flagの設定</para>
@@ -27,14 +50,14 @@ public:
 	/// <para>trueのnodeからHeuristicSearchを行う</para>
 	/// </summary>
 	/// <param name="set"></param>
-	void SetStartNodeFlag(bool set) { start_node_flag = set; }
+	void SetStartNodeFlag(const bool set) { start_node_flag = set; }
 
 	/// <summary>
 	/// <para>HeuristicSearchで使用</para>
 	/// <para>trueのnodeからHeuristicSearchを行う</para>
 	/// </summary>
 	/// <returns>start_node_flag</returns>
-	bool GetStartNodeFlag() { return start_node_flag; }
+	 bool GetStartNodeFlag() const { return start_node_flag; }
 
 	/// <summary>
 	/// <para>goal_node_flagの設定</para>
@@ -49,7 +72,7 @@ public:
 	/// <para>trueのnodeを目的地としてHeuristicSearchを行う</para>
 	/// </summary>
 	/// <returns>goal_node_flag</returns>
-	bool GetGoalNodeFlag() { return goal_node_flag; }
+	bool GetGoalNodeFlag() const { return goal_node_flag; }
 
 	/// <summary>
 	/// <para>player_node_flagの設定</para>
@@ -62,7 +85,7 @@ public:
 	/// trueならこのnodeはプレイヤーがいる
 	/// </summary>
 	/// <returns>player_node_flag</returns>
-	bool GetPlayerNodeFlag() { return player_node_flag; }
+	 bool GetPlayerNodeFlag() const { return player_node_flag; }
 
 	/// <summary>
 	/// <para>enemy_node_flagの設定</para>
@@ -75,7 +98,7 @@ public:
 	/// trueならこのnodeは敵がいる
 	/// </summary>
 	/// <returns>enemy_node_flag</returns>
-	bool GetEnemyNodeFlag() { return enemy_node_flag; }
+	bool GetEnemyNodeFlag() const { return enemy_node_flag; }
 
 	/// <summary>
 	/// <para>wall_node_flagの設定</para>
@@ -88,7 +111,7 @@ public:
 	/// trueならこのnodeは壁
 	/// </summary>
 	/// <returns>wall_node_flag</returns>
-	bool GetWallNodeFlag() { return wall_node_flag; }
+	 bool GetWallNodeFlag() const { return wall_node_flag; }
 
 	/// <summary>
 	/// <para>item_node_flagの設定</para>
@@ -101,7 +124,7 @@ public:
 	/// trueならこのnodeにはアイテムが置かれている
 	/// </summary>
 	/// <returns>item_node_flag</returns>
-	bool GetItemNodeFlag() { return item_node_flag; }
+	 bool GetItemNodeFlag() const { return item_node_flag; }
 
 	/// <summary>
 	/// <para>searched_node_flagの設定</para>
@@ -114,7 +137,7 @@ public:
 	/// trueならこのnodeは探索済み
 	/// </summary>
 	/// <returns>searched_node_flag</returns>
-	bool GetSearchedNodeFlag() { return searched_node_flag; }
+	 bool GetSearchedNodeFlag() const { return searched_node_flag; }
 
 	/// <summary>
 	/// nodeのpositionの設定
@@ -145,24 +168,7 @@ public:
 	///  nodeのpositionの値を返す
 	/// </summary>
 	/// <returns></returns>
-	DirectX::XMFLOAT2 GetNodePosition() { return position; }
-
-private:
-
-	bool start_node_flag = false;//A*始める地点
-	bool goal_node_flag = false;//目標地点
-	bool player_node_flag = false;//Playerのいる地点
-	bool enemy_node_flag = false;//Enemyのいる地点
-	bool wall_node_flag = false;//壁のある地点
-	bool item_node_flag = false;//アイテムのある地点
-	bool searched_node_flag = false;//探索済みの地点
+	 DirectX::XMFLOAT2 GetNodePosition() const { return position; }
 
 
-
-public:
-	int node_id = 0;
-	DirectX::XMFLOAT2 position = { 0,0 };
-	std::vector<std::shared_ptr<Edge>> edge;//このノードが所有するエッジ情報
-	float cost = 1.0f;					//ノード自体のコスト
-	float cost_from_start = 100.f;//A*を始めた地点からの合計コスト
 };

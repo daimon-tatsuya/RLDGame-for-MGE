@@ -4,7 +4,11 @@
 //		SceneManagerクラス
 //
 //**********************************************************
-#include	 "Engine/Systems/scene.h"
+
+
+
+//前方宣言
+class Scene;
 
 /// <summary>
 /// シーンを管理するクラス
@@ -12,11 +16,14 @@
 class SceneManager
 {
 private:
-	SceneManager() {}
-	~SceneManager()
-	{
-		delete current_scene;
-	}
+
+	Scene* current_scene = nullptr;
+
+public:
+private:
+	SceneManager() = default;
+
+	~SceneManager();
 
 public:
 	// 唯一のインスタンス取得
@@ -27,10 +34,10 @@ public:
 	}
 
 	// 更新処理
-	void Update(float elapsedTime);
+	void Update(float elapsed_time) const;
 
 	// 描画処理
-	void Render();
+	void Render() const;
 
 	// シーンクリア
 	void Clear();
@@ -38,6 +45,5 @@ public:
 	// シーン切り替え
 	void ChangeScene(Scene* scene);
 
-private:
-	Scene* current_scene = nullptr;
+
 };

@@ -1,22 +1,31 @@
 #pragma once
+//**********************************************************
+//
+//		Collisionクラス
+//
+//**********************************************************
 
 #include "Engine/Systems/Math.h"
 
-#include "Engine/Objects/Model.h"
+
+//前方宣言
+class Model;
 
 
-// Collision コメント
-
-//ヒット結果
+// ヒット結果
 struct HitResult
 {
 	DirectX::XMFLOAT3		position = { 0, 0, 0 };	// レイとポリゴンの交点
-	DirectX::XMFLOAT3		normal = { 0, 0, 0 };	// 衝突したポリゴンの法線ベクトル
+	DirectX::XMFLOAT3		normal = { 0, 0, 0 };		// 衝突したポリゴンの法線ベクトル
 	DirectX::XMFLOAT3		rotation = { 0, 0, 0 };	// 回転量
-	float								distance = 0.0f; 		// レイの始点から交点までの距離
+	float								distance = 0.0f; 			// レイの始点から交点までの距離
 	int									material_index = -1; 	// 衝突したポリゴンのマテリアル番号
 };
 
+
+/// <summary>
+/// 当たり判定クラス
+/// </summary>
 class Collision
 {
 public:

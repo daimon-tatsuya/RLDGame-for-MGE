@@ -4,28 +4,30 @@
 //		SceneTitleクラス
 //
 //**********************************************************
+
 #include "Engine/Systems/Scene.h"
 
-#include "Engine/Objects/Sprite.h"
-
-#include "Engine/Objects/Model.h"
-#include "Engine/Objects/ModelResource.h"
-#include "Engine/Systems/LambertShader.h"
 
 /// <summary>
 /// タイトルシーン
 /// </summary>
-class SceneTitle : public Scene
+class SceneTitle
+: public Scene
 {
 private:
 
 public:
 
-	SceneTitle();
-	virtual ~SceneTitle();
+	SceneTitle() = default;;
+
+	~SceneTitle() override = default;;
+
 	void Initialize()override;
+
 	void Finalize() override;
-	void Update(float elapsedTime)override;
+
+	void Update(float elapsed_time)override;
+
 	void Render()override;
 
 private:

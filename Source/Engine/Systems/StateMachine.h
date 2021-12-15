@@ -1,61 +1,102 @@
 #pragma once
-//**********************************************************
+//*********************************************************
 //
 //		StateMachineクラス
 //
-//**********************************************************
-#include <vector>
-#include <memory>
-#include "Engine/Systems/StateBase.h"
+//*********************************************************
 
 
-//前方宣言
-class Character;
 
+#include<crtdbg.h>
+#include<functional>
+#include<map>
+
+
+//templateをヘッダー書いた場合
+//https://pknight.hatenablog.com/entry/20090826/1251303641
 /// <summary>
-/// 有限ステートマシンクラス
+///  有限ステートマシンクラス
 /// </summary>
-class StateMachine
+/// <typeparam name="Key">ステートのindex</typeparam>
+/// <typeparam name="ReturnValue">ステートの戻り値</typeparam>
+/// <typeparam name="...Args">ステートの関数の引数</typeparam>
+template<typename Key, typename ReturnValue = void, typename... Args>
+class StateMachine final
 {
 private:
-
-protected:
-
-public:
-	// コンストラクタ
-	StateMachine(Character* character) :owner(character) {}
-	// デストラクタ
-	~StateMachine();
+	Key current_state{ static_cast<int>(-1) };
+	Key old_state{ static_cast<int>(-1) };		// Stateの初期化などに使う
 
 	/// <summary>
-	///  更新処理
+	/// Stateを格納する
 	/// </summary>
-	/// <param name="elapsedTime">経過時間</param>
-	void Update(float elapsedTime);
+	using State = std::map < Key, std::function<ReturnValue(Args...)>>;
+	State state_pool;
 
-	// ステートを設定
-	void SetState(int setState);
-
-	// 親ステートを変更
-	void ChangeState(int newState);
-
-	// ステートの登録(登録するのは一層目)
-	void RegisterState(HierarchicalStateBase* state);
-
-	//現在のステート取得
-	HierarchicalStateBase* GetState() { return current_state; }
-
-	// サブステート登録を追加
-	void StateMachine::RegisterSubState(int index, StateBase* subState);
-
-	// 現在のステート番号取得
-	int GetCurrentStateIndex();
-
-private:
-	Character* owner = nullptr; // 所持者
-	HierarchicalStateBase* current_state = nullptr;	// 現在のステート
-	std::vector<HierarchicalStateBase*> state_pool;	// 各ステートを保持する配列
-protected:
+	bool is_first_time = false;//ステートの切り替え
 
 public:
+
+private:
+
+public:
+	/// <summary>
+	/// ステートを追加
+	/// </summary>
+	/// <param name="state">enum class 整数型のState名</param>
+	/// <param name="callback">ラムダ式</param>
+	void AddState(Key state, std::function<ReturnValue(Args...)> callback)
+	{
+		state_pool.insert(std::make_pair(state, callback));
+	}
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <typeparam name="...Args"></typeparam>
+	void Update(Args... args)
+	{
+		// current_stateの要素が含まれてない
+		_ASSERT_EXPR(state_pool.contains(current_state) == true, "Not found state");
+
+		state_pool.at(current_state)(args...);
+
+	}
+
+
+	/// <summary>
+	/// ステートに入った時、最初の実行かを調べる
+	/// </summary>
+	/// <returns></returns>
+	bool IsStateFirstTime()
+	{
+
+		if (!is_first_time)
+		{
+			return false;
+		}
+
+		is_first_time = false;
+
+		return true;
+	}
+
+	void SetState(Key state)
+	{
+		old_state = current_state;
+		current_state = state;
+		is_first_time = true;
+	}
+
+	//------------------------------------------------
+	//
+	// Getter Setter
+	//
+	//------------------------------------------------
+
+	int GetState() { return static_cast<int>(current_state); }
+	int GetOldState() { return static_cast<int>(old_state); }
+
 };
+
+

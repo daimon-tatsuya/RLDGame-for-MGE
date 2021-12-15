@@ -4,6 +4,9 @@
 //
 //**********************************************************
 #include "Engine/Systems/StageManager.h"
+#include "Engine/Systems/Stage.h"
+#include "Engine/AI/DungeonMake.h"
+#include "Engine/Systems/Collision.h"
 
 StageManager::~StageManager()
 {

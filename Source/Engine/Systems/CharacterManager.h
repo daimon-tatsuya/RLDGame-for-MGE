@@ -2,15 +2,19 @@
 
 //**********************************************************
 //
-//		CharacterManagerクラス
+//	CharacterManagerクラス
 //
 //**********************************************************
 
 #include <vector>
-#include "Engine/Systems/Shader.h"
-#include "Engine/Systems/Character.h"
+#include<memory>
+#include <d3d11.h>
+
 #include "Engine/Systems/EnemyManager.h"
 
+//前方宣言
+class Shader;
+class Character;
 
 /// <summary>
 /// Characterを管理するクラス
@@ -18,20 +22,20 @@
 class CharacterManager
 {
 private:
-	std::shared_ptr<Character> player = nullptr;//プレイヤーを格納する
-	std::vector<Character*>	  characteres;//敵味方関係なく格納する
-	std::vector<Character*>	  removes;//削除するCharacterを格納するして,characteresのindexを指定して直接削除するのを回避
+	std::shared_ptr<Character> player = nullptr;	// プレイヤーを格納する
+	std::vector<Character*>	  characteres;			// 敵味方関係なく格納する
+	std::vector<Character*>	  removes;				// 削除するCharacterを格納するして,characteresのindexを指定して直接削除するのを回避
 	int									  enemy_number = 0;	// 付与するIDの値(この値にMetaAI::Identity::Enemyを加算して付与する)
-	int									  player_number = 0; // 付与するIDの値(この値にMetaAI::Identity::Playerを加算して付与する)
-	EnemyManager                 enemy_manager;//Enemyクラスの管理クラス
+	int									  player_number = 0;	// 付与するIDの値(この値にMetaAI::Identity::Playerを加算して付与する)
+	EnemyManager                 enemy_manager;		// Enemyクラスの管理クラス
 public:
 
 private:
-	CharacterManager() {}
+	CharacterManager() = default;
 	~CharacterManager();
 public:
 
-	///唯一のインスタンス取得
+	// 唯一のインスタンス取得
 	static CharacterManager& Instance()
 	{
 		static CharacterManager instance;

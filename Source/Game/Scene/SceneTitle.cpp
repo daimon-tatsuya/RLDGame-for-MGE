@@ -3,25 +3,22 @@
 //		SceneTitleクラス
 //
 //**********************************************************
+
+#include "Engine/Systems/Blender.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Input.h"
-#include "Engine/Systems/Blender.h"
 
+
+#include "Engine/Objects/Sprite.h"
 #include "Engine/Systems/CameraController.h"
-
 #include "Engine/Systems/CharacterManager.h"
-
-
+#include "Engine/Systems/RenderContext.h"
+#include"Game/Characters/Player.h"
 #include "Engine/Systems/SceneManager.h"
-#include "Game/Scene/SceneLoading.h"
 #include "Game/Scene/SceneTitle.h"
 #include "Game/Scene/SceneGame.h"
-SceneTitle::SceneTitle()
-{
-}
-SceneTitle::~SceneTitle()
-{
-}
+#include "Game/Scene/SceneLoading.h"
+
 void SceneTitle::Initialize()
 {
 	ID3D11Device* device = Graphics::Instance().GetDevice();
@@ -29,9 +26,9 @@ void SceneTitle::Initialize()
 	strcpy_s(message, "Title");
 }
 
-void SceneTitle::Update(float elapsedTime)
+void SceneTitle::Update(float elapsed_time)
 {
-	GamePad& gamePad = Input::Instance().GetGamePad();
+	const GamePad& gamePad = Input::Instance().GetGamePad();
 
 	// なにかボタンを押したらローディングシーンへ切り替え
 	if (gamePad.GetButtonDown() & static_cast<GamePadButton>(GamePad::AnyBTN))
@@ -42,94 +39,21 @@ void SceneTitle::Update(float elapsedTime)
 
 void SceneTitle::Render()
 {
-	Graphics& graphics = Graphics::Instance();
+	const Graphics& graphics = Graphics::Instance();
 	ID3D11DeviceContext* device_context = graphics.GetDeviceContext();
 	ID3D11RenderTargetView* render_target_view = graphics.GetRenderTargetView();
 	ID3D11DepthStencilView* depth_stencil_view = graphics.GetDepthStencilView();
 
 	// 画面クリア＆レンダーターゲット設定
-	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
-	device_context->ClearRenderTargetView(render_target_view, color);
+	constexpr float clear_color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
+	device_context->ClearRenderTargetView(render_target_view, clear_color);
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
 
 	// 描画処理
-	RenderContext render_context;
-	render_context.lightDirection = { -0.5f, -1.0f, -0.5f, 0.0f };	// ライト方向（下方向）
+	RenderContext render_context{};
+	render_context.light_direction = { -0.5f, -1.0f, -0.5f, 0.0f };	// ライト方向（下方向）
 
-	//// 3Dモデル描画
-	//{
-	//	// ワールド行列を作成
-	//	DirectX::XMMATRIX W;
-	//	{
-	//		static float rx = 0;
-	//		static float ry = 0;
-	//		//rx += DirectX::XMConvertToRadians(0.25f);	// 角度をラジアン(θ)に変換
-	//		//ry += DirectX::XMConvertToRadians(0.5f);	// 角度をラジアン(θ)に変換
-
-	//		DirectX::XMFLOAT3 scale(0.5f, 0.5f, 0.5f);
-	//		DirectX::XMFLOAT3 rotate(rx, ry, 0);
-	//		DirectX::XMFLOAT3 translate(0, -20, 0);
-
-	//		DirectX::XMMATRIX S, R, T;
-	//		S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
-	//		R = DirectX::XMMatrixRotationRollPitchYaw(rotate.x, rotate.y, rotate.z);	// ZXY回転
-	//		T = DirectX::XMMatrixTranslation(translate.x, translate.y, translate.z);
-
-	//		W = S * R * T;
-	//	}
-
-	//	// ビュー行列を作成
-	//	DirectX::XMMATRIX V;
-	//	{
-	//		static CameraController camera;
-	//		camera.Update();
-
-	//		// カメラの設定
-	//		DirectX::XMVECTOR eye, focus, up;
-	//		eye = DirectX::XMVectorSet(camera.GetEye().x, camera.GetEye().y, camera.GetEye().z, 1.0f);
-	//		focus = DirectX::XMVectorSet(camera.GetFocus().x, camera.GetFocus().y, camera.GetFocus().z, 1.0f);
-	//		up = DirectX::XMVectorSet(camera.GetUp().x, camera.GetUp().y, camera.GetUp().z, 1.0f);
-
-	//		V = DirectX::XMMatrixLookAtRH(eye, focus, up);
-	//	}
-
-	//	// プロジェクション行列を作成
-	//	DirectX::XMMATRIX P;
-	//	{
-	//		// 画面サイズ取得のためビューポートを取得
-	//		D3D11_VIEWPORT viewport;
-	//		UINT num_viewports = 1;
-	//		device_context->RSGetViewports(&num_viewports, &viewport);
-
-	//		// 角度をラジアン(θ)に変換
-	//		float fov_y = 30 * 0.01745f;	// 画角
-	//		float aspect = viewport.Width / viewport.Height;	// 画面比率
-	//		float nearZ = 0.1f;	// 表示最近面までの距離
-	//		float farZ = 1000.0f;	// 表示最遠面までの距離
-
-	//		P = DirectX::XMMatrixPerspectiveFovRH(fov_y, aspect, nearZ, farZ);
-	//	}
-
-	//	// ビュー行列、プロジェクション行列を合成し行列データを取り出す。
-	//	DirectX::XMFLOAT4X4 viewProjection;
-	//	{
-	//		DirectX::XMMATRIX VP;
-	//		VP = V * P;
-	//		DirectX::XMStoreFloat4x4(&viewProjection, VP);
-	//		DirectX::XMStoreFloat4x4(&render_context.projection, P);
-	//		DirectX::XMStoreFloat4x4(&render_context.view, V);
-	//	}
-
-	//	ShaderManager* shader_manager = graphics.GetShaderManager();
-	//	std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
-
-	//	shader->Activate(device_context,
-	//		render_context
-	//	);
-
-	//	shader->Deactivate(device_context);
-	//}
 	// 2Dスプライト描画
 	{
 	}
@@ -155,15 +79,15 @@ void SceneTitle::Render()
 		// HUD更新
 	//	headUpDisplay->Render(dc);
 
-		Sprite* font = graphics.GetFont();
+		const Sprite* font = graphics.GetFont();
 
 		// 「Title」を描画
-		float screen_width = static_cast<float>(graphics.GetScreenWidth());
-		float screen_height = static_cast<float>(graphics.GetScreenHeight());
-		float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
-		float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
-		float positionX = screen_width / 3;// - textureWidth;// * (textureWidth / 2);
-		float positionY =( screen_height / 2 )- texture_height;
+		const float screen_width = static_cast<float>(graphics.GetScreenWidth());
+		const float screen_height = static_cast<float>(graphics.GetScreenHeight());
+		constexpr float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
+		constexpr float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
+		const float positionX = screen_width / 3;// - textureWidth;// * (textureWidth / 2);
+		const float positionY =( screen_height / 2 )- texture_height;
 
 		font->TextOutW(device_context, message, positionX, positionY, 128, 128);
 	}

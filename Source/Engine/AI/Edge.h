@@ -1,11 +1,9 @@
 #pragma once
-
 //**********************************************************
 //
 //		Edgeクラス
 //
 //**********************************************************
-
 
 
 //0,  /*エッジの表示　上の方向*/
@@ -18,9 +16,9 @@
 //7,  /*エッジの表示　左上の方向*/
 //　　　7     0      1
 //  　　  ＼  |   /
-//　　6    -  ・  -   2
+//　　6   -  ・  -   2
 //　　　  /　|   ＼
-//    　 5      4　　 3
+//    　 5      4　　3
 enum class EdgeDirection :int
 {
 	TopCenter = 0,
@@ -33,7 +31,10 @@ enum class EdgeDirection :int
 	TopLeft
 };
 
-const int EDGE_NUM = 8;//エッジの数　≒　方向の数
+//constexpr constant expression(定数式)の略
+//https://qiita.com/saltheads/items/dd65935878a0901fe9e7
+
+constexpr int EDGE_NUM = 8;// エッジの数　≒　方向の数
 
 
 class Edge
@@ -42,18 +43,22 @@ private:
 
 public:
 
-	int distnation_node = 0;//接続先ノードID
-	int origin_node = 0;//元ノードID
-	float cost = 1.0f;  //コスト
+	int destination_node = 0;// 接続先ノードID
+	int origin_node = 0;		// 元ノードID
+	float cost = 1.0f;			// コスト
 
 private:
 
 public:
 
-	Edge() {}
-	~Edge() {}
+	Edge() = default;
+	~Edge() = default;
 
-	//初期化
-	void Initialize(int node, int& buffer);
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="node">ノードID</param>
+	/// <param name="destination">接続先</param>
 
+	void Initialize(const int node, int& destination);
 };

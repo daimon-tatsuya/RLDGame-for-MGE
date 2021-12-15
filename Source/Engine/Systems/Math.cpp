@@ -1,12 +1,12 @@
-#include <stdlib.h>
-#include "Engine/Systems/Math.h"
 //**********************************************************
 //
 //		Mathクラス
 //
 //**********************************************************
 
-float Math::ClampFloat(float check, float min, float max)
+#include <cstdlib>
+#include "Engine/Systems/Math.h"
+float Math::ClampFloat(const float check, const float min, const float max)
 {
 	if (check < min)
 	{
@@ -21,7 +21,7 @@ float Math::ClampFloat(float check, float min, float max)
 	return check;
 }
 
-float Math::ClampAnyFloat(float check, float Any, float min, float max)
+float Math::ClampAnyFloat(const float check, const float any, const float min, const float max)
 {
 	if (check < min)
 	{
@@ -32,10 +32,10 @@ float Math::ClampAnyFloat(float check, float Any, float min, float max)
 		return max;
 	}
 
-	return Any;
+	return any;
 }
 
-float Math::StepAnyFloat(float check, float Any, float min, float max, bool revers)
+float Math::StepAnyFloat(const float check, const float any, const float min, const float max, const bool revers)
 {
 	if (revers == false)
 	{
@@ -47,7 +47,7 @@ float Math::StepAnyFloat(float check, float Any, float min, float max, bool reve
 		{
 			return 1.f;
 		}
-		return Any;
+		return any;
 	}
 	else
 	{
@@ -59,18 +59,18 @@ float Math::StepAnyFloat(float check, float Any, float min, float max, bool reve
 		{
 			return 0.f;
 		}
-		return Any * -1;
+		return any * -1;
 	}
-	return Any;
+	return any;
 }
 // 線形補完
-float Math::LerpFloat(float a, float b, float t)
+float Math::LerpFloat(const float a, const float b, const float t)
 {
 	float calculated = a * (1.0f - t) + (b * t);
 	return calculated;
 }
 
-float Math::RandomRangeFloat(float min, float max)
+float Math::RandomRangeFloat(const float min, const float max)
 {
 	// 0.0～1.0の間までのランダム値
 	float value = static_cast<float>(rand()) / RAND_MAX;
@@ -83,7 +83,7 @@ float Math::RandomRangeFloat(float min, float max)
 	return calculated;
 }
 
-int Math::RandomInt(int max)
+int Math::RandomInt(const int max)
 {
 
 	int calculated = 0;

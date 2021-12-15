@@ -6,14 +6,13 @@
 //**********************************************************
 
 
-
-#include "Engine/Systems/EnemyBase.h"
+#include "Engine/Systems/Character.h"
 
 /// <summary>
 /// 敵クラス(ヘビ)
 /// </summary>
 class EnemySnake :
-	public EnemyBase
+	public Character
 {
 private:
 
@@ -71,9 +70,10 @@ protected:
 public:
 
 	EnemySnake(RogueLikeDungeon* rogue_like_dungeon);
-	virtual ~EnemySnake();
 
-	void Update(float elapsedTime)override;
+	~EnemySnake() override = default;
+
+	void Update(float elapsed_time)override;
 
 	// 描画処理
 	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)override;
@@ -97,6 +97,6 @@ public:
 	void OnDead()override;
 
 	//メッセージ受信処理
-	virtual bool OnMessage(const Telegram& msg) override;
+	bool OnMessage(const Telegram& msg) override;
 
 };

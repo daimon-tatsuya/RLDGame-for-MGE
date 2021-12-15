@@ -3,20 +3,19 @@
 //		ModelResourceクラス
 //
 //**********************************************************
-#include <stdlib.h>
+#include <algorithm>
 #include <fstream>
 #include <functional>
-#include <shlwapi.h>
-#include <algorithm>
+#include <Shlwapi.h>
 #include <cereal/cereal.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
 
-#include "./Engine/Systems/misc.h"
-#include "./Engine/Objects/ModelResource.h"
-#include"./Engine/Systems/Texture.h"
+#include "Engine/Objects/ModelResource.h"
 #include "Engine/Systems/Logger.h"
+#include "Engine/Systems/Misc.h"
+#include"Engine/Systems/Texture.h"
 
 // CEREALバージョン定義
 CEREAL_CLASS_VERSION(ModelResource::Node, 1)
@@ -232,14 +231,14 @@ namespace DirectX
 	}
 }
 
-ModelResource::ModelResource(ID3D11Device* device, const char* filename, const char* ignoreRootMotionNodeName)
+ModelResource::ModelResource(ID3D11Device* device, const char* filename, const char* ignore_root_motion_node_name)
 {
-	ignore_root_motion_node_name = ignoreRootMotionNodeName;
+	this->ignore_root_motion_node_name = ignore_root_motion_node_name;
 	// マルチバイト文字からワイド文字へ変換
 	size_t length;
 	wchar_t wfilename[256];
 	::mbstowcs_s(&length, wfilename, 256, filename, _TRUNCATE);
-	//拡張子ごとの読み込みを行う
+	// 拡張子ごとの読み込みを行う
 	std::wstring extension = PathFindExtensionW(wfilename);
 	std::transform(extension.begin(), extension.end(), extension.begin(), ::towlower);
 
@@ -253,101 +252,101 @@ ModelResource::ModelResource(ID3D11Device* device, const char* filename, const c
 	}
 }
 
-void ModelResource::AddAnimation(const char* fbxFilename)
+void ModelResource::AddAnimation(const char* fbx_filename)
 {
-	FbxManager* fbxManager = FbxManager::Create();
+	FbxManager* fbx_manager = FbxManager::Create();
 
 	// FBXに対する入出力を定義する
-	FbxIOSettings* fbxIOS = FbxIOSettings::Create(fbxManager, IOSROOT);	// 特別な理由がない限りIOSROOTを指定
-	fbxManager->SetIOSettings(fbxIOS);
+	FbxIOSettings* fbxIOS = FbxIOSettings::Create(fbx_manager, IOSROOT);	// 特別な理由がない限りIOSROOTを指定
+	fbx_manager->SetIOSettings(fbxIOS);
 
 	// インポータを生成
-	FbxImporter* fbxImporter = FbxImporter::Create(fbxManager, "");
-	bool result = fbxImporter->Initialize(fbxFilename, -1, fbxManager->GetIOSettings());	// -1でファイルフォーマット自動判定
+	FbxImporter* fbx_importer = FbxImporter::Create(fbx_manager, "");
+	bool result = fbx_importer->Initialize(fbx_filename, -1, fbx_manager->GetIOSettings());	// -1でファイルフォーマット自動判定
 	_ASSERT_EXPR_A(result, "FbxImporter::Initialize() : Failed!!\n");
 
 	// SceneオブジェクトにFBXファイル内の情報を流し込む
-	FbxScene* fbxScene = FbxScene::Create(fbxManager, "scene");
-	fbxImporter->Import(fbxScene);
-	fbxImporter->Destroy();	// シーンを流し込んだらImporterは解放してOK
+	FbxScene* fbx_scene = FbxScene::Create(fbx_manager, "scene");
+	fbx_importer->Import(fbx_scene);
+	fbx_importer->Destroy();	// シーンを流し込んだらImporterは解放してOK
 
 	// アニメーション構築
-	BuildAnimations(fbxScene);
+	BuildAnimations(fbx_scene);
 
 	// マネージャ解放
-	fbxManager->Destroy();		// 関連するすべてのオブジェクトが解放される
+	fbx_manager->Destroy();// 関連するすべてのオブジェクトが解放される
 }
 
 // フルパス名取得
 std::string ModelResource::GetFullPathNodeName(Node& node)
 {
-	std::string parentNodeName;
+	std::string parent_node_name;
 
 	if (node.parent_index >= 0)
 	{
-		Node& parentNode = nodes.at(node.parent_index);
-		parentNodeName = GetFullPathNodeName(parentNode);
-		return parentNodeName + "/" + node.name;
+		Node& parent_node = nodes.at(node.parent_index);
+		parent_node_name = GetFullPathNodeName(parent_node);
+		return parent_node_name + "/" + node.name;
 	}
 
 	return node.name;
 }
 
-void ModelResource::BuildModel(ID3D11Device* device, const char* fbxFilename)
+void ModelResource::BuildModel(ID3D11Device* device, const char* fbx_filename)
 {
-	FbxManager* fbxManager = FbxManager::Create();
+	FbxManager* fbx_manager = FbxManager::Create();
 
 	// FBXに対する入出力を定義する
-	FbxIOSettings* fbxIOS = FbxIOSettings::Create(fbxManager, IOSROOT);	// 特別な理由がない限りIOSROOTを指定
-	fbxManager->SetIOSettings(fbxIOS);
+	FbxIOSettings* fbxIOS = FbxIOSettings::Create(fbx_manager, IOSROOT);	// 特別な理由がない限りIOSROOTを指定
+	fbx_manager->SetIOSettings(fbxIOS);
 
 	// インポータを生成
-	FbxImporter* fbxImporter = FbxImporter::Create(fbxManager, "");
-	bool result = fbxImporter->Initialize(fbxFilename, -1, fbxManager->GetIOSettings());	// -1でファイルフォーマット自動判定
+	FbxImporter* fbx_importer = FbxImporter::Create(fbx_manager, "");
+	bool result = fbx_importer->Initialize(fbx_filename, -1, fbx_manager->GetIOSettings());	// -1でファイルフォーマット自動判定
 	_ASSERT_EXPR_A(result, "FbxImporter::Initialize() : Failed!!\n");
 
 	// SceneオブジェクトにFBXファイル内の情報を流し込む
-	FbxScene* fbxScene = FbxScene::Create(fbxManager, "scene");
-	fbxImporter->Import(fbxScene);
-	fbxImporter->Destroy();	// シーンを流し込んだらImporterは解放してOK
+	FbxScene* fbx_scene = FbxScene::Create(fbx_manager, "scene");
+	fbx_importer->Import(fbx_scene);
+	fbx_importer->Destroy();	// シーンを流し込んだらImporterは解放してOK
 
 	// ジオメトリを三角形化しておく
-	FbxGeometryConverter fbxGeometryConverter(fbxManager);
-	fbxGeometryConverter.Triangulate(fbxScene, true);
-	fbxGeometryConverter.RemoveBadPolygonsFromMeshes(fbxScene);
+	FbxGeometryConverter fbx_geometry_converter(fbx_manager);
+	fbx_geometry_converter.Triangulate(fbx_scene, true);
+	fbx_geometry_converter.RemoveBadPolygonsFromMeshes(fbx_scene);
 
 #if 0
 	// DirectX座標系へ変換
-	FbxAxisSystem sceneAxisSystem = fbxScene->GetGlobalSettings().GetAxisSystem();
-	if (sceneAxisSystem != FbxAxisSystem::DirectX)
+	FbxAxisSystem scene_axis_system = fbx_scene->GetGlobalSettings().GetAxisSystem();
+	if (scene_axis_system != FbxAxisSystem::DirectX)
 	{
-		FbxAxisSystem::DirectX.ConvertScene(fbxScene);
+		FbxAxisSystem::DirectX.ConvertScene(fbx_scene);
 	}
 #elif 0
 	// OpenGL座標系へ変換
-	FbxAxisSystem sceneAxisSystem = fbxScene->GetGlobalSettings().GetAxisSystem();
-	if (sceneAxisSystem != FbxAxisSystem::OpenGL)
+	FbxAxisSystem scene_axis_system = fbx_scene->GetGlobalSettings().GetAxisSystem();
+	if (scene_axis_system != FbxAxisSystem::OpenGL)
 	{
-		FbxAxisSystem::OpenGL.ConvertScene(fbxScene);
+		FbxAxisSystem::OpenGL.ConvertScene(fbx_scene);
 	}
 #endif
 
 	// ディレクトリパス取得
 	char dirname[256];
-	::_splitpath_s(fbxFilename, nullptr, 0, dirname, 256, nullptr, 0, nullptr, 0);
+	::_splitpath_s(fbx_filename, nullptr, 0, dirname, 256, nullptr, 0, nullptr, 0);
 
 	// モデル構築
-	FbxNode* fbxRootNode = fbxScene->GetRootNode();
-	BuildMaterials(device, dirname, fbxScene);
+	FbxNode* fbx_root_node = fbx_scene->GetRootNode();
+	BuildMaterials(device, dirname, fbx_scene);
 #if 1
-	for (int i = 0; i < fbxRootNode->GetChildCount(); i++)
+	for (int i = 0; i < fbx_root_node->GetChildCount(); i++)
 	{
-		BuildNodes(fbxRootNode->GetChild(i), -1);
+		BuildNodes(fbx_root_node->GetChild(i), -1);
 	}
 #else
 	BuildNodes(fbxRootNode, -1);
 #endif
-	BuildMeshes(device, fbxRootNode);
+	BuildMeshes(device, fbx_root_node);
 
 	// 無視するルートモーションを検索
 	if (ignore_root_motion_node_name != nullptr)
@@ -364,14 +363,14 @@ void ModelResource::BuildModel(ID3D11Device* device, const char* fbxFilename)
 	}
 
 	// アニメーション構築
-	BuildAnimations(fbxScene);
+	BuildAnimations(fbx_scene);
 
-	//シリアライズ化
+	// シリアライズ化
 
-	Serialize(fbxFilename);
+	Serialize(fbx_filename);
 
 	// マネージャ解放
-	fbxManager->Destroy();		// 関連するすべてのオブジェクトが解放される
+	fbx_manager->Destroy();		// 関連するすべてのオブジェクトが解放される
 }
 
 void ModelResource::BuildSerializedModel(ID3D11Device* device, const char* dirname)
@@ -405,149 +404,149 @@ void ModelResource::BuildSerializedModel(ID3D11Device* device, const char* dirna
 
 		// 頂点バッファ
 		{
-			D3D11_BUFFER_DESC bufferDesc = {};
-			D3D11_SUBRESOURCE_DATA subresourceData = {};
+			D3D11_BUFFER_DESC buffer_desc = {};
+			D3D11_SUBRESOURCE_DATA subresource_data = {};
 
-			bufferDesc.ByteWidth = static_cast<UINT>(sizeof(Vertex) * mesh.vertices.size());
+			buffer_desc.ByteWidth = static_cast<UINT>(sizeof(Vertex) * mesh.vertices.size());
 			//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-			bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-			bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-			bufferDesc.CPUAccessFlags = 0;
-			bufferDesc.MiscFlags = 0;
-			bufferDesc.StructureByteStride = 0;
-			subresourceData.pSysMem = mesh.vertices.data();
-			subresourceData.SysMemPitch = 0;
-			subresourceData.SysMemSlicePitch = 0;
+			buffer_desc.Usage = D3D11_USAGE_IMMUTABLE;
+			buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			buffer_desc.CPUAccessFlags = 0;
+			buffer_desc.MiscFlags = 0;
+			buffer_desc.StructureByteStride = 0;
+			subresource_data.pSysMem = mesh.vertices.data();
+			subresource_data.SysMemPitch = 0;
+			subresource_data.SysMemSlicePitch = 0;
 
-			HRESULT hr = device->CreateBuffer(&bufferDesc, &subresourceData, mesh.vertex_buffer.GetAddressOf());
-			_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+			HRESULT hr = device->CreateBuffer(&buffer_desc, &subresource_data, mesh.vertex_buffer.GetAddressOf());
+			_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 		}
 
 		// インデックスバッファ
 		{
-			D3D11_BUFFER_DESC bufferDesc = {};
-			D3D11_SUBRESOURCE_DATA subresourceData = {};
+			D3D11_BUFFER_DESC buffer_desc = {};
+			D3D11_SUBRESOURCE_DATA subresource_data = {};
 
-			bufferDesc.ByteWidth = static_cast<UINT>(sizeof(u_int) * mesh.indices.size());
+			buffer_desc.ByteWidth = static_cast<UINT>(sizeof(u_int) * mesh.indices.size());
 			//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-			bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-			bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-			bufferDesc.CPUAccessFlags = 0;
-			bufferDesc.MiscFlags = 0;
-			bufferDesc.StructureByteStride = 0;
-			subresourceData.pSysMem = mesh.indices.data();
-			subresourceData.SysMemPitch = 0; //Not use for index buffers.
-			subresourceData.SysMemSlicePitch = 0; //Not use for index buffers.
-			HRESULT hr = device->CreateBuffer(&bufferDesc, &subresourceData, mesh.index_buffer.GetAddressOf());
-			_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+			buffer_desc.Usage = D3D11_USAGE_IMMUTABLE;
+			buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+			buffer_desc.CPUAccessFlags = 0;
+			buffer_desc.MiscFlags = 0;
+			buffer_desc.StructureByteStride = 0;
+			subresource_data.pSysMem = mesh.indices.data();
+			subresource_data.SysMemPitch = 0; // インデックスバッファには使用しません。
+			subresource_data.SysMemSlicePitch = 0; // インデックスバッファには使用しません。
+			HRESULT hr = device->CreateBuffer(&buffer_desc, &subresource_data, mesh.index_buffer.GetAddressOf());
+			_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 		}
 	}
 }
 
 // FBXノードを再帰的に辿ってデータを構築する
-void ModelResource::BuildNodes(FbxNode* fbxNode, int parentNodeIndex)
+void ModelResource::BuildNodes(FbxNode* fbx_node, int parent_node_index)
 {
-	FbxNodeAttribute* fbxNodeAttribute = fbxNode->GetNodeAttribute();
-	FbxNodeAttribute::EType fbxNodeAttributeType = FbxNodeAttribute::EType::eUnknown;
+	FbxNodeAttribute* fbx_node_attribute = fbx_node->GetNodeAttribute();
+	FbxNodeAttribute::EType fbx_node_attribute_type = FbxNodeAttribute::EType::eUnknown;
 
-	if (fbxNodeAttribute != nullptr)
+	if (fbx_node_attribute != nullptr)
 	{
-		fbxNodeAttributeType = fbxNodeAttribute->GetAttributeType();
+		fbx_node_attribute_type = fbx_node_attribute->GetAttributeType();
 	}
 
-	switch (fbxNodeAttributeType)
+	switch (fbx_node_attribute_type)
 	{
 	case FbxNodeAttribute::eUnknown:
 	case FbxNodeAttribute::eNull:
 	case FbxNodeAttribute::eMarker:
 	case FbxNodeAttribute::eMesh:
 	case FbxNodeAttribute::eSkeleton:
-		BuildNode(fbxNode, parentNodeIndex);
+		BuildNode(fbx_node, parent_node_index);
 		break;
 	}
 
 	// 再帰的に子ノードを処理する
-	parentNodeIndex = static_cast<int>(nodes.size() - 1);
-	for (int i = 0; i < fbxNode->GetChildCount(); i++)
+	parent_node_index = static_cast<int>(nodes.size() - 1);
+	for (int i = 0; i < fbx_node->GetChildCount(); i++)
 	{
-		BuildNodes(fbxNode->GetChild(i), parentNodeIndex);
+		BuildNodes(fbx_node->GetChild(i), parent_node_index);
 	}
 }
 
 // FBXノードからノードデータを構築する
-void ModelResource::BuildNode(FbxNode* fbxNode, int parentNodeIndex)
+void ModelResource::BuildNode(FbxNode* fbx_node, int parent_node_index)
 {
-	FbxAMatrix& fbxLocalTransform = fbxNode->EvaluateLocalTransform();
+	FbxAMatrix& fbx_local_transform = fbx_node->EvaluateLocalTransform();
 
 	Node node;
-	node.name = fbxNode->GetName();
-	node.parent_index = parentNodeIndex;
-	node.scale = FbxDouble4ToFloat3(fbxLocalTransform.GetS());
-	node.rotate = FbxDouble4ToFloat4(fbxLocalTransform.GetQ());
-	node.translate = FbxDouble4ToFloat3(fbxLocalTransform.GetT());
+	node.name = fbx_node->GetName();
+	node.parent_index = parent_node_index;
+	node.scale = FbxDouble4ToFloat3(fbx_local_transform.GetS());
+	node.rotate = FbxDouble4ToFloat4(fbx_local_transform.GetQ());
+	node.translate = FbxDouble4ToFloat3(fbx_local_transform.GetT());
 
 	nodes.emplace_back(node);
 }
 
 // FBXノードを再帰的に辿ってメッシュデータを構築する
-void ModelResource::BuildMeshes(ID3D11Device* device, FbxNode* fbxNode)
+void ModelResource::BuildMeshes(ID3D11Device* device, FbxNode* fbx_node)
 {
-	FbxNodeAttribute* fbxNodeAttribute = fbxNode->GetNodeAttribute();
-	FbxNodeAttribute::EType fbxNodeAttributeType = FbxNodeAttribute::EType::eUnknown;
+	FbxNodeAttribute* fbx_node_attribute = fbx_node->GetNodeAttribute();
+	FbxNodeAttribute::EType fbx_node_attribute_type = FbxNodeAttribute::EType::eUnknown;
 
-	if (fbxNodeAttribute != nullptr)
+	if (fbx_node_attribute != nullptr)
 	{
-		fbxNodeAttributeType = fbxNodeAttribute->GetAttributeType();
+		fbx_node_attribute_type = fbx_node_attribute->GetAttributeType();
 	}
 
-	switch (fbxNodeAttributeType)
+	switch (fbx_node_attribute_type)
 	{
 	case FbxNodeAttribute::eMesh:
-		BuildMesh(device, fbxNode, static_cast<FbxMesh*>(fbxNodeAttribute));
+		BuildMesh(device, fbx_node, static_cast<FbxMesh*>(fbx_node_attribute));
 		break;
 	}
 
 	// 再帰的に子ノードを処理する
-	for (int i = 0; i < fbxNode->GetChildCount(); i++)
+	for (int i = 0; i < fbx_node->GetChildCount(); i++)
 	{
-		BuildMeshes(device, fbxNode->GetChild(i));
+		BuildMeshes(device, fbx_node->GetChild(i));
 	}
 }
 
 // FBXメッシュからメッシュデータを構築する
-void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* fbxMesh)
+void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbx_node, FbxMesh* fbx_mesh)
 {
-	int fbxControlPointsCount = fbxMesh->GetControlPointsCount();
+	int fbx_control_points_count = fbx_mesh->GetControlPointsCount();
 
 	//int fbxPolygonVertexCount = fbxMesh->GetPolygonVertexCount();
 	//const int* fbxPolygonVertices = fbxMesh->GetPolygonVertices();
 
-	int fbxMaterialCount = fbxNode->GetMaterialCount();
-	int fbxPolygonCount = fbxMesh->GetPolygonCount();
+	int fbx_material_count = fbx_node->GetMaterialCount();
+	int fbx_polygon_count = fbx_mesh->GetPolygonCount();
 
 	meshes.emplace_back(Mesh());
 	Mesh& mesh = meshes.back();
-	mesh.subsets.resize(fbxMaterialCount > 0 ? fbxMaterialCount : 1);
-	mesh.node_index = FindNodeIndex(fbxNode->GetName());
+	mesh.subsets.resize(fbx_material_count > 0 ? fbx_material_count : 1);
+	mesh.node_index = FindNodeIndex(fbx_node->GetName());
 
 	// サブセットのマテリアル設定
-	for (int fbxMaterialIndex = 0; fbxMaterialIndex < fbxMaterialCount; fbxMaterialIndex++)
+	for (int fbx_material_index = 0; fbx_material_index < fbx_material_count; fbx_material_index++)
 	{
-		const FbxSurfaceMaterial* fbxSurfaceMaterial = fbxNode->GetMaterial(fbxMaterialIndex);
+		const FbxSurfaceMaterial* fbx_surface_material = fbx_node->GetMaterial(fbx_material_index);
 
-		Subset& subset = mesh.subsets.at(fbxMaterialIndex);
-		int index = FindMaterialIndex(fbxNode->GetScene(), fbxSurfaceMaterial);
+		Subset& subset = mesh.subsets.at(fbx_material_index);
+		int index = FindMaterialIndex(fbx_node->GetScene(), fbx_surface_material);
 		subset.material = &materials.at(index);
 		subset.material_index = index;
 	}
 
 	// サブセットの頂点インデックス範囲設定
-	if (fbxMaterialCount > 0)
+	if (fbx_material_count > 0)
 	{
-		for (int fbxPolygonIndex = 0; fbxPolygonIndex < fbxPolygonCount; fbxPolygonIndex++)
+		for (int fbx_polygon_index = 0; fbx_polygon_index < fbx_polygon_count; fbx_polygon_index++)
 		{
-			int fbxMaterialIndex = fbxMesh->GetElementMaterial()->GetIndexArray().GetAt(fbxPolygonIndex);
-			mesh.subsets.at(fbxMaterialIndex).index_count += 3;
+			int fbx_material_index = fbx_mesh->GetElementMaterial()->GetIndexArray().GetAt(fbx_polygon_index);
+			mesh.subsets.at(fbx_material_index).index_count += 3;
 		}
 
 		int offset = 0;
@@ -578,53 +577,53 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* f
 		}
 	};
 	// 頂点影響力データを抽出する
-	//影響力の合計が1以上になった時の処理と影響力が4つ以上あるときの処理
-	std::vector<BoneInfluence> boneInfluences;
+	// 影響力の合計が1以上になった時の処理と影響力が4つ以上あるときの処理
+	std::vector<BoneInfluence> bone_influences;
 	{
-		boneInfluences.resize(fbxControlPointsCount);
+		bone_influences.resize(fbx_control_points_count);
 
 		// スキニングに必要な情報を取得する
-		int fbxDeformerCount = fbxMesh->GetDeformerCount(FbxDeformer::eSkin);
-		for (int fbxDeformerIndex = 0; fbxDeformerIndex < fbxDeformerCount; fbxDeformerIndex++)
+		int fbx_deformer_count = fbx_mesh->GetDeformerCount(FbxDeformer::eSkin);
+		for (int fbx_deformer_index = 0; fbx_deformer_index < fbx_deformer_count; fbx_deformer_index++)
 		{
-			FbxSkin* fbxSkin = static_cast<FbxSkin*>(fbxMesh->GetDeformer(fbxDeformerIndex, FbxDeformer::eSkin));
+			FbxSkin* fbx_skin = static_cast<FbxSkin*>(fbx_mesh->GetDeformer(fbx_deformer_index, FbxDeformer::eSkin));
 
-			int fbxClusterCount = fbxSkin->GetClusterCount();
-			for (int fbxClusterIndex = 0; fbxClusterIndex < fbxClusterCount; fbxClusterIndex++)
+			int fbx_cluster_count = fbx_skin->GetClusterCount();
+			for (int fbx_cluster_index = 0; fbx_cluster_index < fbx_cluster_count; fbx_cluster_index++)
 			{
-				FbxCluster* fbxCluster = fbxSkin->GetCluster(fbxClusterIndex);
+				FbxCluster* fbx_cluster = fbx_skin->GetCluster(fbx_cluster_index);
 
 				// 頂点影響力データを抽出する
 				{
-					int fbxClusterControlPointIndicesCount = fbxCluster->GetControlPointIndicesCount();
-					const int* fbxControlPointIndices = fbxCluster->GetControlPointIndices();
-					const double* fbxControlPointWeights = fbxCluster->GetControlPointWeights();
+					int fbx_cluster_control_point_indices_count = fbx_cluster->GetControlPointIndicesCount();
+					const int* fbx_control_point_indices = fbx_cluster->GetControlPointIndices();
+					const double* fbx_control_point_weights = fbx_cluster->GetControlPointWeights();
 
-					for (int i = 0; i < fbxClusterControlPointIndicesCount; i++)
+					for (int i = 0; i < fbx_cluster_control_point_indices_count; i++)
 					{
-						BoneInfluence& boneInfluence = boneInfluences.at(fbxControlPointIndices[i]);
+						BoneInfluence& bone_influence = bone_influences.at(fbx_control_point_indices[i]);
 
-						boneInfluence.Add(fbxClusterIndex, static_cast<float>(fbxControlPointWeights[i]));
+						bone_influence.Add(fbx_cluster_index, static_cast<float>(fbx_control_point_weights[i]));
 					}
 				}
 
 				// ボーン変換行列用の逆行列の計算をする
 				{
 					// メッシュ空間からワールド空間への変換行列
-					FbxAMatrix fbxMeshSpaceTransform;
-					fbxCluster->GetTransformMatrix(fbxMeshSpaceTransform);
+					FbxAMatrix fbx_mesh_space_transform;
+					fbx_cluster->GetTransformMatrix(fbx_mesh_space_transform);
 
 					// ボーン空間からワールド空間への変換行列
-					FbxAMatrix fbxBoneSpaceTransform;
-					fbxCluster->GetTransformLinkMatrix(fbxBoneSpaceTransform);
+					FbxAMatrix fbx_bone_space_transform;
+					fbx_cluster->GetTransformLinkMatrix(fbx_bone_space_transform);
 
 					// ボーン逆行列を計算する
-					FbxAMatrix fbxInverseTransform = fbxBoneSpaceTransform.Inverse() * fbxMeshSpaceTransform;
+					FbxAMatrix fbx_inverse_transform = fbx_bone_space_transform.Inverse() * fbx_mesh_space_transform;
 
-					DirectX::XMFLOAT4X4 inverseTransforms = FbxAMatrixToFloat4x4(fbxInverseTransform);
-					mesh.inverse_transforms.emplace_back(inverseTransforms);
+					DirectX::XMFLOAT4X4 inverse_transforms = FbxAMatrixToFloat4x4(fbx_inverse_transform);
+					mesh.inverse_transforms.emplace_back(inverse_transforms);
 
-					int nodeIndex = FindNodeIndex(fbxCluster->GetLink()->GetName());
+					int nodeIndex = FindNodeIndex(fbx_cluster->GetLink()->GetName());
 					mesh.node_indices.emplace_back(nodeIndex);
 				}
 			}
@@ -632,44 +631,44 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* f
 	}
 
 	// ジオメトリ行列
-	FbxAMatrix fbxGeometricTransform(
-		fbxNode->GetGeometricTranslation(FbxNode::eSourcePivot),
-		fbxNode->GetGeometricRotation(FbxNode::eSourcePivot),
-		fbxNode->GetGeometricScaling(FbxNode::eSourcePivot)
+	FbxAMatrix fbx_geometric_transform(
+		fbx_node->GetGeometricTranslation(FbxNode::eSourcePivot),
+		fbx_node->GetGeometricRotation(FbxNode::eSourcePivot),
+		fbx_node->GetGeometricScaling(FbxNode::eSourcePivot)
 	);
-	DirectX::XMFLOAT4X4 geometricTransform = FbxAMatrixToFloat4x4(fbxGeometricTransform);
-	DirectX::XMMATRIX GM = DirectX::XMLoadFloat4x4(&geometricTransform);
+	DirectX::XMFLOAT4X4 geometric_transform = FbxAMatrixToFloat4x4(fbx_geometric_transform);
+	DirectX::XMMATRIX GM = DirectX::XMLoadFloat4x4(&geometric_transform);
 
 	// UVセット名
-	FbxStringList fbxUVSetNames;
-	fbxMesh->GetUVSetNames(fbxUVSetNames);
+	FbxStringList fbx_UV_set_names;
+	fbx_mesh->GetUVSetNames(fbx_UV_set_names);
 
 	// 頂点データ
-	mesh.vertices.resize(fbxPolygonCount * 3);
-	mesh.indices.resize(fbxPolygonCount * 3);
+	mesh.vertices.resize(static_cast<size_t>(fbx_polygon_count )* 3);
+	mesh.indices.resize(static_cast<size_t>(fbx_polygon_count )* 3);
 
-	int vertexCount = 0;
-	const FbxVector4* fbxControlPoints = fbxMesh->GetControlPoints();
-	for (int fbxPolygonIndex = 0; fbxPolygonIndex < fbxPolygonCount; fbxPolygonIndex++)
+	int vertex_count = 0;
+	const FbxVector4* fbx_control_points = fbx_mesh->GetControlPoints();
+	for (int fbx_polygon_index = 0; fbx_polygon_index < fbx_polygon_count; fbx_polygon_index++)
 	{
 		// ポリゴンに適用されているマテリアルインデックスを取得する
-		int fbxMaterialIndex = 0;
-		if (fbxMaterialCount > 0)
+		int fbx_material_index = 0;
+		if (fbx_material_count > 0)
 		{
-			fbxMaterialIndex = fbxMesh->GetElementMaterial()->GetIndexArray().GetAt(fbxPolygonIndex);
+			fbx_material_index = fbx_mesh->GetElementMaterial()->GetIndexArray().GetAt(fbx_polygon_index);
 		}
 
-		Subset& subset = mesh.subsets.at(fbxMaterialIndex);
-		const int indexOffset = subset.start_index + subset.index_count;
+		Subset& subset = mesh.subsets.at(fbx_material_index);
+		const int index_offset = subset.start_index + subset.index_count;
 
-		for (int fbxVertexIndex = 0; fbxVertexIndex < 3; fbxVertexIndex++)
+		for (int fbx_vertex_index = 0; fbx_vertex_index < 3; fbx_vertex_index++)
 		{
 			Vertex vertex;
 
-			int fbxControlPointIndex = fbxMesh->GetPolygonVertex(fbxPolygonIndex, fbxVertexIndex);
+			int fbx_control_point_index = fbx_mesh->GetPolygonVertex(fbx_polygon_index, fbx_vertex_index);
 			// Position
 			{
-				DirectX::XMFLOAT3 position = FbxDouble4ToFloat3(fbxControlPoints[fbxControlPointIndex]);
+				DirectX::XMFLOAT3 position = FbxDouble4ToFloat3(fbx_control_points[fbx_control_point_index]);
 				DirectX::XMVECTOR V = DirectX::XMLoadFloat3(&position);
 				V = DirectX::XMVector3TransformCoord(V, GM);
 				DirectX::XMStoreFloat3(&vertex.position, V);
@@ -677,7 +676,7 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* f
 
 			// Weight
 			{
-				BoneInfluence& boneInfluence = boneInfluences.at(fbxControlPointIndex);
+				BoneInfluence& boneInfluence = bone_influences.at(fbx_control_point_index);
 				vertex.bone_index.x = boneInfluence.indices[0];
 				vertex.bone_index.y = boneInfluence.indices[1];
 				vertex.bone_index.z = boneInfluence.indices[2];
@@ -690,18 +689,18 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* f
 			}
 
 			// Normal
-			if (fbxMesh->GetElementNormalCount() > 0)
+			if (fbx_mesh->GetElementNormalCount() > 0)
 			{
-				FbxVector4 fbxNormal;
-				fbxMesh->GetPolygonVertexNormal(fbxPolygonIndex, fbxVertexIndex, fbxNormal);
+				FbxVector4 fbx_normal;
+				fbx_mesh->GetPolygonVertexNormal(fbx_polygon_index, fbx_vertex_index, fbx_normal);
 
-				DirectX::XMFLOAT3 normal = FbxDouble4ToFloat3(fbxNormal);
+				DirectX::XMFLOAT3 normal = FbxDouble4ToFloat3(fbx_normal);
 				DirectX::XMVECTOR V = DirectX::XMLoadFloat3(&normal);
 				V = DirectX::XMVector3TransformCoord(V, GM);
 				V = DirectX::XMVector3Normalize(V);
 				DirectX::XMStoreFloat3(&vertex.normal, V);
 
-				vertex.normal = FbxDouble4ToFloat3(fbxNormal);
+				vertex.normal = FbxDouble4ToFloat3(fbx_normal);
 			}
 			else
 			{
@@ -709,11 +708,11 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* f
 			}
 
 			// Texcoord
-			if (fbxMesh->GetElementUVCount() > 0)
+			if (fbx_mesh->GetElementUVCount() > 0)
 			{
-				bool fbxUnmappedUV;
+				bool fbx_unmapped_UV;
 				FbxVector2 fbxUV;
-				fbxMesh->GetPolygonVertexUV(fbxPolygonIndex, fbxVertexIndex, fbxUVSetNames[0], fbxUV, fbxUnmappedUV);
+				fbx_mesh->GetPolygonVertexUV(fbx_polygon_index, fbx_vertex_index, fbx_UV_set_names[0], fbxUV, fbx_unmapped_UV);
 				fbxUV[1] = 1.0 - fbxUV[1];
 				vertex.texcoord = FbxDouble2ToFloat2(fbxUV);
 			}
@@ -721,10 +720,10 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* f
 			{
 				vertex.texcoord = DirectX::XMFLOAT2(0, 0);
 			}
-
-			mesh.indices.at(indexOffset + fbxVertexIndex) = vertexCount;
-			mesh.vertices.at(vertexCount) = vertex;
-			vertexCount++;
+			size_t vc = static_cast<size_t>(index_offset) + static_cast<size_t>(fbx_vertex_index);
+			mesh.indices.at(vc) = vertex_count;
+			mesh.vertices.at(vertex_count) = vertex;
+			vertex_count++;
 		}
 
 		subset.index_count += 3;
@@ -732,56 +731,56 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* f
 
 	// 頂点バッファ
 	{
-		D3D11_BUFFER_DESC bufferDesc = {};
-		D3D11_SUBRESOURCE_DATA subresourceData = {};
+		D3D11_BUFFER_DESC buffer_desc = {};
+		D3D11_SUBRESOURCE_DATA subresource_data = {};
 
-		bufferDesc.ByteWidth = static_cast<UINT>(sizeof(Vertex) * mesh.vertices.size());
+		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(Vertex) * mesh.vertices.size());
 		//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bufferDesc.CPUAccessFlags = 0;
-		bufferDesc.MiscFlags = 0;
-		bufferDesc.StructureByteStride = 0;
-		subresourceData.pSysMem = mesh.vertices.data();
-		subresourceData.SysMemPitch = 0;
-		subresourceData.SysMemSlicePitch = 0;
+		buffer_desc.Usage = D3D11_USAGE_IMMUTABLE;
+		buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		buffer_desc.CPUAccessFlags = 0;
+		buffer_desc.MiscFlags = 0;
+		buffer_desc.StructureByteStride = 0;
+		subresource_data.pSysMem = mesh.vertices.data();
+		subresource_data.SysMemPitch = 0;
+		subresource_data.SysMemSlicePitch = 0;
 
-		HRESULT hr = device->CreateBuffer(&bufferDesc, &subresourceData, mesh.vertex_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		HRESULT hr = device->CreateBuffer(&buffer_desc, &subresource_data, mesh.vertex_buffer.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// インデックスバッファ
 	{
-		D3D11_BUFFER_DESC bufferDesc = {};
-		D3D11_SUBRESOURCE_DATA subresourceData = {};
+		D3D11_BUFFER_DESC buffer_desc = {};
+		D3D11_SUBRESOURCE_DATA subresource_data = {};
 
-		bufferDesc.ByteWidth = static_cast<UINT>(sizeof(u_int) * mesh.indices.size());
+		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(u_int) * mesh.indices.size());
 		//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-		bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		bufferDesc.CPUAccessFlags = 0;
-		bufferDesc.MiscFlags = 0;
-		bufferDesc.StructureByteStride = 0;
-		subresourceData.pSysMem = mesh.indices.data();
-		subresourceData.SysMemPitch = 0; //Not use for index buffers.
-		subresourceData.SysMemSlicePitch = 0; //Not use for index buffers.
-		HRESULT hr = device->CreateBuffer(&bufferDesc, &subresourceData, mesh.index_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		buffer_desc.Usage = D3D11_USAGE_IMMUTABLE;
+		buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		buffer_desc.CPUAccessFlags = 0;
+		buffer_desc.MiscFlags = 0;
+		buffer_desc.StructureByteStride = 0;
+		subresource_data.pSysMem = mesh.indices.data();
+		subresource_data.SysMemPitch = 0; // インデックスバッファには使用しない。
+		subresource_data.SysMemSlicePitch = 0; // インデックスバッファには使用しない。
+		HRESULT hr = device->CreateBuffer(&buffer_desc, &subresource_data, mesh.index_buffer.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 }
 
 // FBXシーン内のFBXマテリアルからマテリアルデータを構築する
 void ModelResource::BuildMaterials(ID3D11Device* device, const char* dirname, FbxScene* fbxScene)
 {
-	int fbxMaterialCount = fbxScene->GetMaterialCount();
+	int fbx_material_count = fbxScene->GetMaterialCount();
 
-	if (fbxMaterialCount > 0)
+	if (fbx_material_count > 0)
 	{
-		for (int fbxMaterialIndex = 0; fbxMaterialIndex < fbxMaterialCount; fbxMaterialIndex++)
+		for (int fbx_material_index = 0; fbx_material_index < fbx_material_count; fbx_material_index++)
 		{
-			FbxSurfaceMaterial* fbxSurfaceMaterial = fbxScene->GetMaterial(fbxMaterialIndex);
+			FbxSurfaceMaterial* fbx_surface_material = fbxScene->GetMaterial(fbx_material_index);
 
-			BuildMaterial(device, dirname, fbxSurfaceMaterial);
+			BuildMaterial(device, dirname, fbx_surface_material);
 		}
 	}
 	else
@@ -800,16 +799,16 @@ void ModelResource::BuildMaterial(ID3D11Device* device, const char* dirname, Fbx
 	Material material;
 
 	// ディフューズカラー
-	FbxProperty fbxDiffuseProperty = fbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
-	FbxProperty fbxDiffuseFactorProperty = fbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sDiffuseFactor);
-	if (fbxDiffuseProperty.IsValid() && fbxDiffuseFactorProperty.IsValid())
+	FbxProperty fbx_diffuse_property = fbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
+	FbxProperty fbx_diffuse_factor_property = fbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sDiffuseFactor);
+	if (fbx_diffuse_property.IsValid() && fbx_diffuse_factor_property.IsValid())
 	{
-		FbxDouble fbxFactor = fbxDiffuseFactorProperty.Get<FbxDouble>();
-		FbxDouble3 fbxColor = fbxDiffuseProperty.Get<FbxDouble3>();
+		FbxDouble fbx_factor = fbx_diffuse_factor_property.Get<FbxDouble>();
+		FbxDouble3 fbx_color = fbx_diffuse_property.Get<FbxDouble3>();
 
-		material.color.x = static_cast<float>(fbxColor[0] * fbxFactor);
-		material.color.y = static_cast<float>(fbxColor[1] * fbxFactor);
-		material.color.z = static_cast<float>(fbxColor[2] * fbxFactor);
+		material.color.x = static_cast<float>(fbx_color[0] * fbx_factor);
+		material.color.y = static_cast<float>(fbx_color[1] * fbx_factor);
+		material.color.z = static_cast<float>(fbx_color[2] * fbx_factor);
 		material.color.w = 1.0f;
 	}
 #if 0
@@ -822,16 +821,16 @@ void ModelResource::BuildMaterial(ID3D11Device* device, const char* dirname, Fbx
 	}
 #endif
 	// ディフューズテクスチャ
-	if (fbxDiffuseProperty.IsValid())
+	if (fbx_diffuse_property.IsValid())
 	{
-		int fbxTextureCount = fbxDiffuseProperty.GetSrcObjectCount<FbxFileTexture>();
-		if (fbxTextureCount > 0)
+		int fbx_texture_count = fbx_diffuse_property.GetSrcObjectCount<FbxFileTexture>();
+		if (fbx_texture_count > 0)
 		{
-			FbxFileTexture* fbxTexture = fbxDiffuseProperty.GetSrcObject<FbxFileTexture>();
+			FbxFileTexture* fbx_texture = fbx_diffuse_property.GetSrcObject<FbxFileTexture>();
 
 			// 相対パスの解決
 			char filename[256];
-			::_makepath_s(filename, 256, nullptr, dirname, fbxTexture->GetRelativeFileName(), nullptr);
+			::_makepath_s(filename, 256, nullptr, dirname, fbx_texture->GetRelativeFileName(), nullptr);
 
 			// マルチバイト文字からワイド文字へ変換
 			size_t length;
@@ -847,7 +846,7 @@ void ModelResource::BuildMaterial(ID3D11Device* device, const char* dirname, Fbx
 			}
 			else
 			{
-				material.texture_filename = fbxTexture->GetRelativeFileName();
+				material.texture_filename = fbx_texture->GetRelativeFileName();
 			}
 		}
 	}
@@ -860,103 +859,103 @@ void ModelResource::BuildMaterial(ID3D11Device* device, const char* dirname, Fbx
 void ModelResource::BuildAnimations(FbxScene* fbxScene)
 {
 	// すべてのアニメーション名を取得
-	FbxArray<FbxString*> fbxAnimStackNames;
-	fbxScene->FillAnimStackNameArray(fbxAnimStackNames);
+	FbxArray<FbxString*> fbx_anim_stack_names;
+	fbxScene->FillAnimStackNameArray(fbx_anim_stack_names);
 
-	int fbxAnimationCount = fbxAnimStackNames.Size();
-	for (int fbxAnimationIndex = 0; fbxAnimationIndex < fbxAnimationCount; fbxAnimationIndex++)
+	int fbx_animation_count = fbx_anim_stack_names.Size();
+	for (int fbx_animation_index = 0; fbx_animation_index < fbx_animation_count; fbx_animation_index++)
 	{
 		animations.emplace_back(Animation());
 		Animation& animation = animations.back();
 
 		// アニメーションデータのサンプリング設定
-		FbxTime::EMode fbxTimeMode = fbxScene->GetGlobalSettings().GetTimeMode();
-		FbxTime fbxFrameTime;
-		fbxFrameTime.SetTime(0, 0, 0, 1, 0, fbxTimeMode);
+		FbxTime::EMode fbx_time_mode = fbxScene->GetGlobalSettings().GetTimeMode();
+		FbxTime fbx_frame_time;
+		fbx_frame_time.SetTime(0, 0, 0, 1, 0, fbx_time_mode);
 
-		float samplingRate = static_cast<float>(fbxFrameTime.GetFrameRate(fbxTimeMode));
-		float samplingTime = 1.0f / samplingRate;
+		float sampling_rate = static_cast<float>(fbx_frame_time.GetFrameRate(fbx_time_mode));
+		float sampling_time = 1.0f / sampling_rate;
 
-		FbxString* fbxAnimStackName = fbxAnimStackNames.GetAt(fbxAnimationIndex);
-		FbxAnimStack* fbxAnimStack = fbxScene->FindMember<FbxAnimStack>(fbxAnimStackName->Buffer());
+		FbxString* fbx_anim_stack_name = fbx_anim_stack_names.GetAt(fbx_animation_index);
+		FbxAnimStack* fbx_anim_stack = fbxScene->FindMember<FbxAnimStack>(fbx_anim_stack_name->Buffer());
 
 		// 再生するアニメーションを指定する。
-		fbxScene->SetCurrentAnimationStack(fbxAnimStack);
+		fbxScene->SetCurrentAnimationStack(fbx_anim_stack);
 
 		// アニメーションの再生開始時間と再生終了時間を取得する
-		FbxTakeInfo* fbxTakeInfo = fbxScene->GetTakeInfo(fbxAnimStackName->Buffer());
-		FbxTime fbxStartTime = fbxTakeInfo->mLocalTimeSpan.GetStart();
-		FbxTime fbxEndTime = fbxTakeInfo->mLocalTimeSpan.GetStop();
+		FbxTakeInfo* fbx_take_info = fbxScene->GetTakeInfo(fbx_anim_stack_name->Buffer());
+		FbxTime fbx_start_time = fbx_take_info->mLocalTimeSpan.GetStart();
+		FbxTime fbx_end_time = fbx_take_info->mLocalTimeSpan.GetStop();
 
 		// 抽出するデータは60フレーム基準でサンプリングする
-		FbxTime fbxSamplingStep;
-		fbxSamplingStep.SetTime(0, 0, 1, 0, 0, fbxTimeMode);
-		fbxSamplingStep = static_cast<FbxLongLong>(fbxSamplingStep.Get() * samplingTime);
+		FbxTime fbx_sampling_step;
+		fbx_sampling_step.SetTime(0, 0, 1, 0, 0, fbx_time_mode);
+		fbx_sampling_step = fbx_sampling_step.Get() * static_cast<FbxLongLong>(sampling_time);
 
-		int startFrame = static_cast<int>(fbxStartTime.Get() / fbxSamplingStep.Get());
-		int endFrame = static_cast<int>(fbxEndTime.Get() / fbxSamplingStep.Get());
-		int frameCount = static_cast<int>((fbxEndTime.Get() - fbxStartTime.Get()) / fbxSamplingStep.Get());
+		int start_frame = static_cast<int>(fbx_start_time.Get() / fbx_sampling_step.Get());
+		int end_frame = static_cast<int>(fbx_end_time.Get() / fbx_sampling_step.Get());
+		int frame_count = static_cast<int>((fbx_end_time.Get() - fbx_start_time.Get()) / fbx_sampling_step.Get());
 
 		// アニメーションの対象となるノードを列挙する
-		std::vector<FbxNode*> fbxNodes;
-		FbxNode* fbxRootNode = fbxScene->GetRootNode();
+		std::vector<FbxNode*> fbx_nodes;
+		FbxNode* fbx_root_node = fbxScene->GetRootNode();
 		for (Node& node : nodes)
 		{
-			FbxNode* fbxNode = fbxRootNode->FindChild(node.name.c_str());
-			fbxNodes.emplace_back(fbxNode);
+			FbxNode* fbx_node = fbx_root_node->FindChild(node.name.c_str());
+			fbx_nodes.emplace_back(fbx_node);
 		}
 
 		// アニメーションデータを抽出する
-		animation.seconds_length = frameCount * samplingTime;
-		animation.keyframes.resize(frameCount + 1);
+		animation.seconds_length = frame_count * sampling_time;
+		animation.keyframes.resize(static_cast<size_t>(frame_count )+ 1);
 
 		float seconds = 0.0f;
 		Keyframe* keyframe = animation.keyframes.data();
-		size_t fbxNodeCount = fbxNodes.size();
-		FbxTime fbxCurrentTime = fbxStartTime;
-		for (FbxTime fbxCurrentTime = fbxStartTime; fbxCurrentTime < fbxEndTime; fbxCurrentTime += fbxSamplingStep, keyframe++)
+		size_t fbx_node_count = fbx_nodes.size();
+		FbxTime fbx_current_time = fbx_start_time;
+		for (FbxTime fbx_current_time = fbx_start_time; fbx_current_time < fbx_end_time; fbx_current_time += fbx_sampling_step, keyframe++)
 		{
 			// キーフレーム毎の姿勢データを取り出す。
 			keyframe->seconds = seconds;
-			keyframe->node_keys.resize(fbxNodeCount);
-			for (size_t fbxNodeIndex = 0; fbxNodeIndex < fbxNodeCount; fbxNodeIndex++)
+			keyframe->node_keys.resize(fbx_node_count);
+			for (size_t fbx_node_index = 0; fbx_node_index < fbx_node_count; fbx_node_index++)
 			{
-				NodeKeyData& keyData = keyframe->node_keys.at(fbxNodeIndex);
-				FbxNode* fbxNode = fbxNodes.at(fbxNodeIndex);
-				if (fbxNode == nullptr)
+				NodeKeyData& key_data = keyframe->node_keys.at(fbx_node_index);
+				FbxNode* fbx_node = fbx_nodes.at(fbx_node_index);
+				if (fbx_node == nullptr)
 				{
 					// アニメーション対象のノードがなかったのでダミーデータを設定
-					Node& node = nodes.at(fbxNodeIndex);
-					keyData.scale = node.scale;
-					keyData.rotate = node.rotate;
-					keyData.translate = node.translate;
+					Node& node = nodes.at(fbx_node_index);
+					key_data.scale = node.scale;
+					key_data.rotate = node.rotate;
+					key_data.translate = node.translate;
 				}
-				else if (fbxNodeIndex == root_motion_node_index)
+				else if (fbx_node_index == root_motion_node_index)
 				{
 					// ルートモーションは無視する
-					Node& node = nodes.at(fbxNodeIndex);
-					keyData.scale = DirectX::XMFLOAT3(1, 1, 1);
-					keyData.rotate = DirectX::XMFLOAT4(0, 0, 0, 1);
-					keyData.translate = DirectX::XMFLOAT3(0, 0, 0);
+					Node& node = nodes.at(fbx_node_index);
+					key_data.scale = DirectX::XMFLOAT3(1, 1, 1);
+					key_data.rotate = DirectX::XMFLOAT4(0, 0, 0, 1);
+					key_data.translate = DirectX::XMFLOAT3(0, 0, 0);
 				}
 				else
 				{
 					// 指定時間のローカル行列からスケール値、回転値、移動値を取り出す。
-					const FbxAMatrix& fbxLocalTransform = fbxNode->EvaluateLocalTransform(fbxCurrentTime);
+					const FbxAMatrix& fbx_local_transform = fbx_node->EvaluateLocalTransform(fbx_current_time);
 
-					keyData.scale = FbxDouble4ToFloat3(fbxLocalTransform.GetS());
-					keyData.rotate = FbxDouble4ToFloat4(fbxLocalTransform.GetQ());
-					keyData.translate = FbxDouble4ToFloat3(fbxLocalTransform.GetT());
+					key_data.scale = FbxDouble4ToFloat3(fbx_local_transform.GetS());
+					key_data.rotate = FbxDouble4ToFloat4(fbx_local_transform.GetQ());
+					key_data.translate = FbxDouble4ToFloat3(fbx_local_transform.GetT());
 				}
 			}
-			seconds += samplingTime;
+			seconds += sampling_time;
 		}
 	}
 
 	// 後始末
-	for (int i = 0; i < fbxAnimationCount; i++)
+	for (int i = 0; i < fbx_animation_count; i++)
 	{
-		delete fbxAnimStackNames[i];
+		delete fbx_anim_stack_names[i];
 	}
 }
 
@@ -976,9 +975,9 @@ int ModelResource::FindNodeIndex(const char* name)
 // マテリアルインデックスを取得する
 int ModelResource::FindMaterialIndex(FbxScene* fbxScene, const FbxSurfaceMaterial* fbxSurfaceMaterial)
 {
-	int fbxMaterialCount = fbxScene->GetMaterialCount();
+	int fbx_material_count = fbxScene->GetMaterialCount();
 
-	for (int i = 0; i < fbxMaterialCount; i++)
+	for (int i = 0; i < fbx_material_count; i++)
 	{
 		if (fbxScene->GetMaterial(i) == fbxSurfaceMaterial)
 		{

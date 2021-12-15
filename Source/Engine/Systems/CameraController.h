@@ -1,11 +1,9 @@
 #pragma once
 //**********************************************************
 //
-//		CameraControllerクラス
+//	CameraControllerクラス
 //
 //**********************************************************
-
-#include <windows.h>
 
 #include "Engine/Systems/Math.h"
 
@@ -20,22 +18,22 @@ private:
 	enum class Mode
 	{
 		FreeCamera,		// フリーカメラ
-		LockonCamera,	// ロックオンカメラ
+		LockOnCamera,	// ロックオンカメラ
 		MotionCamera,	// モーションカメラ
-		DebugCamera,    //デバックカメラ
+		DebugCamera,    // デバックカメラ
 	};
-	DirectX::XMFLOAT3	position = { 0, 0, 0 };//位置
-	DirectX::XMFLOAT3	target = { 0, 0, 0 };//注視点
-	DirectX::XMFLOAT3	angle = { 0, 0, 0 };//各軸の回転角(ラジアン)
+	DirectX::XMFLOAT3	position = { 0, 0, 0 };// 位置
+	DirectX::XMFLOAT3	target = { 0, 0, 0 };// 注視点
+	DirectX::XMFLOAT3	angle = { 0, 0, 0 };// 各軸の回転角(ラジアン)
 	DirectX::XMFLOAT3	new_position = { 0, 0, 0 };//
 	DirectX::XMFLOAT3	new_target = { 0, 0, 0 };
 
-	float				roll_speed = DirectX::XMConvertToRadians(90);//回転速度
+	float				roll_speed = DirectX::XMConvertToRadians(90);// 回転速度
 	float				range = 10.0f;
-	float				max_angleX = DirectX::XMConvertToRadians(+45);//最大回転角
-	float				min_angleX = DirectX::XMConvertToRadians(-45);//最小回転角
-	float              camera_heght = 50.f;//カメラの高さ
-	//ImGui
+	float				max_angleX = DirectX::XMConvertToRadians(+45);// 最大回転角
+	float				min_angleX = DirectX::XMConvertToRadians(-45);// 最小回転角
+	float              camera_height = 50.f;// カメラの高さ
+	// ImGui
 	bool               ViewMap = false;
 public:
 

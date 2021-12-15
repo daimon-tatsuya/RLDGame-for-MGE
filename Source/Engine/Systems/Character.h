@@ -6,11 +6,13 @@
 //**********************************************************
 
 #include "Engine/Systems/Object.h"
-#include "Engine/Systems/StateMachine.h"
-#include "Engine/Systems/DungeonMake.h"
+
 
 // ゲームに共通するものだけ残し、あとはこのクラスを継承して、アクションゲームのキャラクターベースと分ける仕様にする予定
 // 使わない関数があるが、あくまでアクションゲームベースなので消さないでおく
+
+//前方宣言
+class RogueLikeDungeon;
 
 /// <summary>
 /// キャラクター(敵、プレイヤー)などの基底クラス
@@ -27,9 +29,7 @@ protected:
 
 	int	 max_health = 5;
 
-	RogueLikeDungeon* stage_informations = nullptr; // マップ情報　(値をコピーした実体にするか検討中)
-
-	std::unique_ptr<StateMachine> state_machine = nullptr;//ステートマシン
+	RogueLikeDungeon* stage_information = nullptr; // マップ情報　(値をコピーした実体にするか検討中)
 
 	std::vector<int> shortest_path;//最短経路
 private:
@@ -37,52 +37,53 @@ private:
 	/// <summary>
 	/// 有限ステートマシンの初期化
 	/// </summary>
-	virtual void FSMInitialize() {};
+	virtual void FSMInitialize() {}
 
 	/// <summary>
 	/// 垂直速力更新処理
 	/// </summary>
-	/// <param name="elapsedFrame">経過時間</param>
-	virtual void UpdateVerticalVelocity(float elapsedFrame);
+	/// <param name="elapsed_frame">経過時間</param>
+	virtual void UpdateVerticalVelocity(float elapsed_frame);
 
 	/// <summary>
 	///  垂直移動更新処理
 	/// </summary>
-	/// <param name="elapsedTime">経過時間</param>
-	virtual  void UpdateVerticalMove(float elapsedTime);
+	/// <param name="elapsed_time">経過時間</param>
+	virtual  void UpdateVerticalMove(float elapsed_time);
 
 	/// <summary>
 	///  水平速力更新処理
 	/// </summary>
-	/// <param name="elapsedTime">経過時間</param>
-	virtual  void UpdateHorizontalVelocity(float elapsedFrame);
+	/// <param name="elapsed_frame">経過時間</param>
+	virtual  void UpdateHorizontalVelocity(float elapsed_frame);
 
 	/// <summary>
 	///  水平移動更新処理
 	/// </summary>
-	/// <param name="elapsedTime">経過時間</param>
-	virtual  void UpdateHorizontalMove(float elapsedTime);
+	/// <param name="elapsed_time">経過時間</param>
+	virtual  void UpdateHorizontalMove(float elapsed_time);
 
 	/// <summary>
 	///  速力更新処理
 	/// </summary>
-	/// <param name="elapsedTime">経過時間</param>
+	/// <param name="elapsed_time">経過時間</param>
 	void UpdateVelocity(float elapsed_time);
 
 	/// <summary>
-	///  無敵時間更新
+	/// 無敵時間更新
 	/// </summary>
-	/// <param name="elapsedTime">経過時間</param>
+	/// <param name="elapsed_time">経過時間</param>
 	void UpdateInvincibleTimer(float elapsed_time);
 
 protected:
 
 public:
 
-	Character() {}
+	Character() = default;
+
 	// 例えデストラクタが空でも
 	// virtual なデストラクタは明示的に定義する
-	virtual ~Character() {}
+	~Character() override = default;
 
 	/// <summary>
 	/// 衝撃を与える
@@ -96,7 +97,7 @@ public:
 	/// <param name="vx">x軸に加速する大きさ</param>
 	/// <param name="vz">z軸に加速する大きさ</param>
 	/// <param name="gravity_cut_time">重力を無視する時間</param>
-	virtual  void AirDush(float vx, float vz, float gravity_cut_time);
+	virtual  void AirDash(float vx, float vz, float gravity_cut_time);
 
 	/// <summary>
 	/// ダメージを与える
@@ -162,15 +163,12 @@ public:
 	int GetMaxHealth() const { return max_health; }
 
 	//プレイヤーが移動できるかチェックする
-	void MoveChack(float mx, float mz);
+	void MoveCheck(float mx, float mz);
 
 	// 最大健康状態を取得
 	void SetMaxHealth() { this->max_health = max_health; }
 
-	//ステートマシンを取得
-	StateMachine* GetStateMachine() { return state_machine.get(); }
-
-	//マップ情報を取得
-	RogueLikeDungeon* GetStageInformations() { return stage_informations; }
+	// マップ情報を取得
+	RogueLikeDungeon* GetStageInformation() const { return stage_information; }
 
 };

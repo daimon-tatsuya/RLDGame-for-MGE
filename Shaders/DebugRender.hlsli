@@ -6,6 +6,6 @@ struct VS_OUT
 
 cbuffer CbMesh : register(b0)
 {
-    row_major float4x4 worldViewProjection;
+    row_major float4x4 world_view_projection;
     float4 color;
 };

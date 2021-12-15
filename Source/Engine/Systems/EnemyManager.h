@@ -8,16 +8,16 @@
 
 
 #include <vector>
-#include "Engine/Systems/Shader.h"
-#include "Engine/Systems/Character.h"
 
+//‘O•ûéŒ¾
+class Character;
 
 class EnemyManager
 {
 private:
 
 	std::vector<Character*>	 enemies;// ƒGƒlƒ~[‚¾‚¯‚ğŠi”[‚·‚é
-	std::vector<Character*>	 removes; // íœ‚·‚éEnemyBase‚ğŠi”[‚·‚é‚µ‚Ä, characteres‚Ìindex‚ğw’è‚µ‚Ä’¼Úíœ‚·‚é‚Ì‚ğ‰ñ”ğ
+	std::vector<Character*>	 removes; // íœ‚·‚éEnemy(Character)‚ğŠi”[‚·‚é‚µ‚Ä, characteres‚Ìindex‚ğw’è‚µ‚Ä’¼Úíœ‚·‚é‚Ì‚ğ‰ñ”ğ
 public:
 
 private:
@@ -30,29 +30,26 @@ public:
 	//EnemyManager‚Ì¶¬‚Æíœ‚Í‘S‚ÄCharacterManager‚©‚çs‚¤
 	 friend class CharacterManager;
 
-	// ƒLƒƒƒ‰ƒNƒ^[“¯m‚ÌÕ“Ëˆ—
-	//void CollisionEnemyToEnemy();
-
-	//// XVˆ—
-	//void Update(float elapsed_time);
-
-	//// •`‰æˆ—
-	//void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader);
-
 	// “G‚Ì‚ğ‘Síœ
 	void Clear();
 
-	//// ƒfƒoƒbƒOƒvƒŠƒ~ƒeƒBƒu•`‰æ
-	//void DrawDebugPrimitive();
+	/// <summary>
+	/// “G‚ğ“o˜^
+	/// </summary>
+	/// <param name="character">“o˜^‚·‚éƒLƒƒƒ‰</param>
+	void Register(Character* character);
 
-	//// ƒfƒoƒbƒO—pGUI•`‰æ
-	//void DrawDebugGUI();
+	/// <summary>
+	/// “G‚ğíœ
+	/// </summary>
+	/// <param name="character">íœ‚·‚éƒLƒƒƒ‰</param>
+	void Remove(Character* character);
 
-	// “G‚ğ“o˜^
-	void Register(Character* enemy_base);
-
-	// “G‚ğíœ
-	void Remove(Character* enemy_base);
+//------------------------------------------------
+//
+// Getter
+//
+//------------------------------------------------
 
 	// “G‚ğ”æ“¾
 	int GetEnemyCount() { return static_cast<int>(enemies.size()); }

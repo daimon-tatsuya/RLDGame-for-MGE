@@ -22,7 +22,7 @@
     <ProjectGuid>{0DDBE550-8551-4506-9A5A-4DD100C00C48}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>My3dgp</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <ProjectName>3DGameSystem</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -98,6 +98,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\2190144\Desktop\bb\Shader;.\DirectXTK-master\Inc;.\FBX SDK\2016.1.2\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,6 +124,8 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.\Source;.\External\stb-master;.\External\imgui;.\External\FBX SDK\2020.2\include;.\External\DirectXTK-master\Inc;.\External\DirectXTex-master\WICTextureLoader;.\External\DirectXTex-master\DDSTextureLoader;.\External\DirectXTex-master\DirectXTex;.\External\cereal-master\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,6 +154,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\2190144\Desktop\bb\Shader;.\DirectXTK-master\Inc;.\FBX SDK\2016.1.2\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -178,6 +184,8 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.\Source;.\External\stb-master;.\External\imgui;.\External\FBX SDK\2020.2\include;.\External\DirectXTK-master\Inc;.\External\DirectXTex-master\WICTextureLoader;.\External\DirectXTex-master\DDSTextureLoader;.\External\DirectXTex-master\DirectXTex;.\External\cereal-master\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -201,6 +209,7 @@
     <ClCompile Include="External\imgui\imgui_demo.cpp" />
     <ClCompile Include="External\imgui\imgui_draw.cpp" />
     <ClCompile Include="External\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Engine\AI\DungeonMake.cpp" />
     <ClCompile Include="Source\Engine\AI\Edge.cpp" />
     <ClCompile Include="Source\Engine\AI\HeuristicSearch.cpp" />
     <ClCompile Include="Source\Engine\AI\MetaAI.cpp" />
@@ -215,8 +224,6 @@
     <ClCompile Include="Source\Engine\Systems\CharacterManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\Collision.cpp" />
     <ClCompile Include="Source\Engine\Systems\DebugRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Systems\DungeonMake.cpp" />
-    <ClCompile Include="Source\Engine\Systems\EnemyBase.cpp" />
     <ClCompile Include="Source\Engine\Systems\EnemyManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\Framework.cpp" />
     <ClCompile Include="Source\Engine\Systems\GamePad.cpp" />
@@ -232,19 +239,15 @@
     <ClCompile Include="Source\Engine\Systems\Mouse.cpp" />
     <ClCompile Include="Source\Engine\Systems\NoTextureShader.cpp" />
     <ClCompile Include="Source\Engine\Systems\Object.cpp" />
-    <ClCompile Include="Source\Engine\Systems\PlayerBase.cpp" />
     <ClCompile Include="Source\Engine\Systems\ResourceManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\RogueLikeStage.cpp" />
     <ClCompile Include="Source\Engine\Systems\SceneManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\Shader.cpp" />
     <ClCompile Include="Source\Engine\Systems\ShaderManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\StageManager.cpp" />
-    <ClCompile Include="Source\Engine\Systems\StateBase.cpp" />
-    <ClCompile Include="Source\Engine\Systems\StateMachine.cpp" />
     <ClCompile Include="Source\Engine\Systems\Texture.cpp" />
     <ClCompile Include="Source\Engine\Systems\WireframeLambert.cpp" />
     <ClCompile Include="Source\Game\Characters\DerivedEnemySnakeState.cpp" />
-    <ClCompile Include="Source\Game\Characters\DerivedPlayerState.cpp" />
     <ClCompile Include="Source\Game\Characters\EnemySnake.cpp" />
     <ClCompile Include="Source\Game\Characters\Player.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneGame.cpp" />
@@ -258,6 +261,7 @@
     <ClInclude Include="External\imgui\imstb_rectpack.h" />
     <ClInclude Include="External\imgui\imstb_textedit.h" />
     <ClInclude Include="External\imgui\imstb_truetype.h" />
+    <ClInclude Include="Source\Engine\AI\DungeonMake.h" />
     <ClInclude Include="Source\Engine\AI\Edge.h" />
     <ClInclude Include="Source\Engine\AI\HeuristicSearch.h" />
     <ClInclude Include="Source\Engine\AI\MetaAI.h" />
@@ -273,8 +277,6 @@
     <ClInclude Include="Source\Engine\Systems\CharacterManager.h" />
     <ClInclude Include="Source\Engine\Systems\Collision.h" />
     <ClInclude Include="Source\Engine\Systems\DebugRenderer.h" />
-    <ClInclude Include="Source\Engine\Systems\DungeonMake.h" />
-    <ClInclude Include="Source\Engine\Systems\EnemyBase.h" />
     <ClInclude Include="Source\Engine\Systems\EnemyManager.h" />
     <ClInclude Include="Source\Engine\Systems\Framework.h" />
     <ClInclude Include="Source\Engine\Systems\GamePad.h" />
@@ -291,7 +293,6 @@
     <ClInclude Include="Source\Engine\Systems\Mouse.h" />
     <ClInclude Include="Source\Engine\Systems\NoTextureShader.h" />
     <ClInclude Include="Source\Engine\Systems\Object.h" />
-    <ClInclude Include="Source\Engine\Systems\PlayerBase.h" />
     <ClInclude Include="Source\Engine\Systems\RenderContext.h" />
     <ClInclude Include="Source\Engine\Systems\ResourceManager.h" />
     <ClInclude Include="Source\Engine\Systems\RogueLikeStage.h" />
@@ -301,16 +302,12 @@
     <ClInclude Include="Source\Engine\Systems\ShaderManager.h" />
     <ClInclude Include="Source\Engine\Systems\Stage.h" />
     <ClInclude Include="Source\Engine\Systems\StageManager.h" />
-    <ClInclude Include="Source\Engine\Systems\StateBase.h" />
     <ClInclude Include="Source\Engine\Systems\StateMachine.h" />
     <ClInclude Include="Source\Engine\Systems\Texture.h" />
     <ClInclude Include="Source\Engine\Systems\WireframeLambert.h" />
     <ClInclude Include="Source\Game\Characters\DerivedEnemySnakeState.h" />
-    <ClInclude Include="Source\Game\Characters\DerivedPlayerState.h" />
     <ClInclude Include="Source\Game\Characters\EnemySnake.h" />
-    <ClInclude Include="Source\Game\Characters\EnemyState.h" />
     <ClInclude Include="Source\Game\Characters\Player.h" />
-    <ClInclude Include="Source\Game\Characters\PlayerState.h" />
     <ClInclude Include="Source\Game\Scene\SceneGame.h" />
     <ClInclude Include="Source\Game\Scene\SceneLoading.h" />
     <ClInclude Include="Source\Game\Scene\SceneTitle.h" />

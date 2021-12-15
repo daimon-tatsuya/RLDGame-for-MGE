@@ -5,14 +5,23 @@
 //
 //**********************************************************
 #include <vector>
-#include "Engine/Systems/Stage.h"
-#include "Engine/Systems/DungeonMake.h"
+#include <memory>
+#include <d3d11.h>
+#include "Engine/Systems/Math.h"
+
+//前方宣言
+class Stage;
+class Shader;
+struct HitResult;
 
 /// <summary>
 /// Stageを管理するクラス
 /// </summary>
 class StageManager
 {
+private:
+	std::vector<Stage*>		stages;
+
 private:
 	StageManager() {}
 	~StageManager();
@@ -43,7 +52,5 @@ public:
 	// デバッグ用GUI描画
 	void DrawDebugGUI();
 
-private:
-	std::vector<Stage*>		stages;
 
 };

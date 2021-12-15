@@ -16,7 +16,11 @@ class NoTextureShader :
 public:
 
 	NoTextureShader(ID3D11Device* device);
-	~NoTextureShader() {};
+
+	// 例えデストラクタが空でも
+	// virtual なデストラクタは明示的に定義する
+	virtual ~NoTextureShader()=default;
+
 	// 描画開始
 	void Activate(ID3D11DeviceContext* context, const RenderContext& rc)override;
 

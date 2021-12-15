@@ -5,6 +5,8 @@
 //**********************************************************
 
 #include "Engine/AI/Node.h"
+#include "Engine/AI/Edge.h"
+
 
 Node::Node()
 {
@@ -13,9 +15,4 @@ Node::Node()
 		auto o = std::make_shared<Edge>();
 		edge.emplace_back(o);
 	}
-}
-
-Node::~Node()
-{
-
 }

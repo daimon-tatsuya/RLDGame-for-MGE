@@ -7,7 +7,7 @@
 
 #include <d3d11.h>
 #include <wrl.h>
-#include "Engine/Systems/Misc.h"
+
 
 /// <summary>
 /// BlendState‚ğì¬‚·‚éƒNƒ‰ƒX

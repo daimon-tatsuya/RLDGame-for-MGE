@@ -115,20 +115,11 @@
     <Filter Include="Source Files\Game\Scenes\SceneGame">
       <UniqueIdentifier>{e73a9ebd-b7a2-4e0c-b3c9-884a00e62933}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Character\PlayerBase">
-      <UniqueIdentifier>{baa6dca0-7ce3-4938-ab05-e0be67dfacb2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\Character\EnemyBase">
-      <UniqueIdentifier>{51b92ad6-7c8f-4121-af1d-e513f526d318}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\ResourceManager">
       <UniqueIdentifier>{9edadf04-0a38-43e1-b034-bbb7abad8ccc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Game\Characters\Player">
       <UniqueIdentifier>{3c8f846a-6896-4ecf-bbce-a863458e5eb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Characters\Player\State">
-      <UniqueIdentifier>{fe73f6d2-d3f6-4992-a2c6-8246c9faa221}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Systems\Shader\Wireframe">
       <UniqueIdentifier>{d82b0e80-2eeb-4e5a-8480-5b16838ac0e7}</UniqueIdentifier>
@@ -144,9 +135,6 @@
     </Filter>
     <Filter Include="Source Files\Engine\Systems\Shader\NoTexture">
       <UniqueIdentifier>{d909c3e1-61a7-443b-8f69-ec681855bd35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\DungeonMake">
-      <UniqueIdentifier>{f360e16e-d629-4400-b8fe-b35c2c745ae7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\AI\Aster">
       <UniqueIdentifier>{9104f65e-d15e-48be-bdd6-6e56f16dc899}</UniqueIdentifier>
@@ -171,9 +159,6 @@
     </Filter>
     <Filter Include="Source Files\Engine\Systems\StateMachine">
       <UniqueIdentifier>{e2eea2b4-c833-4bf3-886e-b1efb4362056}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\StateMachine\StateBase">
-      <UniqueIdentifier>{50b0b10c-fe8b-48d2-b3b4-4102e11d2495}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Systems\Character\CharacterManager">
       <UniqueIdentifier>{2d38a632-97a5-4cee-83aa-5abc48a96ded}</UniqueIdentifier>
@@ -222,6 +207,9 @@
     </Filter>
     <Filter Include="Source Files\Engine\Systems\Logger">
       <UniqueIdentifier>{d6a2edb5-9593-4f44-8925-50d3b1307d87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AI\DungeonMake">
+      <UniqueIdentifier>{f360e16e-d629-4400-b8fe-b35c2c745ae7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -312,26 +300,11 @@
     <ClCompile Include="Source\Engine\Systems\Math.cpp">
       <Filter>Source Files\Engine\Systems\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\StateMachine.cpp">
-      <Filter>Source Files\Engine\Systems\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\StateBase.cpp">
-      <Filter>Source Files\Engine\Systems\StateMachine\StateBase</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\PlayerBase.cpp">
-      <Filter>Source Files\Engine\Systems\Character\PlayerBase</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\EnemyBase.cpp">
-      <Filter>Source Files\Engine\Systems\Character\EnemyBase</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Scene\SceneGame.cpp">
       <Filter>Source Files\Game\Scenes\SceneGame</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\ResourceManager.cpp">
       <Filter>Source Files\Engine\Systems\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Characters\DerivedPlayerState.cpp">
-      <Filter>Source Files\Game\Characters\Player\State</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\WireframeLambert.cpp">
       <Filter>Source Files\Engine\Systems\Shader\Wireframe</Filter>
@@ -344,9 +317,6 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\NoTextureShader.cpp">
       <Filter>Source Files\Engine\Systems\Shader\NoTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\DungeonMake.cpp">
-      <Filter>Source Files\Engine\Systems\DungeonMake</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\AI\HeuristicSearch.cpp">
       <Filter>Source Files\Engine\AI\Aster\HeuristicSearch</Filter>
@@ -384,6 +354,9 @@
     <ClCompile Include="Source\Engine\Systems\Logger.cpp">
       <Filter>Source Files\Engine\Systems\Logger</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\AI\DungeonMake.cpp">
+      <Filter>Source Files\Engine\AI\DungeonMake</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Scene\SceneTitle.h">
@@ -393,9 +366,6 @@
       <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Imgui.h">
-      <Filter>Source Files\Engine\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Misc.h">
       <Filter>Source Files\Engine\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Objects\ModelResource.h">
@@ -446,9 +416,6 @@
     <ClInclude Include="Source\Engine\Systems\CameraController.h">
       <Filter>Source Files\Engine\Systems\Camera\CameraController</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Scene.h">
-      <Filter>Source Files\Engine\Systems\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\RenderContext.h">
       <Filter>Source Files\Engine\Systems</Filter>
     </ClInclude>
@@ -497,15 +464,6 @@
     <ClInclude Include="Source\Engine\Systems\StateMachine.h">
       <Filter>Source Files\Engine\Systems\StateMachine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\StateBase.h">
-      <Filter>Source Files\Engine\Systems\StateMachine\StateBase</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\PlayerBase.h">
-      <Filter>Source Files\Engine\Systems\Character\PlayerBase</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\EnemyBase.h">
-      <Filter>Source Files\Engine\Systems\Character\EnemyBase</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Scene\SceneGame.h">
       <Filter>Source Files\Game\Scenes\SceneGame</Filter>
     </ClInclude>
@@ -514,9 +472,6 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Characters\Player.h">
       <Filter>Source Files\Game\Characters\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Characters\DerivedPlayerState.h">
-      <Filter>Source Files\Game\Characters\Player\State</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\WireframeLambert.h">
       <Filter>Source Files\Engine\Systems\Shader\Wireframe</Filter>
@@ -529,9 +484,6 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\NoTextureShader.h">
       <Filter>Source Files\Engine\Systems\Shader\NoTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\DungeonMake.h">
-      <Filter>Source Files\Engine\Systems\DungeonMake</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\AI\HeuristicSearch.h">
       <Filter>Source Files\Engine\AI\Aster\HeuristicSearch</Filter>
@@ -560,17 +512,20 @@
     <ClInclude Include="Source\Engine\Systems\EnemyManager.h">
       <Filter>Source Files\Engine\Systems\Character\EnemyManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Characters\EnemyState.h">
-      <Filter>Source Files\Game\Characters\Enemis</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Characters\DerivedEnemySnakeState.h">
       <Filter>Source Files\Game\Characters\Enemis\Snake\State</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Characters\PlayerState.h">
-      <Filter>Source Files\Game\Characters\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Logger.h">
       <Filter>Source Files\Engine\Systems\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\AI\DungeonMake.h">
+      <Filter>Source Files\Engine\AI\DungeonMake</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Misc.h">
+      <Filter>Source Files\Engine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Scene.h">
+      <Filter>Source Files\Engine\Systems\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

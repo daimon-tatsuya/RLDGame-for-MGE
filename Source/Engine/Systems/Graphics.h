@@ -1,7 +1,7 @@
 #pragma once
 //**********************************************************
 //
-//		Graphicsクラス
+//	Graphicsクラス
 //
 //**********************************************************
 
@@ -9,13 +9,15 @@
 #include <d3d11.h>
 #include <wrl.h>
 #include <mutex>
-#include "Engine/Systems/Shader.h"
-#include "Engine/Systems/ShaderManager.h"
-#include "Engine/Systems/DebugRenderer.h"
-#include "Engine/Systems/ImGuiRenderer.h"
-#include "Engine/Systems/LineRenderer.h"
-#include "Engine/Objects/Sprite.h"
 
+
+//前方宣言
+class Shader;
+class DebugRenderer;
+class LineRenderer;
+class ImGuiRenderer;
+class ShaderManager;
+class Sprite;
 
 /// <summary>
 /// 描画周り管理クラス
@@ -28,7 +30,7 @@ private:
 	std::mutex			mutex;
 
 	Microsoft::WRL::ComPtr<ID3D11Device>					device;
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext>		immediate_context;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext>			device_context;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				swapchain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>	render_target_view;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>				depth_stencil_buffer;
@@ -38,7 +40,7 @@ private:
 	std::unique_ptr<LineRenderer>									line_renderer;
 	std::unique_ptr<ImGuiRenderer>								imgui_renderer;
 	std::unique_ptr<ShaderManager>								shader_manager;
-	std::unique_ptr<Sprite>											font;
+	std::unique_ptr<Sprite>												font;
 
 	// Shader
 	std::shared_ptr<Shader>											lambert_shader;
@@ -56,8 +58,9 @@ public:
 	Graphics(HWND hWnd);
 	~Graphics();
 
-	// 唯一のインスタンス取得
+	//唯一のインスタンス取得
 	static Graphics& Instance() { return *instance; }
+
 //------------------------------------------------
 //
 //	Getter Setter
@@ -68,7 +71,7 @@ public:
 	ID3D11Device* GetDevice() const { return device.Get(); }
 
 	// デバイスコンテキスト取得
-	ID3D11DeviceContext* GetDeviceContext() const { return immediate_context.Get(); }
+	ID3D11DeviceContext* GetDeviceContext() const { return device_context.Get(); }
 
 	// スワップチェーン取得
 	IDXGISwapChain* GetSwapChain() const { return swapchain.Get(); }
@@ -79,7 +82,7 @@ public:
 	// レンダーターゲットビュー取得
 	ID3D11RenderTargetView* GetRenderTargetView() const { return render_target_view.Get(); }
 
-	// デプスステンシルビュー取得
+	//1 デプスステンシルビュー取得
 	ID3D11DepthStencilView* GetDepthStencilView() const { return depth_stencil_view.Get(); }
 
 	// スクリーン幅取得
@@ -100,12 +103,8 @@ public:
 	// シェーダーマネージャー取得
 	ShaderManager* GetShaderManager() const { return shader_manager.get(); }
 
-	//フォントの取得
+	// フォントの取得
 	Sprite* GetFont() const { return font.get(); }
 
-	////デバッグモードの設定
-	//bool GetDebugMode() { return debug_mode; }
-
-	//void SetDebugMode(bool setMode) { debug_mode = setMode; }
 
 };

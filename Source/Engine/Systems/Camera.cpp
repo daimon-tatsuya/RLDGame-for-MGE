@@ -1,6 +1,6 @@
 //**********************************************************
 //
-//		Cameraクラス
+//	!	Cameraクラス
 //
 //**********************************************************
 
@@ -46,10 +46,10 @@ void Camera::SetPerspectiveFov(float fovY, float aspect, float nearZ, float farZ
 	OrthMode = false;
 }
 
-void Camera::SetOrthFov(float width, float heght, float nearZ, float farZ)
+void Camera::SetOrthFov(float width, float height, float nearZ, float farZ)
 {
 	// 画角、画面比率、クリップ距離からプロジェクション行列を作成
-	DirectX::XMMATRIX Projection = DirectX::XMMatrixOrthographicLH(width, heght, nearZ, farZ);
+	DirectX::XMMATRIX Projection = DirectX::XMMatrixOrthographicLH(width, height, nearZ, farZ);
 	DirectX::XMStoreFloat4x4(&projection, Projection);
 	OrthMode = true;
 }

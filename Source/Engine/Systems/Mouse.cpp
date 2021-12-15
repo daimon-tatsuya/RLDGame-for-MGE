@@ -6,7 +6,7 @@
 
 #include "Engine/Systems/Mouse.h"
 
-static const int KeyMap[] =
+static constexpr int key_map[] =
 {
 	VK_LBUTTON,		// 左ボタン
 	VK_MBUTTON,		// 中ボタン
@@ -27,13 +27,13 @@ Mouse::Mouse(HWND hWnd)
 void Mouse::Update()
 {
 	// スイッチ情報
-	MouseButton newButtonState = 0;
+	MouseButton new_button_state = 0;
 
-	for (int i = 0; i < ARRAYSIZE(KeyMap); i++)
+	for (int i = 0; i < ARRAYSIZE(key_map); i++)
 	{
-		if (::GetAsyncKeyState(KeyMap[i]) & 0x8000)
+		if (::GetAsyncKeyState(key_map[i]) & 0x8000)
 		{
-			newButtonState |= (1 << i);
+			new_button_state |= (1 << i);
 		}
 	}
 
@@ -43,10 +43,10 @@ void Mouse::Update()
 
 	// ボタン情報更新
 	button_state[1] = button_state[0];	// スイッチ履歴
-	button_state[0] = newButtonState;
+	button_state[0] = new_button_state;
 
-	button_down = ~button_state[1] & newButtonState;	// 押した瞬間
-	button_up = ~newButtonState & button_state[1];	// 離した瞬間
+	button_down = ~button_state[1] & new_button_state;	// 押した瞬間
+	button_up = ~new_button_state & button_state[1];	// 離した瞬間
 
 	// カーソル位置の取得
 	POINT cursor;
@@ -64,6 +64,6 @@ void Mouse::Update()
 	// 画面補正
 	positionX[1] = positionX[0];
 	positionY[1] = positionY[0];
-	positionX[0] = (LONG)(cursor.x / static_cast<float>(viewportW) * static_cast<float>(screenW));
-	positionY[0] = (LONG)(cursor.y / static_cast<float>(viewportH) * static_cast<float>(screenH));
+	positionX[0] = static_cast<LONG>(cursor.x / static_cast<float>(viewportW) * static_cast<float>(screenW));
+	positionY[0] = static_cast<LONG>(cursor.y / static_cast<float>(viewportH) * static_cast<float>(screenH));
 }

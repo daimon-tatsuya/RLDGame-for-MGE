@@ -6,17 +6,19 @@
 //**********************************************************
 
 #include <crtdbg.h>
-#include <stdlib.h>
 #include <memory>
 
-#include "Engine/Systems/framework.h"
-#include "Engine/Systems/Shader.h"
-#include "Engine/Systems/Blender.h"
+#include "Engine/Systems/Framework.h"
+#include "Engine/Objects/Sprite.h"
+#include "Engine/Systems/DebugRenderer.h"
+#include "Engine/Systems/ImGuiRenderer.h"
 #include "Engine/Systems/Logger.h"
 
+#include "Engine/Systems/ShaderManager.h"
+
 #include "Engine/Systems/SceneManager.h"
-#include "Game/Scene/SceneTitle.h"
 #include "Game/Scene/SceneLoading.h"
+#include "Game/Scene/SceneTitle.h"
 
 // 垂直同期間隔設定
 static const int syncInterval = 1;
@@ -31,13 +33,13 @@ Framework::Framework(HWND hwnd)
 
 }
 
-void Framework::Update(float elapsedTime/*最後のフレームからの経過秒数*/)
+void Framework::Update(float elapsed_time/*最後のフレームからの経過秒数*/)
 {
 	// 入力更新処理
 	input.Update();
 
 	// シーン更新処理
-	SceneManager::Instance().Update(elapsedTime);
+	SceneManager::Instance().Update(elapsed_time);
 }
 
 void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/)
@@ -50,7 +52,7 @@ void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/)
 	// IMGUIフレーム開始処理
 	graphics.GetImGuiRenderer()->NewFrame();
 
-	//// シーン描画処理
+	// シーン描画処理
 	SceneManager::Instance().Render();
 
 	// IMGUI描画

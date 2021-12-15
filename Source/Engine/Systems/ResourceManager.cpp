@@ -5,16 +5,20 @@
 //**********************************************************
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/ResourceManager.h"
+#include "Engine/Objects/ModelResource.h"
 
 ResourceManager::~ResourceManager()
 {
-	models.clear();
+	if(!models.empty())//コンテナサイズが 0 のときに true, そうでないときに false。
+	{
+		models.clear();
+	}
 }
 
 std::shared_ptr<ModelResource> ResourceManager::LoadModelResource(const char* filename)
 {
 	//モデル検索
-	ModelMap::iterator it = models.find(filename);
+	const ModelMap::iterator it = models.find(filename);
 	if (it != models.end())
 	{
 		//参照先が解放されてないか確認する

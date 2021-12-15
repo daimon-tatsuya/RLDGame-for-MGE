@@ -5,12 +5,10 @@
 //**********************************************************
 
 
-#include <windows.h>
-#include <stdio.h>
+#include <Windows.h>
+#include <cstdio>
 
 #include "Engine/Systems/Logger.h"
-
-
 
 // ÉçÉOèoóÕ
 void Logger::Print(const char* format, ...)

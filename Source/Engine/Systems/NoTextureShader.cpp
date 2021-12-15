@@ -1,10 +1,14 @@
-#include "Engine/Systems/misc.h"
-#include "Engine/Systems/NoTextureShader.h"
 //**********************************************************
 //
 //		NoTextureShaderクラス
 //
 //**********************************************************
+
+#include "Engine/Systems/Misc.h"
+#include "Engine/Systems/NoTextureShader.h"
+#include "Engine/Objects/ModelResource.h"
+#include "Engine/Objects/Model.h"
+#include "Engine/Systems/RenderContext.h"
 
 NoTextureShader::NoTextureShader(ID3D11Device* device) :Shader(device)
 {
@@ -17,20 +21,20 @@ NoTextureShader::NoTextureShader(ID3D11Device* device) :Shader(device)
 
 		// ファイルのサイズを求める
 		fseek(fp, 0, SEEK_END);
-		long csoSize = ftell(fp);
+		long cso_size = ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
 		// メモリ上に頂点シェーダーデータを格納する領域を用意する
-		std::unique_ptr<u_char[]> csoData = std::make_unique<u_char[]>(csoSize);
-		fread(csoData.get(), csoSize, 1, fp);
+		std::unique_ptr<u_char[]> cso_data = std::make_unique<u_char[]>(cso_size);
+		fread(cso_data.get(), cso_size, 1, fp);
 		fclose(fp);
 
 		// 頂点シェーダー生成
-		HRESULT hr = device->CreateVertexShader(csoData.get(), csoSize, nullptr, vertex_shader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		HRESULT hr = device->CreateVertexShader(cso_data.get(), cso_size, nullptr, vertex_shader.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
 		// 入力レイアウト
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
+		D3D11_INPUT_ELEMENT_DESC input_element_desc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -38,9 +42,9 @@ NoTextureShader::NoTextureShader(ID3D11Device* device) :Shader(device)
 			{ "WEIGHTS",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "BONES",    0, DXGI_FORMAT_R32G32B32A32_UINT,  0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		hr = device->CreateInputLayout(inputElementDesc,
-			ARRAYSIZE(inputElementDesc), csoData.get(), csoSize, input_layout.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		hr = device->CreateInputLayout(input_element_desc,
+			ARRAYSIZE(input_element_desc), cso_data.get(), cso_size, input_layout.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// ピクセルシェーダー
@@ -62,40 +66,38 @@ NoTextureShader::NoTextureShader(ID3D11Device* device) :Shader(device)
 
 		// ピクセルシェーダー生成
 		HRESULT hr = device->CreatePixelShader(csoData.get(), csoSize, nullptr, pixel_shader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// 定数バッファ
 	{
 		// シーン用バッファ
-		D3D11_BUFFER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_BUFFER_DESC desc = {};
 		desc.Usage = D3D11_USAGE_DEFAULT;
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		desc.CPUAccessFlags = 0;
 		desc.MiscFlags = 0;
-		desc.ByteWidth = sizeof(CbScene);
+		desc.ByteWidth = sizeof(ConstantBufferScene);
 		desc.StructureByteStride = 0;
 
 		HRESULT hr = device->CreateBuffer(&desc, 0, scene_constant_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
 		// メッシュ用バッファ
-		desc.ByteWidth = sizeof(CbMesh);
+		desc.ByteWidth = sizeof(ConstantBufferMesh);
 
 		hr = device->CreateBuffer(&desc, 0, mesh_constant_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
 		// サブセット用バッファ
-		desc.ByteWidth = sizeof(CbSubset);
+		desc.ByteWidth = sizeof(ConstantBufferSubset);
 
 		hr = device->CreateBuffer(&desc, 0, subset_constant_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 	// ブレンドステート
 	{
-		D3D11_BLEND_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_BLEND_DESC desc = {};
 		desc.AlphaToCoverageEnable = false;
 		desc.IndependentBlendEnable = false;
 		desc.RenderTarget[0].BlendEnable = true;
@@ -108,25 +110,23 @@ NoTextureShader::NoTextureShader(ID3D11Device* device) :Shader(device)
 		desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		HRESULT hr = device->CreateBlendState(&desc, blend_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// 深度ステンシルステート
 	{
-		D3D11_DEPTH_STENCIL_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_DEPTH_STENCIL_DESC desc = {};
 		desc.DepthEnable = true;
 		desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
 		HRESULT hr = device->CreateDepthStencilState(&desc, depth_stencil_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// ラスタライザーステート
 	{
-		D3D11_RASTERIZER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_RASTERIZER_DESC desc = {};
 		desc.FrontCounterClockwise = true;
 		desc.DepthBias = 0;
 		desc.DepthBiasClamp = 0;
@@ -139,13 +139,12 @@ NoTextureShader::NoTextureShader(ID3D11Device* device) :Shader(device)
 		desc.AntialiasedLineEnable = false;
 
 		HRESULT hr = device->CreateRasterizerState(&desc, rasterizer_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// サンプラステート
 	{
-		D3D11_SAMPLER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_SAMPLER_DESC desc = {};
 		desc.MipLODBias = 0.0f;
 		desc.MaxAnisotropy = 1;
 		desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
@@ -161,7 +160,7 @@ NoTextureShader::NoTextureShader(ID3D11Device* device) :Shader(device)
 		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 		HRESULT hr = device->CreateSamplerState(&desc, sampler_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 }
 
@@ -191,18 +190,18 @@ void NoTextureShader::Activate(ID3D11DeviceContext* context, const RenderContext
 	context->PSSetSamplers(0, 1, sampler_state.GetAddressOf());
 
 	// シーン用定数バッファ更新
-	CbScene cbScene;
-	DirectX::XMFLOAT4X4 viewProjection;
+	ConstantBufferScene constant_buffer_scene{};
+	DirectX::XMFLOAT4X4 view_projection{};
 	{
-		DirectX::XMMATRIX VP, V, P;
+		DirectX::XMMATRIX VP{}, V{}, P{};
 		V = DirectX::XMLoadFloat4x4(&rc.view);
 		P = DirectX::XMLoadFloat4x4(&rc.projection);
 		VP = V * P;
-		DirectX::XMStoreFloat4x4(&viewProjection, VP);
+		DirectX::XMStoreFloat4x4(&view_projection, VP);
 	}
-	cbScene.view_projection = viewProjection;
-	cbScene.light_direction = rc.lightDirection;
-	context->UpdateSubresource(scene_constant_buffer.Get(), 0, 0, &cbScene, 0, 0);
+	constant_buffer_scene.view_projection = view_projection;
+	constant_buffer_scene.light_direction = rc.light_direction;
+	context->UpdateSubresource(scene_constant_buffer.Get(), 0, 0, &constant_buffer_scene, 0, 0);
 }
 
 void NoTextureShader::Draw(ID3D11DeviceContext* context, const Model* model)
@@ -213,23 +212,22 @@ void NoTextureShader::Draw(ID3D11DeviceContext* context, const Model* model)
 	for (const ModelResource::Mesh& mesh : resource->GetMeshes())
 	{
 		// メッシュ用定数バッファ更新
-		CbMesh cbMesh;
-		::memset(&cbMesh, 0, sizeof(cbMesh));
-		if (mesh.node_indices.size() > 0)
+		ConstantBufferMesh constant_buffer_mesh = {};
+		if (!mesh.node_indices.empty())
 		{
 			for (size_t i = 0; i < mesh.node_indices.size(); i++)
 			{
-				DirectX::XMMATRIX worldTransform = DirectX::XMLoadFloat4x4(&nodes.at(mesh.node_indices.at(i)).world_transform);
-				DirectX::XMMATRIX offsetTransform = DirectX::XMLoadFloat4x4(&mesh.inverse_transforms.at(i));
-				DirectX::XMMATRIX boneTransform = offsetTransform * worldTransform;
-				DirectX::XMStoreFloat4x4(&cbMesh.bone_transforms[i], boneTransform);
+				DirectX::XMMATRIX world_transform = DirectX::XMLoadFloat4x4(&nodes.at(mesh.node_indices.at(i)).world_transform);
+				DirectX::XMMATRIX offset_transform = DirectX::XMLoadFloat4x4(&mesh.inverse_transforms.at(i));
+				DirectX::XMMATRIX bone_transform = offset_transform * world_transform;
+				DirectX::XMStoreFloat4x4(&constant_buffer_mesh.bone_transforms[i], bone_transform);
 			}
 		}
 		else
 		{
-			cbMesh.bone_transforms[0] = nodes.at(mesh.node_index).world_transform;
+			constant_buffer_mesh.bone_transforms[0] = nodes.at(mesh.node_index).world_transform;
 		}
-		context->UpdateSubresource(mesh_constant_buffer.Get(), 0, 0, &cbMesh, 0, 0);
+		context->UpdateSubresource(mesh_constant_buffer.Get(), 0, 0, &constant_buffer_mesh, 0, 0);
 
 		UINT stride = sizeof(ModelResource::Vertex);
 		UINT offset = 0;
@@ -239,9 +237,9 @@ void NoTextureShader::Draw(ID3D11DeviceContext* context, const Model* model)
 
 		for (const ModelResource::Subset& subset : mesh.subsets)
 		{
-			CbSubset cbSubset;
-			cbSubset.material_color = subset.material->color;
-			context->UpdateSubresource(subset_constant_buffer.Get(), 0, 0, &cbSubset, 0, 0);
+			ConstantBufferSubset constant_buffer_subset{};
+			constant_buffer_subset.material_color = subset.material->color;
+			context->UpdateSubresource(subset_constant_buffer.Get(), 0, 0, &constant_buffer_subset, 0, 0);
 			context->PSSetShaderResources(0, 1, subset.material->shader_resource_view.GetAddressOf());
 			context->PSSetSamplers(0, 1, sampler_state.GetAddressOf());
 			context->DrawIndexed(subset.index_count, subset.start_index, 0);

@@ -14,14 +14,24 @@ using MouseButton = unsigned int;
 /// </summary>
 class Mouse
 {
+private:
+	MouseButton		button_state[2] = { 0 };
+	MouseButton		button_down = 0;
+	MouseButton		button_up = 0;
+	int						positionX[2]{};
+	int						positionY[2]{};
+	int						wheel[2]{};
+	int						screen_width = 0;
+	int						screen_height = 0;
+	HWND				hWnd = nullptr;
 public:
-	static const MouseButton BTN_LEFT = (1 << 0);
-	static const MouseButton BTN_MIDDLE = (1 << 1);
-	static const MouseButton BTN_RIGHT = (1 << 2);
+	static constexpr MouseButton BTN_LEFT = (1 << 0);
+	static constexpr MouseButton BTN_MIDDLE = (1 << 1);
+	static constexpr MouseButton BTN_RIGHT = (1 << 2);
 
 public:
 	Mouse(HWND hWnd);
-	~Mouse() {}
+	~Mouse() = default;
 
 	// 更新
 	void Update();
@@ -65,14 +75,5 @@ public:
 	// スクリーン高さ取得
 	int GetScreenHeight() const { return screen_height; }
 
-private:
-	MouseButton		button_state[2] = { 0 };
-	MouseButton		button_down = 0;
-	MouseButton		button_up = 0;
-	int						positionX[2];
-	int						positionY[2];
-	int						wheel[2];
-	int						screen_width = 0;
-	int						screen_height = 0;
-	HWND				hWnd = nullptr;
+
 };

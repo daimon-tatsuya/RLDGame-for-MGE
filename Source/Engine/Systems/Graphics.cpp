@@ -4,11 +4,17 @@
 //
 //**********************************************************
 
-#include "Engine//Systems/misc.h"
 #include "Engine/Systems/Graphics.h"
+#include "Engine//Systems/Misc.h"
+#include "Engine/Objects/Sprite.h"
+#include "Engine/Systems/DebugRenderer.h"
+#include "Engine/Systems/ImGuiRenderer.h"
+#include "Engine/Systems/LineRenderer.h"
+#include "Engine/Systems/ShaderManager.h"
+//シェーダー
 #include "Engine/Systems/LambertShader.h"
-#include "Engine/Systems/WireframeLambert.h"
 #include "Engine/Systems/NoTextureShader.h"
+#include "Engine/Systems/WireframeLambert.h"
 
 Graphics* Graphics::instance = nullptr;
 
@@ -60,7 +66,7 @@ Graphics::Graphics(HWND hWnd)
 			swapchain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			swapchain_desc.BufferCount = 1;			// バックバッファの数
 			swapchain_desc.OutputWindow = hWnd;	// DirectXで描いた画を表示するウインドウ
-			swapchain_desc.Windowed = true;		// ウインドウモードか、フルスクリーンにするか。
+			swapchain_desc.Windowed = true;			// ウインドウモードか、フルスクリーンにするか。
 			swapchain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 			swapchain_desc.Flags = 0;						// DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
 		}
@@ -76,26 +82,26 @@ Graphics::Graphics(HWND hWnd)
 			featureLevels,									// D3D_FEATURE_LEVEL列挙型の配列を与える。nullptrにすることでも上記featureと同等の内容の配列が使用される。
 			ARRAYSIZE(featureLevels),				// featureLevels配列の要素数を渡す。
 			D3D11_SDK_VERSION,					// SDKのバージョン。必ずこの値。
-			&swapchain_desc,								// ここで設定した構造体に設定されているパラメータでSwapChainが作成される。
+			&swapchain_desc,							// ここで設定した構造体に設定されているパラメータでSwapChainが作成される。
 			swapchain.GetAddressOf(),				// 作成が成功した場合に、SwapChainのアドレスを格納するポインタ変数へのアドレス。ここで指定したポインタ変数経由でSwapChainを操作する。
 			device.GetAddressOf(),						// 作成が成功した場合に、Deviceのアドレスを格納するポインタ変数へのアドレス。ここで指定したポインタ変数経由でDeviceを操作する。
-			&feature_level,									// 作成に成功したD3D_FEATURE_LEVELを格納するためのD3D_FEATURE_LEVEL列挙型変数のアドレスを設定する。
-			immediate_context.GetAddressOf()		// 作成が成功した場合に、Contextのアドレスを格納するポインタ変数へのアドレス。ここで指定したポインタ変数経由でContextを操作する。
+			&feature_level,								// 作成に成功したD3D_FEATURE_LEVELを格納するためのD3D_FEATURE_LEVEL列挙型変数のアドレスを設定する。
+			device_context.GetAddressOf()		// 作成が成功した場合に、Contextのアドレスを格納するポインタ変数へのアドレス。ここで指定したポインタ変数経由でContextを操作する。
 		);
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// レンダーターゲットビューの生成
 	{
 		// スワップチェーンからバックバッファテクスチャを取得する。
-		// ※スワップチェーンに内包されているバックバッファテクスチャは'色'を書き込むテクスチャ。
+		// !※スワップチェーンに内包されているバックバッファテクスチャは'色'を書き込むテクスチャ。
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> back_buffer;
 		hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(back_buffer.GetAddressOf()));
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
 		// バックバッファテクスチャへの書き込みの窓口となるレンダーターゲットビューを生成する。
 		hr = device->CreateRenderTargetView(back_buffer.Get(), nullptr, render_target_view.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// 深度ステンシルビューの生成
@@ -114,11 +120,11 @@ Graphics::Graphics(HWND hWnd)
 		depth_stencil_buffer_desc.CPUAccessFlags = 0;
 		depth_stencil_buffer_desc.MiscFlags = 0;
 		hr = device->CreateTexture2D(&depth_stencil_buffer_desc, nullptr, depth_stencil_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
 		// 深度ステンシルテクスチャへの書き込みに窓口になる深度ステンシルビューを作成する。
 		hr = device->CreateDepthStencilView(depth_stencil_buffer.Get(), nullptr, depth_stencil_view.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	// ビューポートの設定
@@ -131,23 +137,23 @@ Graphics::Graphics(HWND hWnd)
 		viewport.Height = static_cast<float>(screen_height);
 		viewport.MinDepth = 0.0f;
 		viewport.MaxDepth = 1.0f;
-		immediate_context->RSSetViewports(1, &viewport);
+		device_context->RSSetViewports(1, &viewport);
 	}
 
 	// シェーダー
 	{
 		shader_manager = std::make_unique<ShaderManager>();
 
-		//Lambert
+		// Lambert
 		lambert_shader = std::make_shared<LambertShader>(device.Get());
 		shader_manager->AddShader(ShaderManager::ShaderName::Lambert, lambert_shader);
 
-		//ワイヤーフレーム化したLambert
-		//ラスタライザー関係をクラス化した際に削除予定
+		// ワイヤーフレーム化したLambert
+		// ラスタライザー関係をクラス化した際に削除予定
 		wireframe_lambert_shader = std::make_shared<WireLambertShader>(device.Get());
 		shader_manager->AddShader(ShaderManager::ShaderName::LambertWireFrame, wireframe_lambert_shader);
 
-		//テクスチャのないモデル用
+		// テクスチャのないモデル用
 		no_texture_shader = std::make_shared<NoTextureShader>(device.Get());
 		shader_manager->AddShader(ShaderManager::ShaderName::NoTexture, no_texture_shader);
 	}
@@ -158,7 +164,7 @@ Graphics::Graphics(HWND hWnd)
 		line_renderer = std::make_unique<LineRenderer>(device.Get(), 1024);
 		imgui_renderer = std::make_unique<ImGuiRenderer>(hWnd, device.Get());
 	}
-	//フォント
+	// フォント
 	{
 		font = std::make_unique<Sprite>(L"Assets/fonts/font0.png");
 	}

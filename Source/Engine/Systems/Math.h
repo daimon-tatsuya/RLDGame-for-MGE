@@ -4,7 +4,12 @@
 //		Mathクラス
 //
 //**********************************************************
+#include <d3d11.h>
 #include <DirectXMath.h>
+#include <SimpleMath.h>
+
+//#include <SimpleMath.h>
+//#include<SimpleMath.inl>
 
 /// <summary>
 /// 算術クラス
@@ -28,26 +33,26 @@ public:
 	/// <para>nがmax以上ならmax,min未満ならmin,その他はAny</para>
 	/// </summary>
 	/// <param name="check"></param>
-	/// <param name="Any"></param>
+	/// <param name="any"></param>
 	/// <param name="min">最小値</param>
 	/// <param name="max">最大値</param>
 	/// <returns>Any,min,maxのいずれか</returns>
-	static float ClampAnyFloat(float check, float Any, float min, float max);
+	static float ClampAnyFloat(float check, float any, float min, float max);
 
 
 	/// <summary>
-/// <para>minからmaxまでのステップ</para>
-/// <para>nがmax以上なら1,min未満なら0,その他はAny</para>
-/// <para>0~1の範囲のものにつかう</para>
-/// <para>主にスティック</para>
-/// </summary>
-/// <param name="check"></param>
-/// <param name="Any"></param>
-/// <param name="min">最小値</param>
-/// <param name="max">最大値</param>
-/// <param name="revers">trueの時-1~0の範囲にする</param>
-/// <returns>Any,0,1のいずれか</returns>
-	static float StepAnyFloat(float check, float Any, float min, float max, bool revers = false);
+	/// <para>minからmaxまでのステップ</para>
+	/// <para>nがmax以上なら1,min未満なら0,その他はAny</para>
+	/// <para>0~1の範囲のものにつかう</para>
+	/// <para>主にスティック</para>
+	/// </summary>
+	/// <param name="check"></param>
+	/// <param name="any"></param>
+	/// <param name="min">最小値</param>
+	/// <param name="max">最大値</param>
+	/// <param name="revers">trueの時-1~0の範囲にする</param>
+	/// <returns>Any,0,1のいずれか</returns>
+	static float StepAnyFloat(float check, float any, float min, float max, bool revers = false);
 
 	/// <summary>
 	/// <para>aをtの大きさでb方向に補完する(線形補完)</para>
@@ -78,6 +83,7 @@ public:
 	/// <summary>
 	/// 0~maxまでのランダム値を計算する
 	/// </summary>
+	/// <param name="min">最小値</param>
 	/// <param name="max">最大値</param>
 	/// <returns></returns>
 	static int RandomRangeInt(int min, int max);
@@ -116,6 +122,6 @@ public:
 	/// </summary>
 	/// <param name="a"></param>
 	/// <param name="b"></param>
-	/// <returns></returns>
+	/// <returns>a≒b</returns>
 	static bool BoolianFloat(float a, float b);
 };

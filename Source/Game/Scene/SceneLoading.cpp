@@ -3,19 +3,17 @@
 //		SceneLoadingクラス
 //
 //**********************************************************
+
 #include <thread>
-#include <chrono>
+
 #include "Engine/Systems/Graphics.h"
-#include "Engine/Systems/Input.h"
+#include "Engine/Objects//Sprite.h"
 #include "Engine/Systems/SceneManager.h"
 #include "Game/Scene/SceneLoading.h"
 
 // 初期化
 void SceneLoading::Initialize()
 {
-	// スプライト初期化
-	//sprite = new Sprite(L"Assets/Images/LoadingIcon.png");
-	//sprite = std::make_unique<Sprite>( L"./fonts/font0.png");
 	// スレッド開始
 	std::thread thread(LoadingThread, this);
 
@@ -29,10 +27,10 @@ void SceneLoading::Finalize()
 }
 
 // 更新処理
-void SceneLoading::Update(float elapsedTime)
+void SceneLoading::Update(float elapsed_time)
 {
 	// ローディング演出処理。
-	timer -= elapsedTime;
+	timer -= elapsed_time;
 	if (timer < 0)
 	{
 		timer = 0.1f;
@@ -56,36 +54,36 @@ void SceneLoading::Update(float elapsedTime)
 // 描画処理
 void SceneLoading::Render()
 {
-	Graphics& graphics = Graphics::Instance();
+	const Graphics& graphics = Graphics::Instance();
 	ID3D11DeviceContext* device_context = graphics.GetDeviceContext();
 	ID3D11RenderTargetView* render_target_view = graphics.GetRenderTargetView();
 	ID3D11DepthStencilView* depth_stencil_view = graphics.GetDepthStencilView();
 
 	// 画面クリア＆レンダーターゲット設定
-	FLOAT color[] = { 0.0f, 0.0f, 0.f, 1.0f };	// RGBA(0.0～1.0)
-	device_context->ClearRenderTargetView(render_target_view, color);
+	constexpr FLOAT clear_color[] = { 0.0f, 0.0f, 0.f, 1.0f };	// RGBA(0.0～1.0)
+	device_context->ClearRenderTargetView(render_target_view, clear_color);
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
 
 	// 2Dスプライト描画
 	{
 		// Now Loading...描画。
-		Sprite* font = graphics.GetFont();
+		const Sprite* font = graphics.GetFont();
 
 		// 画面右下にローディングアイコンを描画
-		float screen_width = static_cast<float>(graphics.GetScreenWidth());
-		float screen_height = static_cast<float>(graphics.GetScreenHeight());
-		float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
-		float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
-		float positionX = screen_width - texture_width * (texture_width / 2);
-		float positionY = screen_height - texture_height;
+		const float screen_width = static_cast<float>(graphics.GetScreenWidth());
+		const float screen_height = static_cast<float>(graphics.GetScreenHeight());
+		constexpr float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
+		constexpr float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
+		const float positionX = screen_width - texture_width * (texture_width / 2);
+		const float positionY = screen_height - texture_height;
 
 		font->TextOutW(device_context, message, positionX, positionY, 32, 32);
 	}
 }
 
 // ローディングスレッド
-void SceneLoading::LoadingThread(SceneLoading* scene)
+void SceneLoading::LoadingThread(const SceneLoading* scene)
 {
 	//シリアライズしていてロードが速すぎるのでミリ秒単位で止める
 	Sleep(3000);

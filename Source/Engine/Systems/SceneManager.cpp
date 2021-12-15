@@ -1,37 +1,52 @@
-#include "SceneManager.h"
 //**********************************************************
 //
 //		SceneManagerクラス
 //
 //**********************************************************
-void SceneManager::Update(float elapsedTime)
+#include "Engine/Systems/Scene.h"
+#include "Engine/Systems/SceneManager.h"
+
+SceneManager::~SceneManager()
 {
-	if (current_scene != nullptr)
-	{
-		current_scene->Update(elapsedTime);
-	}
+	delete current_scene;
 }
 
-void SceneManager::Render()
+
+void SceneManager::Update(float elapsed_time) const
 {
+
+	if (current_scene != nullptr)
+	{
+		current_scene->Update(elapsed_time);
+	}
+
+}
+
+void SceneManager::Render() const
+{
+
 	if (current_scene != nullptr)
 	{
 		current_scene->Render();
 	}
+
 }
 
 void SceneManager::Clear()
 {
+
 	if (current_scene != nullptr)
 	{
 		current_scene->Finalize();
 		delete current_scene;
 		current_scene = nullptr;
 	}
+
 }
 
 void SceneManager::ChangeScene(Scene* scene)
 {
+
 	// 古いシーンを終了処理
 	Clear();
 
@@ -43,4 +58,5 @@ void SceneManager::ChangeScene(Scene* scene)
 	{
 		current_scene->Initialize();
 	}
+
 }

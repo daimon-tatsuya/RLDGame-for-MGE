@@ -1,15 +1,14 @@
 #pragma once
 //**********************************************************
 //
-//		ImGuiRendererクラス
+//	ImGuiRendererクラス
 //
 //**********************************************************
 
-#include <vector>
-#include <wrl.h>
 #include <d3d11.h>
-
 #include <imgui.h>
+#include <wrl.h>
+
 #include "Engine/Systems/Math.h"
 
 /// <summary>
@@ -34,10 +33,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer>					constant_buffer;
 
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertex_shader;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader>			pixel_shader;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader>				pixel_shader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>			input_layout;
 
-	Microsoft::WRL::ComPtr<ID3D11BlendState>			blend_state;
+	Microsoft::WRL::ComPtr<ID3D11BlendState>				blend_state;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState>		rasterizer_state;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState>	depth_stencil_tate;
 
@@ -62,10 +61,10 @@ public:
 	ImGuiRenderer(HWND hWnd, ID3D11Device* device);
 	~ImGuiRenderer();
 
-	//フレーム開始処理
+	// フレーム開始処理
 	void NewFrame();
 
-	// 描画実行
+	// 描画処理
 	void Render(ID3D11DeviceContext* device_context);
 
 	// WIN32メッセージハンドラー

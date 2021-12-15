@@ -13,14 +13,14 @@
 class Camera
 {
 private:
-	DirectX::XMFLOAT4X4 view =//ビュー行列
+	DirectX::XMFLOAT4X4 view = // ビュー行列
 	{
 		0,0,0,0,
 		0,0,0,0,
 		0,0,0,0,
 		0,0,0,0
 	};
-	DirectX::XMFLOAT4X4 projection =//投影行列
+	DirectX::XMFLOAT4X4 projection = // 投影行列
 	{
 		0,0,0,0,
 		0,0,0,0,
@@ -28,18 +28,18 @@ private:
 		0,0,0,0
 	};
 
-	DirectX::XMFLOAT3	eye = { 0,0,0 };//カメラの位置
-	DirectX::XMFLOAT3	focus = { 0,0,0 };//カメラの方向
-	DirectX::XMFLOAT3	up = { 0,0,0 };//カメラの上方向、通常は<0.0f、1.0f、0.0f>
-	DirectX::XMFLOAT3	front = { 0,0,0 };//カメラの前方方向
-	DirectX::XMFLOAT3	right = { 0,0,0 };//カメラの右方向
+	DirectX::XMFLOAT3	eye = { 0,0,0 };		// カメラの位置
+	DirectX::XMFLOAT3	focus = { 0,0,0 };	// カメラの方向
+	DirectX::XMFLOAT3	up = { 0,0,0 };		// カメラの上方向、通常は<0.0f、1.0f、0.0f>
+	DirectX::XMFLOAT3	front = { 0,0,0 };	// カメラの前方方向
+	DirectX::XMFLOAT3	right = { 0,0,0 };	// カメラの右方向
 
-	bool  OrthMode = false;//正射影カメラモード
+	bool  OrthMode = false;// 正射影カメラモード
 
 private:
 
-	Camera() {};
-	~Camera() {};
+	Camera() = default;
+	~Camera() = default;
 
 public:
 
@@ -71,10 +71,10 @@ public:
 	/// オルソの設定
 	/// </summary>
 	/// <param name="width">幅</param>
-	/// <param name="heght">高さ</param>
+	/// <param name="height">高さ</param>
 	/// <param name="nearZ">近くのクリッピング平面までの距離(ゼロより大きく)</param>
 	/// <param name="farZ">遠いクリッピング平面までの距離(ゼロより大きく)</param>
-	void SetOrthFov(float width, float heght, float nearZ, float farZ);
+	void SetOrthFov(float width, float height, float nearZ, float farZ);
 
 	//------------------------------------------------
 	//
@@ -103,9 +103,9 @@ public:
 	// 右方向取得
 	const DirectX::XMFLOAT3& GetRight() const { return right; }
 
-	//正射影カメラモード取得
+	// 正射影カメラモード取得
 	 bool GetOrthMode() { return OrthMode; }
 
-	//正射影カメラモード取得
+	// 正射影カメラモード設定
 	void SetOrthMode(bool mode) {  OrthMode= mode; }
 };

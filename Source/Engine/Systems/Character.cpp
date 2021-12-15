@@ -5,11 +5,11 @@
 //**********************************************************
 
 #include "Engine/Systems/Character.h"
-#include "Engine/Systems/StageManager.h"
+#include "Engine/Systems/Collision.h"
 #include "Engine/Systems/Math.h"
+#include "Engine/Systems/StageManager.h"
 
-// ダメージを与える
-bool Character::ApplyDamage(int damage, float invincibleTime)
+bool Character::ApplyDamage(int damage, float invincible_time)
 {
 	// ダメージが0の場合は健康状態を変更する必要がない
 	if (damage == 0) return false;
@@ -21,7 +21,7 @@ bool Character::ApplyDamage(int damage, float invincibleTime)
 	if (invincible_timer > 0.0f) return false;
 
 	// 無敵時間設定
-	invincible_timer = invincibleTime;
+	invincible_timer = invincible_time;
 
 	// ダメージ処理
 	health -= damage;
@@ -41,7 +41,6 @@ bool Character::ApplyDamage(int damage, float invincibleTime)
 	return true;
 }
 
-// 衝撃を与える
 void Character::AddImpulse(const DirectX::XMFLOAT3& impulse)
 {
 	// 速力に力を加える
@@ -50,7 +49,7 @@ void Character::AddImpulse(const DirectX::XMFLOAT3& impulse)
 	velocity.z += impulse.z;
 }
 
-// 移動処理
+
 void Character::Move(float vx, float vz, float speed)
 {
 	// 移動方向ベクトルを設定
@@ -61,7 +60,7 @@ void Character::Move(float vx, float vz, float speed)
 	max_move_speed = speed;
 }
 
-void Character::MoveChack(float mx, float mz)
+void Character::MoveCheck(float mx, float mz)
 {
 	// レイの開始位置と終点位置
 	DirectX::XMFLOAT3 start = { position.x, position.y + step_offset, position.z };
@@ -84,7 +83,7 @@ void Character::MoveChack(float mx, float mz)
 
 		// 補正位置の計算
 		DirectX::XMVECTOR CollectPosition = DirectX::XMVectorMultiplyAdd(v_normal, Dot, v_end);
-		DirectX::XMFLOAT3 collect_position;
+		DirectX::XMFLOAT3 collect_position{};
 		DirectX::XMStoreFloat3(&collect_position, CollectPosition);
 
 		// 壁ずり方向へレイキャスト
@@ -110,14 +109,13 @@ void Character::MoveChack(float mx, float mz)
 
 }
 
-// 旋回処理
 // アクションゲーム用なので後回し https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
 void Character::Turn(float elapsedTime, float vx, float vz, float speed)
 {
 	speed *= elapsedTime;
 
 	// ゼロベクトルの場合は処理する必要なし
-	float length = sqrtf(vx * vx + vz * vz);
+	const float length = sqrtf(vx * vx + vz * vz);
 	if (length < 0.001f) return;
 
 	// 単位ベクトル化
@@ -125,11 +123,11 @@ void Character::Turn(float elapsedTime, float vx, float vz, float speed)
 	vz /= length;
 
 	// 自身の回転値から前方向を求める
-	float frontX = sinf(angle.y);
-	float frontZ = cosf(angle.y);
+	const float frontX = sinf(angle.y);
+	const float frontZ = cosf(angle.y);
 
 	// 回転角を求めるため、２つの単位ベクトルの内積を計算する
-	float dot = (frontX * vx) + (frontZ * vz);
+	const float dot = (frontX * vx) + (frontZ * vz);
 
 	// 内積値は-1.0～1.0で表現されており、２つの単位ベクトルの角度が
 	// 小さいほど1.0に近づくという性質を利用して回転速度を調整する
@@ -137,7 +135,7 @@ void Character::Turn(float elapsedTime, float vx, float vz, float speed)
 	if (rot > speed) rot = speed;
 
 	// 左右判定を行うために２つの単位ベクトルの外積を計算する
-	float cross = (frontX * vz) - (frontZ * vx);
+	const float cross = (frontX * vz) - (frontZ * vx);
 
 	// 2Dの外積値が正の場合か負の場合によって左右判定が行える
 	// 左右判定を行うことによって左右回転を選択する
@@ -151,23 +149,20 @@ void Character::Turn(float elapsedTime, float vx, float vz, float speed)
 	}
 }
 
-// ジャンプ処理
 void Character::Jump(float speed)
 {
 	// 上方向の力を設定
 	velocity.y = speed;
 }
 
-// 空中ダッシュ処理
-void Character::AirDush(float vx, float vz, float gravityCutTime)
+void Character::AirDash(float vx, float vz, float gravity_cut_time)
 {
 	velocity.x = vx;
 	velocity.z = vz;
 	velocity.y = 0;
-	this->gravity_cut_time = gravityCutTime;
+	this->gravity_cut_time = gravity_cut_time;
 }
 
-// 速力処理更新
 void Character::UpdateVelocity(float elapsed_time)
 {
 	// 経過フレーム
@@ -186,7 +181,7 @@ void Character::UpdateVelocity(float elapsed_time)
 	UpdateHorizontalMove(elapsed_time);
 }
 
-// 無敵時間更新
+
 void Character::UpdateInvincibleTimer(float elapsed_time)
 {
 	if (invincible_timer > 0.0f)
@@ -195,7 +190,6 @@ void Character::UpdateInvincibleTimer(float elapsed_time)
 	}
 }
 
-// 垂直速力更新処理
 void Character::UpdateVerticalVelocity(float elapsed_frame)
 {
 	// 重力処理
@@ -206,7 +200,7 @@ void Character::UpdateVerticalVelocity(float elapsed_frame)
 	}
 }
 
-// 垂直移動更新処理
+
 void Character::UpdateVerticalMove(float elapsed_time)
 {
 	// 垂直方向の移動量
@@ -233,8 +227,8 @@ void Character::UpdateVerticalMove(float elapsed_time)
 			position = hit.position;
 
 			// 傾斜率の計算
-			float normalLengthXZ = sqrtf(hit.normal.x * hit.normal.x + hit.normal.z * hit.normal.z);
-			slope_rate = 1.0f - (hit.normal.y / (normalLengthXZ + hit.normal.y));
+			const float normal_lengthXZ = sqrtf(hit.normal.x * hit.normal.x + hit.normal.z * hit.normal.z);
+			slope_rate = 1.0f - (hit.normal.y / (normal_lengthXZ + hit.normal.y));
 
 			// 法線ベクトル取得
 			normal = hit.normal;
@@ -276,10 +270,10 @@ void Character::UpdateVerticalMove(float elapsed_time)
 	}
 }
 
-// 水平速力更新処理
+
 void Character::UpdateHorizontalVelocity(float elapsed_frame)
 {
-	// XZ平面の速力を減速する
+	//! XZ平面の速力を減速する
 	float length = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
 	if (length > 0.0f)
 	{
@@ -307,7 +301,7 @@ void Character::UpdateHorizontalVelocity(float elapsed_frame)
 		}
 	}
 
-	// XZ平面の速力を加速する
+	//! XZ平面の速力を加速する
 	if (length <= max_move_speed)
 	{
 		// 移動ベクトルがゼロベクトルでないなら加速する
@@ -347,7 +341,6 @@ void Character::UpdateHorizontalVelocity(float elapsed_frame)
 	move_vecZ = 0.0f;
 }
 
-// 水平移動更新処理
 void Character::UpdateHorizontalMove(float elapsed_time)
 {
 	// 水平速力量計算
@@ -358,7 +351,7 @@ void Character::UpdateHorizontalMove(float elapsed_time)
 		float mx = velocity.x * elapsed_time;
 		float mz = velocity.z * elapsed_time;
 
-		MoveChack(mx, mz);
+		MoveCheck(mx, mz);
 	}
 }
 

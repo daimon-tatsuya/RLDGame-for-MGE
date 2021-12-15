@@ -1,7 +1,7 @@
 #pragma once
 //**********************************************************
 //
-//		GamePadクラス
+//	GamePadクラス
 //
 //**********************************************************
 
@@ -18,51 +18,52 @@ private:
 	GamePadButton		button_state[2] = { 0 };
 	GamePadButton		button_down = 0;
 	GamePadButton		button_up = 0;
-	float				axisLx = 0.0f;
-	float				axisLy = 0.0f;
-	float				axisRx = 0.0f;
-	float				axisRy = 0.0f;
+
+	float				axisLX = 0.0f;
+	float				axisLY = 0.0f;
+	float				axisRX = 0.0f;
+	float				axisRY = 0.0f;
 	float				triggerL = 0.0f;
 	float				triggerR = 0.0f;
 	int					slot = 0;
 
 public:
 
-	static const GamePadButton BTN_UP = (1 << 0);        //十字キー上
-	static const GamePadButton BTN_RIGHT = (1 << 1);  //十字キー右
-	static const GamePadButton BTN_DOWN = (1 << 2);	 //十字キー下
-	static const GamePadButton BTN_LEFT = (1 << 3);	 //十字キー左
+	static const GamePadButton BTN_UP = (1 << 0);        // 十字キー上
+	static const GamePadButton BTN_RIGHT = (1 << 1);  // 十字キー右
+	static const GamePadButton BTN_DOWN = (1 << 2);	 // 十字キー下
+	static const GamePadButton BTN_LEFT = (1 << 3);	 // 十字キー左
 	static const GamePadButton BTN_A = (1 << 4);//Aボタン
 	static const GamePadButton BTN_B = (1 << 5);//Bボタン
 	static const GamePadButton BTN_X = (1 << 6);//Xボタン
 	static const GamePadButton BTN_Y = (1 << 7);//Yボタン
 	static const GamePadButton BTN_START = (1 << 8);//右スタートボタン
 	static const GamePadButton BTN_BACK = (1 << 9);  //左スタートボタン
-	static const GamePadButton BTN_LEFT_THUMB = (1 << 10); //左スティック押し込み
-	static const GamePadButton BTN_RIGHT_THUMB = (1 << 11); //右スティック押し込み
-	static const GamePadButton BTN_LEFT_SHOULDER = (1 << 12); //LB：L1
-	static const GamePadButton BTN_RIGHT_SHOULDER = (1 << 13); //RB：R1
-	static const GamePadButton BTN_LEFT_TRIGGER = (1 << 14); //LT：L2
-	static const GamePadButton BTN_RIGHT_TRIGGER = (1 << 15);//RT：R2
+	static const GamePadButton BTN_LEFT_THUMB = (1 << 10);		// 左スティック押し込み
+	static const GamePadButton BTN_RIGHT_THUMB = (1 << 11); // 右スティック押し込み
+	static const GamePadButton BTN_LEFT_SHOULDER = (1 << 12);		// LB：L1
+	static const GamePadButton BTN_RIGHT_SHOULDER = (1 << 13);	// RB：R1
+	static const GamePadButton BTN_LEFT_TRIGGER = (1 << 14);			// LT：L2
+	static const GamePadButton BTN_RIGHT_TRIGGER = (1 << 15);		// RT：R2
 
-	static const GamePadButton AnyBTN =
+	static const GamePadButton AnyBTN =// ABXYボタン
 		  GamePad::BTN_A
 		| GamePad::BTN_B
 		| GamePad::BTN_X
-		| GamePad::BTN_Y;//ABXY
+		| GamePad::BTN_Y;
 
-	static const GamePadButton AnyDPad =
+	static const GamePadButton AnyDPad =// 十字キー
 		  GamePad::BTN_UP
 		| GamePad::BTN_RIGHT
 		| GamePad::BTN_DOWN
-		| GamePad::BTN_LEFT;//十字キー
+		| GamePad::BTN_LEFT;
 
 private:
 
 public:
 
-	GamePad() {}
-	~GamePad() {}
+	GamePad() = default;
+	~GamePad() = default;
 
 	// 更新
 	void Update();
@@ -86,16 +87,16 @@ public:
 	GamePadButton GetButtonUp() const { return button_up; }
 
 	// 左スティックX軸入力状態の取得
-	float GetAxisLX() const { return axisLx; }
+	float GetAxisLX() const { return axisLX; }
 
 	// 左スティックY軸入力状態の取得
-	float GetAxisLY() const { return axisLy; }
+	float GetAxisLY() const { return axisLY; }
 
 	// 右スティックX軸入力状態の取得
-	float GetAxisRX() const { return axisRx; }
+	float GetAxisRX() const { return axisRX; }
 
 	// 右スティックY軸入力状態の取得
-	float GetAxisRY() const { return axisRy; }
+	float GetAxisRY() const { return axisRY; }
 
 	// 左トリガー入力状態の取得
 	float GetTriggerL() const { return triggerL; }

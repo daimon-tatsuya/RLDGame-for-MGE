@@ -4,6 +4,7 @@
 //		WireLambertShader
 //
 //**********************************************************
+
 #include "Engine/Systems/Shader.h"
 
 /// <summary>
@@ -13,10 +14,14 @@ class WireLambertShader : public Shader
 {
 public:
 	WireLambertShader(ID3D11Device* device);
-	~WireLambertShader() {};
-	void Activate(ID3D11DeviceContext* context, const RenderContext& rc)override;
+
+	~WireLambertShader() override = default;
+
 	// ï`âÊäJén
+	void Activate(ID3D11DeviceContext* context, const RenderContext& rc)override;
+
 	void Draw(ID3D11DeviceContext* context, const Model* model) override;
+
 	// ï`âÊèIóπ
 	void Deactivate(ID3D11DeviceContext* context) override;
 private:

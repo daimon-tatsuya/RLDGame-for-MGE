@@ -4,25 +4,30 @@
 //		RogueLikeStageクラス
 //
 //**********************************************************
-#include "Engine/Systems/Stage.h"
-#include "Engine/Systems/Collision.h"
-#include "Engine/Systems/DungeonMake.h"
 
-class RogueLikeStage : public Stage
+#include "Engine/Systems/Stage.h"
+
+
+//前方宣言
+class RogueLikeDungeon;
+class RogueLikeMap;
+
+class RogueLikeStage
+: public Stage
 {
 private:
 public:
 	 RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon);
-	 ~RogueLikeStage();
+	 ~RogueLikeStage() override;
 
 	// 更新処理
-	void Update(float elapsedTime);
+	void Update(float elapsed_time) override;
 
 	// 描画処理
-	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader);
+	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader) override;
 
 	// レイキャスト
-	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit);
+	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) override;
 
 	//メッセージ受信処理
 	bool OnMessage(const Telegram& msg) override;
@@ -39,6 +44,7 @@ public:
 private:
 protected:
 	std::vector <Stage> stage_chip;
-	RogueLikeDungeon*  db_rogue_like_dungeon;
+	//imgui
+	RogueLikeDungeon*  rogue_like_dungeon_imgui;
 public:
 };

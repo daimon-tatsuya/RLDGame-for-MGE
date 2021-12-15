@@ -7,8 +7,10 @@
 #include <memory>
 #include <string>
 #include <map>
-#include "Engine/Objects/ModelResource.h"
 
+
+//	前方宣言
+class ModelResource;
 
 /// <summary>
 ///	 2回目の読み込みを制限するクラス
@@ -16,7 +18,7 @@
 class ResourceManager
 {
 private:
-	ResourceManager() {}
+	ResourceManager() = default;
 	~ResourceManager();
 public:
 	// 唯一のインスタンス取得

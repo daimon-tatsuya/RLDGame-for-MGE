@@ -7,10 +7,11 @@
 #include <string>
 #include<map>
 #include <wrl.h>
-#include "Engine/Systems/misc.h"
+#include "Engine/Systems/Misc.h"
 #include "Engine/Systems/Shader.h"
+#include "Engine/Systems/RenderContext.h"
 
-HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* csoName, ID3D11VertexShader** vertexShader, ID3D11InputLayout** inputLayout, D3D11_INPUT_ELEMENT_DESC* inputElementDesc, UINT numElements)
+HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* cso_name, ID3D11VertexShader** vertex_shader, ID3D11InputLayout** input_layout, D3D11_INPUT_ELEMENT_DESC* input_element_desc, UINT num_elements)
 {
 	struct set_of_vertex_shader_and_input_layout
 	{
@@ -20,17 +21,17 @@ HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* csoName, ID3
 	};
 	static std::map<std::string, set_of_vertex_shader_and_input_layout> cache;
 
-	auto it = cache.find(csoName);
+	auto it = cache.find(cso_name);
 	if (it != cache.end())
 	{
-		*vertexShader = it->second.vertex_shader.Get();
-		(*vertexShader)->AddRef();
-		*inputLayout = it->second.input_layout.Get();
-		(*inputLayout)->AddRef();
+		*vertex_shader = it->second.vertex_shader.Get();
+		(*vertex_shader)->AddRef();
+		*input_layout = it->second.input_layout.Get();
+		(*input_layout)->AddRef();
 		return S_OK;
 	}
 	FILE* fp = nullptr;
-	fopen_s(&fp, csoName, "rb");
+	fopen_s(&fp, cso_name, "rb");
 	_ASSERT_EXPR_A(fp, "CSO File not found");
 
 	fseek(fp, 0, SEEK_END);
@@ -41,32 +42,32 @@ HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* csoName, ID3
 	fread(cso_data.get(), cso_sz, 1, fp);
 	fclose(fp);
 
-	HRESULT hr = device->CreateVertexShader(cso_data.get(), cso_sz, nullptr, vertexShader);
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+	HRESULT hr = device->CreateVertexShader(cso_data.get(), cso_sz, nullptr, vertex_shader);
+	_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
-	hr = device->CreateInputLayout(inputElementDesc, numElements, cso_data.get(), cso_sz, inputLayout);
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+	hr = device->CreateInputLayout(input_element_desc, num_elements, cso_data.get(), cso_sz, input_layout);
+	_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
-	cache.insert(std::make_pair(csoName, set_of_vertex_shader_and_input_layout(*vertexShader, *inputLayout)));
+	cache.insert(std::make_pair(cso_name, set_of_vertex_shader_and_input_layout(*vertex_shader, *input_layout)));
 
 	return hr;
 }
 
-HRESULT CreatePixelShaderFromCso(ID3D11Device* device, const char* csoName, ID3D11PixelShader** pixelShader)
+HRESULT CreatePixelShaderFromCso(ID3D11Device* device, const char* cso_name, ID3D11PixelShader** pixel_shader)
 {
 	static std::map<std::string, Microsoft::WRL::ComPtr<ID3D11PixelShader>> cache;
-	auto it = cache.find(csoName);
+	auto it = cache.find(cso_name);
 	if (it != cache.end())
 	{
 		//it->second.Attach(*pixel_shader);
-		*pixelShader = it->second.Get();
-		(*pixelShader)->AddRef();
+		*pixel_shader = it->second.Get();
+		(*pixel_shader)->AddRef();
 		return S_OK;
 	}
 
 	// UNIT.02
 	FILE* fp = nullptr;
-	fopen_s(&fp, csoName, "rb");
+	fopen_s(&fp, cso_name, "rb");
 	_ASSERT_EXPR_A(fp, "CSO File not found");
 
 	fseek(fp, 0, SEEK_END);
@@ -77,10 +78,10 @@ HRESULT CreatePixelShaderFromCso(ID3D11Device* device, const char* csoName, ID3D
 	fread(cso_data.get(), cso_sz, 1, fp);
 	fclose(fp);
 
-	HRESULT hr = device->CreatePixelShader(cso_data.get(), cso_sz, nullptr, pixelShader);
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+	HRESULT hr = device->CreatePixelShader(cso_data.get(), cso_sz, nullptr, pixel_shader);
+	_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
-	cache.insert(std::make_pair(csoName, *pixelShader));
+	cache.insert(std::make_pair(cso_name, *pixel_shader));
 
 	return hr;
 }

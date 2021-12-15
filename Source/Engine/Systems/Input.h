@@ -4,6 +4,7 @@
 //		Inputクラス
 //
 //**********************************************************
+
 #include "Engine/Systems/GamePad.h"
 #include "Engine/Systems/Mouse.h"
 
@@ -14,8 +15,8 @@ class Input
 {
 private:
 	static Input* instance;
-	GamePad	  game_pad;
-	Mouse		  mouse;
+	GamePad	   game_pad;
+	Mouse		   mouse;
 
 public:
 
@@ -23,7 +24,7 @@ private:
 
 public:
 	Input(HWND hWnd);
-	~Input() {}
+	~Input() = default;
 
 	/// <summary>
 	/// インスタンス取得

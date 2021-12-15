@@ -1,12 +1,19 @@
-#include <stdio.h>
+//**********************************************************
+//
+//	ImGuiRendererクラス
+//
+//**********************************************************
+
+#include <cstdio>
 #include <memory>
+
 #include "Engine/Systems/Misc.h"
 #include "Engine/Systems/ImGuiRenderer.h"
 
 ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 	:hWnd(hWnd)
 {
-	//ImGuiコンテキストの設定
+	// ImGuiコンテキストの設定
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -14,22 +21,22 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 	//io.Fonts->AddFontDefault();
 	//io.Fonts->Build();
 
-	//ImGuiスタイルの設定
+	// ImGuiスタイルの設定
 	ImGui::StyleColorsDark();
-	//QueryPerformanceCounter(周波数)を秒に変換する。
-	::QueryPerformanceFrequency((LARGE_INTEGER*)&ticks_per_second);
-	::QueryPerformanceCounter((LARGE_INTEGER*)&time);
+	// QueryPerformanceCounter(周波数)を秒に変換する。
+	::QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&ticks_per_second));
+	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&time));
 
-	//バックエンド機能のフラグ設定
-	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         //We can honor GetMouseCursor() values (optional)
-																							  //バックエンドがOSのカーソル形状を変更するためにGetMouseCursor()の値を尊重することができる?（任意)
-	io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          //We can honor io.WantSetMousePos requests (optional, rarely used)
-																							  //バックエンドは、OSのマウス位置を再配置するためのio.WantSetMousePosリクエストを尊重することができます?ConfigFlags::NavEnableSetMousePosが設定されている場合のみ使用されます。（任意、ほとんど使用しない)
+	// バックエンド機能のフラグ設定
+	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
+																							  // バックエンドがOSのカーソル形状を変更するためにGetMouseCursor()の値を尊重することができる?（任意)
+	io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
+																							  // バックエンドは、OSのマウス位置を再配置するためのio.WantSetMousePosリクエストを尊重することができます?ConfigFlags::NavEnableSetMousePosが設定されている場合のみ使用されます。（任意、ほとんど使用しない)
 	io.BackendPlatformName = "ImGuiRenderer";
 	io.ImeWindowHandle = hWnd;
 
-	//Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
-	//キーボードのマッピング.ImGuiはこれらのインデックスを使って、アプリケーションのライフタイム中に更新されるio.KeysDown[]配列を覗きます。
+	// Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
+	// キーボードのマッピング.ImGuiはこれらのインデックスを使って、アプリケーションのライフタイム中に更新されるio.KeysDown[]配列を覗きます。
 	io.KeyMap[ImGuiKey_Tab] = VK_TAB;
 	io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
 	io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
@@ -52,36 +59,36 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 	io.KeyMap[ImGuiKey_Y] = 'Y';
 	io.KeyMap[ImGuiKey_Z] = 'Z';
 
-	//頂点シェーダー
+	// 頂点シェーダー
 	{
-		//ファイルを開く
+		// ファイルを開く
 		FILE* fp = nullptr;
 		fopen_s(&fp, "Shaders\\ImGui_vs.cso", "rb");
 		_ASSERT_EXPR_A(fp, "CSO File not found");
 
-		//ファイルのサイズを求める
+		// ファイルのサイズを求める
 		fseek(fp, 0, SEEK_END);
-		long csoSize = ftell(fp);
+		long cso_size = ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
-		//メモリ上に頂点シェーダーデータを格納する領域を用意する
-		std::unique_ptr<u_char[]> csoData = std::make_unique<u_char[]>(csoSize);
-		fread(csoData.get(), csoSize, 1, fp);
+		// メモリ上に頂点シェーダーデータを格納する領域を用意する
+		std::unique_ptr<u_char[]> cso_data = std::make_unique<u_char[]>(cso_size);
+		fread(cso_data.get(), cso_size, 1, fp);
 		fclose(fp);
 
-		//頂点シェーダー生成
-		HRESULT hr = device->CreateVertexShader(csoData.get(), csoSize, nullptr, vertex_shader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		// 頂点シェーダー生成
+		HRESULT hr = device->CreateVertexShader(cso_data.get(), cso_size, nullptr, vertex_shader.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
 		// 入力レイアウト
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
+		D3D11_INPUT_ELEMENT_DESC input_element_desc[] =
 		{
 			{"POSITION",	0,	DXGI_FORMAT_R32G32_FLOAT,	0,	D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA,	0 },
 			{"TEXCOORD",	0,	DXGI_FORMAT_R32G32_FLOAT,	0,	D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA,	0 },
 			{"COLOR",		0,	DXGI_FORMAT_R8G8B8A8_UNORM,	0,	D3D11_APPEND_ALIGNED_ELEMENT,	D3D11_INPUT_PER_VERTEX_DATA,	0 },
 		};
-		hr = device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), csoData.get(), csoSize, input_layout.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		hr = device->CreateInputLayout(input_element_desc, ARRAYSIZE(input_element_desc), cso_data.get(), cso_size, input_layout.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	//ピクセルシェーダー
@@ -91,25 +98,24 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 		fopen_s(&fp, "Shaders\\ImGui_ps.cso", "rb");
 		_ASSERT_EXPR_A(fp, "CSO File not found");
 
-		//ファイルのサイズを求める
+		// ファイルのサイズを求める
 		fseek(fp, 0, SEEK_END);
-		long csoSize = ftell(fp);
+		long cso_size = ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
-		//メモリ上に頂点シェーダーデータを格納する領域を用意する
-		std::unique_ptr<u_char[]> csoData = std::make_unique<u_char[]>(csoSize);
-		fread(csoData.get(), csoSize, 1, fp);
+		// メモリ上に頂点シェーダーデータを格納する領域を用意する
+		std::unique_ptr<u_char[]> cso_data = std::make_unique<u_char[]>(cso_size);
+		fread(cso_data.get(), cso_size, 1, fp);
 		fclose(fp);
 
-		//ピクセルシェーダー生成
-		HRESULT hr = device->CreatePixelShader(csoData.get(), csoSize, nullptr, pixel_shader.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		// ピクセルシェーダー生成
+		HRESULT hr = device->CreatePixelShader(cso_data.get(), cso_size, nullptr, pixel_shader.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//定数バッファ
+	// 定数バッファ
 	{
-		D3D11_BUFFER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_BUFFER_DESC desc = {};
 		desc.Usage = D3D11_USAGE_DEFAULT;
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		desc.CPUAccessFlags = 0;
@@ -118,13 +124,12 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 		desc.StructureByteStride = 0;
 
 		HRESULT hr = device->CreateBuffer(&desc, 0, constant_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//ブレンドステート
+	// ブレンドステート
 	{
-		D3D11_BLEND_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_BLEND_DESC desc = {};
 		desc.AlphaToCoverageEnable = false;
 		desc.IndependentBlendEnable = false;
 		desc.RenderTarget[0].BlendEnable = true;
@@ -137,25 +142,23 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 		desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		HRESULT hr = device->CreateBlendState(&desc, blend_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//深度ステンシルステート
+	// 深度ステンシルステート
 	{
-		D3D11_DEPTH_STENCIL_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_DEPTH_STENCIL_DESC desc = {};
 		desc.DepthEnable = false;
 		desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 		desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
 
 		HRESULT hr = device->CreateDepthStencilState(&desc, depth_stencil_tate.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//ラスタライザーステート
+	// ラスタライザーステート
 	{
-		D3D11_RASTERIZER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_RASTERIZER_DESC desc = {};
 		desc.FrontCounterClockwise = true;
 		desc.DepthBias = 0;
 		desc.DepthBiasClamp = 0;
@@ -168,13 +171,12 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 		desc.AntialiasedLineEnable = false;
 
 		HRESULT hr = device->CreateRasterizerState(&desc, rasterizer_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//サンプラステート
+	// サンプラステート
 	{
-		D3D11_SAMPLER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_SAMPLER_DESC desc = {};
 		desc.MipLODBias = 0.0f;
 		desc.MaxAnisotropy = 1;
 		desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
@@ -190,10 +192,10 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 		HRESULT hr = device->CreateSamplerState(&desc, sampler_state.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
-	//フォントテクスチャ
+	// フォントテクスチャ
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		unsigned char* pixels;
@@ -203,8 +205,7 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 		// テクスチャ
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
 		{
-			D3D11_TEXTURE2D_DESC desc;
-			::memset(&desc, 0, sizeof(desc));
+			D3D11_TEXTURE2D_DESC desc = {};
 			desc.Width = width;
 			desc.Height = height;
 			desc.MipLevels = 1;
@@ -215,28 +216,27 @@ ImGuiRenderer::ImGuiRenderer(HWND hWnd, ID3D11Device* device)
 			desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 			desc.CPUAccessFlags = 0;
 
-			D3D11_SUBRESOURCE_DATA subresourceData;
-			subresourceData.pSysMem = pixels;
-			subresourceData.SysMemPitch = desc.Width * 4;
-			subresourceData.SysMemSlicePitch = 0;
-			HRESULT hr = device->CreateTexture2D(&desc, &subresourceData, texture.GetAddressOf());
-			_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+			D3D11_SUBRESOURCE_DATA subresource_data;
+			subresource_data.pSysMem = pixels;
+			subresource_data.SysMemPitch = desc.Width * 4;
+			subresource_data.SysMemSlicePitch = 0;
+			HRESULT hr = device->CreateTexture2D(&desc, &subresource_data, texture.GetAddressOf());
+			_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 		}
 
-		//シェーダーリソースビュー
+		// シェーダーリソースビュー
 		{
-			D3D11_SHADER_RESOURCE_VIEW_DESC desc;
-			::memset(&desc, 0, sizeof(desc));
+			D3D11_SHADER_RESOURCE_VIEW_DESC desc = {};
 			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 			desc.Texture2D.MipLevels = 1;
 			desc.Texture2D.MostDetailedMip = 0;
 			HRESULT hr = device->CreateShaderResourceView(texture.Get(), &desc, shader_resource_view.GetAddressOf());
-			_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+			_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 		}
 
 		// テクスチャを渡す
-		io.Fonts->TexID = (ImTextureID)shader_resource_view.Get();
+		io.Fonts->TexID = static_cast<ImTextureID>(shader_resource_view.Get());
 	}
 }
 
@@ -250,16 +250,16 @@ void ImGuiRenderer::NewFrame()
 	ImGuiIO& io = ImGui::GetIO();
 	IM_ASSERT(io.Fonts->IsBuilt() && "Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().");
 
-	//表示サイズの設定（ウィンドウのサイズ変更に合わせて1フレームごとに設定)
+	// 表示サイズの設定（ウィンドウのサイズ変更に合わせて1フレームごとに設定)
 	RECT rect;
 	::GetClientRect(hWnd, &rect);
-	io.DisplaySize = ImVec2((float)(rect.right - rect.left), (float)(rect.bottom - rect.top));
+	io.DisplaySize = ImVec2(static_cast<float>(rect.right - rect.left), static_cast<float>(rect.bottom - rect.top));
 
-	//時間の設定
-	INT64 currentTime;
-	::QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
-	io.DeltaTime = (float)(currentTime - time) / ticks_per_second;
-	time = currentTime;
+	// 時間の設定
+	INT64 current_time;
+	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&current_time));
+	io.DeltaTime = static_cast<float>(current_time - time) / ticks_per_second;
+	time = current_time;
 
 	//キーボード編集の入力を読み取る
 	io.KeyCtrl = (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
@@ -267,14 +267,14 @@ void ImGuiRenderer::NewFrame()
 	io.KeyAlt = (::GetKeyState(VK_MENU) & 0x8000) != 0;
 	io.KeySuper = false;
 
-	//OSのマウスポジションの更新
+	// OSのマウスポジションの更新
 	UpdateMousePos();
 
-	//OSのマウスカーソルをimguiが要求するカーソルに更新する
-	ImGuiMouseCursor mouseCursor = io.MouseDrawCursor ? ImGuiMouseCursor_None : ImGui::GetMouseCursor();
-	if (last_mouse_cursor != mouseCursor)
+	// OSのマウスカーソルをimguiが要求するカーソルに更新する
+	ImGuiMouseCursor mouse_cursor = io.MouseDrawCursor ? ImGuiMouseCursor_None : ImGui::GetMouseCursor();
+	if (last_mouse_cursor != mouse_cursor)
 	{
-		last_mouse_cursor = mouseCursor;
+		last_mouse_cursor = mouse_cursor;
 		UpdateMouseCursor();
 	}
 
@@ -285,16 +285,15 @@ void ImGuiRenderer::Render(ID3D11DeviceContext* deviceContext)
 {
 	ImGui::Render();
 
-	ImDrawData* drawData = ImGui::GetDrawData();
+	ImDrawData* draw_data = ImGui::GetDrawData();
 
-	//頂点バッファ構築
-	if (vertex_buffer == nullptr || vertex_count < drawData->TotalVtxCount)
+	// 頂点バッファ構築
+	if (vertex_buffer == nullptr || vertex_count < draw_data->TotalVtxCount)
 	{
 		vertex_buffer.Reset();
-		vertex_count = drawData->TotalVtxCount + 5000;
+		vertex_count = draw_data->TotalVtxCount + 5000;
 
-		D3D11_BUFFER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_BUFFER_DESC desc = {};
 		desc.ByteWidth = sizeof(ImDrawVert) * vertex_count;
 		desc.Usage = D3D11_USAGE_DYNAMIC;
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -305,17 +304,16 @@ void ImGuiRenderer::Render(ID3D11DeviceContext* deviceContext)
 		Microsoft::WRL::ComPtr<ID3D11Device> device;
 		deviceContext->GetDevice(device.GetAddressOf());
 		HRESULT hr = device->CreateBuffer(&desc, nullptr, vertex_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
 
 	//インデックスバッファ
-	if (index_buffer == nullptr || index_count < drawData->TotalIdxCount)
+	if (index_buffer == nullptr || index_count < draw_data->TotalIdxCount)
 	{
 		index_buffer.Reset();
-		index_count = drawData->TotalIdxCount + 10000;
+		index_count = draw_data->TotalIdxCount + 10000;
 
-		D3D11_BUFFER_DESC desc;
-		::memset(&desc, 0, sizeof(desc));
+		D3D11_BUFFER_DESC desc = {};
 		desc.ByteWidth = sizeof(ImDrawIdx) * index_count;
 		desc.Usage = D3D11_USAGE_DYNAMIC;
 		desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -326,16 +324,16 @@ void ImGuiRenderer::Render(ID3D11DeviceContext* deviceContext)
 		Microsoft::WRL::ComPtr<ID3D11Device> device;
 		deviceContext->GetDevice(device.GetAddressOf());
 		HRESULT hr = device->CreateBuffer(&desc, nullptr, index_buffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	}
-	//定数バッファ更新
+	// 定数バッファ更新
 	{
-		ConstantBuffer data;
+		ConstantBuffer data{};
 
-		float left = drawData->DisplayPos.x;
-		float right = drawData->DisplayPos.x + drawData->DisplaySize.x;
-		float top = drawData->DisplayPos.y;
-		float bottom = drawData->DisplayPos.y + drawData->DisplaySize.y;
+		float left = draw_data->DisplayPos.x;
+		float right = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
+		float top = draw_data->DisplayPos.y;
+		float bottom = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
 		data.wvp._11 = 2.0f / (right - left);
 		data.wvp._12 = 0.0f;
 		data.wvp._13 = 0.0f;
@@ -353,27 +351,26 @@ void ImGuiRenderer::Render(ID3D11DeviceContext* deviceContext)
 		data.wvp._43 = 0.5f;
 		data.wvp._44 = 1.0f;
 
-		deviceContext->UpdateSubresource(constant_buffer.Get(), 0, 0, &data, 0, 0);
+		deviceContext->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &data, 0, 0);
 	}
 
-	//描画ステート設定
+	// 描画ステート設定
 	{
-		//Setup viewport
-		D3D11_VIEWPORT viewPort;
-		::memset(&viewPort, 0, sizeof(viewPort));
-		viewPort.Width = drawData->DisplaySize.x;
-		viewPort.Height = drawData->DisplaySize.y;
+		// ビューポートの設定
+		D3D11_VIEWPORT viewPort = {};
+		viewPort.Width = draw_data->DisplaySize.x;
+		viewPort.Height = draw_data->DisplaySize.y;
 		viewPort.MinDepth = 0.0f;
 		viewPort.MaxDepth = 1.0f;
 		viewPort.TopLeftX = viewPort.TopLeftY = 0;
 		deviceContext->RSSetViewports(1, &viewPort);
 
-		//シェーダー
+		// シェーダー
 		deviceContext->VSSetShader(vertex_shader.Get(), nullptr, 0);
 		deviceContext->PSSetShader(pixel_shader.Get(), nullptr, 0);
 		deviceContext->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
-		//頂点バッファ
+		// 頂点バッファ
 		UINT stride = sizeof(ImDrawVert);
 		UINT offset = 0;
 		deviceContext->IASetInputLayout(input_layout.Get());
@@ -381,50 +378,50 @@ void ImGuiRenderer::Render(ID3D11DeviceContext* deviceContext)
 		deviceContext->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
 		deviceContext->IASetIndexBuffer(index_buffer.Get(), sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT, 0);
 
-		//ステート
-		const float blend_factor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		// ステート
+		constexpr float blend_factor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		deviceContext->OMSetBlendState(blend_state.Get(), blend_factor, 0xFFFFFFFF);
 		deviceContext->OMSetDepthStencilState(depth_stencil_tate.Get(), 0);
 		deviceContext->RSSetState(rasterizer_state.Get());
 		deviceContext->PSSetSamplers(0, 1, sampler_state.GetAddressOf());
 	}
 
-	//頂点データ積み込み
+	// 頂点データ積み込み
 	{
-		D3D11_MAPPED_SUBRESOURCE mappedVB, mappedIB;
-		HRESULT hr = deviceContext->Map(vertex_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedVB);
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		D3D11_MAPPED_SUBRESOURCE mapped_VB, mapped_IB;
+		HRESULT hr = deviceContext->Map(vertex_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_VB);
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
-		hr = deviceContext->Map(index_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedIB);
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_Trace(hr));
+		hr = deviceContext->Map(index_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_IB);
+		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
-		ImDrawVert* dstVertex = (ImDrawVert*)mappedVB.pData;
-		ImDrawIdx* dstIndex = (ImDrawIdx*)mappedIB.pData;
-		for (int i = 0; i < drawData->CmdListsCount; i++)
+		ImDrawVert* dst_vertex = static_cast<ImDrawVert*>(mapped_VB.pData);
+		ImDrawIdx* dst_index = static_cast<ImDrawIdx*>(mapped_IB.pData);
+		for (int i = 0; i < draw_data->CmdListsCount; i++)
 		{
-			const ImDrawList* cmdList = drawData->CmdLists[i];
-			::memcpy(dstVertex, cmdList->VtxBuffer.Data, cmdList->VtxBuffer.Size * sizeof(ImDrawVert));
-			::memcpy(dstIndex, cmdList->IdxBuffer.Data, cmdList->IdxBuffer.Size * sizeof(ImDrawIdx));
+			const ImDrawList* cmd_list = draw_data->CmdLists[i];
+			::memcpy(dst_vertex, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+			::memcpy(dst_index, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
 
-			dstVertex += cmdList->VtxBuffer.Size;
-			dstIndex += cmdList->IdxBuffer.Size;
+			dst_vertex += cmd_list->VtxBuffer.Size;
+			dst_index += cmd_list->IdxBuffer.Size;
 		}
 
 		deviceContext->Unmap(vertex_buffer.Get(), 0);
 		deviceContext->Unmap(index_buffer.Get(), 0);
 	}
 
-	//描画
+	// 描画
 	{
-		int globalIdxOffset = 0;
-		int globalVtxOffset = 0;
-		ImVec2 clip_off = drawData->DisplayPos;
-		for (int i = 0; i < drawData->CmdListsCount; i++)
+		int global_idx_offset = 0;
+		int global_vtx_offset = 0;
+		ImVec2 clip_off = draw_data->DisplayPos;
+		for (int i = 0; i < draw_data->CmdListsCount; i++)
 		{
-			const ImDrawList* cmdList = drawData->CmdLists[i];
-			for (int cmd_i = 0; cmd_i < cmdList->CmdBuffer.Size; cmd_i++)
+			const ImDrawList* cmd_list = draw_data->CmdLists[i];
+			for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
 			{
-				const ImDrawCmd* pcmd = &cmdList->CmdBuffer[cmd_i];
+				const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
 				if (pcmd->UserCallback != NULL)
 				{
 					//User callback, registered via ImDrawList::AddCallback()
@@ -436,23 +433,25 @@ void ImGuiRenderer::Render(ID3D11DeviceContext* deviceContext)
 					}
 					else
 					{
-						pcmd->UserCallback(cmdList, pcmd);
+						pcmd->UserCallback(cmd_list, pcmd);
 					}
 				}
 				else
 				{
 					// Apply scissor/clipping rectangle
-					const D3D11_RECT r = { (LONG)(pcmd->ClipRect.x - clip_off.x), (LONG)(pcmd->ClipRect.y - clip_off.y), (LONG)(pcmd->ClipRect.z - clip_off.x), (LONG)(pcmd->ClipRect.w - clip_off.y) };
+					// シザー/クリッピング・レクタングルの適用
+					const D3D11_RECT r = { static_cast<LONG>(pcmd->ClipRect.x - clip_off.x), static_cast<LONG>(pcmd->ClipRect.y - clip_off.y), static_cast<LONG>(pcmd->ClipRect.z - clip_off.x), static_cast<LONG>(pcmd->ClipRect.w - clip_off.y) };
 					deviceContext->RSSetScissorRects(1, &r);
 
 					// Bind texture, Draw
-					ID3D11ShaderResourceView* srv = (ID3D11ShaderResourceView*)pcmd->TextureId;
+					// テクスチャーのバインド、ドロー
+					ID3D11ShaderResourceView* srv = static_cast<ID3D11ShaderResourceView*>(pcmd->TextureId);
 					deviceContext->PSSetShaderResources(0, 1, &srv);
-					deviceContext->DrawIndexed(pcmd->ElemCount, pcmd->IdxOffset + globalIdxOffset, pcmd->VtxOffset + globalVtxOffset);
+					deviceContext->DrawIndexed(pcmd->ElemCount, pcmd->IdxOffset + global_idx_offset, pcmd->VtxOffset + global_vtx_offset);
 				}
 			}
-			globalIdxOffset += cmdList->IdxBuffer.Size;
-			globalVtxOffset += cmdList->VtxBuffer.Size;
+			global_idx_offset += cmd_list->IdxBuffer.Size;
+			global_vtx_offset += cmd_list->VtxBuffer.Size;
 		}
 		ID3D11ShaderResourceView* nullSRV = nullptr;
 		deviceContext->PSSetShaderResources(0, 1, &nullSRV);
@@ -461,7 +460,7 @@ void ImGuiRenderer::Render(ID3D11DeviceContext* deviceContext)
 // WIN32メッセージハンドラー
 LRESULT ImGuiRenderer::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (ImGui::GetCurrentContext() == NULL)
+	if (ImGui::GetCurrentContext() == nullptr)
 	{
 		return 0;
 	}
@@ -492,7 +491,7 @@ LRESULT ImGuiRenderer::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 			button = (GET_XBUTTON_WPARAM(wParam) == XBUTTON1) ? 3 : 4;
 		}
 
-		if (!ImGui::IsAnyMouseDown() && ::GetCapture() == NULL)
+		if (!ImGui::IsAnyMouseDown() && ::GetCapture() == nullptr)
 		{
 			::SetCapture(hWnd);
 		}
@@ -529,10 +528,10 @@ LRESULT ImGuiRenderer::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 		return 0;
 	}
 	case WM_MOUSEWHEEL:
-		io.MouseWheel += (float)GET_WHEEL_DELTA_WPARAM(wParam) / (float)WHEEL_DELTA;
+		io.MouseWheel += static_cast<float>(GET_WHEEL_DELTA_WPARAM(wParam)) / static_cast<float>(WHEEL_DELTA);
 		return 0;
 	case WM_MOUSEHWHEEL:
-		io.MouseWheelH += (float)GET_WHEEL_DELTA_WPARAM(wParam) / (float)WHEEL_DELTA;
+		io.MouseWheelH += static_cast<float>(GET_WHEEL_DELTA_WPARAM(wParam)) / static_cast<float>(WHEEL_DELTA);
 		return 0;
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
@@ -546,8 +545,9 @@ LRESULT ImGuiRenderer::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 		return 0;
 	case WM_CHAR:
 		// You can also use ToAscii()+GetKeyboardState() to retrieve characters.
+		// ToAscii()+GetKeyboardState()を使って文字を取り出すこともできます。
 		if (wParam > 0 && wParam < 0x10000)
-			io.AddInputCharacterUTF16((unsigned short)wParam);
+			io.AddInputCharacterUTF16(static_cast<unsigned short>(wParam));
 		return 0;
 	case WM_SETCURSOR:
 		if (LOWORD(lParam) == HTCLIENT && UpdateMouseCursor())
@@ -563,58 +563,58 @@ bool ImGuiRenderer::UpdateMouseCursor()
 	if (io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange)
 		return false;
 
-	ImGuiMouseCursor imguiCursor = ImGui::GetMouseCursor();
-	if (imguiCursor == ImGuiMouseCursor_None || io.MouseDrawCursor)
+	ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
+	if (imgui_cursor == ImGuiMouseCursor_None || io.MouseDrawCursor)
 	{
 		//Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
 		// imgui がマウスカーソルを描画している場合や、カーソルがないことを望んでいる場合に OS のマウスカーソルを隠す
-		::SetCursor(NULL);
+		::SetCursor(nullptr);
 	}
 	else
 	{
 		//Show OS mouse cursor
-		//OSのマウスカーソルを表示する
-		LPTSTR win32Cursor = IDC_ARROW;
-		switch (imguiCursor)
+		// OSのマウスカーソルを表示する
+		LPTSTR win32_cursor = IDC_ARROW;
+		switch (imgui_cursor)
 		{
 		case ImGuiMouseCursor_Arrow:
-			win32Cursor = IDC_ARROW;
+			win32_cursor = IDC_ARROW;
 			break;
 
 		case ImGuiMouseCursor_TextInput:
-			win32Cursor = IDC_IBEAM;
+			win32_cursor = IDC_IBEAM;
 			break;
 
 		case ImGuiMouseCursor_ResizeAll:
-			win32Cursor = IDC_SIZEALL;
+			win32_cursor = IDC_SIZEALL;
 			break;
 
 		case ImGuiMouseCursor_ResizeEW:
-			win32Cursor = IDC_SIZEWE;
+			win32_cursor = IDC_SIZEWE;
 			break;
 
 		case ImGuiMouseCursor_ResizeNS:
-			win32Cursor = IDC_SIZENS;
+			win32_cursor = IDC_SIZENS;
 			break;
 
 		case ImGuiMouseCursor_ResizeNESW:
-			win32Cursor = IDC_SIZENESW;
+			win32_cursor = IDC_SIZENESW;
 			break;
 
 		case ImGuiMouseCursor_ResizeNWSE:
-			win32Cursor = IDC_SIZENWSE;
+			win32_cursor = IDC_SIZENWSE;
 			break;
 
 		case ImGuiMouseCursor_Hand:
-			win32Cursor = IDC_HAND;
+			win32_cursor = IDC_HAND;
 			break;
 
 		case ImGuiMouseCursor_NotAllowed:
-			win32Cursor = IDC_NO;
+			win32_cursor = IDC_NO;
 			break;
 		}
 
-		::SetCursor(::LoadCursor(NULL, win32Cursor));
+		::SetCursor(::LoadCursor(nullptr, win32_cursor));
 	}
 	return true;
 }
@@ -624,18 +624,20 @@ void ImGuiRenderer::UpdateMousePos()
 	ImGuiIO& io = ImGui::GetIO();
 
 	// Set OS mouse position if requested (rarely used, only when ImGuiConfigFlags_NavEnableSetMousePos is enabled by user)
+	//  要求に応じて OS のマウスの位置を設定する（ほとんど使用されません。ユーザーによって ImGuiConfigFlags_NavEnableSetMousePos が有効になっている場合のみ）。
 	if (io.WantSetMousePos)
 	{
-		POINT pos = { (int)io.MousePos.x, (int)io.MousePos.y };
+		POINT pos = { static_cast<int>(io.MousePos.x), static_cast<int>(io.MousePos.y) };
 		::ClientToScreen(hWnd, &pos);
 		::SetCursorPos(pos.x, pos.y);
 	}
 
 	// Set mouse position
+	//  マウスポジションの設定
 	io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
 	POINT pos;
 	if (HWND active_window = ::GetForegroundWindow())
 		if (active_window == hWnd || ::IsChild(active_window, hWnd))
 			if (::GetCursorPos(&pos) && ::ScreenToClient(hWnd, &pos))
-				io.MousePos = ImVec2((float)pos.x, (float)pos.y);
+				io.MousePos = ImVec2(static_cast<float>(pos.x), static_cast<float>(pos.y));
 }

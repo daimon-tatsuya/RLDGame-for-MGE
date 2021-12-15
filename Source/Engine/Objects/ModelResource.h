@@ -1,7 +1,7 @@
 #pragma once
 //**********************************************************
 //
-//		ModelResourceクラス
+//	ModelResourceクラス
 //
 //**********************************************************
 #include <string>
@@ -9,16 +9,18 @@
 #include <wrl.h>
 #include <d3d11.h>
 #include <fbxsdk.h>
-#include "Engine/Systems/Math.h"
+#include<DirectXMath.h>
+
+
 
 /// <summary>
 /// モデルの読み込み、シリアライズを行うクラス
 /// </summary>
 class ModelResource
 {
+private:
+
 public:
-	ModelResource(ID3D11Device* device, const char* filename, const char* ignoreRootMotionNodeName = nullptr);
-	~ModelResource() {}
 
 	// Node = Boneと考えていい
 	struct Node
@@ -50,7 +52,7 @@ public:
 		unsigned int		start_index = 0;
 		unsigned int		index_count = 0;
 		unsigned int		material_index = 0;
-		Material*			material = nullptr;	// モデルを読み込んだ時にマテリアルを関連ずける
+		Material* material = nullptr;	// モデルを読み込んだ時にマテリアルを関連ずける
 
 		template<class Archive>
 		void serialize(Archive& archive, int version);
@@ -59,7 +61,7 @@ public:
 	// それぞれの頂点
 	struct Vertex
 	{
-		DirectX::XMFLOAT3		position{};	// ローカル座標
+		DirectX::XMFLOAT3		position{};	    // ローカル座標
 		DirectX::XMFLOAT3		normal{};		// ローカル座標
 		DirectX::XMFLOAT2		texcoord{};		// UV coordinates
 		DirectX::XMFLOAT4		bone_weight = { 1.0f,0.0f,0.0f,0.0f };
@@ -113,37 +115,43 @@ public:
 		void serialize(Archive& archive, int version);
 	};
 
-	void AddAnimation(const char* fbxFilename);
-
-	const std::vector<Mesh>& GetMeshes() const { return meshes; }
-	const std::vector<Node>& GetNodes() const { return nodes; }
-	const std::vector<Animation>& GetAnimations() const { return animations; }
+private:
+	std::vector<Node>			nodes;
+	std::vector<Material>		materials;
+	std::vector<Mesh>			meshes;
+	std::vector<Animation>	animations;
+	int									root_motion_node_index = -1;
+	const char* ignore_root_motion_node_name;
 
 private:
-	// モデルを構築
-	void BuildModel(ID3D11Device* dev1vbnice, const char* fbxFilename);
+	/// <summary>
+	/// モデルを構築
+	/// </summary>
+	/// <param name="device"></param>
+	/// <param name="fbxFilename"></param>
+	void BuildModel(ID3D11Device* device, const char* fbx_filename);
 
-	//シリアライズされたモデル構築
+	// シリアライズされたモデル構築
 	void BuildSerializedModel(ID3D11Device* device, const char* dirname);
 
 	// ノードデータを構築
-	void BuildNodes(FbxNode* fbxNode, int parentNodeIndex);
-	void BuildNode(FbxNode* fbxNode, int parentNodeIndex);
+	void BuildNodes(FbxNode* fbx_node, int parent_node_index);
+	void BuildNode(FbxNode* fbx_node, int parent_node_index);
 
 	// メッシュデータを構築
-	void BuildMeshes(ID3D11Device* device, FbxNode* fbxNode);
-	void BuildMesh(ID3D11Device* device, FbxNode* fbxNode, FbxMesh* fbxMesh);
+	void BuildMeshes(ID3D11Device* device, FbxNode* fbx_node);
+	void BuildMesh(ID3D11Device* device, FbxNode* fbx_node, FbxMesh* fbx_mesh);
 
 	// マテリアルデータを構築
-	void BuildMaterials(ID3D11Device* device, const char* dirname, FbxScene* fbxScene);
-	void BuildMaterial(ID3D11Device* device, const char* dirname, FbxSurfaceMaterial* fbxSurfaceMaterial);
+	void BuildMaterials(ID3D11Device* device, const char* dirname, FbxScene* fbx_scene);
+	void BuildMaterial(ID3D11Device* device, const char* dirname, FbxSurfaceMaterial* fbx_surface_material);
 
 	// アニメーションデータを構築
-	void BuildAnimations(FbxScene* fbxScene);
+	void BuildAnimations(FbxScene* fbx_scene);
 
 	// インデックスの検索
 	int FindNodeIndex(const char* name);
-	int FindMaterialIndex(FbxScene* fbxScene, const FbxSurfaceMaterial* fbxSurfaceMaterial);
+	int FindMaterialIndex(FbxScene* fbx_scene, const FbxSurfaceMaterial* fbx_surface_material);
 
 	// シリアライズ
 	void Serialize(const char* filename);
@@ -153,13 +161,22 @@ private:
 
 	void Load(ID3D11Device* device, const char* filename);
 
-	// フルパス名取得
+public:
+
+	ModelResource(ID3D11Device* device, const char* filename, const char* ignore_root_motion_node_name = nullptr);
+	~ModelResource() {}
+
+	void AddAnimation(const char* fbx_filename);
+
+	//------------------------------------------------
+	//
+	// Getter Setter
+	//
+	//------------------------------------------------
+
+	const std::vector<Mesh>& GetMeshes() const { return meshes; }
+	const std::vector<Node>& GetNodes() const { return nodes; }
+	const std::vector<Animation>& GetAnimations() const { return animations; }
 	std::string GetFullPathNodeName(Node& node);
-private:
-	std::vector<Node>			nodes;
-	std::vector<Material>		materials;
-	std::vector<Mesh>			meshes;
-	std::vector<Animation>	animations;
-	int									root_motion_node_index = -1;
-	const char*						ignore_root_motion_node_name;
+
 };

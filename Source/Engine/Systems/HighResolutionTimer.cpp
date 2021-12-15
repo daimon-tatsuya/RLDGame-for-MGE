@@ -6,7 +6,7 @@
 
 #include "Engine/Systems/HighResolutionTimer.h"
 
-HighResolutionTimer::HighResolutionTimer() : delta_time(-1.0), paused_time(0), stopped(false), stop_time(0)
+HighResolutionTimer::HighResolutionTimer() : delta_time(-1.0), paused_time(0), stop_time(0), stopped(false)
 {
 	LONGLONG counts_per_sec;
 	QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&counts_per_sec));
@@ -75,9 +75,9 @@ void HighResolutionTimer::Tick()
 	last_time = this_time;
 
 	// 強制的に非負の値にする。
-	//DXSDKのCDXUTTimerでは、プロセッサがパワーセーブモードになったり、
-	//他のプロセッサにシャッフルされたりした場合、
-	//delta_timeが負の値になることがあると言及しています。
+	// DXSDKのCDXUTTimerでは、プロセッサがパワーセーブモードになったり、
+	// 他のプロセッサにシャッフルされたりした場合、
+	// delta_timeが負の値になることがあると言及しています。
 	if (delta_time < 0.0)
 	{
 		delta_time = 0.0;
@@ -95,7 +95,6 @@ float HighResolutionTimer::TimeStamp() const
 	// 停止している場合は、停止してからの経過時間をカウントしない。
 	// さらに、すでに一時停止していた場合、stop_time - base_timeには、カウントしたくない一時停止の時間が含まれます。
 	// これを修正するには、stop_timeから一時停止した時間を差し引きます。
-
 	//                     |<--paused_time-->|
 	// ----*---------------*-----------------*------------*------------*------> time
 	//  base_time       stop_time        start_time     stop_time    this_time

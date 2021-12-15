@@ -1,10 +1,8 @@
-#include <windows.h>
-#include <memory>
-#include <assert.h>
+#include <Windows.h>
 #include <tchar.h>
-#include <time.h>
 
 #include "Engine/Systems/Framework.h"
+#include"CharacterManager.h"
 
 const static LONG SCREEN_WIDTH  = 1980;
 const static LONG SCREEN_HEIGHT = 1080;
@@ -29,9 +27,9 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = instance;
 	wcex.hIcon = 0;
-	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wcex.lpszMenuName = NULL;
+	wcex.lpszMenuName = nullptr;
 	wcex.lpszClassName = _T("Alphonse");
 	wcex.hIconSm = 0;
 	RegisterClassEx(&wcex);

@@ -7,7 +7,7 @@
 // cbuffer CbMesh
 // {
 //
-//   row_major float4x4 worldViewProjection;// Offset:    0 Size:    64
+//   row_major float4x4 world_view_projection;// Offset:    0 Size:    64
 //   float4 color;                      // Offset:   64 Size:    16
 //
 // }

@@ -1,7 +1,7 @@
 #pragma once
 //**********************************************************
 //
-//		Telegramクラス
+//	Telegramクラス
 //
 //**********************************************************
 
@@ -25,7 +25,6 @@ public:
 	int receiver;		// 受けてのID
 	MESSAGE_TYPE msg;	// メッセージNumber
 
-	//コンストラクタ
-	Telegram(int sender, int receiver, MESSAGE_TYPE msg) :sender(sender), receiver(receiver), msg(msg)
+	Telegram(int sender, int receiver, const MESSAGE_TYPE msg) :sender(sender), receiver(receiver), msg(msg)
 	{}
 };

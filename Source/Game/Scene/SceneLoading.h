@@ -4,7 +4,7 @@
 //		SceneLoadingクラス
 //
 //**********************************************************
-#include "Engine/Objects//Sprite.h"
+
 #include "Engine/Systems/Scene.h"
 
 /// <summary>
@@ -13,8 +13,8 @@
 class SceneLoading : public Scene
 {
 public:
-	SceneLoading(Scene* nextScene) : next_scene(nextScene) {}
-	~SceneLoading() override {}
+	explicit SceneLoading(Scene* next_scene) : next_scene(next_scene) {}
+	~SceneLoading() override = default;
 
 	// 初期化
 	void Initialize() override;
@@ -23,18 +23,17 @@ public:
 	void Finalize() override;
 
 	// 更新処理
-	void Update(float elapsedTime) override;
+	void Update(float elapsed_time) override;
 
 	// 描画処理
 	void Render() override;
 
 private:
 	// ローディングスレッド
-	static void LoadingThread(SceneLoading* scene);
+	static void LoadingThread(const SceneLoading* scene);
 
 private:
 	Scene* next_scene = nullptr;
-	//std::unique_ptr<Sprite> sprite = nullptr;
 	// Now Loading...アニメーション用
 	float	timer = 0.0f;
 	int		counter = 0;

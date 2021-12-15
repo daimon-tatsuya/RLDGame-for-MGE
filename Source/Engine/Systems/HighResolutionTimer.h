@@ -2,11 +2,11 @@
 
 //**********************************************************
 //
-//		HighResolutionTimerクラス
+//	!	HighResolutionTimerクラス
 //
 //**********************************************************
 
-#include <windows.h>
+#include <Windows.h>
 
 
 /// <summary>

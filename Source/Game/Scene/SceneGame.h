@@ -6,11 +6,13 @@
 //**********************************************************
 #include <memory>
 #include "Engine/Systems/Scene.h"
-#include "Engine/Systems/CameraController.h"
-#include "Engine/Systems/DungeonMake.h"
-#include "Engine/AI/HeuristicSearch.h"
 
-#include"Game/Characters/Player.h"
+#include "Engine/AI/DungeonMake.h"
+
+
+//前方宣言
+class Player;
+class CameraController;
 
 /// <summary>
 /// ゲームシーン
@@ -22,22 +24,22 @@ private:
 
 public:
 
-	SceneGame();
+	SceneGame() = default;
 
-	virtual ~SceneGame();
+	~SceneGame() override;
 
 	void Initialize()override;
 
 	void Finalize() override;
 
-	void Update(float elapsedTime)override;
+	void Update(float elapsed_time)override;
 
 	void Render()override;
 
 private:
 
 public:
-	std::unique_ptr<Player>   player = nullptr;
+	std::unique_ptr<Player>   player= nullptr ;
 	std::unique_ptr<CameraController> camera_controller = nullptr;
 	RogueLikeDungeon storage_dungeon;
 
