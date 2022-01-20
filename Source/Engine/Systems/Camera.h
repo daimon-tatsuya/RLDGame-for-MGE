@@ -13,32 +13,27 @@
 class Camera
 {
 private:
-	DirectX::XMFLOAT4X4 view = // ビュー行列
-	{
-		0,0,0,0,
-		0,0,0,0,
-		0,0,0,0,
-		0,0,0,0
-	};
-	DirectX::XMFLOAT4X4 projection = // 投影行列
-	{
-		0,0,0,0,
-		0,0,0,0,
-		0,0,0,0,
-		0,0,0,0
-	};
+	DirectX::XMFLOAT4X4 view{};			// ビュー行列
+	DirectX::XMFLOAT4X4 projection{};	// 投影行列
 
-	DirectX::XMFLOAT3	eye = { 0,0,0 };		// カメラの位置
-	DirectX::XMFLOAT3	focus = { 0,0,0 };	// カメラの方向
-	DirectX::XMFLOAT3	up = { 0,0,0 };		// カメラの上方向、通常は<0.0f、1.0f、0.0f>
-	DirectX::XMFLOAT3	front = { 0,0,0 };	// カメラの前方方向
-	DirectX::XMFLOAT3	right = { 0,0,0 };	// カメラの右方向
+	DirectX::XMFLOAT3	eye{0,1,10};		// カメラの位置
+	DirectX::XMFLOAT3	focus{0,0,0};	// カメラの方向
+	DirectX::XMFLOAT3	up{0,1,0};		// カメラの上方向、通常は<0.0f、1.0f、0.0f>
+	DirectX::XMFLOAT3	front{};		// カメラの前方方向
+	DirectX::XMFLOAT3	right{};		// カメラの右方向
 
-	bool  OrthMode = false;// 正射影カメラモード
+	float width{};
+	float height{};
+	float aspect{};
+	float fovY{ DirectX::XM_PI / 6.0f };
+	float nearZ{0.1f};
+	float farZ{1000.f};
+
+	bool  OrthoMode = false;// 平行投影カメラモード
 
 private:
 
-	Camera() = default;
+	Camera();
 	~Camera() = default;
 
 public:
@@ -49,6 +44,15 @@ public:
 		static Camera camera;
 		return camera;
 	}
+
+	void ActivateCamera();
+
+
+	//------------------------------------------------
+	//
+	// Getter Setter
+	//
+	//------------------------------------------------
 
 	/// <summary>
 	/// 指定方向を向く
@@ -68,44 +72,80 @@ public:
 	void SetPerspectiveFov(float fovY, float aspect, float nearZ, float farZ);
 
 	/// <summary>
-	/// オルソの設定
+	/// オルトの設定
 	/// </summary>
 	/// <param name="width">幅</param>
 	/// <param name="height">高さ</param>
 	/// <param name="nearZ">近くのクリッピング平面までの距離(ゼロより大きく)</param>
 	/// <param name="farZ">遠いクリッピング平面までの距離(ゼロより大きく)</param>
-	void SetOrthFov(float width, float height, float nearZ, float farZ);
+	void SetOrthoFov(float width, float height, float nearZ, float farZ);
 
-	//------------------------------------------------
-	//
-	// Getter
-	//
-	//------------------------------------------------
-
-	// ビュー行列取得
+	// ビュー行列の取得
 	const DirectX::XMFLOAT4X4& GetView() const { return view; }
 
-	// プロジェクション行列取得
+	// プロジェクション行列の取得
 	const DirectX::XMFLOAT4X4& GetProjection() const { return projection; }
 
-	// 視点取得
+	// 視点の取得
 	const DirectX::XMFLOAT3& GetEye() const { return eye; }
 
-	// 注視点取得
+	// 注視点の取得
 	const DirectX::XMFLOAT3& GetFocus() const { return focus; }
 
-	// 上方向取得
+	// 上方向の取得
 	const DirectX::XMFLOAT3& GetUp() const { return up; }
 
-	// 前方向取得
+	// 前方向の取得
 	const DirectX::XMFLOAT3& GetFront() const { return front; }
 
-	// 右方向取得
+	// 右方向の取得
 	const DirectX::XMFLOAT3& GetRight() const { return right; }
 
-	// 正射影カメラモード取得
-	 bool GetOrthMode() { return OrthMode; }
 
-	// 正射影カメラモード設定
-	void SetOrthMode(bool mode) {  OrthMode= mode; }
+	//幅の設定
+	void SetWidth(const float width) { this->width = width; }
+
+	//幅の取得
+	float GetWidth() const { return  width; }
+
+	//高さの設定
+	void SetHeight(const float height) { this->height = height; }
+
+	//高さの取得
+	float GetHeight() const { return  height; }
+
+	//アスペクト比の設定
+	void SetAspect(const float width, const float height) { SetAspect(width / height); }
+	void SetAspect(const float aspect) { this->aspect = aspect; }
+
+	//アスペクト比の取得
+	float GetAspect() const { return  aspect; }
+
+	//視野の設定
+	void SetFov(const float fov) { this->fovY = fov; }
+
+	//視野の取得
+	float GetFov() const { return  fovY; }
+
+	//nearの設定
+	void SetNear(const float nearZ) { this->nearZ = nearZ; }
+
+	//nearの取得
+	float GetNear() const { return  nearZ; }
+
+	//farの設定
+	void SetFar(const float farZ) { this->farZ = farZ; }
+
+	//farの取得
+	float GetFar() const { return  farZ; }
+
+
+	// 平行投影カメラモード取得
+	 bool GetOrthMode() { return OrthoMode; }
+
+	// 平行投影カメラモード設定
+	void SetOrthMode(bool mode) {  OrthoMode= mode; }
 };
+
+
+

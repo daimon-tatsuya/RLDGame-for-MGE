@@ -4,7 +4,7 @@
 #include "Engine/Systems/Framework.h"
 #include"CharacterManager.h"
 
-const static LONG SCREEN_WIDTH  = 1980;
+const static LONG SCREEN_WIDTH  = 1920;
 const static LONG SCREEN_HEIGHT = 1080;
 
 LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -13,7 +13,7 @@ LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	return f ? f->HandleMessage(hwnd, msg, wparam, lparam) : DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
-INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line, INT cmd_show)
+INT WINAPI	wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line, INT cmd_show)
 {
 
 #if defined(DEBUG) | defined(_DEBUG)

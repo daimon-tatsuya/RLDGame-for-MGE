@@ -21,8 +21,8 @@ class Object
 private:
 
 protected:
-	DirectX::XMFLOAT3		position = { 0, 0, 0 };
-	DirectX::XMFLOAT3		angle = { 0, 0, 0 };// ƒ‰ƒWƒAƒ“Šp
+	DirectX::XMFLOAT3		position{};
+	DirectX::XMFLOAT3		angle{};// ƒ‰ƒWƒAƒ“Šp
 	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 	DirectX::XMFLOAT4X4	transform =
 	{
@@ -31,7 +31,7 @@ protected:
 		0, 0, 1, 0,
 		0, 0, 0, 1
 	};
-	DirectX::XMFLOAT3		velocity = { 0, 0, 0 };
+	DirectX::XMFLOAT3		velocity{};
 	std::shared_ptr<Model> model = nullptr;
 	int					id = 0;
 	float				radius = 0.5f;// ”¼Œa

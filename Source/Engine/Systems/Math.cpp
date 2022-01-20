@@ -159,3 +159,29 @@ bool Math::BoolianFloat(float a, float b)
 		return false;
 	}
 }
+
+DirectX::XMFLOAT3 Math::Normalize(DirectX::XMFLOAT3 v1)
+{
+	DirectX::XMFLOAT3 norm = v1;
+	if (const float len = sqrtf(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z))
+	{
+		norm.x /= len;
+		norm.y /= len;
+		norm.z /= len;
+	}
+	return norm;
+}
+
+float Math::Dot(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
+{
+	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
+}
+
+DirectX::XMFLOAT3 Math::Cross(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
+{
+	DirectX::XMFLOAT3 cross = {};
+	cross.x = v1.y * v2.z - v1.z * v2.y;
+	cross.y = v1.z * v2.x - v1.x * v2.z;
+	cross.z = v1.x * v2.y - v1.y * v2.x;
+	return cross;
+}

@@ -8,6 +8,7 @@
 #include "Engine/Systems/Collision.h"
 #include "Engine/Systems/Math.h"
 #include "Engine/Systems/StageManager.h"
+#include "Engine/Systems/CharacterManager.h"
 
 bool Character::ApplyDamage(int damage, float invincible_time)
 {
@@ -15,7 +16,7 @@ bool Character::ApplyDamage(int damage, float invincible_time)
 	if (damage == 0) return false;
 
 	// €–S‚µ‚Ä‚¢‚éê‡‚ÍŒ’Nó‘Ô‚ğ•ÏX‚µ‚È‚¢
-	if (health <= 0) return false;
+	if (current_health <= 0) return false;
 
 	// –³“GŠÔ’†‚Íƒ_ƒ[ƒW‚ğ—^‚¦‚È‚¢
 	if (invincible_timer > 0.0f) return false;
@@ -24,10 +25,10 @@ bool Character::ApplyDamage(int damage, float invincible_time)
 	invincible_timer = invincible_time;
 
 	// ƒ_ƒ[ƒWˆ—
-	health -= damage;
+	current_health -= damage;
 
 	// €–S’Ê’m
-	if (health <= 0)
+	if (current_health <= 0)
 	{
 		OnDead();
 	}
@@ -39,6 +40,12 @@ bool Character::ApplyDamage(int damage, float invincible_time)
 
 	// Œ’Nó‘Ô‚ª•ÏX‚µ‚½ê‡‚Ítrue‚ğ•Ô‚·
 	return true;
+}
+
+void Character::Destroy()
+{
+	CharacterManager& character_manager = CharacterManager::Instance();
+	character_manager.Remove(this);
 }
 
 void Character::AddImpulse(const DirectX::XMFLOAT3& impulse)

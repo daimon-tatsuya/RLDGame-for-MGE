@@ -10,6 +10,7 @@
 
 Node::Node()
 {
+	//edge配列のサイズ初期化
 	for (int i = 0; i < EDGE_NUM; i++)
 	{
 		auto o = std::make_shared<Edge>();

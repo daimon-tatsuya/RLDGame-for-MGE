@@ -40,7 +40,7 @@ public:
 		DirectX::XMFLOAT4													color = { 0.8f, 0.8f, 0.8f, 1.0f };
 
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>	shader_resource_view = nullptr;	// シリアライズの対象外
-		std::string																	texture_filename = "";		// モデルを読み込んだ時にテクスチャを作成する
+		std::string																		texture_filename = "";		// モデルを読み込んだ時にテクスチャを作成する
 
 		template<class Archive>
 		void serialize(Archive& archive, int version);
@@ -77,16 +77,21 @@ public:
 		Microsoft::WRL::ComPtr<ID3D11Buffer>	index_buffer;	// シリアライズの対象外
 
 		std::vector<Vertex>								vertices;
-		std::vector<UINT>								indices;
+		std::vector<UINT>									indices;
 		std::vector<Subset>								subsets;
-		std::string											name;
-		int														node_index;
+		std::string												name;
+		int															node_index;
 		std::vector<int>									node_indices;
 		std::vector<DirectX::XMFLOAT4X4>		inverse_transforms;
+
+		//AABB用の位置保持用変数
+		DirectX::XMFLOAT3                                position_max_value{};
+		DirectX::XMFLOAT3                                position_min_value{};
 
 		template<class Archive>
 		void serialize(Archive& archive, int version);
 	};
+
 
 	struct NodeKeyData
 	{
@@ -128,7 +133,7 @@ private:
 	/// モデルを構築
 	/// </summary>
 	/// <param name="device"></param>
-	/// <param name="fbxFilename"></param>
+	/// <param name="fbx_filename"></param>
 	void BuildModel(ID3D11Device* device, const char* fbx_filename);
 
 	// シリアライズされたモデル構築

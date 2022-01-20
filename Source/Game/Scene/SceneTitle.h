@@ -6,7 +6,7 @@
 //**********************************************************
 
 #include "Engine/Systems/Scene.h"
-
+#include "Engine/Systems/CameraController.h"
 
 /// <summary>
 /// タイトルシーン
@@ -18,9 +18,9 @@ private:
 
 public:
 
-	SceneTitle() = default;;
+	SceneTitle() = default;
 
-	~SceneTitle() override = default;;
+	~SceneTitle() override = default;
 
 	void Initialize()override;
 

@@ -29,65 +29,65 @@ CEREAL_CLASS_VERSION(ModelResource::Animation, 1)
 CEREAL_CLASS_VERSION(ModelResource, 1)
 
 // FbxDouble2 → XMFLOAT2
-inline DirectX::XMFLOAT2 FbxDouble2ToFloat2(const FbxDouble2& fbxValue)
+inline DirectX::XMFLOAT2 FbxDouble2ToFloat2(const FbxDouble2& fbx_value)
 {
 	return DirectX::XMFLOAT2(
-		static_cast<float>(fbxValue[0]),
-		static_cast<float>(fbxValue[1])
+		static_cast<float>(fbx_value[0]),
+		static_cast<float>(fbx_value[1])
 	);
 }
 
 // FbxDouble3 → XMFLOAT3
-inline DirectX::XMFLOAT3 FbxDouble3ToFloat3(const FbxDouble3& fbxValue)
+inline DirectX::XMFLOAT3 FbxDouble3ToFloat3(const FbxDouble3& fbx_value)
 {
 	return DirectX::XMFLOAT3(
-		static_cast<float>(fbxValue[0]),
-		static_cast<float>(fbxValue[1]),
-		static_cast<float>(fbxValue[2])
+		static_cast<float>(fbx_value[0]),
+		static_cast<float>(fbx_value[1]),
+		static_cast<float>(fbx_value[2])
 	);
 }
 
 // FbxDouble4 → XMFLOAT3
-inline DirectX::XMFLOAT3 FbxDouble4ToFloat3(const FbxDouble4& fbxValue)
+inline DirectX::XMFLOAT3 FbxDouble4ToFloat3(const FbxDouble4& fbx_value)
 {
 	return DirectX::XMFLOAT3(
-		static_cast<float>(fbxValue[0]),
-		static_cast<float>(fbxValue[1]),
-		static_cast<float>(fbxValue[2])
+		static_cast<float>(fbx_value[0]),
+		static_cast<float>(fbx_value[1]),
+		static_cast<float>(fbx_value[2])
 	);
 }
 
 // FbxDouble4 → XMFLOAT4
-inline DirectX::XMFLOAT4 FbxDouble4ToFloat4(const FbxDouble4& fbxValue)
+inline DirectX::XMFLOAT4 FbxDouble4ToFloat4(const FbxDouble4& fbx_value)
 {
 	return DirectX::XMFLOAT4(
-		static_cast<float>(fbxValue[0]),
-		static_cast<float>(fbxValue[1]),
-		static_cast<float>(fbxValue[2]),
-		static_cast<float>(fbxValue[3])
+		static_cast<float>(fbx_value[0]),
+		static_cast<float>(fbx_value[1]),
+		static_cast<float>(fbx_value[2]),
+		static_cast<float>(fbx_value[3])
 	);
 }
 
 // FbxDouble4 → XMFLOAT4
-inline DirectX::XMFLOAT4X4 FbxAMatrixToFloat4x4(const FbxAMatrix& fbxValue)
+inline DirectX::XMFLOAT4X4 FbxAMatrixToFloat4x4(const FbxAMatrix& fbx_value)
 {
 	return DirectX::XMFLOAT4X4(
-		static_cast<float>(fbxValue[0][0]),
-		static_cast<float>(fbxValue[0][1]),
-		static_cast<float>(fbxValue[0][2]),
-		static_cast<float>(fbxValue[0][3]),
-		static_cast<float>(fbxValue[1][0]),
-		static_cast<float>(fbxValue[1][1]),
-		static_cast<float>(fbxValue[1][2]),
-		static_cast<float>(fbxValue[1][3]),
-		static_cast<float>(fbxValue[2][0]),
-		static_cast<float>(fbxValue[2][1]),
-		static_cast<float>(fbxValue[2][2]),
-		static_cast<float>(fbxValue[2][3]),
-		static_cast<float>(fbxValue[3][0]),
-		static_cast<float>(fbxValue[3][1]),
-		static_cast<float>(fbxValue[3][2]),
-		static_cast<float>(fbxValue[3][3])
+		static_cast<float>(fbx_value[0][0]),
+		static_cast<float>(fbx_value[0][1]),
+		static_cast<float>(fbx_value[0][2]),
+		static_cast<float>(fbx_value[0][3]),
+		static_cast<float>(fbx_value[1][0]),
+		static_cast<float>(fbx_value[1][1]),
+		static_cast<float>(fbx_value[1][2]),
+		static_cast<float>(fbx_value[1][3]),
+		static_cast<float>(fbx_value[2][0]),
+		static_cast<float>(fbx_value[2][1]),
+		static_cast<float>(fbx_value[2][2]),
+		static_cast<float>(fbx_value[2][3]),
+		static_cast<float>(fbx_value[3][0]),
+		static_cast<float>(fbx_value[3][1]),
+		static_cast<float>(fbx_value[3][2]),
+		static_cast<float>(fbx_value[3][3])
 	);
 }
 template<class Archive>
@@ -171,7 +171,9 @@ void ModelResource::Mesh::serialize(Archive& archive, int version)
 		CEREAL_NVP(subsets),
 		CEREAL_NVP(node_index),
 		CEREAL_NVP(node_indices),
-		CEREAL_NVP(inverse_transforms)
+		CEREAL_NVP(inverse_transforms),
+		CEREAL_NVP(position_max_value),
+		CEREAL_NVP(position_min_value)
 	);
 }
 
@@ -644,8 +646,8 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbx_node, FbxMesh* 
 	fbx_mesh->GetUVSetNames(fbx_UV_set_names);
 
 	// 頂点データ
-	mesh.vertices.resize(static_cast<size_t>(fbx_polygon_count )* 3);
-	mesh.indices.resize(static_cast<size_t>(fbx_polygon_count )* 3);
+	mesh.vertices.resize(static_cast<size_t>(fbx_polygon_count) * 3);
+	mesh.indices.resize(static_cast<size_t>(fbx_polygon_count) * 3);
 
 	int vertex_count = 0;
 	const FbxVector4* fbx_control_points = fbx_mesh->GetControlPoints();
@@ -672,18 +674,27 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbx_node, FbxMesh* 
 				DirectX::XMVECTOR V = DirectX::XMLoadFloat3(&position);
 				V = DirectX::XMVector3TransformCoord(V, GM);
 				DirectX::XMStoreFloat3(&vertex.position, V);
+
+				//AABB用の位置を保持
+				if (mesh.position_max_value.x < position.x) { mesh.position_max_value.x = position.x; }
+				if (mesh.position_max_value.y < position.y) { mesh.position_max_value.y = position.y; }
+				if (mesh.position_max_value.z < position.z) { mesh.position_max_value.z = position.z; }
+
+				if (mesh.position_min_value.x > position.x) { mesh.position_min_value.x = position.x; }
+				if (mesh.position_min_value.y > position.y) { mesh.position_min_value.y = position.y; }
+				if (mesh.position_min_value.z > position.z) { mesh.position_min_value.z = position.z; }
 			}
 
 			// Weight
 			{
-				BoneInfluence& boneInfluence = bone_influences.at(fbx_control_point_index);
-				vertex.bone_index.x = boneInfluence.indices[0];
-				vertex.bone_index.y = boneInfluence.indices[1];
-				vertex.bone_index.z = boneInfluence.indices[2];
-				vertex.bone_index.w = boneInfluence.indices[3];
-				vertex.bone_weight.x = boneInfluence.weights[0];
-				vertex.bone_weight.y = boneInfluence.weights[1];
-				vertex.bone_weight.z = boneInfluence.weights[2];
+				BoneInfluence& bone_influence = bone_influences.at(fbx_control_point_index);
+				vertex.bone_index.x = bone_influence.indices[0];
+				vertex.bone_index.y = bone_influence.indices[1];
+				vertex.bone_index.z = bone_influence.indices[2];
+				vertex.bone_index.w = bone_influence.indices[3];
+				vertex.bone_weight.x = bone_influence.weights[0];
+				vertex.bone_weight.y = bone_influence.weights[1];
+				vertex.bone_weight.z = bone_influence.weights[2];
 				vertex.bone_weight.w = 1.0f - (vertex.bone_weight.x + vertex.bone_weight.y + vertex.bone_weight.z);
 				//vertex.boneWeight.w = boneInfluence.weights[3];
 			}
@@ -731,8 +742,8 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbx_node, FbxMesh* 
 
 	// 頂点バッファ
 	{
-		D3D11_BUFFER_DESC buffer_desc = {};
-		D3D11_SUBRESOURCE_DATA subresource_data = {};
+		D3D11_BUFFER_DESC buffer_desc{};
+		D3D11_SUBRESOURCE_DATA subresource_data{};
 
 		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(Vertex) * mesh.vertices.size());
 		//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -751,8 +762,8 @@ void ModelResource::BuildMesh(ID3D11Device* device, FbxNode* fbx_node, FbxMesh* 
 
 	// インデックスバッファ
 	{
-		D3D11_BUFFER_DESC buffer_desc = {};
-		D3D11_SUBRESOURCE_DATA subresource_data = {};
+		D3D11_BUFFER_DESC buffer_desc{};
+		D3D11_SUBRESOURCE_DATA subresource_data{};
 
 		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(u_int) * mesh.indices.size());
 		//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -853,7 +864,7 @@ void ModelResource::BuildMaterial(ID3D11Device* device, const char* dirname, Fbx
 	//
 
 	materials.emplace_back(material);
-}
+	}
 
 // アニメーションデータを構築
 void ModelResource::BuildAnimations(FbxScene* fbxScene)
@@ -890,7 +901,7 @@ void ModelResource::BuildAnimations(FbxScene* fbxScene)
 		// 抽出するデータは60フレーム基準でサンプリングする
 		FbxTime fbx_sampling_step;
 		fbx_sampling_step.SetTime(0, 0, 1, 0, 0, fbx_time_mode);
-		fbx_sampling_step = fbx_sampling_step.Get() * static_cast<FbxLongLong>(sampling_time);
+		fbx_sampling_step = fbx_sampling_step.Get() * sampling_time;// fbx_sampling_step.Get() * static_cast<FbxLongLong>(sampling_time);
 
 		int start_frame = static_cast<int>(fbx_start_time.Get() / fbx_sampling_step.Get());
 		int end_frame = static_cast<int>(fbx_end_time.Get() / fbx_sampling_step.Get());
@@ -907,7 +918,7 @@ void ModelResource::BuildAnimations(FbxScene* fbxScene)
 
 		// アニメーションデータを抽出する
 		animation.seconds_length = frame_count * sampling_time;
-		animation.keyframes.resize(static_cast<size_t>(frame_count )+ 1);
+		animation.keyframes.resize(static_cast<size_t>(frame_count) + 1);
 
 		float seconds = 0.0f;
 		Keyframe* keyframe = animation.keyframes.data();

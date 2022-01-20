@@ -22,6 +22,29 @@ struct HitResult
 	int									material_index = -1; 	// 衝突したポリゴンのマテリアル番号
 };
 
+///<summary>
+///AABBのクラス
+///</summary>
+class AxisAlignedBoundingBox
+{
+private:
+public:
+	//個オブジェクト用
+	DirectX::XMFLOAT3 position_min{};			// 最大値
+	DirectX::XMFLOAT3 position_max{};			// 最小値
+	DirectX::XMFLOAT3 object_old_position{}; //前の座標値
+	//範囲用
+	DirectX::XMFLOAT3 center{};
+	DirectX::XMFLOAT3 radius{};	// 半径
+
+private:
+public:
+	AxisAlignedBoundingBox() = default;
+	~AxisAlignedBoundingBox() = default;
+
+	AxisAlignedBoundingBox(const DirectX::XMFLOAT3 min_value, const DirectX::XMFLOAT3 max_value, DirectX::XMFLOAT3 object_pos);
+
+};
 
 /// <summary>
 /// 当たり判定クラス
@@ -70,6 +93,7 @@ public:
 	// カプセルと球の交差判定
 
 
-	// AABB
+	// AABBとAABBの交差判定
+	static bool IntersectAxisAlignedBoundingBox(const AxisAlignedBoundingBox& box1, const AxisAlignedBoundingBox& box2);
 
 };

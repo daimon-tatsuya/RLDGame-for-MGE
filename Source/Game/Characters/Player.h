@@ -8,6 +8,9 @@
 #include "Engine/Systems/Character.h"
 #include "Engine/Systems/StateMachine.h"
 
+///<summary>
+///プレイヤークラス
+///</summary>
 class Player :
 	public Character
 {
@@ -60,7 +63,7 @@ private:
 
 
 
-	StateMachine<Player::ParentState, void, const float> player_state;	// プレイヤー親ステート
+	StateMachine<ParentState, void, const float> player_state_machine;	// プレイヤー親ステート
 
 	using PlayerEntryState = StateMachine<Entry, void, const float>; // プレイヤー子ステート
 	using PlayerReactionState = StateMachine<Reaction, void, const float>; // プレイヤー子ステート
@@ -69,7 +72,7 @@ private:
 	PlayerReactionState  player_reaction_state;// HP関係の反応ステート
 	PlayerReceiveState   player_receive_state; // MetaAIからの指示待ちステート
 
-protected:
+
 
 public:
 
@@ -97,9 +100,10 @@ private:
 	/// <param name="elapsed_time">経過時間</param>
 	void ReceiveState(const float elapsed_time);
 
+
 	//子ステート
 
-	//EntryState
+	//?EntryState
 
 	/// <summary>
 	/// <para>行動選択ステート</para>
@@ -138,11 +142,10 @@ private:
 	/// <param name="elapsed_time">経過時間</param>
 	void	MenuState(const float elapsed_time);
 
-	//ReactionState
+	//?ReactionState
 
 	/// <summary>
-	/// <para>オープンメニューステート</para>
-	/// <para>操作をメニューウィンドウに移す</para>
+	/// <para>ダメージを受けた結果を判別する</para>
 	/// <para>仮置き</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
@@ -150,7 +153,6 @@ private:
 
 	/// <summary>
 	/// <para>被ダメージステート</para>
-	/// <para>操作をメニューウィンドウに移す</para>
 	/// <para>仮置き</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
@@ -164,12 +166,10 @@ private:
 	/// <param name="elapsed_time">経過時間</param>
 	void DeathState(const float elapsed_time);
 
-	//ReceiveState
+	//?ReceiveState
 
 	/// <summary>
 	/// <para>待機ステート</para>
-	/// <para></para>
-	/// <para>仮置き</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
 	void WaitState(const float elapsed_time);
@@ -182,7 +182,7 @@ private:
 	/// <param name="elapsed_time">経過時間</param>k
 	void CalledState(const float elapsed_time);
 
-protected:
+
 
 public:
 
@@ -203,7 +203,7 @@ public:
 	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)override;
 
 	// 有限ステートマシンの初期化
-	void FSMInitialize() override;
+	void FiniteStateMachineInitialize() override;
 
 	// ダメージを受けた時に呼ばれる
 	void OnDamaged() override;

@@ -7,6 +7,12 @@
 #include "Engine/Objects/ModelResource.h"
 #include "Engine/Objects/Model.h"
 
+AxisAlignedBoundingBox::AxisAlignedBoundingBox(const DirectX::XMFLOAT3 min_value, const DirectX::XMFLOAT3 max_value,DirectX::XMFLOAT3 object_pos)
+:position_min(min_value), position_max(max_value), object_old_position(object_pos)
+{
+	center = {(position_max.x - position_min.x)/2,(position_max.y - position_min.y)/2, (position_max.z - position_min.z)/2};
+}
+
 bool Collision::IntersectSphereToSphere(
 	const DirectX::XMFLOAT3& positionA,
 	float radiusA,
@@ -181,4 +187,39 @@ bool Collision::IntersectRayToModel(
 		}
 	}
 	return hit;
+}
+
+bool Collision::IntersectAxisAlignedBoundingBox(const AxisAlignedBoundingBox& box1, const AxisAlignedBoundingBox& box2)
+{
+	if (box1.position_min.x > box2.position_max.x)
+	{
+		return false;
+	}
+
+	if (box1.position_max.x < box2.position_min.x)
+	{
+		return false;
+	}
+
+	if (box1.position_min.y > box2.position_max.y)
+	{
+		return false;
+	}
+
+	if (box1.position_max.y < box2.position_min.y)
+	{
+		return false;
+	}
+
+	if (box1.position_min.z > box2.position_max.z)
+	{
+		return false;
+	}
+
+	if (box1.position_max.z < box2.position_min.z)
+	{
+		return false;
+	}
+
+	return true; // Œð·‚µ‚Ä‚¢‚é
 }

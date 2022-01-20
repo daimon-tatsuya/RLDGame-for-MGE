@@ -24,6 +24,8 @@ void SceneTitle::Initialize()
 	ID3D11Device* device = Graphics::Instance().GetDevice();
 
 	strcpy_s(message, "Title");
+
+	
 }
 
 void SceneTitle::Update(float elapsed_time)

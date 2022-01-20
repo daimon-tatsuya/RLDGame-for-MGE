@@ -22,7 +22,7 @@ public:
 
 private:
 
-	EnemyManager() {}
+	EnemyManager() = default;
 	~EnemyManager();
 
 public:

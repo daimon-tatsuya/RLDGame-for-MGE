@@ -15,9 +15,9 @@
 RogueLikeStage::RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon) : rogue_like_dungeon_imgui(rogue_like_dungeon)
 {
 
-	scale		= DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
+	scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
 	position = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
-	angle		= DirectX::XMFLOAT3(0.f, 0.f, 0.f);
+	angle = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
 	SetStageObject(rogue_like_dungeon->map_role);
 }
 
@@ -42,7 +42,7 @@ void RogueLikeStage::Update(float elapsed_time)
 	}
 }
 
-void RogueLikeStage::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
+void RogueLikeStage::Render(ID3D11DeviceContext* dc, const std::shared_ptr<Shader> shader)
 {
 	for (auto& stage : stage_chip)
 	{
@@ -74,6 +74,9 @@ void RogueLikeStage::DrawDebugGUI()
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("RogueLikeStage", nullptr, ImGuiWindowFlags_None))
 	{
+		//モデル数
+		ImGui::Text("model:%d", static_cast<int>(stage_chip.size()));
+
 		// トランスフォーム
 		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_OpenOnArrow))
 		{
@@ -89,23 +92,23 @@ void RogueLikeStage::DrawDebugGUI()
 			// スケール
 			ImGui::InputFloat3("Scale", &this->scale.x);
 		}
-		//モデル数
-		ImGui::Text("モデル数:%d", static_cast<int>(stage_chip.size()));
 
 		//プレイヤー初期位置
-		ImGui::Text("SetPlayerMapPosition	:%f %f",
-			rogue_like_dungeon_imgui->mobs[0].position.x, rogue_like_dungeon_imgui->mobs[0].position.y);
+		if (ImGui::CollapsingHeader("Player_info", ImGuiTreeNodeFlags_OpenOnArrow))
+		{
+			ImGui::Text("SetPlayerMapPosition	:%f %f",
+				rogue_like_dungeon_imgui->mobs[0].position.x, rogue_like_dungeon_imgui->mobs[0].position.y);
 
-		const float player_first_position_x = rogue_like_dungeon_imgui->mobs[0].position.x * 2.f;
-		const float player_first_position_y = rogue_like_dungeon_imgui->mobs[0].position.y * 2.f;
+			const float player_first_position_x = rogue_like_dungeon_imgui->mobs[0].position.x * 2.f;
+			const float player_first_position_y = rogue_like_dungeon_imgui->mobs[0].position.y * 2.f;
 
-		ImGui::Text("PlayerFirstPosition:%f %f", player_first_position_x, player_first_position_y);
-		ImGui::Text("PlayerPointAttribute:%d",
-			rogue_like_dungeon_imgui->map_role
+			ImGui::Text("PlayerFirstPosition:%f %f", player_first_position_x, player_first_position_y);
+			ImGui::Text("PlayerPointAttribute:%zu",
+				rogue_like_dungeon_imgui->map_role
 				[static_cast<size_t>(rogue_like_dungeon_imgui->mobs[0].position.y)]
-				[static_cast<size_t>(rogue_like_dungeon_imgui->mobs[0].position.x)]
-				.map_data);
-
+			[static_cast<size_t>(rogue_like_dungeon_imgui->mobs[0].position.x)]
+			.map_data);
+		}
 	}
 	ImGui::End();
 }
@@ -117,12 +120,12 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 
 	int object_num = 0;
 	//オブジェクト配置
-	for (int y = 0; y < MapSize_Y; y++)
+	for (int y = 0; y < MapSize_Y - 1; y++)
 	{
-		for (int x = 0; x < MapSize_X; x++)
+		for (int x = 0; x < MapSize_X - 1; x++)
 		{
 			//壁
-			if (map_role[y][x].map_data == static_cast<size_t>(RogueLikeMap::Attribute::Wall))
+			if (map_role[y][x].map_data == static_cast<size_t>(Attribute::Wall))
 			{
 				float pos_x = static_cast<float>(x * CellSize);
 				float pos_z = static_cast<float> (y * CellSize);
@@ -130,15 +133,16 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 				Stage st("Assets/FBX/geometry/wall.bin", pos, object_num);
 				stage_chip.emplace_back(st);
 			}
-			//その他
-			else if (map_role[y][x].map_data > static_cast<size_t>(RogueLikeMap::Attribute::Wall))
+			//部屋
+			else if (map_role[y][x].map_data >= static_cast<size_t>(Attribute::Room))
 			{
 				float pos_x = static_cast<float>(x * CellSize);
 				float pos_z = static_cast<float> (y * CellSize);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				Stage st("Assets/FBX/geometry/floor.bin",pos, object_num);
+				Stage st("Assets/FBX/geometry/floor.bin", pos, object_num);
 				stage_chip.emplace_back(st);
 			}
+
 			object_num++;
 		}
 	}

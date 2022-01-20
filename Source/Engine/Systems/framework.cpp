@@ -20,7 +20,7 @@
 #include "Game/Scene/SceneLoading.h"
 #include "Game/Scene/SceneTitle.h"
 
-// ‚’¼“¯ŠúŠÔŠuİ’è
+// ‚’¼“¯ŠúŠÔŠuİ’è //1‚ÌƒtƒŒ[ƒ€‚ğŒÅ’è
 static const int syncInterval = 1;
 
 Framework::Framework(HWND hwnd)

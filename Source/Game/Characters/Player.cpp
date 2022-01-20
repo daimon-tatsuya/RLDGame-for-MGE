@@ -4,6 +4,7 @@
 //
 //**********************************************************
 
+
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Shader.h"
@@ -22,23 +23,24 @@ const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
 Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 {
 	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
+	//model = std::make_shared<Model>("Assets/FBX/Animals/Rattlesnake.bin");
 	scale.x = scale.y = scale.z = 1.f;
 	position.y = 0.f;
 
 	// 初期ステート
-	Player::FSMInitialize();
+	Player::FiniteStateMachineInitialize();
 
 	stage_information = rogue_like_dungeon;
 
 	// オブジェクト配置
-	for (int y = 0; y < MapSize_Y; y++)
+	for (int y = 0; y < MapSize_Y-1; y++)
 	{
-		for (int x = 0; x < MapSize_X; x++)
+		for (int x = 0; x < MapSize_X-1; x++)
 		{
-			if (stage_information->map_role[y][x].map_data == static_cast<size_t>(RogueLikeMap::Attribute::Player))
+			if (stage_information->map_role[y][x].map_data == static_cast<size_t>(Attribute::Player))
 			{
-				float pos_x = static_cast<float>(x * CellSize);
-				float pos_z = static_cast<float> (y * CellSize);
+				const float pos_x = static_cast<float>(x * CellSize);
+				const float pos_z = static_cast<float> (y * CellSize);
 
 				position = DirectX::XMFLOAT3(pos_x, 0, pos_z);
 			}
@@ -54,7 +56,8 @@ void Player::Update(const float elapsed_time)
 {
 	position.y = 0.f;
 
-	player_state.Update(elapsed_time);
+	player_state_machine.Update(elapsed_time);
+
 	{
 		//--追加---------------------------------------
 		// AABB
@@ -81,23 +84,23 @@ void Player::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
 	shader->Draw(dc, model.get());
 }
 
-void Player::FSMInitialize()
+void Player::FiniteStateMachineInitialize()
 {
 
 	//親ステートの追加
-	player_state.AddState
+	player_state_machine.AddState
 	(
 		 ParentState::Entry,
 		[this](const float elapsed_time) { EntryState(elapsed_time); }
 	);
 
-	player_state.AddState
+	player_state_machine.AddState
 	(
 		 ParentState::Reaction,
 		[this](const float elapsed_time) { ReactionState(elapsed_time); }
 	);
 
-	player_state.AddState
+	player_state_machine.AddState
 	(
 		 ParentState::Receive,
 		[this](const float elapsed_time) { ReceiveState(elapsed_time); }
@@ -172,7 +175,7 @@ void Player::FSMInitialize()
 	);
 
 	// 各初期ステートの設定
-	player_state.SetState( ParentState::Entry);
+	player_state_machine.SetState( ParentState::Entry);
 
 	player_entry_state.SetState( Entry::Select);
 	player_reaction_state.SetState( Reaction::ReactionSelect);
@@ -188,7 +191,7 @@ bool Player::OnMessage(const Telegram& telegram)
 	{
 	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
 
-		player_state.SetState(ParentState::Entry);
+		player_state_machine.SetState(ParentState::Entry);
 
 		return true;
 	}
@@ -256,15 +259,17 @@ void Player::DrawDebugGUI()
 		}
 		ImGui::Text("GamePadAxisOnStep: x:%f y:%f", ax, ay);
 		// 周囲のマップ情報
-		DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
-		size_t up_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
-		size_t down_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
-		size_t right_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
-		size_t left_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
-		ImGui::Text("OmniMapData");
-		ImGui::Text("  l          up:%d", up_data);
-		ImGui::Text("  left:%d          right:%d ", left_data, right_data);
-		ImGui::Text("           down:%d", down_data);
+		const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
+		const size_t up_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
+		const size_t down_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
+		const size_t right_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
+		const size_t left_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
+
+		ImGui::Text("OmniDirMapData");
+		ImGui::Text("            up:%zu", up_data);
+		ImGui::Text("  left:%zu          right:%zu ", left_data, right_data);
+		ImGui::Text("           down:%zu", down_data);
+
 	}
 	ImGui::End();
 }
@@ -286,9 +291,10 @@ void Player::DrawDebugPrimitive()
 //---------------------
 // 親ステート
 //---------------------
+
 void Player::EntryState(const float elapsed_time)
 {
-	if (player_state.IsStateFirstTime())
+	if (player_state_machine.IsStateFirstTime())
 	{
 		// 子ステートのの初期化
 		if (player_entry_state.GetState() != static_cast<int>( Entry::Select))
@@ -303,7 +309,7 @@ void Player::EntryState(const float elapsed_time)
 
 void Player::ReactionState(const float elapsed_time)
 {
-	if (player_state.IsStateFirstTime())
+	if (player_state_machine.IsStateFirstTime())
 	{
 		// 子ステートのの初期化
 		if (player_reaction_state.GetState() != static_cast<int>( Reaction::ReactionSelect))
@@ -321,7 +327,7 @@ void Player::ReactionState(const float elapsed_time)
 
 void Player::ReceiveState(const float elapsed_time)
 {
-	if (player_state.IsStateFirstTime())
+	if (player_state_machine.IsStateFirstTime())
 	{
 		// 子ステートのの初期化
 		if (player_receive_state.GetState() != static_cast<int>( Receive::Wait))
@@ -558,9 +564,9 @@ void	Player::MoveState(const float elapsed_time)
 		//壁か敵でないなら
 		//ななめの移動なので上下左右の位置も確認する
 		if (
-			(map_data_diagonal == 1 || map_data_diagonal == 4 || map_data_diagonal == 5) &&
-			(map_data_horizon == 1 || map_data_horizon == 4 || map_data_horizon == 5) &&
-			(map_data_vertical == 1 || map_data_vertical == 4 || map_data_vertical == 5)
+			(map_data_diagonal == static_cast<size_t>(Attribute::Road) || map_data_diagonal == static_cast<size_t>(Attribute::Room)) &&
+			(map_data_horizon == static_cast<size_t>(Attribute::Road) || map_data_horizon == static_cast<size_t>(Attribute::Room)) &&
+			(map_data_vertical == static_cast<size_t>(Attribute::Road) || map_data_vertical == static_cast<size_t>(Attribute::Room))
 			)
 		{
 			AddPositionZ(CellSize);
@@ -583,9 +589,9 @@ void	Player::MoveState(const float elapsed_time)
 		//壁か敵でないなら
 		//ななめの移動なので上下左右の位置も確認する
 		if (
-			(map_data_diagonal == 1 || map_data_diagonal == 4 || map_data_diagonal == 5) &&
-			(map_data_horizon == 1 || map_data_horizon == 4 || map_data_horizon == 5) &&
-			(map_data_vertical == 1 || map_data_vertical == 4 || map_data_vertical == 5)
+			(map_data_diagonal == static_cast<size_t>(Attribute::Road) || map_data_diagonal == static_cast<size_t>(Attribute::Room)) &&
+			(map_data_horizon == static_cast<size_t>(Attribute::Road) || map_data_horizon == static_cast<size_t>(Attribute::Room)) &&
+			(map_data_vertical == static_cast<size_t>(Attribute::Road) || map_data_vertical == static_cast<size_t>(Attribute::Room))
 			)
 		{
 			AddPositionZ(CellSize);
@@ -608,9 +614,9 @@ void	Player::MoveState(const float elapsed_time)
 		//壁か敵でないなら
 		//ななめの移動なので上下左右の位置も確認する
 		if (
-			(map_data_diagonal == 1 || map_data_diagonal == 4 || map_data_diagonal == 5) &&
-			(map_data_horizon == 1 || map_data_horizon == 4 || map_data_horizon == 5) &&
-			(map_data_vertical == 1 || map_data_vertical == 4 || map_data_vertical == 5)
+			(map_data_diagonal == static_cast<size_t>(Attribute::Road) || map_data_diagonal == static_cast<size_t>(Attribute::Room)) &&
+			(map_data_horizon == static_cast<size_t>(Attribute::Road) || map_data_horizon == static_cast<size_t>(Attribute::Room)) &&
+			(map_data_vertical == static_cast<size_t>(Attribute::Road) || map_data_vertical == static_cast<size_t>(Attribute::Room))
 			)
 		{
 			AddPositionZ(-CellSize);
@@ -633,9 +639,9 @@ void	Player::MoveState(const float elapsed_time)
 		//壁か敵でないなら
 		//ななめの移動なので上下左右の位置も確認する
 		if (
-			(map_data_diagonal == 1 || map_data_diagonal == 4 || map_data_diagonal == 5) &&
-			(map_data_horizon == 1 || map_data_horizon == 4 || map_data_horizon == 5) &&
-			(map_data_vertical == 1 || map_data_vertical == 4 || map_data_vertical == 5)
+			(map_data_diagonal == static_cast<size_t>(Attribute::Road) || map_data_diagonal == static_cast<size_t>(Attribute::Room)) &&
+			(map_data_horizon == static_cast<size_t>(Attribute::Road) || map_data_horizon == static_cast<size_t>(Attribute::Room)) &&
+			(map_data_vertical == static_cast<size_t>(Attribute::Road) || map_data_vertical == static_cast<size_t>(Attribute::Room))
 			)
 		{
 			AddPositionZ(-CellSize);
@@ -650,7 +656,7 @@ void	Player::MoveState(const float elapsed_time)
 		size_t map_data = GetStageInformation()->
 			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
 		//壁か敵でないなら
-		if (map_data == 1 || map_data == 4 || map_data == 5)
+		if (map_data == static_cast<size_t>(Attribute::Road) || map_data == static_cast<size_t>(Attribute::Room))
 		{
 			AddPositionZ(CellSize);
 		}
@@ -662,7 +668,7 @@ void	Player::MoveState(const float elapsed_time)
 		size_t map_data = GetStageInformation()->
 			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
 		//壁か敵でないなら
-		if (map_data == 1 || map_data == 4 || map_data == 5)
+		if (map_data == static_cast<size_t>(Attribute::Road) || map_data == static_cast<size_t>(Attribute::Room))
 		{
 			AddPositionZ(-CellSize);
 		}
@@ -674,7 +680,7 @@ void	Player::MoveState(const float elapsed_time)
 		size_t map_data = GetStageInformation()->
 			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
 	//壁か敵でないなら
-		if (map_data == 1 || map_data == 4 || map_data == 5)
+		if (map_data == static_cast<size_t>(Attribute::Road) || map_data == static_cast<size_t>(Attribute::Room))
 		{
 			AddPositionX(CellSize);
 		}
@@ -687,7 +693,7 @@ void	Player::MoveState(const float elapsed_time)
 		size_t map_data = GetStageInformation()->
 			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
 		//壁か敵でないなら
-		if (map_data == 1 || map_data == 4 || map_data == 5)
+		if (map_data == static_cast<size_t>(Attribute::Road) || map_data == static_cast<size_t>(Attribute::Room))
 		{
 			AddPositionX(-CellSize);
 		}
@@ -704,7 +710,7 @@ void Player::ReactionSelectState(const float elapsed_time)
 {
 	if (player_reaction_state.IsStateFirstTime())
 	{
-		if (health > 0)
+		if (current_health > 0)
 		{
 			player_reaction_state.SetState( Reaction::Damaged);
 		}

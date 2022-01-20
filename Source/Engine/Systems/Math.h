@@ -124,4 +124,25 @@ public:
 	/// <param name="b"></param>
 	/// <returns>a≒b</returns>
 	static bool BoolianFloat(float a, float b);
+
+	/// <summary>
+	/// 正規化
+	/// </summary>
+	/// <param name="v1">	正規化するベクトル</param>
+	/// <returns>a≒b</returns>
+	static DirectX::XMFLOAT3 Normalize(DirectX::XMFLOAT3 v1);
+
+	/// <summary>
+	/// 内積
+	/// </summary>
+	/// <param name="v1">	内積するベクトル</param>
+	/// <param name="v2">	内積するベクトル</param>
+	static float Dot(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
+
+	/// <summary>
+	/// 外積
+	/// </summary>
+	/// <param name="v1">	内積するベクトル</param>
+	/// <param name="v2">	内積するベクトル</param>
+	static   DirectX::XMFLOAT3 Cross(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
 };

@@ -22,22 +22,19 @@ class Character : public Object
 private:
 
 public:
-
-protected:
-
-	int	 health = 5;
-
+	int	 current_health = 5;//名前を変えるかも health→life,HP
 	int	 max_health = 5;
 
 	RogueLikeDungeon* stage_information = nullptr; // マップ情報　(値をコピーした実体にするか検討中)
 
-	std::vector<int> shortest_path;//最短経路
+	std::vector<int> shortest_path{};//最短経路
+	size_t path_index{};//最短経路の配列のindex番号
 private:
 
 	/// <summary>
 	/// 有限ステートマシンの初期化
 	/// </summary>
-	virtual void FSMInitialize() {}
+	virtual void FiniteStateMachineInitialize() {}
 
 	/// <summary>
 	/// 垂直速力更新処理
@@ -75,8 +72,6 @@ private:
 	/// <param name="elapsed_time">経過時間</param>
 	void UpdateInvincibleTimer(float elapsed_time);
 
-protected:
-
 public:
 
 	Character() = default;
@@ -105,6 +100,11 @@ public:
 	/// <param name="damage">hpへ減算する量</param>
 	/// <param name="invincible_time">無敵時間</param>
 	bool ApplyDamage(int damage, float invincible_time);
+
+	/// <summary>
+	/// 破棄
+	/// </summary>
+	virtual  void Destroy();
 
 	/// <summary>
 	/// ジャンプ処理
@@ -151,10 +151,10 @@ public:
 	//------------------------------------------------
 
 	// 健康状態を取得
-	int GetHealth() const { return health; }
+	int GetHealth() const { return current_health; }
 
 	// 健康状態を設定
-	void SetHealth(const int health) { this->health = health; }
+	void SetHealth(const int health) { this->current_health = health; }
 
 	// 地面に接地しているか
 	bool IsGround() const { return is_ground; }
@@ -165,10 +165,12 @@ public:
 	//プレイヤーが移動できるかチェックする
 	void MoveCheck(float mx, float mz);
 
-	// 最大健康状態を取得
+	// 最大健康状態を設定
 	void SetMaxHealth() { this->max_health = max_health; }
 
 	// マップ情報を取得
 	RogueLikeDungeon* GetStageInformation() const { return stage_information; }
 
+	//最短経路を設定
+	void SetShortestPath(std::vector<int> path) { shortest_path = path; }
 };
