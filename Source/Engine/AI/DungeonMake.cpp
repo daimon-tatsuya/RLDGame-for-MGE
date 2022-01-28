@@ -11,6 +11,7 @@
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine//Systems/Character.h"
+#include "Engine/Systems/ImGuiRenderer.h"
 
 RogueLikeDungeon::RogueLikeDungeon()
 {
@@ -34,9 +35,9 @@ void RogueLikeDungeon::UpdateMapRolePlayer()
 {
 	//更新前のプレイヤーのデータの書き換え
 	//オブジェクト配置
-	for (int y = 0; y < MapSize_Y - 1; y++)
+	for (int y = 0; y < MapSize_Y; y++)
 	{
-		for (int x = 0; x < MapSize_X - 1; x++)
+		for (int x = 0; x < MapSize_X; x++)
 		{
 			//属性がプレイヤーなら
 			if (map_role[y][x].map_data == static_cast<size_t>(Attribute::Player))
@@ -48,11 +49,11 @@ void RogueLikeDungeon::UpdateMapRolePlayer()
 				}
 				//\足元にアイテムか罠があったら4,5
 				//床に書き換え
-				if (map_role[y][x].road_or_room == false)//床の属性が通路
+				if (map_role[y][x].is_this_room_flag == false)//床の属性が通路
 				{
 					map_role[y][x].map_data = static_cast<size_t>(Attribute::Road);
 				}
-				else if (map_role[y][x].road_or_room == true)//床の属性が部屋
+				else if (map_role[y][x].is_this_room_flag == true)//床の属性が部屋
 				{
 					map_role[y][x].map_data = static_cast<size_t>(Attribute::Room);
 				}
@@ -78,9 +79,9 @@ void RogueLikeDungeon::UpdateMapRoleEnemis()
 	//ToDo 以下の{}を関数化または、UpdateMapRolePlayer()とまとめる
 	//? {
 	//一度上書き
-	for (int y = 0; y < MapSize_Y - 1; y++)
+	for (int y = 0; y < MapSize_Y; y++)
 	{
-		for (int x = 0; x < MapSize_X - 1; x++)
+		for (int x = 0; x < MapSize_X; x++)
 		{
 			//壁なら無視(今後、壁を無視する敵が移動が追加されるなら変更する)
 			if (map_role[y][x].map_data == static_cast<size_t>(Attribute::Wall))
@@ -90,11 +91,11 @@ void RogueLikeDungeon::UpdateMapRoleEnemis()
 			//\足元にアイテムか罠があったら4,5
 			//床に書き換え
 
-			if (map_role[y][x].road_or_room == false)//床の属性が通路
+			if (map_role[y][x].is_this_room_flag == false)//床の属性が通路
 			{
 				map_role[y][x].map_data = static_cast<size_t>(Attribute::Road);
 			}
-			else if (map_role[y][x].road_or_room == true)//床の属性が部屋
+			else if (map_role[y][x].is_this_room_flag == true)//床の属性が部屋
 			{
 				map_role[y][x].map_data = static_cast<size_t>(Attribute::Room);
 			}
@@ -137,18 +138,59 @@ void RogueLikeDungeon::MapClear()
 	map_role.clear();
 }
 
-//void RogueLikeDungeon::MapReMake(DungeonMapRole* dungeon_map_role)
 void RogueLikeDungeon::MapReMake()
 {
 	//	解放
 	MapClear();
+
 	//サイズの再設定
 	InitializeMapSize();
+
 	//ダンジョン生成
 	DungeonMake();
+
 }
 
-//bool RogueLikeDungeon::MobMake(DungeonMapRole* const dungeon_map_role, const int id)
+void RogueLikeDungeon::DrawDebugGUI()
+{
+	ImGui::SetNextWindowPos(ImVec2(0, 350), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(300, 350), ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("MapInformation ", nullptr, ImGuiWindowFlags_None))
+	{
+		ImGui::Text("MapSize:%d \nMapSize_Y:%d MapSize_X:%d", MapSize,MapSize_Y,MapSize_X);
+		ImGui::Text("MapRoomCount:%d", static_cast<int>(dungeon_map_role.map_room_count));//部屋の数
+		ImGui::Text("MapDivisionCount:%d", static_cast<int>(dungeon_map_role.map_division_count));//部屋を作るために分割した数(部屋の数と一致しない場合通路がねじれている)
+
+		if (ImGui::CollapsingHeader("AttributeInfo", ImGuiTreeNodeFlags_OpenOnArrow))
+		{
+			ImGui::Text("Wall:0");
+			ImGui::Text("Floor:1");
+			ImGui::Text("Room:2");
+			ImGui::Text("Road:3");
+			ImGui::Text("Player:4");
+			ImGui::Text("Enemy:5");
+			ImGui::Text("Exit:6");
+			/*Attribute
+			Wall = 0,// 0:壁
+			Floor,    // 1:床
+			Room,	// 2:部屋
+			Road,	// 3:道
+			Player,   // 4:プレイヤー
+			Enemy,  // 5:敵
+			Exit,		// 6:階段
+			// 6 : アイテム
+			// 7 : 罠
+			// 8 : アイテムの上のプレイヤー
+			// 9 : アイテムの上の敵
+			// 10 : 地形の上のプレイヤー
+			// 11 :  地形の上の敵*/
+		}
+
+
+	}
+	ImGui::End();
+}
+
 bool RogueLikeDungeon::MobMake(const int id)
 {
 	//Mobを設置する
@@ -209,8 +251,6 @@ bool RogueLikeDungeon::MobMake(const int id)
 }
 
 
-
-//bool RogueLikeDungeon::MapMake(DungeonMapRole* const dungeon_map_role/*, std::vector<std::vector<RogueLikeMap>>& map_role*/)
 bool RogueLikeDungeon::MapMake()
 {
 	if (map_role.empty() || map_role.front().empty())
@@ -224,10 +264,11 @@ bool RogueLikeDungeon::MapMake()
 		for (auto& j : i)
 		{
 			j.map_data = static_cast<size_t>(Attribute::Wall);
-			j.road_or_room = false;
+			j.is_this_room_flag = false;
+			j.road_entrance_flag = false;
 		}
 	}
-	//マップの区分け数 (部屋の個数) n-1個部屋ができる
+	//マップの区分け数
 	dungeon_map_role.map_division_count = dungeon_map_role.division_count_min +
 		static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.division_count_rand + ONE)));
 
@@ -390,7 +431,7 @@ bool RogueLikeDungeon::MapMake()
 			for (size_t k = dungeon_map_role.map_room[i][3]; k < dungeon_map_role.map_room[i][1]; k++)
 			{
 				map_role[j][k].map_data = static_cast<size_t>(Attribute::Room);
-				map_role[j][k].road_or_room = true;
+				map_role[j][k].is_this_room_flag = true;
 				dungeon_map_role.map_room_area[i]++;
 			}
 		}
@@ -409,75 +450,125 @@ bool RogueLikeDungeon::MapMake()
 	まず、前の通路を作り、次に後の通路を作る。
 	最後に前と後の通路を繋げる。
 	*/
+	//前は道を延ばす部屋
+	//後は道が繋がる部屋
 
 	size_t room_after{};
 	for (size_t room_before = 0; room_before < dungeon_map_role.map_division_count; room_before++)
 	{
 		room_after = dungeon_map_role.map_road[room_before][0];/*繋がる先の部屋ID*/
 
+		bool only_once_flag = false;//for文中、一度だけ行う作業のためのフラグ
+
 		//Y座標の通路
 		switch (dungeon_map_role.map_road[room_before][1]/*0:Y座標 , 1:X座標*/)
 		{
 			case static_cast<size_t>(Road::Axis_Y) :
+
 				//前側の通路の位置
 				dungeon_map_role.map_road[room_before][2] = static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[room_before][1] - dungeon_map_role.map_room[room_before][3] - 2)));
 				//後側の通路の位置
 				dungeon_map_role.map_road[room_before][3] = static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[room_after][1] - dungeon_map_role.map_room[room_after][3] - 2)));
 
-				//前の通路
+				//前の通路を分割線まで伸ばす
 				for (size_t j = dungeon_map_role.map_room[room_before][0]; j < dungeon_map_role.map_division[room_before][0]; j++)
 				{
+
+					//通路の入り口を保存
+					if (only_once_flag == false)
+					{
+						map_role[j][dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]].road_entrance_flag = true;
+						only_once_flag = true;
+					}
+
+					size_t a = dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3];
 					map_role[j][dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]].map_data = static_cast<size_t>(Attribute::Road); //通路の属性に設定
-					map_role[j][dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]].road_or_room = false;//このデータは通路
+					map_role[j][dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]].is_this_room_flag = false;//このデータは通路
 				}
-				//後の通路
+
+				only_once_flag = false;
+
+				//後の通路を分割線まで伸ばす
 				for (size_t j = dungeon_map_role.map_division[room_after][2]; j < dungeon_map_role.map_room[room_after][2]; j++)
 				{
+					//通路の入り口を保存
+					if (only_once_flag == false)
+					{
+						map_role[j][dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]].road_entrance_flag = true;
+						only_once_flag = true;
+					}
+
 					map_role[j][dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][3]].map_data = static_cast<size_t>(Attribute::Road); //通路の属性に設定
-					map_role[j][dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][3]].road_or_room = false;//このデータは通路
+					map_role[j][dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][3]].is_this_room_flag = false;//このデータは通路
 				}
-				//通路をつなぐ
+
+				only_once_flag = false;
+
+				//通路をつなぐ(分割線上に伸ばす)
 				for (size_t j = dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]; j <= dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][3]; j++)
 				{
 					map_role[dungeon_map_role.map_division[room_before][0]][j].map_data = static_cast<size_t>(Attribute::Road); //通路の属性に設定 2から5(上から下)
-					map_role[dungeon_map_role.map_division[room_before][0]][j].road_or_room = false;//このデータは通路
+					map_role[dungeon_map_role.map_division[room_before][0]][j].is_this_room_flag = false;//このデータは通路
 				}
+
 				for (size_t j = dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][3]; j <= dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]; j++)
 				{
 					map_role[dungeon_map_role.map_division[room_before][0]][j].map_data = static_cast<size_t>(Attribute::Road); //通路の属性に設定 5から2(下から上)
-					map_role[dungeon_map_role.map_division[room_before][0]][j].road_or_room = false;//このデータは通路
+					map_role[dungeon_map_role.map_division[room_before][0]][j].is_this_room_flag = false;//このデータは通路
 				}
 				break;
 
 				case static_cast<size_t>(Road::Axis_X) :
+
 					//前側の通路の位置
 					dungeon_map_role.map_road[room_before][2] = static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[room_before][0] - dungeon_map_role.map_room[room_before][2] - ONE)));
+
 					//後側の通路の位置
 					dungeon_map_role.map_road[room_before][3] = static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[room_after][0] - dungeon_map_role.map_room[room_after][2] - ONE)));
-					//前の通路
+
+					//前の通路を分割線まで伸ばす
 					for (size_t j = dungeon_map_role.map_room[room_before][1]; j < dungeon_map_role.map_division[room_before][1]; j++)
 					{
+						//通路の入り口を保存
+						if (only_once_flag == false)
+						{
+							map_role[j][dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]].road_entrance_flag = true;
+							only_once_flag = true;
+						}
+
 						map_role[dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][2]][j].map_data = static_cast<size_t>(Attribute::Road); //通路の属性に設定
-						map_role[dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][2]][j].road_or_room = false;//このデータは通路
+						map_role[dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][2]][j].is_this_room_flag = false;//このデータは通路
 					}
-					//後の通路
+
+					only_once_flag = false;
+
+					//後の通路を分割線まで伸ばす
 					for (size_t j = dungeon_map_role.map_division[room_after][3]; j < dungeon_map_role.map_room[room_after][3]; j++)
 					{
+						//通路の入り口を保存
+						if (only_once_flag == false)
+						{
+							map_role[j][dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][3]].road_entrance_flag = true;
+							only_once_flag = true;
+						}
+
 						map_role[dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][2]][j].map_data = static_cast<size_t>(Attribute::Road); //通路の属性に設定
-						map_role[dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][2]][j].road_or_room = false;//このデータは通路
+						map_role[dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][2]][j].is_this_room_flag = false;//このデータは通路
 					}
+
 					//通路をつなぐ
 					for (size_t j = dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][2]; j <= dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][2]; j++)
 					{
 						map_role[j][dungeon_map_role.map_division[room_before][1]].map_data = static_cast<size_t>(Attribute::Road); //通路の属性に設定
-						map_role[j][dungeon_map_role.map_division[room_before][1]].road_or_room = false;//このデータは通路
+						map_role[j][dungeon_map_role.map_division[room_before][1]].is_this_room_flag = false;//このデータは通路
 					}
 					for (size_t j = dungeon_map_role.map_road[room_before][3] + dungeon_map_role.map_room[room_after][2]; j <= dungeon_map_role.map_road[room_before][2] + dungeon_map_role.map_room[room_before][2]; j++)
 					{
 						map_role[j][dungeon_map_role.map_division[room_before][1]].map_data = static_cast<size_t>(Attribute::Road); //通路の属性に設定
-						map_role[j][dungeon_map_role.map_division[room_before][1]].road_or_room = false;//このデータは通路
+						map_role[j][dungeon_map_role.map_division[room_before][1]].is_this_room_flag = false;//このデータは通路
 					}
 					break;
+
 				default:
 					break;
 		}
@@ -487,6 +578,21 @@ bool RogueLikeDungeon::MapMake()
 	{
 		return false;
 	}
+
+	//道の入り口だけを格納する
+	for (int y = 0; y < MapSize_Y; y++)
+	{
+		for (int x = 0; x < MapSize_X; x++)
+		{
+			if (map_role[y][x].road_entrance_flag == true)
+			{
+				DirectX::XMINT2 entrance_array = { y,x };
+				roads_entrance.emplace_back(entrance_array);
+			}
+		}
+	}
+	//エラーチェック
+
 
 	return true;
 }

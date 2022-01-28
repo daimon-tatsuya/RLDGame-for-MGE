@@ -11,7 +11,6 @@
 #include "Engine/Systems/Camera.h"
 #include "Engine/Systems/CameraController.h"
 #include "Engine/Systems/CharacterManager.h"
-#include "Engine/Systems/Collision.h"
 #include "Engine/Systems/DebugRenderer.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Input.h"
@@ -145,6 +144,11 @@ void SceneGame::Update(const float elapsed_time)
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
 	}
+	// Bボタンを押したら 再ロード
+	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_B))
+	{
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+	}
 
 }
 
@@ -226,6 +230,7 @@ void SceneGame::Render()
 		CharacterManager::Instance().DrawDebugGUI();
 		camera_controller->DrawDebugGUI();
 		StageManager::Instance().DrawDebugGUI();
+		storage_dungeon.DrawDebugGUI();
 	}
 #endif
 }

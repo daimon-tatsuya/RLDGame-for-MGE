@@ -864,7 +864,7 @@ void ModelResource::BuildMaterial(ID3D11Device* device, const char* dirname, Fbx
 	//
 
 	materials.emplace_back(material);
-	}
+}
 
 // アニメーションデータを構築
 void ModelResource::BuildAnimations(FbxScene* fbxScene)
@@ -901,7 +901,7 @@ void ModelResource::BuildAnimations(FbxScene* fbxScene)
 		// 抽出するデータは60フレーム基準でサンプリングする
 		FbxTime fbx_sampling_step;
 		fbx_sampling_step.SetTime(0, 0, 1, 0, 0, fbx_time_mode);
-		fbx_sampling_step = fbx_sampling_step.Get() * sampling_time;// fbx_sampling_step.Get() * static_cast<FbxLongLong>(sampling_time);
+		fbx_sampling_step = fbx_sampling_step.Get() * static_cast<FbxLongLong>(sampling_time); //fbx_sampling_step.Get() * sampling_time;
 
 		int start_frame = static_cast<int>(fbx_start_time.Get() / fbx_sampling_step.Get());
 		int end_frame = static_cast<int>(fbx_end_time.Get() / fbx_sampling_step.Get());

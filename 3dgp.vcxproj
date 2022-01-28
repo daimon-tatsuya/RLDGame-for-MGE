@@ -132,6 +132,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;DirectXTK.lib;d3d11.lib;dxgi.lib;xinput.lib;xaudio2.lib;winmm.lib;DirectXTex.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\External\FBX SDK\2020.2\lib\vs2019\x64\debug;.\External\DirectXTK-master\Bin\Desktop_2019_Win10\x64\Debug;.\External\DirectXTex-master\DirectXTex\Bin\Desktop_2019_Win10\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <IncrementalLinkDatabaseFile>$(IntDir)$(TargetName).ilk</IncrementalLinkDatabaseFile>
     </Link>
     <FxCompile>
       <AssemblerOutput>AssemblyCode</AssemblerOutput>
@@ -194,6 +196,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>.\External\FBX SDK\2020.2\lib\vs2019\x64\release;.\External\DirectXTK-master\Bin\Desktop_2019_Win10\x64\Release;.\External\DirectXTex-master\DirectXTex\Bin\Desktop_2019_Win10\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;DirectXTK.lib;d3d11.lib;dxgi.lib;xinput.lib;xaudio2.lib;winmm.lib;DirectXTex.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <IncrementalLinkDatabaseFile>$(IntDir)$(TargetName).ilk</IncrementalLinkDatabaseFile>
     </Link>
     <FxCompile>
       <AssemblerOutput>AssemblyCode</AssemblerOutput>

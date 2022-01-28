@@ -75,40 +75,18 @@ void RogueLikeStage::DrawDebugGUI()
 	if (ImGui::Begin("RogueLikeStage", nullptr, ImGuiWindowFlags_None))
 	{
 		//モデル数
-		ImGui::Text("model:%d", static_cast<int>(stage_chip.size()));
+		ImGui::Text("Number of Models:%d", static_cast<int>(stage_chip.size()));
 
-		// トランスフォーム
-		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_OpenOnArrow))
-		{
-			// 位置
-			ImGui::InputFloat3("Position", &this->position.x);
-			// 回転
-			DirectX::XMFLOAT3 a{};
-			a.x = DirectX::XMConvertToDegrees(this->angle.x);
-			a.y = DirectX::XMConvertToDegrees(this->angle.y);
-			a.z = DirectX::XMConvertToDegrees(this->angle.z);
-			ImGui::InputFloat3("Radian", &this->angle.x);
-			ImGui::InputFloat3("Degree", &a.x);
-			// スケール
-			ImGui::InputFloat3("Scale", &this->scale.x);
-		}
+		//プレイヤーのマップ情報上での初期位置
+		ImGui::Text("PlayerMapPosition	:%f %f",
+			rogue_like_dungeon_imgui->mobs[0].position.x, rogue_like_dungeon_imgui->mobs[0].position.y);
 
-		//プレイヤー初期位置
-		if (ImGui::CollapsingHeader("Player_info", ImGuiTreeNodeFlags_OpenOnArrow))
-		{
-			ImGui::Text("SetPlayerMapPosition	:%f %f",
-				rogue_like_dungeon_imgui->mobs[0].position.x, rogue_like_dungeon_imgui->mobs[0].position.y);
+		//プレイヤーの初期位置
+		const float player_positionX = rogue_like_dungeon_imgui->mobs[0].position.x * 2.f;
+		const float player_positionY = rogue_like_dungeon_imgui->mobs[0].position.y * 2.f;
 
-			const float player_first_position_x = rogue_like_dungeon_imgui->mobs[0].position.x * 2.f;
-			const float player_first_position_y = rogue_like_dungeon_imgui->mobs[0].position.y * 2.f;
+		ImGui::Text("PlayerPosition:%f %f", player_positionX, player_positionY);
 
-			ImGui::Text("PlayerFirstPosition:%f %f", player_first_position_x, player_first_position_y);
-			ImGui::Text("PlayerPointAttribute:%zu",
-				rogue_like_dungeon_imgui->map_role
-				[static_cast<size_t>(rogue_like_dungeon_imgui->mobs[0].position.y)]
-			[static_cast<size_t>(rogue_like_dungeon_imgui->mobs[0].position.x)]
-			.map_data);
-		}
 	}
 	ImGui::End();
 }
@@ -120,9 +98,9 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 
 	int object_num = 0;
 	//オブジェクト配置
-	for (int y = 0; y < MapSize_Y - 1; y++)
+	for (int y = 0; y < MapSize_Y; y++)
 	{
-		for (int x = 0; x < MapSize_X - 1; x++)
+		for (int x = 0; x < MapSize_X; x++)
 		{
 			//壁
 			if (map_role[y][x].map_data == static_cast<size_t>(Attribute::Wall))

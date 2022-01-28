@@ -40,10 +40,10 @@ private:
 	///  描画処理
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
-	void Render(float elapsed_time/*最後のフレームからの経過秒数*/);
+	void Render(float elapsed_time/*最後のフレームからの経過秒数*/) const;
 
 	// 1 秒あたりの平均フレーム数と、1 つのフレームを描画するのにかかる平均時間の計算
-	void CalculateFrameStats();
+	void CalculateFrameStates() const;
 
 public:
 

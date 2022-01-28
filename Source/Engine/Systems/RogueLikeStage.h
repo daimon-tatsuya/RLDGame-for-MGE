@@ -10,7 +10,7 @@
 
 //‘O•ûéŒ¾
 class RogueLikeDungeon;
-class RogueLikeMap;
+struct RogueLikeMap;
 
 class RogueLikeStage
 : public Stage

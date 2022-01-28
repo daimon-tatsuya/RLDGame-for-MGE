@@ -25,7 +25,6 @@ void SceneTitle::Initialize()
 
 	strcpy_s(message, "Title");
 
-	
 }
 
 void SceneTitle::Update(float elapsed_time)
@@ -47,7 +46,7 @@ void SceneTitle::Render()
 	ID3D11DepthStencilView* depth_stencil_view = graphics.GetDepthStencilView();
 
 	// 画面クリア＆レンダーターゲット設定
-	constexpr float clear_color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
+	constexpr float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };	// RGBA(0.0～1.0)
 	device_context->ClearRenderTargetView(render_target_view, clear_color);
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);

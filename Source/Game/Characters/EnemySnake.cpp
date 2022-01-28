@@ -27,9 +27,9 @@ EnemySnake::EnemySnake(RogueLikeDungeon* rogue_like_dungeon)
 	EnemySnake::FiniteStateMachineInitialize();
 
 	//オブジェクト配置
-	for (int y = 0; y < MapSize_Y - 1; y++)
+	for (int y = 0; y < MapSize_Y; y++)
 	{
-		for (int x = 0; x < MapSize_X - 1; x++)
+		for (int x = 0; x < MapSize_X; x++)
 		{
 			if (stage_information->map_role[y][x].map_data == 3)
 			{
@@ -257,9 +257,31 @@ void EnemySnake::ExploreState(const float elapsed_time)
 	start_id = enemy_posYX[0] * MapSize_Y + enemy_posYX[1];
 
 	//目的地
+	//最も近い場所を見つける
 
-	 
+	DirectX::XMINT2 shotest{};
 
+	 float min_length=FLT_MAX;
+
+	for (const auto& road_entrance : stage_information->roads_entrance)
+	{
+		DirectX::XMINT2 r = road_entrance;
+
+		//マップ情報→ワールド座標
+		r.y = r.y * CellSize;
+		r.x = r.x * CellSize;
+
+		const DirectX::XMFLOAT3 road_pos = DirectX::XMFLOAT3(static_cast<float>(r.x), 0.f, static_cast<float>(r.y));
+
+		float length = Math::Length( Math::SubtractVector(position, road_pos));//自分(敵)から道の最短距離
+
+		if (length < min_length)
+		{
+			min_length = length;//現在の最短距離の入れ替え
+			shotest = r;
+		}
+
+	}
 	/*	最短経路を求める*/
 	HeuristicSearch& Astar = HeuristicSearch::Instance();
 	Astar.Reset(*stage_information);

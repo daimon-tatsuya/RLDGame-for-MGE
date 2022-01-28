@@ -4,8 +4,8 @@
 #include "Engine/Systems/Framework.h"
 #include"CharacterManager.h"
 
-const static LONG SCREEN_WIDTH  = 1920;
-const static LONG SCREEN_HEIGHT = 1080;
+constexpr static LONG SCREEN_WIDTH  = (1920/10)*9;
+constexpr static LONG SCREEN_HEIGHT = (1080/10)*9;
 
 LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {

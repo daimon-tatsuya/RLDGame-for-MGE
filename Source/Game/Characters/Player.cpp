@@ -33,9 +33,9 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 	stage_information = rogue_like_dungeon;
 
 	// オブジェクト配置
-	for (int y = 0; y < MapSize_Y-1; y++)
+	for (int y = 0; y < MapSize_Y; y++)
 	{
-		for (int x = 0; x < MapSize_X-1; x++)
+		for (int x = 0; x < MapSize_X; x++)
 		{
 			if (stage_information->map_role[y][x].map_data == static_cast<size_t>(Attribute::Player))
 			{
@@ -79,7 +79,7 @@ void Player::Update(const float elapsed_time)
 	model->UpdateTransform(transform);
 }
 
-void Player::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
+void Player::Render(ID3D11DeviceContext * dc, std::shared_ptr<Shader> shader)
 {
 	shader->Draw(dc, model.get());
 }
@@ -90,19 +90,19 @@ void Player::FiniteStateMachineInitialize()
 	//親ステートの追加
 	player_state_machine.AddState
 	(
-		 ParentState::Entry,
+		ParentState::Entry,
 		[this](const float elapsed_time) { EntryState(elapsed_time); }
 	);
 
 	player_state_machine.AddState
 	(
-		 ParentState::Reaction,
+		ParentState::Reaction,
 		[this](const float elapsed_time) { ReactionState(elapsed_time); }
 	);
 
 	player_state_machine.AddState
 	(
-		 ParentState::Receive,
+		ParentState::Receive,
 		[this](const float elapsed_time) { ReceiveState(elapsed_time); }
 	);
 
@@ -111,31 +111,31 @@ void Player::FiniteStateMachineInitialize()
 	//Entry
 	player_entry_state.AddState
 	(
-		 Entry::Select,
+		Entry::Select,
 		[this](const float elapsed_time) {SelectState(elapsed_time); }
 	);
 
 	player_entry_state.AddState
 	(
-		 Entry::Attack,
+		Entry::Attack,
 		[this](const float elapsed_time) {AttackState(elapsed_time); }
 	);
 
-	player_entry_state.AddState
-	(
-		 Entry::Menu,
-		[this](const float elapsed_time) {MenuState(elapsed_time); }
-	);
+	//player_entry_state.AddState
+	//(
+	//	 Entry::Menu,
+	//	[this](const float elapsed_time) {MenuState(elapsed_time); }
+	//);
 
 	player_entry_state.AddState
 	(
-		 Entry::WayChange,
+		Entry::WayChange,
 		[this](const float elapsed_time) {WayChangeState(elapsed_time); }
 	);
 
 	player_entry_state.AddState
 	(
-		 Entry::Move,
+		Entry::Move,
 		[this](const float elapsed_time) {MoveState(elapsed_time); }
 	);
 
@@ -143,19 +143,19 @@ void Player::FiniteStateMachineInitialize()
 
 	player_reaction_state.AddState
 	(
-		 Reaction::ReactionSelect,
+		Reaction::ReactionSelect,
 		[this](const float elapsed_time) {ReactionSelectState(elapsed_time); }
 	);
 
 	player_reaction_state.AddState
 	(
-		 Reaction::Damaged,
+		Reaction::Damaged,
 		[this](const float elapsed_time) {DamagedState(elapsed_time); }
 	);
 
 	player_reaction_state.AddState
 	(
-		 Reaction::Death,
+		Reaction::Death,
 		[this](const float elapsed_time) {DeathState(elapsed_time); }
 	);
 
@@ -164,26 +164,26 @@ void Player::FiniteStateMachineInitialize()
 
 	player_receive_state.AddState
 	(
-		 Receive::Wait,
+		Receive::Wait,
 		[this](const float elapsed_time) {WaitState(elapsed_time); }
 	);
 
 	player_receive_state.AddState
 	(
-		 Receive::Called,
+		Receive::Called,
 		[this](const float elapsed_time) {CalledState(elapsed_time); }
 	);
 
 	// 各初期ステートの設定
-	player_state_machine.SetState( ParentState::Entry);
+	player_state_machine.SetState(ParentState::Entry);
 
-	player_entry_state.SetState( Entry::Select);
-	player_reaction_state.SetState( Reaction::ReactionSelect);
-	player_receive_state.SetState( Receive::Wait);
+	player_entry_state.SetState(Entry::Select);
+	player_reaction_state.SetState(Reaction::ReactionSelect);
+	player_receive_state.SetState(Receive::Wait);
 
 }
 
-bool Player::OnMessage(const Telegram& telegram)
+bool Player::OnMessage(const Telegram & telegram)
 {
 	// メタAIからの受信処理
 
@@ -213,8 +213,7 @@ void Player::DrawDebugGUI()
 	float ax = game_pad.GetAxisLX();
 	float ay = game_pad.GetAxisLY();
 
-	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Appearing);
-	ImGui::SetNextWindowSize(ImVec2(300, 350), ImGuiCond_Appearing);
+
 	if (ImGui::Begin("Player", nullptr, ImGuiWindowFlags_None))
 	{
 		// トランスフォーム
@@ -265,13 +264,14 @@ void Player::DrawDebugGUI()
 		const size_t right_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
 		const size_t left_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
 
-		ImGui::Text("OmniDirMapData");
+		ImGui::Text("OmniAttribute");
 		ImGui::Text("            up:%zu", up_data);
 		ImGui::Text("  left:%zu          right:%zu ", left_data, right_data);
 		ImGui::Text("           down:%zu", down_data);
 
 	}
 	ImGui::End();
+
 }
 
 void Player::DrawDebugPrimitive()
@@ -297,9 +297,9 @@ void Player::EntryState(const float elapsed_time)
 	if (player_state_machine.IsStateFirstTime())
 	{
 		// 子ステートのの初期化
-		if (player_entry_state.GetState() != static_cast<int>( Entry::Select))
+		if (player_entry_state.GetState() != static_cast<int>(Entry::Select))
 		{
-			player_entry_state.SetState( Entry::Select);
+			player_entry_state.SetState(Entry::Select);
 		}
 	}
 	// サブステートの実行
@@ -312,9 +312,9 @@ void Player::ReactionState(const float elapsed_time)
 	if (player_state_machine.IsStateFirstTime())
 	{
 		// 子ステートのの初期化
-		if (player_reaction_state.GetState() != static_cast<int>( Reaction::ReactionSelect))
+		if (player_reaction_state.GetState() != static_cast<int>(Reaction::ReactionSelect))
 		{
-			player_reaction_state.SetState( Reaction::ReactionSelect);
+			player_reaction_state.SetState(Reaction::ReactionSelect);
 		}
 
 	}
@@ -330,9 +330,9 @@ void Player::ReceiveState(const float elapsed_time)
 	if (player_state_machine.IsStateFirstTime())
 	{
 		// 子ステートのの初期化
-		if (player_receive_state.GetState() != static_cast<int>( Receive::Wait))
+		if (player_receive_state.GetState() != static_cast<int>(Receive::Wait))
 		{
-			player_receive_state.SetState( Receive::Wait);
+			player_receive_state.SetState(Receive::Wait);
 		}
 	}
 
@@ -367,17 +367,17 @@ void	Player::SelectState(const float elapsed_time)
 	//同時に処理をしたくないので else ifで1つtrueなら入らないようにする
 
 	//メニュー
-	else if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_B))
-	{
-		//Menuステートに遷移する
-		player_entry_state.SetState( Entry::Menu);
-	}
+	//else if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_B))
+	//{
+	//	//Menuステートに遷移する
+	//	player_entry_state.SetState( Entry::Menu);
+	//}
 
 	//方向転換
 	else if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_Y))
 	{
 		//WayChangeステートに遷移する
-		player_entry_state.SetState( Entry::WayChange);
+		player_entry_state.SetState(Entry::WayChange);
 	}
 
 	//	移動
@@ -385,7 +385,7 @@ void	Player::SelectState(const float elapsed_time)
 	else if (game_pad.GetAxisLX() != 0 || game_pad.GetAxisLY() != 0)
 	{
 		//Moveステートに遷移する
-		player_entry_state.SetState( Entry::Move);
+		player_entry_state.SetState(Entry::Move);
 	}
 
 }
@@ -397,23 +397,23 @@ void	Player::AttackState(const float elapsed_time)
 
 	}
 	//仮
-	player_entry_state.SetState( Entry::Select);
+	player_entry_state.SetState(Entry::Select);
 	//player_state.SetState(ParentState::Receive);
 }
 
-void	Player::MenuState(const float elapsed_time)
-{
-	if (player_entry_state.IsStateFirstTime())
-	{
-
-	}
-
-	// ステートの終了
-	if (false)
-	{
-
-	}
-}
+//void	Player::MenuState(const float elapsed_time)
+//{
+//	if (player_entry_state.IsStateFirstTime())
+//	{
+//
+//	}
+//
+//	// ステートの終了
+//	if (false)
+//	{
+//
+//	}
+//}
 
 void	Player::WayChangeState(const float elapsed_time)
 {
@@ -426,7 +426,7 @@ void	Player::WayChangeState(const float elapsed_time)
 	//Yボタンを長押ししている間
 	if (game_pad.GetButtonUp() & static_cast<GamePadButton>(GamePad::BTN_Y))
 	{
-		player_entry_state.SetState( Entry::Select);
+		player_entry_state.SetState(Entry::Select);
 	}
 	float ax = game_pad.GetAxisLX();
 	float ay = game_pad.GetAxisLY();
@@ -499,7 +499,7 @@ void	Player::WayChangeState(const float elapsed_time)
 	else	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
 	{
 		//Attackステートに遷移する
-		player_entry_state.SetState( Entry::Attack);
+		player_entry_state.SetState(Entry::Attack);
 	}
 
 	// ステートの終了
@@ -712,11 +712,11 @@ void Player::ReactionSelectState(const float elapsed_time)
 	{
 		if (current_health > 0)
 		{
-			player_reaction_state.SetState( Reaction::Damaged);
+			player_reaction_state.SetState(Reaction::Damaged);
 		}
 		else
 		{
-			player_reaction_state.SetState( Reaction::Death);
+			player_reaction_state.SetState(Reaction::Death);
 		}
 	}
 

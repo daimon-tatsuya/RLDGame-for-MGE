@@ -131,7 +131,7 @@ public:
 
 	//characterごとにidをセットして管理する
 	void	SetId(const int id) { this->id = id; }
-	int		GetId() const { return id; }
+	int	GetId() const { return id; }
 
 	//モデルを取得
 	void	SetModel(const char* pass);

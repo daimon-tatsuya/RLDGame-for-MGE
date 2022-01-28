@@ -96,7 +96,7 @@ int Math::RandomInt(const int max)
 	return calculated;
 }
 
-int Math::RandomRangeInt(int min, int max)
+int Math::RandomRangeInt(const int min, const int max)
 {
 	int calculated = 0;
 	if (max == 0)
@@ -108,7 +108,7 @@ int Math::RandomRangeInt(int min, int max)
 	return calculated;
 }
 
-float Math::NormalizeDegreeAngle(float degree)
+float Math::NormalizeDegreeAngle(const float degree)
 {
 	int deg = 0;
 	if (degree < 0.0f || degree >= 360.f)
@@ -128,7 +128,7 @@ float Math::NormalizeRadianAngle(float radian)
 {
 	if (radian < 0.0f || radian >= DirectX::XM_2PI)
 	{
-		int div = static_cast<int>(radian / DirectX::XM_2PI);
+		const int div = static_cast<int>(radian / DirectX::XM_2PI);
 		radian -= (div * DirectX::XM_2PI);
 
 		if (radian < 0.0f)
@@ -138,17 +138,17 @@ float Math::NormalizeRadianAngle(float radian)
 	return radian;
 }
 
-float Math::ConvertToRadianAngle(float degree)
+float Math::ConvertToRadianAngle(const float degree)
 {
 	return DirectX::XMConvertToRadians(degree);
 }
 
-float Math::ConvertToDegreeAngle(float radian)
+float Math::ConvertToDegreeAngle(const float radian)
 {
 	return  DirectX::XMConvertToDegrees(radian);
 }
 
-bool Math::BoolianFloat(float a, float b)
+bool Math::BoolianFloat(const float a, const float b)
 {
 	if (fabsf(a - b) <= FLT_EPSILON * fmaxf(1.f, fmaxf(fabsf(a), fabsf(b))))
 	{
@@ -160,9 +160,10 @@ bool Math::BoolianFloat(float a, float b)
 	}
 }
 
-DirectX::XMFLOAT3 Math::Normalize(DirectX::XMFLOAT3 v1)
+DirectX::XMFLOAT3 Math::Normalize(const DirectX::XMFLOAT3 v1)
 {
 	DirectX::XMFLOAT3 norm = v1;
+
 	if (const float len = sqrtf(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z))
 	{
 		norm.x /= len;
@@ -172,12 +173,12 @@ DirectX::XMFLOAT3 Math::Normalize(DirectX::XMFLOAT3 v1)
 	return norm;
 }
 
-float Math::Dot(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
+float Math::Dot(const DirectX::XMFLOAT3 v1, const DirectX::XMFLOAT3 v2)
 {
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
-DirectX::XMFLOAT3 Math::Cross(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
+DirectX::XMFLOAT3 Math::Cross(const DirectX::XMFLOAT3 v1, const DirectX::XMFLOAT3 v2)
 {
 	DirectX::XMFLOAT3 cross = {};
 	cross.x = v1.y * v2.z - v1.z * v2.y;
@@ -185,3 +186,33 @@ DirectX::XMFLOAT3 Math::Cross(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
 	cross.z = v1.x * v2.y - v1.y * v2.x;
 	return cross;
 }
+
+float Math::Length(const DirectX::XMFLOAT3 v)
+{
+	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+float Math::Length(const DirectX::XMINT3 v)
+{
+	return sqrtf(static_cast<float>(v.x * v.x + v.y * v.y + v.z * v.z));
+}
+
+DirectX::XMFLOAT3 Math::SubtractVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
+{
+	DirectX::XMFLOAT3 vec{};
+
+	vec = DirectX::XMFLOAT3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+
+	return vec;
+}
+
+DirectX::XMFLOAT3 Math::AddVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
+{
+	DirectX::XMFLOAT3 vec{};
+
+	vec = DirectX::XMFLOAT3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+
+	return vec;
+}
+
+

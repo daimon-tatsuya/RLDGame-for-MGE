@@ -129,20 +129,39 @@ public:
 	/// 正規化
 	/// </summary>
 	/// <param name="v1">	正規化するベクトル</param>
-	/// <returns>a≒b</returns>
+	/// <returns>正規化されたv1</returns>
 	static DirectX::XMFLOAT3 Normalize(DirectX::XMFLOAT3 v1);
 
 	/// <summary>
-	/// 内積
+	/// 内積(v1・v2)
 	/// </summary>
 	/// <param name="v1">	内積するベクトル</param>
 	/// <param name="v2">	内積するベクトル</param>
+	/// <returns>v1とv2の内積</returns>
 	static float Dot(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
 
 	/// <summary>
-	/// 外積
+	/// 外積(v1×v2)
 	/// </summary>
 	/// <param name="v1">	内積するベクトル</param>
 	/// <param name="v2">	内積するベクトル</param>
+	/// <returns>v1からv2への外積</returns>
 	static   DirectX::XMFLOAT3 Cross(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
+
+
+	/// <summary>
+	///	位置ベクトルの長さ
+	/// </summary>
+	/// <returns>長さ</returns>
+	static  float Length(DirectX::XMFLOAT3 v);
+
+	/// <summary>
+	///	位置ベクトルの長さ
+	/// </summary>
+	/// <returns>長さ</returns>
+	static  float Length(DirectX::XMINT3 v);
+
+	static  DirectX::XMFLOAT3 SubtractVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
+	static  DirectX::XMFLOAT3 AddVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
+
 };

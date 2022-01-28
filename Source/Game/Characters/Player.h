@@ -29,7 +29,7 @@ private:
 	{
 		Select = 0,
 		Attack,
-		Menu,
+	//	Menu,
 		WayChange,
 		Move,
 		// 今後作る予定のステート
@@ -140,7 +140,7 @@ private:
 	/// <para>仮置き</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
-	void	MenuState(const float elapsed_time);
+	//void	MenuState(const float elapsed_time);
 
 	//?ReactionState
 

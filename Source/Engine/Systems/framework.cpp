@@ -42,11 +42,12 @@ void Framework::Update(float elapsed_time/*最後のフレームからの経過秒数*/)
 	SceneManager::Instance().Update(elapsed_time);
 }
 
-void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/)
+void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/) const
 {
 	// 別スレッド中にデバイスコンテキストが使われていた場合に
 	// 同時アクセスしないように排他制御する
-	std::lock_guard<std::mutex> lock(graphics.GetMutex());
+	//_Requires_lock_held_(graphics.GetMutex());
+	//std::lock_guard<std::mutex> lock(graphics.GetMutex());
 
 	ID3D11DeviceContext* device_context = graphics.GetDeviceContext();
 	// IMGUIフレーム開始処理
@@ -78,7 +79,7 @@ int Framework::Run()
 		else
 		{
 			timer.Tick();
-			CalculateFrameStats();
+			CalculateFrameStates();
 
 			float elapsedTime = syncInterval == 0 ? timer.TimeInterval() : syncInterval / 60.0f;
 
@@ -93,7 +94,7 @@ int Framework::Run()
 	return static_cast<int>(msg.wParam);
 }
 
-void Framework::CalculateFrameStats()
+void Framework::CalculateFrameStates() const
 {
 	// 1 秒あたりの平均フレーム数と、1 つのフレームをレンダリングするのにかかる平均時間を計算します。
 	// これらの統計情報は、ウィンドウのキャプションバーに追加されます。
@@ -105,11 +106,11 @@ void Framework::CalculateFrameStats()
 	// 1秒ごとの平均値を計算する。
 	if ((timer.TimeStamp() - time_tlapsed) >= 1.0f)
 	{
-		float fps = static_cast<float>(frames); // fps = frameCnt / 1
-		float mspf = 1000.0f / fps;
+		const float fps = static_cast<float>(frames); // fps = frameCnt / 1
+		const float mspf = 1000.0f / fps;
 		std::ostringstream outs;
 		outs.precision(6);
-		outs << "FPS : " << fps << " / " << "Frame Time : " << mspf << " (ms)";
+		outs << "RougeLikeGame(NoName)" << "FPS : " << fps << " / " << "Frame Time : " << mspf << " (ms)";
 		SetWindowTextA(hwnd, outs.str().c_str());
 
 		// 次の平均値のためにリセットします。
