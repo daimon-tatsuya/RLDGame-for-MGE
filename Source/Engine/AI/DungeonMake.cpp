@@ -4,7 +4,7 @@
 //
 //**********************************************************
 
-// ToDo xyが最大最小値を超えないようにxyが０または最大値の時、変更されない属性を設定する
+//! xyが最大最小値を超えないようにxyが０または最大値の時、変更されない属性を設定する
 
 #include <ctime>
 
@@ -76,7 +76,7 @@ void RogueLikeDungeon::UpdateMapRolePlayer()
 
 void RogueLikeDungeon::UpdateMapRoleEnemis()
 {
-	//ToDo 以下の{}を関数化または、UpdateMapRolePlayer()とまとめる
+	//! 以下の{}を関数化または、UpdateMapRolePlayer()とまとめる
 	//? {
 	//一度上書き
 	for (int y = 0; y < MapSize_Y; y++)

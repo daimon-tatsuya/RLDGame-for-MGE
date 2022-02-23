@@ -51,7 +51,7 @@ void SceneTitle::Render()
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
 
-	// 描画処理
+	 //描画処理
 	RenderContext render_context{};
 	render_context.light_direction = { -0.5f, -1.0f, -0.5f, 0.0f };	// ライト方向（下方向）
 
@@ -95,7 +95,7 @@ void SceneTitle::Render()
 
 	// 2DデバッグGUI描画
 	{
-		CharacterManager::Instance().DrawDebugGUI();
+	//	CharacterManager::Instance().DrawDebugGUI();
 	}
 }
 

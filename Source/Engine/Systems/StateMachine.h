@@ -11,6 +11,7 @@
 #include<functional>
 #include<map>
 
+constexpr int NonState = -1;
 
 //template‚ğƒwƒbƒ_[‘‚¢‚½ê‡
 //https://pknight.hatenablog.com/entry/20090826/1251303641
@@ -24,8 +25,10 @@ template<typename Key, typename ReturnValue = void, typename... Args>
 class StateMachine final
 {
 private:
-	Key current_state{ static_cast<int>(-1) };
-	Key old_state{ static_cast<int>(-1) };		// State‚Ì‰Šú‰»‚È‚Ç‚Ég‚¤
+	Key current_state{ NonState };
+	Key old_state{ NonState };		// State‚Ì‰Šú‰»‚È‚Ç‚Ég‚¤
+
+
 
 	/// <summary>
 	/// State‚ğŠi”[‚·‚é
@@ -96,6 +99,7 @@ public:
 
 	int GetState() { return static_cast<int>(current_state); }
 	int GetOldState() { return static_cast<int>(old_state); }
+
 
 };
 

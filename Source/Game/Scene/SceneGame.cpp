@@ -8,6 +8,7 @@
 
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/AI/MetaAI.h"
+
 #include "Engine/Systems/Camera.h"
 #include "Engine/Systems/CameraController.h"
 #include "Engine/Systems/CharacterManager.h"
@@ -21,7 +22,10 @@
 #include "Engine/Systems/Shader.h"
 #include "Engine/Systems/ShaderManager.h"
 #include "Engine/Systems/StageManager.h"
+
 #include"Game/Characters/Player.h"
+#include "Game/Characters/EnemySnake.h"
+
 #include "Game/Scene/SceneLoading.h"
 #include "Game/Scene/SceneTitle.h"
 
@@ -65,8 +69,6 @@ void SceneGame::Initialize()
 
 	//ダンジョン生成初期化
 	RogueLikeDungeon rogue_like_dungeon;
-	//struct DungeonMapRole dungeon_map_role;
-	//rogue_like_dungeon.MapReMake(&dungeon_map_role);
 	rogue_like_dungeon.MapReMake();
 	storage_dungeon = rogue_like_dungeon;
 
@@ -81,17 +83,11 @@ void SceneGame::Initialize()
 	{
 		CharacterManager& character_manager = CharacterManager::Instance();
 		//	 プレイヤー
-		player = std::make_unique<Player>(&storage_dungeon);
 
-		character_manager.Register(player.get(), static_cast<int>(Meta::Identity::Player));
+		character_manager.Register(new Player(&storage_dungeon) , static_cast<int>(Meta::Identity::Player));
 
-		//	// エネミー初期化
-		//	for (int i = 0; i < 3; ++i)
-		//	{
-		//		EnemySlime* slime = new EnemySlime();
-		//		slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
-		//		characterManager.Register(slime);
-		//	}
+		character_manager.Register(new EnemySnake(&storage_dungeon) ,static_cast<int>(Meta::Identity::Enemy));
+
 	}
 
 	//生成されなかったオブジェクトをマップデータから消す

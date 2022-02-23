@@ -46,7 +46,7 @@ public:
 	//子ステート
 	enum class Reaction :int
 	{
-		ReactionSelect=0,
+		ReactionSelect = 0,
 		Damaged,
 		Death,
 
@@ -69,6 +69,8 @@ public:
 	EnemySnakeEntryState      enemy_snake_entry_state;   // 行動(入力)ステート
 	EnemySnakeReactionState enemy_snake_reaction_state;// HP関係の反応ステート
 	EnemySnakeReceiveState   enemy_snake_receive_state; // MetaAIからの指示待ちステート
+
+
 
 
 private:

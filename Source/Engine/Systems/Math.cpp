@@ -187,6 +187,7 @@ DirectX::XMFLOAT3 Math::Cross(const DirectX::XMFLOAT3 v1, const DirectX::XMFLOAT
 	return cross;
 }
 
+
 float Math::Length(const DirectX::XMFLOAT3 v)
 {
 	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);

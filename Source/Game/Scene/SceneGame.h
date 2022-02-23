@@ -24,6 +24,13 @@ class SceneGame :
 private:
 
 public:
+	//std::unique_ptr<Player>   player = nullptr;
+	std::unique_ptr<CameraController> camera_controller = nullptr;
+	RogueLikeDungeon storage_dungeon{};//シーンが持っているマップ情報
+
+private:
+
+public:
 
 	SceneGame() = default;
 
@@ -37,17 +44,6 @@ public:
 
 	void Render()override;
 
-private:
 
-public:
-	std::unique_ptr<Player>   player= nullptr ;
-	std::unique_ptr<CameraController> camera_controller = nullptr;
-	RogueLikeDungeon storage_dungeon{};//シーンが持っているマップ情報
-	//std::vector<AxisAlignedBoundingBox*> axis_aligned_bounding_box_for_frustum;// 視錐台カリング用のAABB
-	//AxisAlignedBoundingBox* axis_aligned_bounding_box[32]{};
 
-	//必要なら使うので消さない
-	//float	timer = 0.0f;
-	//int		counter = 0;
-	//char	message[32] = { 0 };
 };

@@ -43,8 +43,8 @@ private:
 
 public:
 
-	int destination_node = 0;// 接続先ノードID
-	int origin_node = 0;		// 元ノードID
+	int destination_node_id = 0;// 接続先ノードID
+	int origin_node_id = 0;		// 元ノードID
 	float cost = 1.0f;			// コスト
 
 private:

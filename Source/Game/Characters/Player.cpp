@@ -4,6 +4,7 @@
 //
 //**********************************************************
 
+#include <string>
 
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/Graphics.h"
@@ -15,7 +16,6 @@
 #include "Engine/AI/DungeonMake.h"
 
 #include "Game/Characters/Player.h"
-#include "Game/Characters/DerivedPlayerState.h"
 
 
 const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
@@ -23,7 +23,6 @@ const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
 Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 {
 	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
-	//model = std::make_shared<Model>("Assets/FBX/Animals/Rattlesnake.bin");
 	scale.x = scale.y = scale.z = 1.f;
 	position.y = 0.f;
 
@@ -32,9 +31,14 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 
 	stage_information = rogue_like_dungeon;
 
-	// オブジェクト配置
+	//オブジェクト配置
 	for (int y = 0; y < MapSize_Y; y++)
 	{
+		if (set_pos == true)
+		{
+			break;
+		}
+
 		for (int x = 0; x < MapSize_X; x++)
 		{
 			if (stage_information->map_role[y][x].map_data == static_cast<size_t>(Attribute::Player))
@@ -43,6 +47,8 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 				const float pos_z = static_cast<float> (y * CellSize);
 
 				position = DirectX::XMFLOAT3(pos_x, 0, pos_z);
+				set_pos = true;
+				break;
 			}
 		}
 	}
@@ -121,12 +127,6 @@ void Player::FiniteStateMachineInitialize()
 		[this](const float elapsed_time) {AttackState(elapsed_time); }
 	);
 
-	//player_entry_state.AddState
-	//(
-	//	 Entry::Menu,
-	//	[this](const float elapsed_time) {MenuState(elapsed_time); }
-	//);
-
 	player_entry_state.AddState
 	(
 		Entry::WayChange,
@@ -181,6 +181,22 @@ void Player::FiniteStateMachineInitialize()
 	player_reaction_state.SetState(Reaction::ReactionSelect);
 	player_receive_state.SetState(Receive::Wait);
 
+	//ImGui
+	player_entry_string.emplace_back("Select");
+	player_entry_string.emplace_back("Attack");
+	player_entry_string.emplace_back("WayChange");
+	player_entry_string.emplace_back("Move");
+
+	player_reaction_string.emplace_back("ReactionSelect");
+	player_reaction_string.emplace_back("Damaged");
+	player_reaction_string.emplace_back("Death");
+
+	player_receive_string.emplace_back("Wait");
+	player_receive_string.emplace_back("Called");
+
+	player_states_string.emplace_back(player_entry_string);
+	player_states_string.emplace_back(player_reaction_string);
+	player_states_string.emplace_back(player_receive_string);
 }
 
 bool Player::OnMessage(const Telegram & telegram)
@@ -194,6 +210,11 @@ bool Player::OnMessage(const Telegram & telegram)
 		player_state_machine.SetState(ParentState::Entry);
 
 		return true;
+	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+
+		return true;
+	default:
+		;
 	}
 	return false;
 }
@@ -214,8 +235,11 @@ void Player::DrawDebugGUI()
 	float ay = game_pad.GetAxisLY();
 
 
+
 	if (ImGui::Begin("Player", nullptr, ImGuiWindowFlags_None))
 	{
+		// ID
+		ImGui::Text("CharacterID:%d", this->id);
 		// トランスフォーム
 		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -234,41 +258,98 @@ void Player::DrawDebugGUI()
 			// スケール
 			ImGui::InputFloat3("Scale", &this->scale.x);
 		}
-		// ID
-		ImGui::Text("ID:%d", this->id);
-		// ゲームパッドのスティック入力
-		ImGui::Text("GamePadAxis: x:%f y:%f", ax, ay);
-		// ゲームパッドのスティック入力のステップ
-		if (ax > 0.f)
-		{
-			ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f));
-		}
-		else if (ax < 0.f)
-		{
-			ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
-		}
 
-		if (ay > 0.f)
+		//現在のステートを表示
+		if (ImGui::CollapsingHeader("CurrentState", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f)); ;
+
+			char parent_state_name[64] = "empty";
+			char current_state_name[64] = "empty";
+
+			//	player_states_string.at(static_cast<u_int>(player_state_machine.GetState())).at
+			//	(static_cast<u_int>(player_entry_state.GetState()));
+
+			//!関数化
+
+			if (player_state_machine.GetState() == static_cast<int>(ParentState::Entry))
+			{
+				//"empty"の文字列を削除
+				memset(current_state_name, '\0', sizeof(current_state_name));
+				memset(parent_state_name, '\0', sizeof(parent_state_name));
+
+				//ステート名を入れる
+				strcat_s(parent_state_name, sizeof(parent_state_name), "Entry");
+				const char* state_name = player_states_string.at(static_cast<u_int>(player_state_machine.GetState())).at(static_cast<u_int>(player_entry_state.GetState())).c_str();
+				strcat_s(current_state_name, sizeof(current_state_name), state_name);
+			}
+
+			if (player_state_machine.GetState() == static_cast<int>(ParentState::Reaction))
+			{
+				//"empty"の文字列を削除
+				memset(current_state_name, '\0', sizeof(current_state_name));
+				memset(parent_state_name, '\0', sizeof(parent_state_name));
+
+				//ステート名を入れる
+				strcat_s(parent_state_name, sizeof(parent_state_name), "Reaction");
+				const char* state_name = player_states_string.at(static_cast<u_int>(player_state_machine.GetState())).at(static_cast<u_int>(player_reaction_state.GetState())).c_str();
+				strcat_s(current_state_name, sizeof(current_state_name), state_name);
+			}
+
+			if (player_state_machine.GetState() == static_cast<int>(ParentState::Receive))
+			{
+				//"empty"の文字列を削除
+				memset(current_state_name, '\0', sizeof(current_state_name));
+				memset(parent_state_name, '\0', sizeof(parent_state_name));
+
+				//ステート名を入れる
+				strcat_s(parent_state_name, sizeof(parent_state_name), "Receive");
+				const char* state_name = player_states_string.at(static_cast<u_int>(player_state_machine.GetState())).at(static_cast<u_int>(player_receive_state.GetState())).c_str();
+				strcat_s(current_state_name, sizeof(current_state_name), state_name);
+			}
+
+			ImGui::Text("parent_state_name:%s", parent_state_name);
+			ImGui::Text("current_state_name:%s", current_state_name);
+
 		}
-		else if (ay < 0.f)
+		if (ImGui::CollapsingHeader("GamePadStatus", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
+			// ゲームパッドのスティック入力
+			ImGui::Text("GamePadAxis: x:%f y:%f", ax, ay);
+			// ゲームパッドのスティック入力のステップ
+			if (ax > 0.f)
+			{
+				ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f));
+			}
+			else if (ax < 0.f)
+			{
+				ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
+			}
+
+			if (ay > 0.f)
+			{
+				ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f)); ;
+			}
+			else if (ay < 0.f)
+			{
+				ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
+			}
+			ImGui::Text("GamePadAxisOnStep: x:%f y:%f", ax, ay);
+
 		}
-		ImGui::Text("GamePadAxisOnStep: x:%f y:%f", ax, ay);
-		// 周囲のマップ情報
-		const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
-		const size_t up_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
-		const size_t down_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
-		const size_t right_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
-		const size_t left_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
+		if (ImGui::CollapsingHeader("PlayerOmniAttribute", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			// 周囲のマップ情報
+			const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
+			const size_t up_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
+			const size_t down_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
+			const size_t right_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
+			const size_t left_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
 
-		ImGui::Text("OmniAttribute");
-		ImGui::Text("            up:%zu", up_data);
-		ImGui::Text("  left:%zu          right:%zu ", left_data, right_data);
-		ImGui::Text("           down:%zu", down_data);
-
+			ImGui::Text("OmniAttribute");
+			ImGui::Text("            up:%zu", up_data);
+			ImGui::Text("  left:%zu          right:%zu ", left_data, right_data);
+			ImGui::Text("           down:%zu", down_data);
+		}
 	}
 	ImGui::End();
 
@@ -400,20 +481,6 @@ void	Player::AttackState(const float elapsed_time)
 	player_entry_state.SetState(Entry::Select);
 	//player_state.SetState(ParentState::Receive);
 }
-
-//void	Player::MenuState(const float elapsed_time)
-//{
-//	if (player_entry_state.IsStateFirstTime())
-//	{
-//
-//	}
-//
-//	// ステートの終了
-//	if (false)
-//	{
-//
-//	}
-//}
 
 void	Player::WayChangeState(const float elapsed_time)
 {

@@ -12,6 +12,14 @@
 /// </summary>
 class SceneLoading : public Scene
 {
+private:
+	Scene* next_scene = nullptr;
+
+	// Now Loading...アニメーション用
+	float	timer = 0.0f;
+	int		counter = 0;
+	char	message[32] = { 0 };
+
 public:
 	explicit SceneLoading(Scene* next_scene) : next_scene(next_scene) {}
 	~SceneLoading() override = default;
@@ -32,11 +40,5 @@ private:
 	// ローディングスレッド
 	static void LoadingThread(const SceneLoading* scene);
 
-private:
-	Scene* next_scene = nullptr;
-	// Now Loading...アニメーション用
-	float	timer = 0.0f;
-	int		counter = 0;
-	char	message[32] = { 0 };
-	//float	angle = 0.0f;
+
 };

@@ -8,6 +8,6 @@
 
 void Edge::Initialize(const int node, int& destination)
 {
-	origin_node = node;
+	origin_node_id = node;
 	destination = -1;
 }

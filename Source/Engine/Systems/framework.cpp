@@ -19,6 +19,7 @@
 #include "Engine/Systems/SceneManager.h"
 #include "Game/Scene/SceneLoading.h"
 #include "Game/Scene/SceneTitle.h"
+#include "Game/Scene/SceneGame.h"
 
 // ‚’¼“¯ŠúŠÔŠuİ’è //1‚ÌƒtƒŒ[ƒ€‚ğŒÅ’è
 static const int syncInterval = 1;

@@ -228,7 +228,6 @@
     <ClCompile Include="Source\Engine\Systems\CharacterManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\Collision.cpp" />
     <ClCompile Include="Source\Engine\Systems\DebugRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Systems\EnemyManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\Framework.cpp" />
     <ClCompile Include="Source\Engine\Systems\GamePad.cpp" />
     <ClCompile Include="Source\Engine\Systems\Graphics.cpp" />
@@ -251,7 +250,6 @@
     <ClCompile Include="Source\Engine\Systems\StageManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\Texture.cpp" />
     <ClCompile Include="Source\Engine\Systems\WireframeLambert.cpp" />
-    <ClCompile Include="Source\Game\Characters\DerivedEnemySnakeState.cpp" />
     <ClCompile Include="Source\Game\Characters\EnemySnake.cpp" />
     <ClCompile Include="Source\Game\Characters\Player.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneGame.cpp" />
@@ -281,7 +279,6 @@
     <ClInclude Include="Source\Engine\Systems\CharacterManager.h" />
     <ClInclude Include="Source\Engine\Systems\Collision.h" />
     <ClInclude Include="Source\Engine\Systems\DebugRenderer.h" />
-    <ClInclude Include="Source\Engine\Systems\EnemyManager.h" />
     <ClInclude Include="Source\Engine\Systems\Framework.h" />
     <ClInclude Include="Source\Engine\Systems\GamePad.h" />
     <ClInclude Include="Source\Engine\Systems\Graphics.h" />
@@ -309,7 +306,6 @@
     <ClInclude Include="Source\Engine\Systems\StateMachine.h" />
     <ClInclude Include="Source\Engine\Systems\Texture.h" />
     <ClInclude Include="Source\Engine\Systems\WireframeLambert.h" />
-    <ClInclude Include="Source\Game\Characters\DerivedEnemySnakeState.h" />
     <ClInclude Include="Source\Game\Characters\EnemySnake.h" />
     <ClInclude Include="Source\Game\Characters\Player.h" />
     <ClInclude Include="Source\Game\Scene\SceneGame.h" />

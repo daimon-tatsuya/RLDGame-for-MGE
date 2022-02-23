@@ -5,6 +5,9 @@
 //
 //**********************************************************
 
+#include <utility>
+
+#include "Engine/AI/HeuristicSearch.h"
 #include "Engine/Systems/Object.h"
 
 
@@ -13,6 +16,8 @@
 
 //前方宣言
 class RogueLikeDungeon;
+
+struct  ShortestPath;
 
 /// <summary>
 /// キャラクター(敵、プレイヤー)などの基底クラス
@@ -27,8 +32,9 @@ public:
 
 	RogueLikeDungeon* stage_information = nullptr; // マップ情報　(値をコピーした実体にするか検討中)
 
-	std::vector<int> shortest_path{};//最短経路
-	size_t path_index{};//最短経路の配列のindex番号
+	ShortestPath* shortest_path{};//最短経路
+
+
 private:
 
 	/// <summary>
@@ -169,8 +175,10 @@ public:
 	void SetMaxHealth() { this->max_health = max_health; }
 
 	// マップ情報を取得
-	RogueLikeDungeon* GetStageInformation() const { return stage_information; }
+	 RogueLikeDungeon* GetStageInformation() const { return stage_information; }
 
 	//最短経路を設定
-	void SetShortestPath(std::vector<int> path) { shortest_path = path; }
+	void SetShortestPath(std::vector<int> path) const { shortest_path->path = std::move(path); }
+
+
 };

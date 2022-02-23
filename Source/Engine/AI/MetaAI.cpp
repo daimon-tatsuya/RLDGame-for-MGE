@@ -64,14 +64,14 @@ bool Meta::OnMessage(const Telegram& telegram)
 	std::vector<Character*> enemis;
 	enemis.clear();
 	CharacterManager& chracter_manager = CharacterManager::Instance();
-	int enemy_count = character_manager->GetEnemyManager().GetEnemyCount();
+	int enemy_count = character_manager->GetEnemyCount();
 	// ステートマシンにできるかも？
 	switch (telegram.msg)
 	{
 	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:// プレイヤーのターンが終わった
 		for (int i = 0; i < enemy_count; i++)
 		{
-			const int enemy_id = character_manager->GetEnemyManager().GetEnemy(i)->GetId();
+			const int enemy_id = character_manager->GetEnemy(i)->GetId();
 
 			// エネミーにメッセージを送る
 			this->SendMessaging(
@@ -125,9 +125,9 @@ void Meta::SendMessaging(int sender, int receiver, MESSAGE_TYPE msg)
 	{
 
 		// 受信者のポインタを取得
-		Character* receive_enemy = chracter_manager.GetEnemyManager().GetEnemyFromId(receiver);
+		Character* receive_enemy = chracter_manager.GetEnemy(receiver);
 		// レシーバー居ないとき関数を終了する
-		if (receive_enemy == nullptr)
+		if (receive_enemy)
 		{ return; }
 		// メッセージデータを作成
 		const Telegram telegram(sender, receiver, msg);

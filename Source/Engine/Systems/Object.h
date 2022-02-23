@@ -50,6 +50,7 @@ public:
 	float				air_control = 0.3f;
 	float				step_offset = 1.0f;
 	float				slope_rate = 0.0f;
+	bool				set_pos = false;
 private:
 
 protected:
@@ -65,10 +66,10 @@ public:
 	// 行列更新処理
 	void UpdateTransform();
 	// 更新処理
-	virtual void Update(float elapsed_time) = 0;
+	virtual void Update(float elapsed_time) {};
 
 	// 描画処理
-	virtual void Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader) = 0;
+	virtual void Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader) {}
 
 	// デバッグ用GUI描画
 	virtual	void DrawDebugGUI() {}

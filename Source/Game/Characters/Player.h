@@ -21,6 +21,7 @@ private:
 		Entry = 0,
 		Reaction,
 		Receive,
+
 		StateEnd
 	};
 
@@ -29,7 +30,6 @@ private:
 	{
 		Select = 0,
 		Attack,
-	//	Menu,
 		WayChange,
 		Move,
 		// 今後作る予定のステート
@@ -72,6 +72,10 @@ private:
 	PlayerReactionState  player_reaction_state;// HP関係の反応ステート
 	PlayerReceiveState   player_receive_state; // MetaAIからの指示待ちステート
 
+	std::vector<std::vector<std::string>> player_states_string;//ImGui用ステート名コンテナ
+	std::vector<std::string> player_entry_string;
+	std::vector<std::string> player_reaction_string;
+	std::vector<std::string> player_receive_string;
 
 
 public:

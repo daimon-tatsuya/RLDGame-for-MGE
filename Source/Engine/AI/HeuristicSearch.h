@@ -7,11 +7,27 @@
 
 #include <vector>
 #include <memory>
-
+#include "Engine/Systems/Math.h"
 // 前方宣言
 class Node;
 class Edge;
 class RogueLikeDungeon;
+
+struct ShortestPath
+{
+	DirectX::XMINT2 destination_pos{};//目的地のマップ上の位置
+	std::vector<int> path{};//最短経路
+	unsigned int path_index{};//最短経路用の配列index番号
+
+	void Clear()
+	{
+		destination_pos = DirectX::XMINT2(0,0);
+		path.clear();
+		path_index = 0;
+	}
+
+	//メンバの初期化
+};
 
 class HeuristicSearch final
 {
@@ -66,13 +82,5 @@ public:
 	/// <returns>最短経路</returns>
 	std::vector<int> Search(int start_id, int goal_id, const RogueLikeDungeon& rogue_like_dungeon);
 
-	/// <summary>
-    /// Asterの結果を2次元配列に変換する
-    /// </summary>
-	//void ConvertTwoDimensionalArray();
 
-	/// <summary>
-	/// マップ情報を1次元配列に変換する
-	/// </summary>
-	//void ConvertOneDimensionalArray(const RogueLikeDungeon& rogue_like_dungeon);
 };

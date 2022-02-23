@@ -10,7 +10,7 @@
 #include<memory>
 #include <d3d11.h>
 
-#include "Engine/Systems/EnemyManager.h"
+
 
 //‘O•ûéŒ¾
 class Shader;
@@ -22,17 +22,17 @@ class Character;
 class CharacterManager
 {
 private:
-	std::shared_ptr<Character> player = nullptr;	// ƒvƒŒƒCƒ„[‚ğŠi”[‚·‚é
-	std::vector<Character*>	  characteres;			// “G–¡•ûŠÖŒW‚È‚­Ši”[‚·‚é
-	std::vector<Character*>	  removes;				// íœ‚·‚éCharacter‚ğŠi”[‚·‚é‚µ‚Ä,characteres‚Ìindex‚ğw’è‚µ‚Ä’¼Úíœ‚·‚é‚Ì‚ğ‰ñ”ğ
+
+	std::vector<std::shared_ptr<Character>>	  characteres;			// “G–¡•ûŠÖŒW‚È‚­Ši”[‚·‚é
+	std::vector<std::shared_ptr<Character>>	  removes;				// íœ‚·‚éCharacter‚ğŠi”[‚·‚é‚µ‚Ä,characteres‚Ìindex‚ğw’è‚µ‚Ä’¼Úíœ‚·‚é‚Ì‚ğ‰ñ”ğ
 	int									  enemy_number = 0;	// •t—^‚·‚éID‚Ì’l(‚±‚Ì’l‚ÉMetaAI::Identity::Enemy‚ğ‰ÁZ‚µ‚Ä•t—^‚·‚é)
 	int									  player_number = 0;	// •t—^‚·‚éID‚Ì’l(‚±‚Ì’l‚ÉMetaAI::Identity::Player‚ğ‰ÁZ‚µ‚Ä•t—^‚·‚é)
-	EnemyManager                 enemy_manager;		// EnemyƒNƒ‰ƒX‚ÌŠÇ—ƒNƒ‰ƒX
+
 public:
 
 private:
-	CharacterManager() = default;
-	~CharacterManager();
+	CharacterManager() {}
+	~CharacterManager(){}
 public:
 
 	// —Bˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒXæ“¾
@@ -103,10 +103,13 @@ public:
 	// ƒLƒƒƒ‰ƒNƒ^[‚ğ”æ“¾
 	int GetCharacterCount() const { return static_cast<int>(characteres.size()); }
 
-	// ƒLƒƒƒ‰ƒNƒ^[‚ğæ“¾
-	Character* GetCharacter(int index) { return characteres.at(index); }
+	//@index ”Ô–Ú‚Ìƒƒƒ‰ƒNƒ^[‚ğæ“¾
+	Character* GetCharacter(int index) { return characteres.at(index).get(); }
 
-	// “GŠÇ—ƒNƒ‰ƒX‚ğæ“¾
-	EnemyManager& GetEnemyManager() { return enemy_manager; }
+	//“G‚Ì”‚ğæ“¾
+	int GetEnemyCount() const { return  enemy_number; }
+
+	// index ”Ô–Ú‚ÉÅ‚à‹ß‚¢ID‚Ì“G‚ğæ“¾
+	Character* GetEnemy(int index);
 
 };
