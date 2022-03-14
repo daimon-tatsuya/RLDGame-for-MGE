@@ -7,18 +7,17 @@
 
 #include "Engine/Systems/Stage.h"
 
-
 //前方宣言
 class RogueLikeDungeon;
 struct RogueLikeMap;
 
 class RogueLikeStage
-: public Stage
+	: public Stage
 {
 private:
 public:
-	 RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon);
-	 ~RogueLikeStage() override;
+	RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon);
+	~RogueLikeStage() override;
 
 	// 更新処理
 	void Update(float elapsed_time) override;
@@ -30,7 +29,7 @@ public:
 	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) override;
 
 	//メッセージ受信処理
-	bool OnMessage(const Telegram& msg) override;
+	bool OnMessage(const Telegram& telegram) override;
 
 	// デバッグ用GUI描画
 	void DrawDebugGUI()override;
@@ -45,6 +44,6 @@ private:
 protected:
 	std::vector <Stage> stage_chip;
 	//imgui
-	RogueLikeDungeon*  rogue_like_dungeon_imgui;
+	RogueLikeDungeon* rogue_like_dungeon_imgui;
 public:
 };

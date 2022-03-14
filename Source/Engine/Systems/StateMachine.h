@@ -5,8 +5,6 @@
 //
 //*********************************************************
 
-
-
 #include<crtdbg.h>
 #include<functional>
 #include<map>
@@ -27,8 +25,6 @@ class StateMachine final
 private:
 	Key current_state{ NonState };
 	Key old_state{ NonState };		// Stateの初期化などに使う
-
-
 
 	/// <summary>
 	/// Stateを格納する
@@ -63,9 +59,7 @@ public:
 		_ASSERT_EXPR(state_pool.contains(current_state) == true, "Not found state");
 
 		state_pool.at(current_state)(args...);
-
 	}
-
 
 	/// <summary>
 	/// ステートに入った時、最初の実行かを調べる
@@ -73,7 +67,6 @@ public:
 	/// <returns></returns>
 	bool IsStateFirstTime()
 	{
-
 		if (!is_first_time)
 		{
 			return false;
@@ -99,8 +92,4 @@ public:
 
 	int GetState() { return static_cast<int>(current_state); }
 	int GetOldState() { return static_cast<int>(old_state); }
-
-
 };
-
-

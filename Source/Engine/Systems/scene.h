@@ -5,7 +5,6 @@
 //
 //**********************************************************
 
-
 /// <summary>
 /// シーンの基底クラス
 /// </summary>
@@ -38,7 +37,4 @@ public:
 	bool IsReady() const { return ready; }
 	// 準備完了設定
 	void SetReady() { ready = true; }
-
-
-
 };

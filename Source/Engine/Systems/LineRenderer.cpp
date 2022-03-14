@@ -202,7 +202,6 @@ void LineRenderer::Render(ID3D11DeviceContext* device_context, const DirectX::XM
 	vertices.clear();
 }
 
-
 void LineRenderer::AddVertex(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT4& color)
 {
 	Vertex v{};

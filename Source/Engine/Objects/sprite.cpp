@@ -9,7 +9,6 @@
 #include "Engine/Systems/Shader.h"
 #include "Engine/Systems/Texture.h"
 
-
 // コンストラクタ
 Sprite::Sprite()
 	: Sprite(nullptr)
@@ -179,7 +178,7 @@ void Sprite::Render(ID3D11DeviceContext* immediate_context,
 		};
 
 		// スプライトを構成する４頂点のテクスチャ座標を計算する
-		 DirectX::XMFLOAT2 texcoords[] =
+		DirectX::XMFLOAT2 texcoords[] =
 		{
 			DirectX::XMFLOAT2(sx,      sy),			// 左上
 			DirectX::XMFLOAT2(sx + sw, sy),			// 右上

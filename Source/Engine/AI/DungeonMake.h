@@ -21,7 +21,6 @@ static int	MapSize_Y = 48;	// マップ縦サイズ
 static int	MapSize_X = 48;   // マップ横サイズ
 static int	MapSize = MapSize_Y * MapSize_X;
 
-
 constexpr static int MobMax = 25;	// mobの出現最大値
 constexpr static int RoomMax = 8;	// 部屋の数
 
@@ -31,12 +30,10 @@ constexpr static int CellSize = 2;	// world座標での升目の大きさ
 
 //constexpr static int PlayerID = 0;	// プレイヤーのID
 
-
 //constexpr  static int EndPointY = 0;	// Y終点
 //constexpr  static int EndPointX = 1;	// X終点
 //constexpr  static int StartPointY = 2;	// Y始点
 //constexpr  static int StartPointX = 3;	// X始点
-
 
 enum class Attribute
 {
@@ -56,7 +53,6 @@ enum class Attribute
 	EndAttribute
 };
 
-
 // 書き換え可能なマップ
 struct RogueLikeMap
 {
@@ -66,13 +62,12 @@ struct RogueLikeMap
 	size_t map_data = static_cast<size_t>(Attribute::Floor);// マスの属性情報
 
 	//道の入り口かそうでないかのフラグ
-	bool road_entrance_flag = false; //  false:道 、true:道の入り口
+	bool is_road_entrance = false; //  false:道 、true:道の入り口
 
 	//プレーヤーや敵、アイテムが乗っていても潜在的に分かるようするフラグ
-	bool is_this_room_flag = false; // false:通路、true:部屋　※壁は部屋ではない扱い(falseのまま)とする。
-														//\また、新たに増える場合はこのフラグを消して、enum class で判別するようにする
+	bool is_room = false; // false:通路、true:部屋　※壁は部屋ではない扱い(falseのまま)とする。
+	//\また、新たに増える場合はこのフラグを消して、enum class で判別するようにする
 };
-
 
 // 自作のマップデータを扱う
 class  RogueLikeDungeon
@@ -89,7 +84,7 @@ public:
 	//	size_t map_data = static_cast<size_t>(Attribute::Floor);// マスの属性情報
 
 	//	//プレーヤーや敵、アイテムが乗っていても潜在的に分かるようするフラグ
-	//	bool is_this_room_flag = false; // false:通路、true:部屋　0:1に感覚　※壁は通路扱い(falseのまま)とする。また、新たに増える場合はenum class で判別するようにする
+	//	bool is_room = false; // false:通路、true:部屋　0:1に感覚　※壁は通路扱い(falseのまま)とする。また、新たに増える場合はenum class で判別するようにする
 	//};
 
 	enum class  Road : int//  マップの通路の軸
@@ -104,7 +99,6 @@ public:
 		DirectX::XMFLOAT2 position = {};// マップ上位置
 		int id{};//マップ上のmobのID
 	};
-
 
 	// マップの雛形
 	struct DungeonMapRole
@@ -137,8 +131,7 @@ public:
 
 	MobRole mobs[MobMax]{};// マップ上に存在するmobの情報
 
-	size_t map_room_player{};	// Playerのいる部屋の番号
-
+	size_t map_room_player{};	// プレイヤーのいる部屋の番号
 
 private:
 
@@ -154,7 +147,7 @@ public:
 	void UpdateMapRolePlayer();
 
 	// 敵のマップ情報を更新する
-	void UpdateMapRoleEnemis();
+	void UpdateMapRoleEnemies();
 
 	// マップ生成関数
 	bool MapMake();
@@ -169,7 +162,6 @@ public:
 	//新規ダンジョン作成の関数
 	void DungeonMake();
 
-
 	// マップ情報を消去
 	void MapClear();
 
@@ -177,6 +169,5 @@ public:
 	void MapReMake();
 
 	// デバッグ用GUI描画
-	void DrawDebugGUI();
-
+	void DrawDebugGUI() const;
 };

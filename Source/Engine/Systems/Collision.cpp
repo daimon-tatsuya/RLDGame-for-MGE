@@ -7,10 +7,10 @@
 #include "Engine/Objects/ModelResource.h"
 #include "Engine/Objects/Model.h"
 
-AxisAlignedBoundingBox::AxisAlignedBoundingBox(const DirectX::XMFLOAT3 min_value, const DirectX::XMFLOAT3 max_value,DirectX::XMFLOAT3 object_pos)
-:position_min(min_value), position_max(max_value), object_old_position(object_pos)
+AxisAlignedBoundingBox::AxisAlignedBoundingBox(const DirectX::XMFLOAT3 min_value, const DirectX::XMFLOAT3 max_value, DirectX::XMFLOAT3 object_pos)
+	:position_min(min_value), position_max(max_value), object_old_position(object_pos)
 {
-	center = {(position_max.x - position_min.x)/2,(position_max.y - position_min.y)/2, (position_max.z - position_min.z)/2};
+	center = { (position_max.x - position_min.x) / 2,(position_max.y - position_min.y) / 2, (position_max.z - position_min.z) / 2 };
 }
 
 bool Collision::IntersectSphereToSphere(

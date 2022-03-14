@@ -12,7 +12,7 @@
 /// タイトルシーン
 /// </summary>
 class SceneTitle
-: public Scene
+	: public Scene
 {
 private:
 

@@ -8,7 +8,6 @@
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Input.h"
 
-
 #include "Engine/Objects/Sprite.h"
 #include "Engine/Systems/CameraController.h"
 #include "Engine/Systems/CharacterManager.h"
@@ -24,7 +23,6 @@ void SceneTitle::Initialize()
 	ID3D11Device* device = Graphics::Instance().GetDevice();
 
 	strcpy_s(message, "Title");
-
 }
 
 void SceneTitle::Update(float elapsed_time)
@@ -51,7 +49,7 @@ void SceneTitle::Render()
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
 
-	 //描画処理
+	//描画処理
 	RenderContext render_context{};
 	render_context.light_direction = { -0.5f, -1.0f, -0.5f, 0.0f };	// ライト方向（下方向）
 
@@ -88,14 +86,14 @@ void SceneTitle::Render()
 		constexpr float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
 		constexpr float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
 		const float positionX = screen_width / 3;// - textureWidth;// * (textureWidth / 2);
-		const float positionY =( screen_height / 2 )- texture_height;
+		const float positionY = (screen_height / 2) - texture_height;
 
 		font->TextOutW(device_context, message, positionX, positionY, 128, 128);
 	}
 
 	// 2DデバッグGUI描画
 	{
-	//	CharacterManager::Instance().DrawDebugGUI();
+		//	CharacterManager::Instance().DrawDebugGUI();
 	}
 }
 

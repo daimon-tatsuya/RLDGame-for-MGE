@@ -16,7 +16,6 @@ class Shader;
 /// </summary>
 class ShaderManager
 {
-
 public:
 	enum class ShaderName : int
 	{
@@ -43,6 +42,4 @@ public:
 
 	// シェーダーの呼び出し
 	std::shared_ptr<Shader>GetShader(ShaderName shader_name);
-
-
 };

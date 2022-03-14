@@ -16,9 +16,9 @@ private:
 	Scene* next_scene = nullptr;
 
 	// Now Loading...アニメーション用
-	float	timer = 0.0f;
+	float		timer = 0.0f;
 	int		counter = 0;
-	char	message[32] = { 0 };
+	char		message[32] = { 0 };
 
 public:
 	explicit SceneLoading(Scene* next_scene) : next_scene(next_scene) {}
@@ -39,6 +39,4 @@ public:
 private:
 	// ローディングスレッド
 	static void LoadingThread(const SceneLoading* scene);
-
-
 };

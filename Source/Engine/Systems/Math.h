@@ -38,7 +38,6 @@ public:
 	/// <returns>Any,min,maxのいずれか</returns>
 	static float ClampAnyFloat(float check, float any, float min, float max);
 
-
 	/// <summary>
 	/// <para>minからmaxまでのステップ</para>
 	/// <para>nがmax以上なら1,min未満なら0,その他はAny</para>
@@ -70,7 +69,6 @@ public:
 	/// <param name="max">最大値</param>
 	/// <returns></returns>
 	static float RandomRangeFloat(float min, float max);
-
 
 	/// <summary>
 	/// 0~maxまでのランダム値を計算する
@@ -115,7 +113,6 @@ public:
 	/// <returns></returns>
 	static float ConvertToDegreeAngle(float radian);
 
-
 	/// <summary>
 	/// 浮動小数点数の誤差を考慮した比較
 	/// </summary>
@@ -147,7 +144,6 @@ public:
 	/// <returns>v1からv2への外積</returns>
 	static   DirectX::XMFLOAT3 Cross(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
 
-
 	/// <summary>
 	///	位置ベクトルの長さ
 	/// </summary>
@@ -176,7 +172,15 @@ public:
 	/// <returns>v1+v2のベクトル</returns>
 	static  DirectX::XMFLOAT3 AddVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
 
-	static  int GetOneDimensionalArrayIndex(DirectX::XMINT2);
+	/// <summary>
+	///	誤差を考慮した比較
+	///	xとyの差の絶対値がDBL_EPSILON以下ならほぼ同じ値
+	/// </summary>
+	///	<param name="x"></param>
+	///	<param name="y"></param>
+	/// <returns>xとyの差の絶対値がDBL_EPSILON以下ならtrue</returns>
+	static bool Comparison(float x,float y);
+
 };
 //Asterの結果を2次元配列に変換する
 //void HeuristicSearch::ConvertTwoDimensionalArray()

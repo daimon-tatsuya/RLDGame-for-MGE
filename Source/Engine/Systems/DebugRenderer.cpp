@@ -350,7 +350,7 @@ void DebugRenderer::CreateCylinderMesh(ID3D11Device* device, float radius1, floa
 	// 頂点バッファ
 	{
 		D3D11_BUFFER_DESC desc = {};
-		D3D11_SUBRESOURCE_DATA subresource_data= {};
+		D3D11_SUBRESOURCE_DATA subresource_data = {};
 
 		desc.ByteWidth = static_cast<UINT>(sizeof(DirectX::XMFLOAT3) * cylinder_vertex_count);
 		desc.Usage = D3D11_USAGE_IMMUTABLE;	// D3D11_USAGE_DEFAULT;

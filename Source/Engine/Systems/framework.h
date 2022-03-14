@@ -18,7 +18,6 @@
 
 class Framework
 {
-
 private:
 
 	const HWND				hwnd;
@@ -27,7 +26,6 @@ private:
 	Input							input;		// “ü—ÍŠÇ—ƒNƒ‰ƒX
 
 public:
-
 
 private:
 	/// <summary>
@@ -55,5 +53,4 @@ public:
 	LRESULT CALLBACK HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 	int Run();
-
 };

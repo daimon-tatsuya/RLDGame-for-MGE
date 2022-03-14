@@ -12,7 +12,7 @@ struct HitResult;
 /// ステージの基底クラス
 /// </summary>
 class Stage
-: public Object
+	: public Object
 {
 public:
 	Stage() = default;
@@ -38,7 +38,7 @@ public:
 	virtual bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) { return false; }
 
 	//メッセージ受信処理
-	 bool OnMessage(const Telegram& msg) override { return false; }
+	bool OnMessage(const Telegram& telegram) override { return false; }
 
 	// デバッグ用GUI描画
 	void DrawDebugGUI()override {}

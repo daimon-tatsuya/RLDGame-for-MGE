@@ -8,7 +8,6 @@
 
 #include <Windows.h>
 
-
 /// <summary>
 /// /フレーム管理クラス
 /// </summary>
@@ -28,9 +27,7 @@ private:
 
 public:
 
-
 private:
-
 
 public:
 	HighResolutionTimer();
@@ -53,8 +50,4 @@ public:
 	// Reset()が呼ばれてからの経過時間を、時計が止まっている時間を除いて返します。
 	// 単位：秒
 	float TimeStamp() const;
-
-
-
-
 };

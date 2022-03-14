@@ -58,14 +58,12 @@ void Camera::SetPerspectiveFov(const float fovY, const float aspect, const float
 
 void Camera::SetOrthoFov(const float width, const float height, const float nearZ, const float farZ)
 {
-
 	this->width = width;
 	this->height = height;
 	this->nearZ = nearZ;
 	this->farZ = farZ;
 	OrthoMode = true;
 }
-
 
 void Camera::ActivateCamera()
 {
@@ -77,7 +75,7 @@ void Camera::ActivateCamera()
 	DirectX::XMStoreFloat4x4(&view, View);
 
 	DirectX::XMMATRIX Projection{};
-	if (OrthoMode==false)
+	if (OrthoMode == false)
 	{
 		//画角、画面比率、クリップ距離からプロジェクション行列を作成
 		Projection = DirectX::XMMatrixPerspectiveFovLH(fovY, aspect, nearZ, farZ);

@@ -8,12 +8,11 @@
 #include <wrl.h>
 #include  "Engine/Systems/Math.h"
 
-
- HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* cso_name, ID3D11VertexShader** vertex_shader, ID3D11InputLayout** input_layout, D3D11_INPUT_ELEMENT_DESC* input_element_desc, UINT num_elements);
- HRESULT CreatePixelShaderFromCso(ID3D11Device* device, const char* cso_name, ID3D11PixelShader** pixel_shader);
+HRESULT CreateVertexShaderFromCso(ID3D11Device* device, const char* cso_name, ID3D11VertexShader** vertex_shader, ID3D11InputLayout** input_layout, D3D11_INPUT_ELEMENT_DESC* input_element_desc, UINT num_elements);
+HRESULT CreatePixelShaderFromCso(ID3D11Device* device, const char* cso_name, ID3D11PixelShader** pixel_shader);
 
 //前方宣言
- class Model;
+class Model;
 struct RenderContext;
 
 /// <summary>
@@ -23,7 +22,7 @@ class Shader
 {
 public:
 	explicit Shader(ID3D11Device* device) {}
-	virtual ~Shader() =default;
+	virtual ~Shader() = default;
 	// 描画開始
 	virtual void Activate(ID3D11DeviceContext* device_context, const RenderContext& rc) = 0;
 	// 描画開始
@@ -50,7 +49,7 @@ protected:
 	{
 		DirectX::XMFLOAT4	material_color;
 		DirectX::XMFLOAT4  vertex_color;
- 	};
+	};
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer>			scene_constant_buffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer>			mesh_constant_buffer;

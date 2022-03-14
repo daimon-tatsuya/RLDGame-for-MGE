@@ -83,5 +83,4 @@ public:
 
 	// デバッグ用GUI描画
 	void DrawDebugGUI();
-
 };

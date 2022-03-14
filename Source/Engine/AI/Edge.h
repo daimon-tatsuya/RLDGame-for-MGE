@@ -5,7 +5,6 @@
 //
 //**********************************************************
 
-
 //0,  /*エッジの表示　上の方向*/
 //1,  /*エッジの表示　右上の方向*/
 //2,  /*エッジの表示　右の方向*/
@@ -35,7 +34,6 @@ enum class EdgeDirection :int
 //https://qiita.com/saltheads/items/dd65935878a0901fe9e7
 
 constexpr int EDGE_NUM = 8;// エッジの数　≒　方向の数
-
 
 class Edge
 {

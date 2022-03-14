@@ -10,10 +10,28 @@
 #include "Engine/AI/HeuristicSearch.h"
 #include "Engine/Systems/Object.h"
 
-
 // ゲームに共通するものだけ残し、あとはこのクラスを継承して、アクションゲームのキャラクターベースと分ける仕様にする予定
 // 使わない関数があるが、あくまでアクションゲームベースなので消さないでおく
-
+/*
+ 使っていない関数
+ UpdateVerticalVelocity
+ UpdateVerticalMove
+ UpdateHorizontalVelocity
+ UpdateHorizontalMove
+ UpdateVelocity
+ UpdateInvincibleTimer
+ AddImpulse
+ AirDash
+ ApplyDamage
+ Jump
+ Move
+ Turn
+ OnLanding
+ OnDamaged
+ OnDead
+ IsGround
+ MoveCheck
+*/
 //前方宣言
 class RogueLikeDungeon;
 
@@ -33,7 +51,6 @@ public:
 	RogueLikeDungeon* stage_information = nullptr; // マップ情報　(値をコピーした実体にするか検討中)
 
 	ShortestPath* shortest_path{};//最短経路
-
 
 private:
 
@@ -110,7 +127,7 @@ public:
 	/// <summary>
 	/// 破棄
 	/// </summary>
-	virtual  void Destroy();
+	//virtual  void Destroy();
 
 	/// <summary>
 	/// ジャンプ処理
@@ -165,20 +182,18 @@ public:
 	// 地面に接地しているか
 	bool IsGround() const { return is_ground; }
 
-	// 最大健康状態を取得
-	int GetMaxHealth() const { return max_health; }
-
 	//プレイヤーが移動できるかチェックする
 	void MoveCheck(float mx, float mz);
+
+	// 最大健康状態を取得
+	int GetMaxHealth() const { return max_health; }
 
 	// 最大健康状態を設定
 	void SetMaxHealth() { this->max_health = max_health; }
 
 	// マップ情報を取得
-	 RogueLikeDungeon* GetStageInformation() const { return stage_information; }
+	RogueLikeDungeon* GetStageInformation() const { return stage_information; }
 
 	//最短経路を設定
 	void SetShortestPath(std::vector<int> path) const { shortest_path->path = std::move(path); }
-
-
 };

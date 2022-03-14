@@ -1,4 +1,3 @@
-
 //**********************************************************
 //
 //		Frameworkクラス
@@ -31,7 +30,6 @@ Framework::Framework(HWND hwnd)
 {
 	// シーン初期化
 	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
-
 }
 
 void Framework::Update(float elapsed_time/*最後のフレームからの経過秒数*/)
@@ -66,12 +64,10 @@ void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/) con
 
 int Framework::Run()
 {
-
 	MSG msg = {};
 
 	while (WM_QUIT != msg.message)
 	{
-
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);

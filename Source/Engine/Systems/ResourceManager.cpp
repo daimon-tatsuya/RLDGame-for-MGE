@@ -9,7 +9,7 @@
 
 ResourceManager::~ResourceManager()
 {
-	if(!models.empty())//コンテナサイズが 0 のときに true, そうでないときに false。
+	if (!models.empty())//コンテナサイズが 0 のときに true, そうでないときに false。
 	{
 		models.clear();
 	}

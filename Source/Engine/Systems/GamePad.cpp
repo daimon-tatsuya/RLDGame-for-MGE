@@ -1,4 +1,3 @@
-
 //**********************************************************
 //
 //	GamePadクラス
@@ -10,7 +9,6 @@
 #include <Xinput.h>
 
 #include "Engine/Systems/GamePad.h"
-
 
 void GamePad::Update()
 {
@@ -28,21 +26,21 @@ void GamePad::Update()
 		//! XInputGetCapabilities(m_slot, XINPUT_FLAG_GAMEPAD, &caps);
 		XINPUT_GAMEPAD& pad = xinput_state.Gamepad;
 
-		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_UP)							new_button_state |= BTN_UP;
+		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_UP)							    new_button_state |= BTN_UP;
 		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)						new_button_state |= BTN_RIGHT;
 		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)						new_button_state |= BTN_DOWN;
 		if (pad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)							new_button_state |= BTN_LEFT;
-		if (pad.wButtons & XINPUT_GAMEPAD_A)										new_button_state |= BTN_A;
-		if (pad.wButtons & XINPUT_GAMEPAD_B)										new_button_state |= BTN_B;
-		if (pad.wButtons & XINPUT_GAMEPAD_X)										new_button_state |= BTN_X;
-		if (pad.wButtons & XINPUT_GAMEPAD_Y)										new_button_state |= BTN_Y;
+		if (pad.wButtons & XINPUT_GAMEPAD_A)											new_button_state |= BTN_A;
+		if (pad.wButtons & XINPUT_GAMEPAD_B)											new_button_state |= BTN_B;
+		if (pad.wButtons & XINPUT_GAMEPAD_X)											new_button_state |= BTN_X;
+		if (pad.wButtons & XINPUT_GAMEPAD_Y)											new_button_state |= BTN_Y;
 		if (pad.wButtons & XINPUT_GAMEPAD_START)									new_button_state |= BTN_START;
-		if (pad.wButtons & XINPUT_GAMEPAD_BACK)									new_button_state |= BTN_BACK;
+		if (pad.wButtons & XINPUT_GAMEPAD_BACK)										new_button_state |= BTN_BACK;
 		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)						new_button_state |= BTN_LEFT_THUMB;
 		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)					new_button_state |= BTN_RIGHT_THUMB;
-		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)					new_button_state |= BTN_LEFT_SHOULDER;
+		if (pad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)				new_button_state |= BTN_LEFT_SHOULDER;
 		if (pad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)				new_button_state |= BTN_RIGHT_SHOULDER;
-		if (pad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)		new_button_state |= BTN_LEFT_TRIGGER;
+		if (pad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)	new_button_state |= BTN_LEFT_TRIGGER;
 		if (pad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)	new_button_state |= BTN_RIGHT_TRIGGER;
 
 		if ((pad.sThumbLX <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && pad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
@@ -87,14 +85,14 @@ void GamePad::Update()
 				{
 					static const int povBit[8] =
 					{
-						BTN_UP,					// 上
+						BTN_UP,								// 上
 						BTN_RIGHT | BTN_UP,		// 右上
-						BTN_RIGHT,				// 右
+						BTN_RIGHT,						// 右
 						BTN_RIGHT | BTN_DOWN,	// 右下
-						BTN_DOWN,				// 下
+						BTN_DOWN,						// 下
 						BTN_LEFT | BTN_DOWN,	// 左下
-						BTN_LEFT,				// 左
-						BTN_LEFT | BTN_UP		// 左上
+						BTN_LEFT,							// 左
+						BTN_LEFT | BTN_UP			// 左上
 					};
 					int angle = joyInfo.dwPOV / 4500;
 					newButtonState |= povBit[angle];

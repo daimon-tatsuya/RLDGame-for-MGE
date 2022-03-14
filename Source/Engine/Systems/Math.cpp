@@ -77,7 +77,6 @@ float Math::RandomRangeFloat(const float min, const float max)
 
 	float calculated = 0;
 
-
 	// min`max‚Ü‚Å‚Ìƒ‰ƒ“ƒ_ƒ€’l‚É•ÏŠ·
 	calculated = min + (max - min) * value;
 	return calculated;
@@ -85,7 +84,6 @@ float Math::RandomRangeFloat(const float min, const float max)
 
 int Math::RandomInt(const int max)
 {
-
 	int calculated = 0;
 	if (max == 0)
 	{
@@ -187,7 +185,6 @@ DirectX::XMFLOAT3 Math::Cross(const DirectX::XMFLOAT3 v1, const DirectX::XMFLOAT
 	return cross;
 }
 
-
 float Math::Length(const DirectX::XMFLOAT3 v)
 {
 	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
@@ -216,4 +213,18 @@ DirectX::XMFLOAT3 Math::AddVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
 	return vec;
 }
 
+bool Math::Comparison(float x, float y)
+{
+	const float fabs_num = fabs(x - y);
+	if (fabs_num <  DBL_EPSILON)
+	{
+		return true;
+	}
 
+	return false;
+}
+
+//int Math::GetOneDimensionalArrayIndex(DirectX::XMINT2 array_num)
+//{
+//
+//}

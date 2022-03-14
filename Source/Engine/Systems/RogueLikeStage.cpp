@@ -14,7 +14,6 @@
 
 RogueLikeStage::RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon) : rogue_like_dungeon_imgui(rogue_like_dungeon)
 {
-
 	scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
 	position = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
 	angle = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
@@ -28,10 +27,6 @@ RogueLikeStage::~RogueLikeStage()
 
 void RogueLikeStage::Update(float elapsed_time)
 {
-	// オブジェクト行列を更新
-	//UpdateTransform();
-	// モデル行列更新
-	//	model->UpdateTransform(transform);
 
 	for (auto& stage : stage_chip)
 	{
@@ -63,7 +58,7 @@ bool RogueLikeStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFL
 	return false;
 }
 
-bool RogueLikeStage::OnMessage(const Telegram& msg)
+bool RogueLikeStage::OnMessage(const Telegram& telegram)
 {
 	return false;
 }
@@ -86,14 +81,12 @@ void RogueLikeStage::DrawDebugGUI()
 		const float player_positionY = rogue_like_dungeon_imgui->mobs[0].position.y * 2.f;
 
 		ImGui::Text("PlayerPosition:%f %f", player_positionX, player_positionY);
-
 	}
 	ImGui::End();
 }
 
 void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_role)
 {
-
 	this->Clear();
 
 	int object_num = 0;

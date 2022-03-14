@@ -55,7 +55,6 @@ private:
 	// マウス座標更新
 	void UpdateMousePos();
 
-
 public:
 
 	ImGuiRenderer(HWND hWnd, ID3D11Device* device);
@@ -69,6 +68,4 @@ public:
 
 	// WIN32メッセージハンドラー
 	LRESULT HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-
 };

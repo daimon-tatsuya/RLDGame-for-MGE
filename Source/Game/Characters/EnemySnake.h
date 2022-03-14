@@ -56,22 +56,19 @@ public:
 	//子ステート
 	enum class Receive
 	{
-		Wait,
+		//		Wait,
 		Called,
 		StateEnd
 	};
 
 	StateMachine<ParentState, void, const float> enemy_snake_state_machine;	// ヘビの親ステート
 
-	using EnemySnakeEntryState = StateMachine<Entry, void, const float>; // ヘビ子ステート
-	using EnemySnakeReactionState = StateMachine<Reaction, void, const float>; // ヘビ子ステート
-	using EnemySnakeReceiveState = StateMachine<Receive, void, const float>; // ヘビ子ステート
+	using EnemySnakeEntryState = StateMachine<Entry, void, const float>; // ヘビの子ステート
+	using EnemySnakeReactionState = StateMachine<Reaction, void, const float>; // ヘビの子ステート
+	using EnemySnakeReceiveState = StateMachine<Receive, void, const float>; // ヘビの子ステート
 	EnemySnakeEntryState      enemy_snake_entry_state;   // 行動(入力)ステート
 	EnemySnakeReactionState enemy_snake_reaction_state;// HP関係の反応ステート
 	EnemySnakeReceiveState   enemy_snake_receive_state; // MetaAIからの指示待ちステート
-
-
-
 
 private:
 
@@ -89,13 +86,11 @@ private:
 	/// <param name="elapsed_time">経過時間</param>
 	void ReactionState(const float elapsed_time);
 
-
 	/// <summary>
 	///  MetaAIからの指示待ちステート
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
 	void ReceiveState(const float elapsed_time);
-
 
 	//子ステート
 
@@ -123,14 +118,11 @@ private:
 	/// <param name="elapsed_time"></param>
 	void ExploreState(const float elapsed_time);
 
-
-
 	/// <summary>
 	/// <para>対象に攻撃するステート</para>
 	/// </summary>
 	/// <param name="elapsed_time"></param>
 	void AttackState(const float elapsed_time);
-
 
 	/// <summary>
 	/// <para>対象にアビリティ発動するステート</para>
@@ -164,11 +156,11 @@ private:
 
 	//? ReceiveState
 
-	/// <summary>
-	/// <para>待機ステート</para>
-	/// </summary>
-	/// <param name="elapsed_time">経過時間</param>
-	void WaitState(const float elapsed_time);
+	///// <summary>
+	///// <para>待機ステート</para>
+	///// </summary>
+	///// <param name="elapsed_time">経過時間</param>
+	//void WaitState(const float elapsed_time);
 
 	/// <summary>
 	/// <para>オープンメニューステート</para>
@@ -179,7 +171,6 @@ private:
 	void CalledState(const float elapsed_time);
 
 protected:
-
 
 public:
 
@@ -196,7 +187,7 @@ public:
 	void FiniteStateMachineInitialize() override;
 
 	// 破棄
-	void Destroy() override;
+	//void Destroy() override;
 
 	// デバッグエネミー情報表示
 	void DrawDebugGUI()override;
@@ -212,5 +203,4 @@ public:
 
 	//メッセージ受信処理
 	bool OnMessage(const Telegram& telegram) override;
-
 };

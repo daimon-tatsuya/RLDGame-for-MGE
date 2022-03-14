@@ -177,7 +177,6 @@ void ModelResource::Mesh::serialize(Archive& archive, int version)
 	);
 }
 
-
 namespace DirectX
 {
 	template<class Archive>

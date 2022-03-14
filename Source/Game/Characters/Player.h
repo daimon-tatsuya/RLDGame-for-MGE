@@ -56,18 +56,16 @@ private:
 	// 子ステート
 	enum class Receive
 	{
-		Wait,
+	//	Wait,
 		Called,
 		StateEnd
 	};
 
+	StateMachine<ParentState, void, const float> player_state_machine;	// プレイヤーの親ステート
 
-
-	StateMachine<ParentState, void, const float> player_state_machine;	// プレイヤー親ステート
-
-	using PlayerEntryState = StateMachine<Entry, void, const float>; // プレイヤー子ステート
-	using PlayerReactionState = StateMachine<Reaction, void, const float>; // プレイヤー子ステート
-	using PlayerReceiveState = StateMachine<Receive, void, const float>; // プレイヤー子ステート
+	using PlayerEntryState = StateMachine<Entry, void, const float>; // プレイヤーの子ステート
+	using PlayerReactionState = StateMachine<Reaction, void, const float>; // プレイヤーの子ステート
+	using PlayerReceiveState = StateMachine<Receive, void, const float>; // プレイヤーの子ステート
 	PlayerEntryState      player_entry_state;   // 行動(入力)ステート
 	PlayerReactionState  player_reaction_state;// HP関係の反応ステート
 	PlayerReceiveState   player_receive_state; // MetaAIからの指示待ちステート
@@ -77,9 +75,7 @@ private:
 	std::vector<std::string> player_reaction_string;
 	std::vector<std::string> player_receive_string;
 
-
 public:
-
 
 private:
 
@@ -97,13 +93,11 @@ private:
 	/// <param name="elapsed_time">経過時間</param>
 	void ReactionState(const float elapsed_time);
 
-
 	/// <summary>
 	///  MetaAIからの指示待ちステート
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
 	void ReceiveState(const float elapsed_time);
-
 
 	//子ステート
 
@@ -173,12 +167,6 @@ private:
 	//?ReceiveState
 
 	/// <summary>
-	/// <para>待機ステート</para>
-	/// </summary>
-	/// <param name="elapsed_time">経過時間</param>
-	void WaitState(const float elapsed_time);
-
-	/// <summary>
 	/// <para>オープンメニューステート</para>
 	/// <para>MetaAIから送られてくる命令(メッセージ)によってステートを遷移させる</para>
 	/// <para>仮置き</para>
@@ -186,12 +174,10 @@ private:
 	/// <param name="elapsed_time">経過時間</param>k
 	void CalledState(const float elapsed_time);
 
-
-
 public:
 
 	Player(RogueLikeDungeon* rogue_like_dungeon);
-	 ~Player()override;
+	~Player()override;
 
 	/// <summary>
 	/// 更新処理
@@ -218,13 +204,22 @@ public:
 	/// <summary>
 	/// メッセージ受信処理
 	/// </summary>
-	/// <param name="msg">命令</param>
+	/// <param name="telegram">命令</param>
 	/// <returns>受信の有無</returns>
-	bool OnMessage(const Telegram& msg) override;
+	bool OnMessage(const Telegram& telegram) override;
+
+	//メタAIメタAIにターンの終了を伝える
+	void SendMessaging(MESSAGE_TYPE msg);
 
 	// デバッグ用GUI描画
 	void DrawDebugGUI()override;
 
 	// デバッグプリミティブ描画
 	void DrawDebugPrimitive()override;
+
+	/// <summary>
+	/// 移動しているかをチェック
+	/// </summary>
+	/// <returns>移動していたらtrue</returns>
+	bool IsMoved();
 };

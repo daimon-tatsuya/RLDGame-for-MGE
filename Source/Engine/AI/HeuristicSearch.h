@@ -21,7 +21,7 @@ struct ShortestPath
 
 	void Clear()
 	{
-		destination_pos = DirectX::XMINT2(0,0);
+		destination_pos = DirectX::XMINT2(0, 0);
 		path.clear();
 		path_index = 0;
 	}
@@ -81,6 +81,4 @@ public:
 	/// /// <param name="rogue_like_dungeon">マップ情報</param>
 	/// <returns>最短経路</returns>
 	std::vector<int> Search(int start_id, int goal_id, const RogueLikeDungeon& rogue_like_dungeon);
-
-
 };

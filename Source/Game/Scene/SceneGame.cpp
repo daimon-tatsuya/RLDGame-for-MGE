@@ -35,7 +35,6 @@ SceneGame::~SceneGame()
 	StageManager::Instance().Clear();
 	// キャラクター終了化
 	CharacterManager::Instance().Clear();
-
 }
 
 void SceneGame::Initialize()
@@ -62,10 +61,8 @@ void SceneGame::Initialize()
 		0.1f,
 		100.f);
 
-
 	// カメラコントローラー初期化
 	camera_controller = std::make_unique<CameraController>();
-
 
 	//ダンジョン生成初期化
 	RogueLikeDungeon rogue_like_dungeon;
@@ -75,24 +72,22 @@ void SceneGame::Initialize()
 	// ステージ初期化
 	StageManager& stage_manager = StageManager::Instance();
 	RogueLikeStage* rogue_like_stage = new RogueLikeStage(&storage_dungeon);
-	stage_manager.Register(rogue_like_stage);
-
-
+	StageManager::Instance().Register(rogue_like_stage);
 
 	// キャラクター生成処理
 	{
-		CharacterManager& character_manager = CharacterManager::Instance();
 		//	 プレイヤー
+		CharacterManager::Instance().Register(new Player(&storage_dungeon), static_cast<int>(Meta::Identity::Player));
+		// 敵
+		CharacterManager::Instance().Register(new EnemySnake(&storage_dungeon), static_cast<int>(Meta::Identity::Enemy));
+		Meta& meta = Meta::Instance();
 
-		character_manager.Register(new Player(&storage_dungeon) , static_cast<int>(Meta::Identity::Player));
-
-		character_manager.Register(new EnemySnake(&storage_dungeon) ,static_cast<int>(Meta::Identity::Enemy));
-
+		meta.SendMessaging(static_cast<int>(Meta::Identity::Meta), static_cast<int>(Meta::Identity::CharacterManager), MESSAGE_TYPE::MSG_END_ENEMY_TURN);
 	}
 
 	//生成されなかったオブジェクトをマップデータから消す
 	storage_dungeon.UpdateMapRolePlayer();
-	storage_dungeon.UpdateMapRoleEnemis();
+	storage_dungeon.UpdateMapRoleEnemies();
 
 	//視錐台カリング用のAABBの初期設定
 	//axis_aligned_bounding_box_for_frustum.clear();
@@ -109,7 +104,6 @@ void SceneGame::Initialize()
 	//		}
 	//	}
 	//}
-
 }
 
 void SceneGame::Finalize()
@@ -133,19 +127,23 @@ void SceneGame::Update(const float elapsed_time)
 	const GamePad& game_pad = Input::Instance().GetGamePad();
 
 	storage_dungeon.UpdateMapRolePlayer();
-	storage_dungeon.UpdateMapRoleEnemis();
+	storage_dungeon.UpdateMapRoleEnemies();
 
-	// Aボタンを押したらタイトルシーンへ切り替え
+	// Aボタン(Zｷｰ)を押したらタイトルシーンへ切り替え
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
 	}
-	// Bボタンを押したら 再ロード
+	// Bボタン(Xｷｰ)を押したら 再ロード
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_B))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 	}
-
+	// Startボタン(Nｷｰ)を押したら 敵の削除
+	//if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_START))
+	//{
+	////	CharacterManager::Instance().Remove(CharacterManager::Instance().GetCharacterFromId(static_cast<int>(Meta::Identity::Enemy)));
+	//}
 }
 
 void SceneGame::Render()
@@ -156,7 +154,7 @@ void SceneGame::Render()
 	ID3D11DepthStencilView* depth_stencil_view = graphics.GetDepthStencilView();
 
 	// 画面クリア＆レンダーターゲット設定
-	constexpr FLOAT clear_color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
+	constexpr FLOAT clear_color[] = { 0.0f, 0.5f, 0.5f, 0.5f };	// RGBA(0.0～1.0)
 	device_context->ClearRenderTargetView(render_target_view, clear_color);
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
@@ -183,29 +181,15 @@ void SceneGame::Render()
 
 			// キャラクター描画
 			CharacterManager::Instance().Render(device_context, shader);
-
-			//for (int array_index = 0; array_index < 16; array_index++)
-			//{
-			//	const bool  for_debug = camera_controller->IntersectFrustum(axis_aligned_bounding_box_for_frustum[array_index]);
-				//if (for_debug)
-				//{
-					// ステージ描画
-					//StageManager::Instance().Render(device_context, shader);
-					// キャラクター描画
-					//CharacterManager::Instance().Render(device_context, shader);
-			//	}
-			//}
 		}
 		shader->Deactivate(device_context);
 	}
 	// 3Dエフェクト描画
 	{
-
 	}
 	// 2Dスプライト描画
 	{
 		// HUD更新
-
 	}
 
 	// 3Dデバッグ描画

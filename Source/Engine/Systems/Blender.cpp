@@ -139,4 +139,3 @@ Blender::Blender(ID3D11Device* device)
 	hr = device->CreateBlendState(&blend_desc, states[BS_SCREEN].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 }
-

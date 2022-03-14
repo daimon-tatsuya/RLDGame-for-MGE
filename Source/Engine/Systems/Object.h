@@ -20,8 +20,9 @@ class Object
 {
 private:
 
-protected:
+protected://ToDo protectedである必要がないので変更する,あとカプセル化する(全てのクラス)
 	DirectX::XMFLOAT3		position{};
+	DirectX::XMFLOAT3		old_position{};
 	DirectX::XMFLOAT3		angle{};// ラジアン角
 	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 	DirectX::XMFLOAT4X4	transform =
@@ -33,24 +34,28 @@ protected:
 	};
 	DirectX::XMFLOAT3		velocity{};
 	std::shared_ptr<Model> model = nullptr;
-	int					id = 0;
+	int				id = 0;
 	float				radius = 0.5f;// 半径
 	float				height = 2.0f;// 高さ
+	bool				is_set_pos = false;//位置が決まった時にbreakするために使う
+	bool				exists = false;//存在フラグ
 
 public:
 	float				gravity = -1.0f;
 	float				gravity_cut_time = 0;// 重力を無視するときに使う
-	bool				is_ground = false;// 地面判定用
+
 	float				invincible_timer = 0.0f;// 無敵時間
 	float				friction = 0.5f;
 	float				acceleration = 1.0f;
 	float				max_move_speed = 5.0f;
-	float				move_vecX = 0.0f;
-	float				move_vecZ = 0.0f;
+	float				move_vec_x = 0.0f;
+	float				move_vec_z = 0.0f;
 	float				air_control = 0.3f;
 	float				step_offset = 1.0f;
 	float				slope_rate = 0.0f;
-	bool				set_pos = false;
+
+	bool				is_ground = false;// 地面判定用
+
 private:
 
 protected:
@@ -78,7 +83,7 @@ public:
 	virtual	void DrawDebugPrimitive() {}
 
 	//メッセージ受信処理
-	virtual bool OnMessage(const Telegram& msg) = 0;
+	virtual bool OnMessage(const Telegram& telegram) = 0;
 
 	// 任意の回転角を0~360に正規化
 	float NormalizeAnyAngle(float radian);
@@ -101,6 +106,16 @@ public:
 	void SetPositionY(const float y) { this->position.y = y; }
 	void SetPositionZ(const float z) { this->position.z = z; }
 
+
+	// 位置を取得
+	const DirectX::XMFLOAT3& GetOldPosition() const { return old_position; }
+
+	// 位置を設定
+	void SetOldPosition() { old_position = position; }
+	void SetOldPositionX() { old_position.x = position.x; }
+	void SetOldPositionY() { old_position.y = position.y; }
+	void SetOldPositionZ() { old_position.z = position.z; }
+
 	//現在の位置から動かす
 	void AddPosition(const DirectX::XMFLOAT3& position)
 	{
@@ -108,9 +123,18 @@ public:
 		this->position.y += position.y;
 		this->position.z += position.z;
 	}
-	void AddPositionX(const float x) { this->position.x += x; }
-	void AddPositionY(const float y) { this->position.y += y; }
-	void AddPositionZ(const float z) { this->position.z += z; }
+	void AddPositionX(const float x)
+	{
+		this->position.x += x;
+	}
+	void AddPositionY(const float y)
+	{
+		this->position.y += y;
+	}
+	void AddPositionZ(const float z)
+	{
+		this->position.z += z;
+	}
 
 	// 回転角度を取得
 	const DirectX::XMFLOAT3& GetAngle() const { return angle; }
@@ -157,5 +181,4 @@ public:
 
 	// 高さを設定
 	void SetHeight(const float height) { this->height = height; }
-
 };

@@ -16,9 +16,9 @@ private:
 	DirectX::XMFLOAT4X4 view{};			// ビュー行列
 	DirectX::XMFLOAT4X4 projection{};	// 投影行列
 
-	DirectX::XMFLOAT3	eye{0,1,10};		// カメラの位置
-	DirectX::XMFLOAT3	focus{0,0,0};	// カメラの方向
-	DirectX::XMFLOAT3	up{0,1,0};		// カメラの上方向、通常は<0.0f、1.0f、0.0f>
+	DirectX::XMFLOAT3	eye{ 0,1,10 };		// カメラの位置
+	DirectX::XMFLOAT3	focus{ 0,0,0 };	// カメラの方向
+	DirectX::XMFLOAT3	up{ 0,1,0 };		// カメラの上方向、通常は<0.0f、1.0f、0.0f>
 	DirectX::XMFLOAT3	front{};		// カメラの前方方向
 	DirectX::XMFLOAT3	right{};		// カメラの右方向
 
@@ -26,8 +26,8 @@ private:
 	float height{};
 	float aspect{};
 	float fovY{ DirectX::XM_PI / 6.0f };
-	float nearZ{0.1f};
-	float farZ{1000.f};
+	float nearZ{ 0.1f };
+	float farZ{ 1000.f };
 
 	bool  OrthoMode = false;// 平行投影カメラモード
 
@@ -46,7 +46,6 @@ public:
 	}
 
 	void ActivateCamera();
-
 
 	//------------------------------------------------
 	//
@@ -101,7 +100,6 @@ public:
 	// 右方向の取得
 	const DirectX::XMFLOAT3& GetRight() const { return right; }
 
-
 	//幅の設定
 	void SetWidth(const float width) { this->width = width; }
 
@@ -139,13 +137,9 @@ public:
 	//farの取得
 	float GetFar() const { return  farZ; }
 
-
 	// 平行投影カメラモード取得
-	 bool GetOrthMode() { return OrthoMode; }
+	bool GetOrthMode() { return OrthoMode; }
 
 	// 平行投影カメラモード設定
-	void SetOrthMode(bool mode) {  OrthoMode= mode; }
+	void SetOrthMode(bool mode) { OrthoMode = mode; }
 };
-
-
-

@@ -5,11 +5,9 @@
 //
 //**********************************************************
 
-
 #include <vector>
 #include <memory>
 #include "Engine/Systems/Math.h"
-
 
 //前方宣言
 class Edge;
@@ -18,15 +16,13 @@ class Node
 {
 private:
 
-	bool start_node_flag = false;		// A*始める地点
-	bool goal_node_flag = false;		// 目標地点
-	bool player_node_flag = false;	// Playerのいる地点
-	bool enemy_node_flag = false;	// Enemyのいる地点
-	bool wall_node_flag = false;		// 壁のある地点
-	bool item_node_flag = false;		// アイテムのある地点
-	bool searched_node_flag = false;// 探索済みの地点
-
-
+	bool is_start_node = false;		// A*始める地点ならtrue
+	bool is_goal_node = false;		// 目標地点ならtrue
+	bool is_player_node = false;	// プレイヤーのいる地点ならtrue
+	bool is_enemy_node = false;	// 敵のいる地点ならtrue
+	bool is_wall_node = false;		// 壁のある地点ならtrue
+	bool is_item_node = false;		// アイテムのある地点ならtrue
+	bool is_searched_node = false;// 探索済みの地点ならtrue
 
 public:
 	int node_id = 0;
@@ -35,14 +31,13 @@ public:
 	float cost = 1.0f;		                             // ノード自体のコスト
 	float cost_from_start = 100.f;                 // A*を始めた地点からの合計コスト
 
-
 private:
 
 public:
 
 	Node();
 
-	~Node()= default;
+	~Node() = default;
 
 	/// <summary>
 	/// <para>start_node_flagの設定</para>
@@ -50,14 +45,14 @@ public:
 	/// <para>trueのnodeからHeuristicSearchを行う</para>
 	/// </summary>
 	/// <param name="set"></param>
-	void SetStartNodeFlag(const bool set) { start_node_flag = set; }
+	void SetIsStartNode(const bool set) { is_start_node = set; }
 
 	/// <summary>
 	/// <para>HeuristicSearchで使用</para>
 	/// <para>trueのnodeからHeuristicSearchを行う</para>
 	/// </summary>
-	/// <returns>start_node_flag</returns>
-	 bool GetStartNodeFlag() const { return start_node_flag; }
+	/// <returns>is_start_node</returns>
+	bool GetIsStartNode() const { return is_start_node; }
 
 	/// <summary>
 	/// <para>goal_node_flagの設定</para>
@@ -65,79 +60,79 @@ public:
 	/// <para>trueのnodeを目的地としてHeuristicSearchを行う</para>
 	/// </summary>
 	/// <param name="set"></param>
-	void SetGoalNodeFlag(bool set) { goal_node_flag = set; }
+	void SetIsGoalNode(bool set) { is_goal_node = set; }
 
 	/// <summary>
 	/// <para>HeuristicSearchで使用</para>
 	/// <para>trueのnodeを目的地としてHeuristicSearchを行う</para>
 	/// </summary>
-	/// <returns>goal_node_flag</returns>
-	bool GetGoalNodeFlag() const { return goal_node_flag; }
+	/// <returns>is_goal_node</returns>
+	bool GetIsGoalNode() const { return is_goal_node; }
 
 	/// <summary>
 	/// <para>player_node_flagの設定</para>
 	/// <para>trueならこのnodeはプレイヤーがいる</para>
 	/// </summary>
 	/// <param name="set"></param>
-	void SetPlayerNodeFlag(bool set) { player_node_flag = set; }
+	void SetIsPlayerNode(bool set) { is_player_node = set; }
 
 	/// <summary>
 	/// trueならこのnodeはプレイヤーがいる
 	/// </summary>
-	/// <returns>player_node_flag</returns>
-	 bool GetPlayerNodeFlag() const { return player_node_flag; }
+	/// <returns>is_player_node</returns>
+	bool GetIsPlayerNode() const { return is_player_node; }
 
 	/// <summary>
 	/// <para>enemy_node_flagの設定</para>
 	/// <para>trueならこのnodeは敵がいる</para>
 	/// </summary>
 	/// <param name="set"></param>
-	void SetEnemyNodeFlag(bool set) { enemy_node_flag = set; }
+	void SetIsEnemyNode(bool set) { is_enemy_node = set; }
 
 	/// <summary>
 	/// trueならこのnodeは敵がいる
 	/// </summary>
-	/// <returns>enemy_node_flag</returns>
-	bool GetEnemyNodeFlag() const { return enemy_node_flag; }
+	/// <returns>is_enemy_node</returns>
+	bool GetIsEnemyNode() const { return is_enemy_node; }
 
 	/// <summary>
 	/// <para>wall_node_flagの設定</para>
 	/// <para>trueならこのnodeは壁</para>
 	/// </summary>
 	/// <param name="set"></param>
-	void SetWallNodeFlag(bool set) { wall_node_flag = set; }
+	void SetIsWallNode(bool set) { is_wall_node = set; }
 
 	/// <summary>
 	/// trueならこのnodeは壁
 	/// </summary>
-	/// <returns>wall_node_flag</returns>
-	 bool GetWallNodeFlag() const { return wall_node_flag; }
+	/// <returns>is_wall_node</returns>
+	bool GetIsWallNode() const { return is_wall_node; }
 
 	/// <summary>
 	/// <para>item_node_flagの設定</para>
 	/// <para>trueならこのnodeにはアイテムが置かれている</para>
 	/// </summary>
 	/// <param name="set"></param>
-	void SetItemNodeFlag(bool set) { item_node_flag = set; }
+	void SetIsItemNode(bool set) { is_item_node = set; }
 
 	/// <summary>
 	/// trueならこのnodeにはアイテムが置かれている
 	/// </summary>
-	/// <returns>item_node_flag</returns>
-	 bool GetItemNodeFlag() const { return item_node_flag; }
+	/// <returns>is_item_node</returns>
+	bool GetIsItemNode() const { return is_item_node; }
 
 	/// <summary>
 	/// <para>searched_node_flagの設定</para>
 	/// <para>trueならこのnodeは探索済み</para>
 	/// </summary>
 	/// <param name="set"></param>
-	void SetSearchedNodeFlag(bool set) { searched_node_flag = set; }
+	void SetIsSearchedNode(bool set) { is_searched_node = set; }
 
 	/// <summary>
 	/// trueならこのnodeは探索済み
 	/// </summary>
-	/// <returns>searched_node_flag</returns>
-	 bool GetSearchedNodeFlag() const { return searched_node_flag; }
+	/// <returns>is_searched_node</returns>
+	bool GetIsSearchedNode() const { return is_searched_node; }
 
 	/// <summary>
 	/// nodeのpositionの設定
@@ -168,7 +163,5 @@ public:
 	///  nodeのpositionの値を返す
 	/// </summary>
 	/// <returns></returns>
-	 DirectX::XMFLOAT2 GetNodePosition() const { return position; }
-
-
+	DirectX::XMFLOAT2 GetNodePosition() const { return position; }
 };

@@ -74,6 +74,4 @@ public:
 
 	// ƒXƒNƒŠ[ƒ“‚‚³æ“¾
 	int GetScreenHeight() const { return screen_height; }
-
-
 };

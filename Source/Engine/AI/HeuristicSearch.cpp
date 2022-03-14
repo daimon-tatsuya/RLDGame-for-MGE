@@ -23,8 +23,6 @@ HeuristicSearch::~HeuristicSearch()
 	{
 		advance.clear();
 	}
-
-
 }
 
 void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
@@ -45,13 +43,13 @@ void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
 			// 壁
 			if (rogue_like_dungeon.map_role[y][x].map_data == static_cast<size_t>(Attribute::Wall))
 			{
-				piece->SetWallNodeFlag(true);//壁フラグ
+				piece->SetIsWallNode(true);//壁フラグ
 			}
 
 			// 敵(保留)
 			if (rogue_like_dungeon.map_role[y][x].map_data == static_cast<size_t>(Attribute::Enemy))
 			{
-				piece->SetEnemyNodeFlag(true);//敵フラグ
+				piece->SetIsEnemyNode(true);//敵フラグ
 			}
 
 			nodes.emplace_back(std::move(piece));
@@ -160,7 +158,6 @@ void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
 			}
 			edge->destination_node_id = destination;
 			//edge->cost = 1.414f;
-
 		}
 	}
 }
@@ -175,7 +172,7 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueL
 	// 初期化
 	for (int i = 0; i < MapSize; i++)
 	{
-		nodes[i]->SetSearchedNodeFlag(false);
+		nodes[i]->SetIsSearchedNode(false);
 		nodes[i]->cost_from_start = 0.f;
 		advance[i] = -1;
 	}
@@ -212,12 +209,12 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueL
 
 				// cost増減
 				//敵
-				if (next_node->GetEnemyNodeFlag() == true)
+				if (next_node->GetIsEnemyNode() == true)
 				{
 					total_cost += 5.0f;
 				}
 				//壁
-				if (next_node->GetWallNodeFlag() == true)
+				if (next_node->GetIsWallNode() == true)
 				{
 					total_cost += 10.0f;
 				}
@@ -226,7 +223,7 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueL
 				// コストが一度も計算されてないか、新しいコストが低ければ探索候補にする
 				if (next_node->cost_from_start == 0.f || next_node->cost_from_start > total_cost)
 				{
-					if (!next_node->GetWallNodeFlag())//探索候補が壁なら候補に入れない
+					if (!next_node->GetIsWallNode())//探索候補が壁なら候補に入れない
 					{
 						candidate.emplace_back(edge);
 					}
@@ -296,7 +293,4 @@ float  HeuristicSearch::HeuristicCalculation(const std::shared_ptr<Node> n1, con
 	const float y = N1_pos.y - N2_pos.y;
 	const float x = N1_pos.x - N2_pos.x;
 	return  sqrtf((y * y) + (x * x)) / 20;
-
 }
-
-

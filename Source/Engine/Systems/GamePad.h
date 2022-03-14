@@ -25,7 +25,7 @@ private:
 	float				axisRY = 0.0f;
 	float				triggerL = 0.0f;
 	float				triggerR = 0.0f;
-	int					slot = 0;
+	int				slot = 0;
 
 public:
 
@@ -47,13 +47,13 @@ public:
 	static const GamePadButton BTN_RIGHT_TRIGGER = (1 << 15);		// RT：R2
 
 	static const GamePadButton AnyBTN =// ABXYボタン
-		  GamePad::BTN_A
+		GamePad::BTN_A
 		| GamePad::BTN_B
 		| GamePad::BTN_X
 		| GamePad::BTN_Y;
 
 	static const GamePadButton AnyDPad =// 十字キー
-		  GamePad::BTN_UP
+		GamePad::BTN_UP
 		| GamePad::BTN_RIGHT
 		| GamePad::BTN_DOWN
 		| GamePad::BTN_LEFT;
@@ -103,6 +103,4 @@ public:
 
 	// 右トリガー入力状態の取得
 	float GetTriggerR() const { return triggerR; }
-
-
 };

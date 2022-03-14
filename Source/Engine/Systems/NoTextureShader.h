@@ -6,7 +6,6 @@
 //**********************************************************
 #include "Engine/Systems/Shader.h"
 
-
 /// <summary>
 /// スタティックメッシュ用
 /// </summary>
@@ -19,7 +18,7 @@ public:
 
 	// 例えデストラクタが空でも
 	// virtual なデストラクタは明示的に定義する
-	virtual ~NoTextureShader()=default;
+	virtual ~NoTextureShader() = default;
 
 	// 描画開始
 	void Activate(ID3D11DeviceContext* context, const RenderContext& rc)override;

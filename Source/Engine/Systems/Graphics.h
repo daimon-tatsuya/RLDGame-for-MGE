@@ -10,7 +10,6 @@
 #include <wrl.h>
 #include <mutex>
 
-
 //前方宣言
 class Shader;
 class DebugRenderer;
@@ -24,7 +23,6 @@ class Sprite;
 /// </summary>
 class Graphics
 {
-
 private:
 	static Graphics* instance;
 	std::mutex			mutex;
@@ -61,13 +59,13 @@ public:
 	//唯一のインスタンス取得
 	static Graphics& Instance() { return *instance; }
 
-//------------------------------------------------
-//
-//	Getter Setter
-//
-//------------------------------------------------
+	//------------------------------------------------
+	//
+	//	Getter Setter
+	//
+	//------------------------------------------------
 
-	// デバイス取得
+		// デバイス取得
 	ID3D11Device* GetDevice() const { return device.Get(); }
 
 	// デバイスコンテキスト取得
@@ -105,6 +103,4 @@ public:
 
 	// フォントの取得
 	Sprite* GetFont() const { return font.get(); }
-
-
 };

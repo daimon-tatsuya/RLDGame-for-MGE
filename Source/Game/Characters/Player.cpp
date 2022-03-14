@@ -4,8 +4,10 @@
 //
 //**********************************************************
 
-#include <string>
+//#include <string>
 
+#include  "Engine/AI/MetaAI.h"
+#include "Engine/Systems/Logger.h"
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Shader.h"
@@ -17,7 +19,6 @@
 
 #include "Game/Characters/Player.h"
 
-
 const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
 
 Player::Player(RogueLikeDungeon* rogue_like_dungeon)
@@ -25,16 +26,16 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 	model = std::make_shared<Model>("Assets/FBX/Animals/BlackWidow.bin");
 	scale.x = scale.y = scale.z = 1.f;
 	position.y = 0.f;
+	exists = true;
+	stage_information = rogue_like_dungeon;
 
 	// 初期ステート
 	Player::FiniteStateMachineInitialize();
 
-	stage_information = rogue_like_dungeon;
-
 	//オブジェクト配置
 	for (int y = 0; y < MapSize_Y; y++)
 	{
-		if (set_pos == true)
+		if (is_set_pos == true)
 		{
 			break;
 		}
@@ -47,7 +48,7 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 				const float pos_z = static_cast<float> (y * CellSize);
 
 				position = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				set_pos = true;
+				is_set_pos = true;
 				break;
 			}
 		}
@@ -57,10 +58,9 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 Player::~Player()
 = default;
 
-
 void Player::Update(const float elapsed_time)
 {
-	position.y = 0.f;
+	position.y = 0.f;//ジャンプさせないので固定
 
 	player_state_machine.Update(elapsed_time);
 
@@ -70,7 +70,6 @@ void Player::Update(const float elapsed_time)
 		//
 		//-----------------------------------------------
 	}
-
 
 	// 回転角の正規化
 	NormalizeAngle();
@@ -92,7 +91,6 @@ void Player::Render(ID3D11DeviceContext * dc, std::shared_ptr<Shader> shader)
 
 void Player::FiniteStateMachineInitialize()
 {
-
 	//親ステートの追加
 	player_state_machine.AddState
 	(
@@ -159,14 +157,13 @@ void Player::FiniteStateMachineInitialize()
 		[this](const float elapsed_time) {DeathState(elapsed_time); }
 	);
 
-
 	//Recieve
 
-	player_receive_state.AddState
-	(
-		Receive::Wait,
-		[this](const float elapsed_time) {WaitState(elapsed_time); }
-	);
+	//player_receive_state.AddState
+	//(
+	//	Receive::Wait,
+	//	[this](const float elapsed_time) {WaitState(elapsed_time); }
+	//);
 
 	player_receive_state.AddState
 	(
@@ -179,7 +176,7 @@ void Player::FiniteStateMachineInitialize()
 
 	player_entry_state.SetState(Entry::Select);
 	player_reaction_state.SetState(Reaction::ReactionSelect);
-	player_receive_state.SetState(Receive::Wait);
+	player_receive_state.SetState(Receive::Called);
 
 	//ImGui
 	player_entry_string.emplace_back("Select");
@@ -191,7 +188,7 @@ void Player::FiniteStateMachineInitialize()
 	player_reaction_string.emplace_back("Damaged");
 	player_reaction_string.emplace_back("Death");
 
-	player_receive_string.emplace_back("Wait");
+	//	player_receive_string.emplace_back("Wait");
 	player_receive_string.emplace_back("Called");
 
 	player_states_string.emplace_back(player_entry_string);
@@ -205,19 +202,50 @@ bool Player::OnMessage(const Telegram & telegram)
 
 	switch (telegram.msg)
 	{
-	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
-
-		player_state_machine.SetState(ParentState::Entry);
-
-		return true;
 	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
 
+		LOG("\n error: MESSAGE_TYPE::MSG_END_PLAYER_TURN Messages not received or No Function")
+			return false;
+
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+
+		player_state_machine.SetState(ParentState::Receive);
+
 		return true;
+
 	default:
-		;
+
+		LOG("\n error: No Message ")
+
+			return false;
 	}
-	return false;
 }
+
+void Player::SendMessaging(MESSAGE_TYPE msg)
+{
+	Meta& meta = Meta::Instance();
+
+	switch (msg)
+	{
+	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+		//メタAIにターンの終了を伝える
+
+		meta.SendMessaging(GetId(),
+			static_cast<int>(Meta::Identity::Meta),
+			MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+
+		break;
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+
+		LOG("\n error: No Function")
+			break;
+
+	default:
+		LOG("\n No Message")
+			break;
+	}
+}
+
 void Player::OnDamaged()
 {
 }
@@ -226,15 +254,12 @@ void Player::OnDead()
 {
 }
 
-
 void Player::DrawDebugGUI()
 {
 	// 入力された情報を取得
-	GamePad& game_pad = Input::Instance().GetGamePad();
+	const GamePad& game_pad = Input::Instance().GetGamePad();
 	float ax = game_pad.GetAxisLX();
 	float ay = game_pad.GetAxisLY();
-
-
 
 	if (ImGui::Begin("Player", nullptr, ImGuiWindowFlags_None))
 	{
@@ -262,7 +287,6 @@ void Player::DrawDebugGUI()
 		//現在のステートを表示
 		if (ImGui::CollapsingHeader("CurrentState", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-
 			char parent_state_name[64] = "empty";
 			char current_state_name[64] = "empty";
 
@@ -309,7 +333,6 @@ void Player::DrawDebugGUI()
 
 			ImGui::Text("parent_state_name:%s", parent_state_name);
 			ImGui::Text("current_state_name:%s", current_state_name);
-
 		}
 		if (ImGui::CollapsingHeader("GamePadStatus", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -334,7 +357,6 @@ void Player::DrawDebugGUI()
 				ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
 			}
 			ImGui::Text("GamePadAxisOnStep: x:%f y:%f", ax, ay);
-
 		}
 		if (ImGui::CollapsingHeader("PlayerOmniAttribute", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -352,7 +374,6 @@ void Player::DrawDebugGUI()
 		}
 	}
 	ImGui::End();
-
 }
 
 void Player::DrawDebugPrimitive()
@@ -361,6 +382,24 @@ void Player::DrawDebugPrimitive()
 
 	// 衝突判定用のデバッグ球を描画
 	debug_renderer->DrawSphere(this->position, this->radius, DirectX::XMFLOAT4(0, 0, 0, 1));
+}
+
+bool Player::IsMoved()
+{
+	if (Math::Comparison(position.x, old_position.x))//trueなら動いていない
+	{
+		return false;
+	}
+	//今回は動かす予定がないので削除
+	//if (!Math::Comparison(position.y, old_position.y))
+	//{
+	//	return true;
+	//}
+	else if (Math::Comparison(position.z, old_position.z))//trueなら動いていない
+	{
+		return false;
+	}
+	return true;
 }
 
 //----------------------------------------------------------------
@@ -385,7 +424,6 @@ void Player::EntryState(const float elapsed_time)
 	}
 	// サブステートの実行
 	player_entry_state.Update(elapsed_time);
-
 }
 
 void Player::ReactionState(const float elapsed_time)
@@ -397,13 +435,10 @@ void Player::ReactionState(const float elapsed_time)
 		{
 			player_reaction_state.SetState(Reaction::ReactionSelect);
 		}
-
 	}
 
 	// サブステートの実行
 	player_reaction_state.Update(elapsed_time);
-
-
 }
 
 void Player::ReceiveState(const float elapsed_time)
@@ -411,15 +446,14 @@ void Player::ReceiveState(const float elapsed_time)
 	if (player_state_machine.IsStateFirstTime())
 	{
 		// 子ステートのの初期化
-		if (player_receive_state.GetState() != static_cast<int>(Receive::Wait))
+		if (player_receive_state.GetState() != static_cast<int>(Receive::Called))
 		{
-			player_receive_state.SetState(Receive::Wait);
+			player_receive_state.SetState(Receive::Called);
 		}
 	}
 
 	// サブステートの実行
 	player_receive_state.Update(elapsed_time);
-
 }
 
 //---------------------
@@ -432,11 +466,9 @@ void	Player::SelectState(const float elapsed_time)
 {
 	if (player_entry_state.IsStateFirstTime())
 	{
-
 	}
 
 	GamePad& game_pad = Input::Instance().GetGamePad();
-
 
 	//攻撃
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
@@ -468,25 +500,22 @@ void	Player::SelectState(const float elapsed_time)
 		//Moveステートに遷移する
 		player_entry_state.SetState(Entry::Move);
 	}
-
 }
 
 void	Player::AttackState(const float elapsed_time)
 {
 	if (player_entry_state.IsStateFirstTime())
 	{
-
 	}
-	//仮
-	player_entry_state.SetState(Entry::Select);
-	//player_state.SetState(ParentState::Receive);
+
+	//MetaAIにプレイヤーのターンを終了を伝える
+	SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
 }
 
 void	Player::WayChangeState(const float elapsed_time)
 {
 	if (player_entry_state.IsStateFirstTime())
 	{
-
 	}
 
 	GamePad& game_pad = Input::Instance().GetGamePad();
@@ -569,19 +598,16 @@ void	Player::WayChangeState(const float elapsed_time)
 		player_entry_state.SetState(Entry::Attack);
 	}
 
-	// ステートの終了
-	if (false)
-	{
-
-	}
 }
 
 void	Player::MoveState(const float elapsed_time)
 {
 	if (player_entry_state.IsStateFirstTime())
 	{
-
+		//SetOldPosition();
 	}
+
+	SetOldPosition();//前回の位置を保存
 
 	GamePad& game_pad = Input::Instance().GetGamePad();
 
@@ -627,7 +653,6 @@ void	Player::MoveState(const float elapsed_time)
 		size_t map_data_vertical = GetStageInformation()->//現在のステージの情報から一つ上の升目を見る
 			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
 
-
 		//壁か敵でないなら
 		//ななめの移動なので上下左右の位置も確認する
 		if (
@@ -663,6 +688,9 @@ void	Player::MoveState(const float elapsed_time)
 		{
 			AddPositionZ(CellSize);
 			AddPositionX(-CellSize);
+			//MetaAIにプレイヤーのターンを終了を伝える
+			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			player_entry_state.SetState(Entry::Select);
 		}
 	}
 	//左下
@@ -688,6 +716,9 @@ void	Player::MoveState(const float elapsed_time)
 		{
 			AddPositionZ(-CellSize);
 			AddPositionX(-CellSize);
+			//MetaAIにプレイヤーのターンを終了を伝える
+			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			player_entry_state.SetState(Entry::Select);
 		}
 	}
 	//右下
@@ -713,6 +744,9 @@ void	Player::MoveState(const float elapsed_time)
 		{
 			AddPositionZ(-CellSize);
 			AddPositionX(CellSize);
+			//MetaAIにプレイヤーのターンを終了を伝える
+			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			player_entry_state.SetState(Entry::Select);
 		}
 	}
 
@@ -726,6 +760,9 @@ void	Player::MoveState(const float elapsed_time)
 		if (map_data == static_cast<size_t>(Attribute::Road) || map_data == static_cast<size_t>(Attribute::Room))
 		{
 			AddPositionZ(CellSize);
+			//MetaAIにプレイヤーのターンを終了を伝える
+			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			player_entry_state.SetState(Entry::Select);
 		}
 	}
 	//下
@@ -738,6 +775,9 @@ void	Player::MoveState(const float elapsed_time)
 		if (map_data == static_cast<size_t>(Attribute::Road) || map_data == static_cast<size_t>(Attribute::Room))
 		{
 			AddPositionZ(-CellSize);
+			//MetaAIにプレイヤーのターンを終了を伝える
+			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			player_entry_state.SetState(Entry::Select);
 		}
 	}
 	//右
@@ -750,6 +790,9 @@ void	Player::MoveState(const float elapsed_time)
 		if (map_data == static_cast<size_t>(Attribute::Road) || map_data == static_cast<size_t>(Attribute::Room))
 		{
 			AddPositionX(CellSize);
+			//MetaAIにプレイヤーのターンを終了を伝える
+			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			player_entry_state.SetState(Entry::Select);
 		}
 	}
 	//左
@@ -763,11 +806,12 @@ void	Player::MoveState(const float elapsed_time)
 		if (map_data == static_cast<size_t>(Attribute::Road) || map_data == static_cast<size_t>(Attribute::Room))
 		{
 			AddPositionX(-CellSize);
+			//MetaAIにプレイヤーのターンを終了を伝える
+			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			player_entry_state.SetState(Entry::Select);
 		}
+
 	}
-	//仮
-	player_entry_state.SetState(Entry::Select);
-	//player_state.SetState(ParentState::Receive);
 
 }
 
@@ -786,19 +830,14 @@ void Player::ReactionSelectState(const float elapsed_time)
 			player_reaction_state.SetState(Reaction::Death);
 		}
 	}
-
 }
 
 void Player::DamagedState(const float elapsed_time)
 {
 	if (player_reaction_state.IsStateFirstTime())
 	{
-		//Meta& meta = Meta::Instance();
-		//meta.SendMessaging(GetId(),
-		//static_cast<int>(Meta::Identity::Meta),
-		//MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+
 	}
-	//player_state.SetState(ParentState::Entry);
 
 }
 
@@ -806,35 +845,17 @@ void Player::DeathState(const float elapsed_time)
 {
 	if (player_reaction_state.IsStateFirstTime())
 	{
-
 	}
 
 	// ステートの終了
 	if (false)
 	{
-
 	}
 }
 
 // ReceiveState
 
-void Player::WaitState(const float elapsed_time)
-{
-	if (player_receive_state.IsStateFirstTime())
-	{
-		//メタAIにターンの終了を伝える
-		//Meta& meta = Meta::Instance();
-		//meta.SendMessaging(owner->GetId(),
-		//	static_cast<int>(Meta::Identity::Meta),
-		//	MESSAGE_TYPE::MSG_END_PLAYER_TURN);
-	}
 
-	// ステートの終了
-	if (false)
-	{
-
-	}
-}
 
 void Player::CalledState(const float elapsed_time)
 {

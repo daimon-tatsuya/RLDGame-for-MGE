@@ -11,7 +11,6 @@
 
 #include "Engine/Systems/Math.h"
 
-
 /// <summary>
 /// ラインを描画するクラス
 /// </summary>
@@ -47,12 +46,10 @@ public:
 
 private:
 
-
 public:
 
 	LineRenderer(ID3D11Device* device, UINT vertex_count);
 	~LineRenderer() = default;
-
 
 	/// <summary>
 	/// 描画処理
@@ -64,6 +61,4 @@ public:
 
 	// 頂点追加
 	void AddVertex(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT4& color);
-
-
 };

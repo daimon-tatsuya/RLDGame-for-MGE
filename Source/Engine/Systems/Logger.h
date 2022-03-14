@@ -17,7 +17,7 @@ public:
 	/// 　ログ出力
 	/// </summary>
 	/// <param name="format">出力内容</param>
-	/// <param name="">可変長引数</param>
+	/// <param name=..."">可変長引数</param>
 	static void Print(const char* format, ...);
 };
 //__VA_ARGS__　https://cpprefjp.github.io/lang/cpp11/variadic_macros.html

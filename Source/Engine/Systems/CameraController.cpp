@@ -33,7 +33,6 @@ void CameraController::ActionGameCameraUpdate(const float elapsed_time)
 	// カメラの回転速度
 	float speed = roll_speed * elapsed_time;
 
-
 	// スティックの入力値に合わせてX軸とY軸を回転
 	//angle.x += ay *speed;
 	//angle.y += ax *speed;
@@ -106,7 +105,6 @@ void CameraController::FollowCameraUpdate(float elapsed_time)
 
 void CameraController::CalculateFrustum()
 {
-
 	const Camera& camera = Camera::Instance();
 
 	// ビュープロジェクション行列を取得する
@@ -272,7 +270,6 @@ bool CameraController::IntersectFrustum(AxisAlignedBoundingBox* aabb)
 		}
 	}
 
-
 	// 交差状態の詳細判定
 	// AABBの面の中心点と法線を作り、中心点から視錐台の８頂点に対して表裏判定を行う。
 	// ８頂点全てが表側にあれば、交差していなかったことが確定するのでcollisionStateを更新してreturnする
@@ -382,7 +379,6 @@ void CameraController::DrawDebugGUI()
 		ImGui::Text("nearZ:%f", camera.GetNear());
 		ImGui::Text("farZ:%f", camera.GetFar());
 
-
 		// 平衡投影カメラ
 		if (const bool ortho_mode = camera.GetOrthMode(); ortho_mode == true)
 		{
@@ -411,7 +407,6 @@ void CameraController::DrawDebugGUI()
 				camera_height = 50.f;
 			}
 		}
-
 	}
 	ImGui::End();
 }

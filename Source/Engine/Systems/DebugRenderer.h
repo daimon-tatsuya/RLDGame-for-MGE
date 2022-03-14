@@ -11,7 +11,6 @@
 
 #include "Engine/Systems/Math.h"
 
-
 class DebugRenderer
 {
 private:
@@ -91,6 +90,4 @@ public:
 	void DrawCylinder(const DirectX::XMFLOAT3& position, float radius, float height, const DirectX::XMFLOAT4& color);
 
 	// ƒJƒvƒZƒ‹•`‰æ
-
-
 };

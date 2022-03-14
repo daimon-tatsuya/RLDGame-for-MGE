@@ -42,11 +42,11 @@ bool Character::ApplyDamage(int damage, float invincible_time)
 	return true;
 }
 
-void Character::Destroy()
-{
-	CharacterManager& character_manager = CharacterManager::Instance();
-	character_manager.Remove(this);
-}
+//void Character::Destroy()
+//{
+//	CharacterManager& character_manager = CharacterManager::Instance();
+////	character_manager.Remove(this);
+//}
 
 void Character::AddImpulse(const DirectX::XMFLOAT3& impulse)
 {
@@ -56,12 +56,11 @@ void Character::AddImpulse(const DirectX::XMFLOAT3& impulse)
 	velocity.z += impulse.z;
 }
 
-
 void Character::Move(float vx, float vz, float speed)
 {
 	// 移動方向ベクトルを設定
-	move_vecX = vx;
-	move_vecZ = vz;
+	move_vec_x = vx;
+	move_vec_z = vz;
 
 	// 最大速度設定
 	max_move_speed = speed;
@@ -113,7 +112,6 @@ void Character::MoveCheck(float mx, float mz)
 		position.x += mx;
 		position.z += mz;
 	}
-
 }
 
 // アクションゲーム用なので後回し https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-seek--gamedev-849
@@ -162,7 +160,7 @@ void Character::Jump(float speed)
 	velocity.y = speed;
 }
 
-void Character::AirDash(float vx, float vz, float gravity_cut_time)
+void Character::AirDash(float vx, float vz, const float gravity_cut_time)
 {
 	velocity.x = vx;
 	velocity.z = vz;
@@ -188,7 +186,6 @@ void Character::UpdateVelocity(float elapsed_time)
 	UpdateHorizontalMove(elapsed_time);
 }
 
-
 void Character::UpdateInvincibleTimer(float elapsed_time)
 {
 	if (invincible_timer > 0.0f)
@@ -207,7 +204,6 @@ void Character::UpdateVerticalVelocity(float elapsed_frame)
 	}
 }
 
-
 void Character::UpdateVerticalMove(float elapsed_time)
 {
 	// 垂直方向の移動量
@@ -222,9 +218,9 @@ void Character::UpdateVerticalMove(float elapsed_time)
 	if (my < 0.0f)
 	{
 		// レイの開始位置は足元より少し上
-		DirectX::XMFLOAT3 start = { position.x, position.y + step_offset, position.z };
+		const DirectX::XMFLOAT3 start = { position.x, position.y + step_offset, position.z };
 		// レイの終点位置は移動後の位置
-		DirectX::XMFLOAT3 end = { position.x, position.y + my, position.z };
+		const DirectX::XMFLOAT3 end = { position.x, position.y + my, position.z };
 
 		// レイキャストによる地面判定
 		HitResult hit;
@@ -277,11 +273,10 @@ void Character::UpdateVerticalMove(float elapsed_time)
 	}
 }
 
-
 void Character::UpdateHorizontalVelocity(float elapsed_frame)
 {
 	//! XZ平面の速力を減速する
-	float length = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
+	const float length = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
 	if (length > 0.0f)
 	{
 		// 摩擦力
@@ -312,7 +307,7 @@ void Character::UpdateHorizontalVelocity(float elapsed_frame)
 	if (length <= max_move_speed)
 	{
 		// 移動ベクトルがゼロベクトルでないなら加速する
-		float move_vec_length = sqrtf(move_vecX * move_vecX + move_vecZ * move_vecZ);
+		const float move_vec_length = sqrtf(move_vec_x * move_vec_x + move_vec_z * move_vec_z);
 		if (move_vec_length > 0.0f)
 		{
 			// 加速力
@@ -322,8 +317,8 @@ void Character::UpdateHorizontalVelocity(float elapsed_frame)
 			if (!is_ground) acceleration *= air_control;
 
 			// 移動ベクトルによる加速処理
-			velocity.x += move_vecX * acceleration;
-			velocity.z += move_vecZ * acceleration;
+			velocity.x += move_vec_x * acceleration;
+			velocity.z += move_vec_z * acceleration;
 
 			// 最大速度制限
 			float length = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
@@ -344,14 +339,14 @@ void Character::UpdateHorizontalVelocity(float elapsed_frame)
 		}
 	}
 	// 移動ベクトルをリセット
-	move_vecX = 0.0f;
-	move_vecZ = 0.0f;
+	move_vec_x = 0.0f;
+	move_vec_z = 0.0f;
 }
 
 void Character::UpdateHorizontalMove(float elapsed_time)
 {
 	// 水平速力量計算
-	float velocity_lengthXZ = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
+	const float velocity_lengthXZ = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
 	if (velocity_lengthXZ > 0.0f)
 	{
 		// 水平移動値
@@ -361,4 +356,3 @@ void Character::UpdateHorizontalMove(float elapsed_time)
 		MoveCheck(mx, mz);
 	}
 }
-

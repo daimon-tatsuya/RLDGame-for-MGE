@@ -10,7 +10,6 @@
 
 #include "Engine/Systems/Math.h"
 
-
 /// <summary>
 /// テクスチャーを描画するクラス
 /// </summary>
@@ -61,7 +60,6 @@ public:
 	int GetTextureHeight() const { return texture_height; }
 
 	void TextOut(ID3D11DeviceContext* immediateContext, std::string s, float x, float y, float w, float h, float r = 1, float g = 1, float b = 1, float a = 1) const;
-
 };
 
 class SpriteBatch
@@ -104,5 +102,4 @@ public:
 	void Begin(ID3D11DeviceContext* immediate_context);
 	void Render(ID3D11DeviceContext* immediate_context, float dx, float dy, float dw, float dh, float sx, float sy, float sw, float sh, float angle/*degree*/, float r, float g, float b, float a);
 	void End(ID3D11DeviceContext* immediate_context);
-
 };

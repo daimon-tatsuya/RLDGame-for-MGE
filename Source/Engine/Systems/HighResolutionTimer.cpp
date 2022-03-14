@@ -84,7 +84,6 @@ void HighResolutionTimer::Tick()
 	}
 }
 
-
 float HighResolutionTimer::TimeInterval() const
 {
 	return static_cast<float>(delta_time);
@@ -116,5 +115,3 @@ float HighResolutionTimer::TimeStamp() const
 		return static_cast<float>(((this_time - paused_time) - base_time) * seconds_per_count);
 	}
 }
-
-

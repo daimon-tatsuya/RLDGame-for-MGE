@@ -8,7 +8,6 @@
 #include <d3d11.h>
 #include <wrl.h>
 
-
 /// <summary>
 /// BlendState‚ğì¬‚·‚éƒNƒ‰ƒX
 /// </summary>

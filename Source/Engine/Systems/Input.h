@@ -48,6 +48,4 @@ public:
 	/// </summary>
 	/// <returns>マウスの入力を持つクラスのインスタンス</returns>
 	Mouse& GetMouse() { return mouse; }
-
-
 };

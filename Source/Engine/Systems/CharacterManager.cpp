@@ -1,50 +1,57 @@
-
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/Collision.h"
 #include "Engine/AI/MetaAI.h"
 #include "Engine/Systems/Math.h"
 #include "Engine/Systems/Shader.h"
 #include "Engine/Systems/Character.h"
+#include "Game/Characters/EnemySnake.h"
+#include "Game/Characters/Player.h"
 
-void CharacterManager::Update(float elapsed_time)
+void CharacterManager::Update(float elapsed_time) const
 {
-	for (const auto& character : characteres)
+	for (const auto& character : characters)
 	{
-		character->Update(elapsed_time);
-	}
-
-	// 破棄処理
-	// characteresの範囲for文中でerase()すると不具合が発生してしまうため、
-	// 更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
-	for (auto& character : removes)
-	{
-		// std::vectorから要素を削除する場合はイテレーターで削除しなければならない
-		std::vector<std::shared_ptr<Character>>::iterator it = std::find(characteres.begin(), characteres.end(), character);
-		if (it != characteres.end())
+		if( character->GetId() == static_cast<int>(Meta::Identity::Player)&& is_player_turn==true  )//プレイヤーかつプレイヤーのターンなら
 		{
-			characteres.erase(it);
+			character->Update(elapsed_time);
 		}
-		//delete character.get();
-		character.reset();
-	}
-	// 破棄リストをクリア
-	removes.clear();
 
+		if (is_enemy_turn==true && character->GetId()>= static_cast<int>(Meta::Identity::Enemy))//敵のターンかつ敵なら
+		{
+			character->Update(elapsed_time);
+		}
+
+	}
+
+	//// 破棄処理
+	//// characteresの範囲for文中でerase()すると不具合が発生してしまうため、
+	//// 更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
+	//for (std::shared_ptr<Character> character : removes)
+	//{
+	//	// std::vectorから要素を削除する場合はイテレーターで削除しなければならない
+	//	std::vector<std::shared_ptr<Character>>::iterator it = std::find(characters.begin(), characters.end(), character);
+	//	if (it != characters.end())
+	//	{
+	//		characters.erase(it);
+	//	}
+	//	//delete character.get();
+	//	//character.reset();
+	//}
+	//// 破棄リストをクリア
+	//removes.clear();
 }
 
-
-void CharacterManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader)
+void CharacterManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader) const
 {
-	for (const auto& character : characteres)
+	for (const auto& character : characters)
 	{
 		character->Render(context, shader);
 	}
 }
 
-
-void CharacterManager::DrawDebugPrimitive()
+void CharacterManager::DrawDebugPrimitive() const
 {
-	for (auto& character : characteres)
+	for (auto& character : characters)
 	{
 		character->DrawDebugPrimitive();
 	}
@@ -52,12 +59,11 @@ void CharacterManager::DrawDebugPrimitive()
 
 void CharacterManager::DrawDebugGUI()
 {
-	for (const auto& character : characteres)
+	for (const auto& character : characters)
 	{
 		character->DrawDebugGUI();
 	}
 }
-
 
 void CharacterManager::Register(Character* character, int character_type)
 {
@@ -65,10 +71,9 @@ void CharacterManager::Register(Character* character, int character_type)
 	if (character_type == static_cast<int>(Meta::Identity::Player))
 	{
 		// IDを設定
-		character->SetId(player_number + static_cast<int>(Meta::Identity::Player));
+		character->SetId(team_number + static_cast<int>(Meta::Identity::Player));
 
-		player_number++;// 設定したらインクリメントする
-
+		//team_number++;// 設定したらインクリメントする
 	}
 
 	// 登録するキャラクターが敵なら
@@ -80,42 +85,60 @@ void CharacterManager::Register(Character* character, int character_type)
 		enemy_number++;// 設定したらインクリメントする
 	}
 	// 登録
-	characteres.emplace_back(character);
+	characters.emplace_back(character);
 }
 
+bool CharacterManager::OnMessage(const Telegram& telegram)
+{
+	switch (telegram.msg)
+	{
+	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+		is_player_turn = false;
+		is_enemy_turn = true;
+
+		return true;
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+
+		is_player_turn = true;
+		is_enemy_turn = false;
+
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
 
 void CharacterManager::Clear()
 {
-	for(auto& character:characteres)
+	for (auto& character : characters)
 	{
-		if (character->GetId()==static_cast<int>(Meta::Identity::Player))
+		if (character->GetId() == static_cast<int>(Meta::Identity::Player))
 		{
 			continue;
 		}
-		 character.reset();
+		character.reset();
 	}
-	characteres.clear();
-	player_number = 0;
+	characters.clear();
+	team_number = 0;
 	enemy_number = 0;
 }
 
+//void CharacterManager::Remove(Character* character)
+//{
+//	// 破棄リストにすでにあれば弾く
+//	for (const auto& it : removes)
+//	{
+//		if (it.get() == character)
+//			break;
+//	}
+//	// 破棄リストに追加
+//	removes.emplace_back(character);
+//}
 
-void CharacterManager::Remove(Character* character)
+Character* CharacterManager::GetCharacterFromId(int id) const
 {
-	// 破棄リストにすでにあれば弾く
-	for (const auto& it : removes)
-	{
-		if (it.get() == character)
-			break;
-	}
-	// 破棄リストに追加
-	removes.emplace_back(character);
-}
-
-
-Character* CharacterManager::GetCharacterFromId(int id)
-{
-	for (const auto& character : characteres)
+	for (const auto& character : characters)
 	{
 		if (character->GetId() == id)
 			return character.get();
@@ -123,19 +146,19 @@ Character* CharacterManager::GetCharacterFromId(int id)
 	return nullptr;
 }
 
-Character* CharacterManager::GetPlayer(int number)
+Character* CharacterManager::GetPlayer() const
 {
-	for (const auto& character : characteres)
+	for (const auto& character : characters)
 	{
-		if (character->GetId() == static_cast<int>(Meta::Identity::Player) + number)
+		if (character->GetId() == static_cast<int>(Meta::Identity::Player))
 			return character.get();
 	}
 	return nullptr;
 }
 
-Character* CharacterManager::GetEnemy(int index)
+Character* CharacterManager::GetEnemy(int index) const
 {
-	for (const auto& character : characteres)
+	for (const auto& character : characters)
 	{
 		if (character->GetId() == static_cast<int>(Meta::Identity::Enemy) + index)
 			return character.get();
@@ -143,16 +166,15 @@ Character* CharacterManager::GetEnemy(int index)
 	return nullptr;
 }
 
-
-void CharacterManager::CollisionCharacterToCharacter()
+void CharacterManager::CollisionCharacterToCharacter() const
 {
-	const size_t count = characteres.size();
+	const size_t count = characters.size();
 	for (int i = 0; i < count; i++)
 	{
-		Character* characterA = characteres.at(i).get();
+		Character* characterA = characters.at(i).get();
 		for (int j = i + 1; j < count; j++)
 		{
-			Character* characterB = characteres.at(j).get();
+			Character* characterB = characters.at(j).get();
 
 			DirectX::XMFLOAT3 out_positionA, out_positionB;
 

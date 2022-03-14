@@ -7,10 +7,8 @@
 
 #include "Engine/Systems/Math.h"
 
-
 //前方宣言
 class Model;
-
 
 // ヒット結果
 struct HitResult
@@ -43,7 +41,6 @@ public:
 	~AxisAlignedBoundingBox() = default;
 
 	AxisAlignedBoundingBox(const DirectX::XMFLOAT3 min_value, const DirectX::XMFLOAT3 max_value, DirectX::XMFLOAT3 object_pos);
-
 };
 
 /// <summary>
@@ -89,11 +86,8 @@ public:
 
 	// カプセルとカプセルの交差判定
 
-
 	// カプセルと球の交差判定
-
 
 	// AABBとAABBの交差判定
 	static bool IntersectAxisAlignedBoundingBox(const AxisAlignedBoundingBox& box1, const AxisAlignedBoundingBox& box2);
-
 };

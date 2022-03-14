@@ -8,7 +8,6 @@
 #include <string>
 #include <map>
 
-
 //	‘O•ûéŒ¾
 class ModelResource;
 
