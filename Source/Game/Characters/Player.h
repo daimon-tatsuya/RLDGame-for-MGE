@@ -56,8 +56,9 @@ private:
 	// 子ステート
 	enum class Receive
 	{
-	//	Wait,
-		Called,
+		Wait,
+		Call,
+
 		StateEnd
 	};
 
@@ -135,7 +136,6 @@ private:
 	/// <summary>
 	/// <para>オープンメニューステート</para>
 	/// <para>操作をメニューウィンドウに移す</para>
-	/// <para>仮置き</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
 	//void	MenuState(const float elapsed_time);
@@ -144,14 +144,12 @@ private:
 
 	/// <summary>
 	/// <para>ダメージを受けた結果を判別する</para>
-	/// <para>仮置き</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
 	void ReactionSelectState(const float elapsed_time);
 
 	/// <summary>
 	/// <para>被ダメージステート</para>
-	/// <para>仮置き</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
 	void DamagedState(const float elapsed_time);
@@ -159,20 +157,24 @@ private:
 	/// <summary>
 	/// <para>死亡ステート</para>
 	/// <para>HPが0以下ならシーン遷移</para>
-	/// <para>仮置き</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
 	void DeathState(const float elapsed_time);
 
 	//?ReceiveState
 
+	///// <summary>
+	///// <para>待機ステート</para>
+	///// </summary>
+	///// <param name="elapsed_time">経過時間</param>
+	void WaitState(const float elapsed_time);
+
 	/// <summary>
-	/// <para>オープンメニューステート</para>
-	/// <para>MetaAIから送られてくる命令(メッセージ)によってステートを遷移させる</para>
-	/// <para>仮置き</para>
+	/// <para>メッセージを送信ステート</para>
+	/// <para>MetaAIへ命令(メッセージ)を送るステート</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>k
-	void CalledState(const float elapsed_time);
+	//void CallState(const float elapsed_time);
 
 public:
 
@@ -208,8 +210,8 @@ public:
 	/// <returns>受信の有無</returns>
 	bool OnMessage(const Telegram& telegram) override;
 
-	//メタAIメタAIにターンの終了を伝える
-	void SendMessaging(MESSAGE_TYPE msg);
+ 	//メタAIにターンの終了を伝える
+	void SendMessaging(MESSAGE_TYPE msg)override;
 
 	// デバッグ用GUI描画
 	void DrawDebugGUI()override;

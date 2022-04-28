@@ -1,6 +1,6 @@
 //**********************************************************
 //
-//		RogueLikeStageクラス
+//		RogueLikeGameCharacterクラス
 //
 //**********************************************************
 
@@ -12,11 +12,12 @@
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/Systems/Collision.h"
 
-RogueLikeStage::RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon) : rogue_like_dungeon_imgui(rogue_like_dungeon)
+
+RogueLikeStage::RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon) : storage_dungeon_information(rogue_like_dungeon)
 {
-	scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
-	position = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
-	angle = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
+	SetScale(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
+	SetPosition(DirectX::XMFLOAT3(0.f, 0.f, 0.f));
+	SetAngle(DirectX::XMFLOAT3(0.f, 0.f, 0.f));
 	SetStageObject(rogue_like_dungeon->map_role);
 }
 
@@ -28,6 +29,9 @@ RogueLikeStage::~RogueLikeStage()
 void RogueLikeStage::Update(float elapsed_time)
 {
 
+	//プレイヤーと階段の当たり判定
+
+
 	for (auto& stage : stage_chip)
 	{
 		// オブジェクト行列を更新
@@ -35,6 +39,8 @@ void RogueLikeStage::Update(float elapsed_time)
 		// モデル行列更新
 		stage.GetModel()->UpdateTransform(stage.GetTransform());
 	}
+
+
 }
 
 void RogueLikeStage::Render(ID3D11DeviceContext* dc, const std::shared_ptr<Shader> shader)
@@ -71,16 +77,6 @@ void RogueLikeStage::DrawDebugGUI()
 	{
 		//モデル数
 		ImGui::Text("Number of Models:%d", static_cast<int>(stage_chip.size()));
-
-		//プレイヤーのマップ情報上での初期位置
-		ImGui::Text("PlayerMapPosition	:%f %f",
-			rogue_like_dungeon_imgui->mobs[0].position.x, rogue_like_dungeon_imgui->mobs[0].position.y);
-
-		//プレイヤーの初期位置
-		const float player_positionX = rogue_like_dungeon_imgui->mobs[0].position.x * 2.f;
-		const float player_positionY = rogue_like_dungeon_imgui->mobs[0].position.y * 2.f;
-
-		ImGui::Text("PlayerPosition:%f %f", player_positionX, player_positionY);
 	}
 	ImGui::End();
 }
@@ -90,11 +86,21 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 	this->Clear();
 
 	int object_num = 0;
+	bool is_once = false;//for文中、一度だけ行う作業のためのフラグ
 	//オブジェクト配置
 	for (int y = 0; y < MapSize_Y; y++)
 	{
 		for (int x = 0; x < MapSize_X; x++)
 		{
+			//階段
+			if (map_role[y][x].map_data == static_cast<size_t>(Attribute::Exit) && is_once == false)
+			{
+				float pos_x = static_cast<float>(x * CellSize);
+				float pos_z = static_cast<float> (y * CellSize);
+				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
+				Stage st("Assets/FBX/geometry/stairs.bin", pos, object_num);
+				stage_chip.emplace_back(st);
+			}
 			//壁
 			if (map_role[y][x].map_data == static_cast<size_t>(Attribute::Wall))
 			{

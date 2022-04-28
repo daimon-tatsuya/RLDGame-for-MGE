@@ -157,7 +157,7 @@ void LineRenderer::Render(ID3D11DeviceContext* device_context, const DirectX::XM
 	//deviceContext->PSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
 
 	// レンダーステート設定
-	constexpr float blend_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const float blend_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	device_context->OMSetBlendState(blend_state.Get(), blend_factor, 0xFFFFFFFF);
 	device_context->OMSetDepthStencilState(depth_stencil_state.Get(), 0);
 	device_context->RSSetState(rasterizer_state.Get());

@@ -16,7 +16,8 @@ class EnemySnake :
 {
 private:
 
-protected:
+//	bool end_explore = false; //たんさく
+
 
 public:
 
@@ -160,7 +161,7 @@ private:
 	///// <para>待機ステート</para>
 	///// </summary>
 	///// <param name="elapsed_time">経過時間</param>
-	//void WaitState(const float elapsed_time);
+	void WaitState(const float elapsed_time);
 
 	/// <summary>
 	/// <para>オープンメニューステート</para>
@@ -203,4 +204,7 @@ public:
 
 	//メッセージ受信処理
 	bool OnMessage(const Telegram& telegram) override;
+
+	//メタAIメタAIにターンの終了を伝える
+	void SendMessaging(MESSAGE_TYPE msg) override;
 };

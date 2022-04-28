@@ -11,7 +11,7 @@ using GamePadButton = unsigned int;
 /// <para>ゲームパッドの入力を検知する。 </para>
 /// <para>PCコントローラー、キーボード </para>
 /// </summary>
-class GamePad
+class GamePad final
 {
 private:
 

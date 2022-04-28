@@ -25,17 +25,17 @@ private:
 	static Meta* instance;
 
 public:
-	//CharacterManager* character_manager = nullptr;
 
+	//IDの列挙
 	enum class Identity : int
 	{
 		Meta = 0,
 		Stage,
 		Camera,
 		CharacterManager,
-		Player,				// プレイヤーIDは4
-		Team,				// 仲間のIDは5~7
-		Enemy				// 以降の値は全て敵
+		Player,					// プレイヤーIDは4
+		Team,					// 仲間のIDは5~7
+		Enemy=8				// 以降の値は全て敵のID
 	};
 private:
 
@@ -45,7 +45,7 @@ public:
 	~Meta() = default;
 
 	// 唯一のインスタンス取得
-	static Meta& Instance();
+	static Meta& Instance() { return *instance; }
 
 	// 更新処理
 	void Update();

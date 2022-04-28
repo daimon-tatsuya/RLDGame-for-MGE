@@ -1,3 +1,8 @@
+//**********************************************************
+//
+//	   CharacterManagerクラス
+//
+//**********************************************************
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/Collision.h"
 #include "Engine/AI/MetaAI.h"
@@ -11,34 +16,8 @@ void CharacterManager::Update(float elapsed_time) const
 {
 	for (const auto& character : characters)
 	{
-		if( character->GetId() == static_cast<int>(Meta::Identity::Player)&& is_player_turn==true  )//プレイヤーかつプレイヤーのターンなら
-		{
 			character->Update(elapsed_time);
-		}
-
-		if (is_enemy_turn==true && character->GetId()>= static_cast<int>(Meta::Identity::Enemy))//敵のターンかつ敵なら
-		{
-			character->Update(elapsed_time);
-		}
-
 	}
-
-	//// 破棄処理
-	//// characteresの範囲for文中でerase()すると不具合が発生してしまうため、
-	//// 更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
-	//for (std::shared_ptr<Character> character : removes)
-	//{
-	//	// std::vectorから要素を削除する場合はイテレーターで削除しなければならない
-	//	std::vector<std::shared_ptr<Character>>::iterator it = std::find(characters.begin(), characters.end(), character);
-	//	if (it != characters.end())
-	//	{
-	//		characters.erase(it);
-	//	}
-	//	//delete character.get();
-	//	//character.reset();
-	//}
-	//// 破棄リストをクリア
-	//removes.clear();
 }
 
 void CharacterManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader) const
@@ -57,7 +36,7 @@ void CharacterManager::DrawDebugPrimitive() const
 	}
 }
 
-void CharacterManager::DrawDebugGUI()
+void CharacterManager::DrawDebugGUI() const
 {
 	for (const auto& character : characters)
 	{
@@ -93,14 +72,10 @@ bool CharacterManager::OnMessage(const Telegram& telegram)
 	switch (telegram.msg)
 	{
 	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
-		is_player_turn = false;
-		is_enemy_turn = true;
 
 		return true;
 	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
 
-		is_player_turn = true;
-		is_enemy_turn = false;
 
 		return true;
 	default:
@@ -124,7 +99,7 @@ void CharacterManager::Clear()
 	enemy_number = 0;
 }
 
-//void CharacterManager::Remove(Character* character)
+//void CharacterManager::Remove(RogueLikeGameCharacter* character)
 //{
 //	// 破棄リストにすでにあれば弾く
 //	for (const auto& it : removes)

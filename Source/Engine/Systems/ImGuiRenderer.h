@@ -14,7 +14,7 @@
 /// <summary>
 /// Imgui‚ğ•`‰æ‚ğs‚¤ƒNƒ‰ƒX
 /// </summary>
-class ImGuiRenderer
+class ImGuiRenderer final
 {
 private:
 

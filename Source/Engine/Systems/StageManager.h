@@ -17,7 +17,7 @@ struct HitResult;
 /// <summary>
 /// Stage‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 /// </summary>
-class StageManager
+class StageManager final
 {
 private:
 	std::vector<Stage*>		stages;

@@ -146,7 +146,7 @@ HRESULT MakeDummyTexture(ID3D11Device* device, ID3D11ShaderResourceView** shader
 }
 void CombineResourcePath(wchar_t(&combined_resource_path)[256], const wchar_t* referrer_filename, const wchar_t* referent_filename)
 {
-	constexpr wchar_t delimiters[] = { L'\\', L'/' };
+	const wchar_t delimiters[] = { L'\\', L'/' };
 	// extract directory from obj_filename
 	wchar_t directory[256] = {};
 	for (const wchar_t delimiter : delimiters)

@@ -11,7 +11,7 @@
 /// <summary>
 /// /フレーム管理クラス
 /// </summary>
-class HighResolutionTimer
+class HighResolutionTimer final
 {
 private:
 	double seconds_per_count;

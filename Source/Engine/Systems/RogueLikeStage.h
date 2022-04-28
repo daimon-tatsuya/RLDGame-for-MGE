@@ -44,6 +44,6 @@ private:
 protected:
 	std::vector <Stage> stage_chip;
 	//imgui
-	RogueLikeDungeon* rogue_like_dungeon_imgui;
+	RogueLikeDungeon* storage_dungeon_information;
 public:
 };

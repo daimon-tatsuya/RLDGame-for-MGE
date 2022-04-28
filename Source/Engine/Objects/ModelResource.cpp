@@ -900,11 +900,11 @@ void ModelResource::BuildAnimations(FbxScene* fbxScene)
 		// 抽出するデータは60フレーム基準でサンプリングする
 		FbxTime fbx_sampling_step;
 		fbx_sampling_step.SetTime(0, 0, 1, 0, 0, fbx_time_mode);
-		fbx_sampling_step = fbx_sampling_step.Get() * static_cast<FbxLongLong>(sampling_time); //fbx_sampling_step.Get() * sampling_time;
+		fbx_sampling_step = fbx_sampling_step.Get() * sampling_time; //データが失われると警告が出ているがstatic_castすると本当に失うので放置
 
-		int start_frame = static_cast<int>(fbx_start_time.Get() / fbx_sampling_step.Get());
-		int end_frame = static_cast<int>(fbx_end_time.Get() / fbx_sampling_step.Get());
-		int frame_count = static_cast<int>((fbx_end_time.Get() - fbx_start_time.Get()) / fbx_sampling_step.Get());
+		//int start_frame =fbx_start_time.Get() / fbx_sampling_step.Get(); //データが失われると警告が出ているがstatic_castすると本当に失うので放置
+		//int end_frame = fbx_end_time.Get() / fbx_sampling_step.Get(); //データが失われると警告が出ているがstatic_castすると本当に失うので放置
+		int frame_count = (fbx_end_time.Get() - fbx_start_time.Get()) / fbx_sampling_step.Get(); //データが失われると警告が出ているがstatic_castすると本当に失うので放置
 
 		// アニメーションの対象となるノードを列挙する
 		std::vector<FbxNode*> fbx_nodes;

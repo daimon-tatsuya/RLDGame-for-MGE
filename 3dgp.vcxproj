@@ -228,6 +228,7 @@
     <ClCompile Include="Source\Engine\Systems\CharacterManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\Collision.cpp" />
     <ClCompile Include="Source\Engine\Systems\DebugRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Systems\DungeonSystem.cpp" />
     <ClCompile Include="Source\Engine\Systems\Framework.cpp" />
     <ClCompile Include="Source\Engine\Systems\GamePad.cpp" />
     <ClCompile Include="Source\Engine\Systems\Graphics.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="Source\Engine\Systems\CharacterManager.h" />
     <ClInclude Include="Source\Engine\Systems\Collision.h" />
     <ClInclude Include="Source\Engine\Systems\DebugRenderer.h" />
+    <ClInclude Include="Source\Engine\Systems\DungeonSystem.h" />
     <ClInclude Include="Source\Engine\Systems\Framework.h" />
     <ClInclude Include="Source\Engine\Systems\GamePad.h" />
     <ClInclude Include="Source\Engine\Systems\Graphics.h" />

@@ -5,6 +5,7 @@
 //**********************************************************
 
 #include "Game/Scene/SceneGame.h"
+#include "Engine/Systems/Logger.h"
 
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/AI/MetaAI.h"
@@ -35,6 +36,7 @@ SceneGame::~SceneGame()
 	StageManager::Instance().Clear();
 	// キャラクター終了化
 	CharacterManager::Instance().Clear();
+	LOG("success: SceneGame's destructor\n")
 }
 
 void SceneGame::Initialize()
@@ -86,8 +88,9 @@ void SceneGame::Initialize()
 	}
 
 	//生成されなかったオブジェクトをマップデータから消す
-	storage_dungeon.UpdateMapRolePlayer();
-	storage_dungeon.UpdateMapRoleEnemies();
+	//storage_dungeon.UpdateMapRolePlayer();
+	//storage_dungeon.UpdateMapRoleEnemies();
+	storage_dungeon.UpdateMapRole();
 
 	//視錐台カリング用のAABBの初期設定
 	//axis_aligned_bounding_box_for_frustum.clear();
@@ -126,8 +129,10 @@ void SceneGame::Update(const float elapsed_time)
 
 	const GamePad& game_pad = Input::Instance().GetGamePad();
 
-	storage_dungeon.UpdateMapRolePlayer();
-	storage_dungeon.UpdateMapRoleEnemies();
+	//storage_dungeon.UpdateMapRolePlayer();
+	//storage_dungeon.UpdateMapRoleEnemies();
+	storage_dungeon.UpdateMapRole();
+
 
 	// Aボタン(Zｷｰ)を押したらタイトルシーンへ切り替え
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
@@ -154,7 +159,7 @@ void SceneGame::Render()
 	ID3D11DepthStencilView* depth_stencil_view = graphics.GetDepthStencilView();
 
 	// 画面クリア＆レンダーターゲット設定
-	constexpr FLOAT clear_color[] = { 0.0f, 0.5f, 0.5f, 0.5f };	// RGBA(0.0～1.0)
+	const FLOAT clear_color[] = { 0.0f, 0.5f, 0.5f, 0.5f };	// RGBA(0.0～1.0)
 	device_context->ClearRenderTargetView(render_target_view, clear_color);
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);

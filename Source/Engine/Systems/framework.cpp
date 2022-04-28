@@ -8,7 +8,6 @@
 #include <memory>
 
 #include "Engine/Systems/Framework.h"
-#include "Engine/Objects/Sprite.h"
 #include "Engine/Systems/DebugRenderer.h"
 #include "Engine/Systems/ImGuiRenderer.h"
 #include "Engine/Systems/Logger.h"
@@ -87,7 +86,7 @@ int Framework::Run()
 	}
 
 	//_CrtDumpMemoryLeaks();	// ‚±‚Ì“_‚ÅŠJ•ú‚³‚ê‚Ä‚¢‚È‚¢ƒƒ‚ƒŠ‚Ìî•ñ‚Ì•\¦
-	LOG("model deserialize failed");
+
 	return static_cast<int>(msg.wParam);
 }
 

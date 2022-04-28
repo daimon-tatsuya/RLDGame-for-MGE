@@ -44,7 +44,7 @@ void SceneTitle::Render()
 	ID3D11DepthStencilView* depth_stencil_view = graphics.GetDepthStencilView();
 
 	// 画面クリア＆レンダーターゲット設定
-	constexpr float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };	// RGBA(0.0～1.0)
+	const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };	// RGBA(0.0～1.0)
 	device_context->ClearRenderTargetView(render_target_view, clear_color);
 	device_context->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	device_context->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
@@ -83,8 +83,8 @@ void SceneTitle::Render()
 		// 「Title」を描画
 		const float screen_width = static_cast<float>(graphics.GetScreenWidth());
 		const float screen_height = static_cast<float>(graphics.GetScreenHeight());
-		constexpr float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
-		constexpr float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
+		const float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
+		const float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
 		const float positionX = screen_width / 3;// - textureWidth;// * (textureWidth / 2);
 		const float positionY = (screen_height / 2) - texture_height;
 

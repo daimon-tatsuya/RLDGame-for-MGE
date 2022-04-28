@@ -14,7 +14,7 @@ class ModelResource;
 /// <summary>
 ///	 2‰ñ–Ú‚Ì“Ç‚İ‚İ‚ğ§ŒÀ‚·‚éƒNƒ‰ƒX
 /// </summary>
-class ResourceManager
+class ResourceManager final
 {
 private:
 	ResourceManager() = default;

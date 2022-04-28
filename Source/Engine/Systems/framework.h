@@ -16,7 +16,7 @@
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Input.h"
 
-class Framework
+class Framework final
 {
 private:
 

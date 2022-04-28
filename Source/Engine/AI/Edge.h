@@ -30,12 +30,13 @@ enum class EdgeDirection :int
 	TopLeft
 };
 
-//constexpr constant expression(定数式)の略
-//https://qiita.com/saltheads/items/dd65935878a0901fe9e7
 
-constexpr int EDGE_NUM = 8;// エッジの数　≒　方向の数
 
-class Edge
+const int EDGE_NUM = 8;// エッジの数　＝　方向の数
+
+const float  OBLIQUE_COST = 1.414f; //斜めのコスト
+
+class Edge final
 {
 private:
 

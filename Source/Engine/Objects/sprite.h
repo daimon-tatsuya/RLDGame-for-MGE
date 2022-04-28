@@ -13,12 +13,12 @@
 /// <summary>
 /// テクスチャーを描画するクラス
 /// </summary>
-class Sprite
+class Sprite final
 {
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertex_shader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>				pixel_shader;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout>			input_layout;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout>				input_layout;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer>						vertex_buffer;
 

@@ -30,13 +30,13 @@ void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
 	// nodeの初期化
 	searched_edge.clear();
 	int node_id = 0;
-	for (int y = 0; y < static_cast<int>(MapSize_Y) - 1; y++)
+	for (int y = 0; y < MapSize_Y - 1; y++)
 	{
-		for (int x = 0; x < static_cast<int>(MapSize_X) - 1; x++)
+		for (int x = 0; x < MapSize_X - 1; x++)
 		{
 			auto piece = std::make_shared<Node>();
 			piece->node_id = node_id;
-			piece->SetNodePosition(static_cast<float>(x * CellSize), static_cast<float>(y * CellSize));
+			piece->SetNodePosition(static_cast<float>(x), static_cast<float>(y));
 
 			// マップデータからデータを取り出す
 
@@ -54,9 +54,6 @@ void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
 
 			nodes.emplace_back(std::move(piece));
 
-			//進行ルートの初期化
-			advance.emplace_back(-1);
-			//advance_vector[y][x] = -1;
 			node_id++;
 		}
 	}
@@ -65,15 +62,16 @@ void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
 	// destination_nodeが- 1となら、edgeは無効
 	int destination = 0;
 
-	for (int y = 0; y < static_cast<int>(MapSize_Y); y++)
+	for (int y = 0; y < MapSize_Y; y++)
 	{
-		for (int x = 0; x < static_cast<int>(MapSize_X); x++)
+		for (int x = 0; x < MapSize_X; x++)
 		{
 			const int node = y * MapSize_Y + x;
+			//{関数化
 
 			// edge上方向
 			std::shared_ptr<Edge> edge = nodes[node]->edge[static_cast<size_t>(EdgeDirection::TopCenter)];
-			//{関数化
+
 			edge->Initialize(node, destination);
 			// 一番上の段でなければ
 			if (!(y <= 0))
@@ -92,6 +90,7 @@ void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
 				destination = node - MapSize_X + 1;
 			}
 			edge->destination_node_id = destination;
+			edge->cost = OBLIQUE_COST;
 
 			//edge->cost = 1.414f;
 
@@ -172,14 +171,17 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueL
 	// 初期化
 	for (int i = 0; i < MapSize; i++)
 	{
-		nodes[i]->SetIsSearchedNode(false);
+		nodes[i]->is_searched_node = false;
 		nodes[i]->cost_from_start = 0.f;
-		advance[i] = -1;
 	}
 
+	//進行ルートの初期化
+	advance.clear();
+
+	//現在探索中のedgeを作成
 	std::shared_ptr<Edge> now_edge = std::make_shared<Edge>();
 
-	// ダミー
+	//スタート
 	now_edge->destination_node_id = start_id;
 	now_edge->origin_node_id = start_id;
 
@@ -187,22 +189,25 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueL
 	{
 		float total_cost = 0;
 		// 探索済みのedgeの保存
+		//advance.push_back(now_edge->origin_node_id);
+
 		advance[now_edge->destination_node_id] = now_edge->origin_node_id;
 
-		// 次のnowEdgeのdistnation_nodeが目的地なら目的地までの最短進行ルートを返す
+		// 次のnowEdgeのdestination_nodeが目的地なら目的地までの最短進行ルートを返す
 		if (now_edge->destination_node_id == goal_id)
 		{
 			return advance;
 		}
-		// nowEdgeの接続先のノードを取得する。
+		// now_edgeの接続先のノードを取得する。
 		std::shared_ptr<Node>node = nodes[now_edge->destination_node_id];
 
-		for (int edge_num = 0; edge_num < EDGE_NUM; edge_num++)
+		for (int edge_num = 0; edge_num < EDGE_NUM; edge_num++)//8方向調べる
 		{
 			std::shared_ptr<Edge> edge = node->edge[edge_num];
+
 			if (edge->destination_node_id >= 0)// このedgeが有効なら
 			{
-				std::shared_ptr<Node> next_node = nodes[edge->destination_node_id];
+				const std::shared_ptr<Node> next_node = nodes[edge->destination_node_id];
 
 				// スタート地点からのコストとエッジのコストをtotal_costに加算
 				total_cost += (node->cost_from_start + edge->cost);
@@ -211,7 +216,7 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueL
 				//敵
 				if (next_node->GetIsEnemyNode() == true)
 				{
-					total_cost += 5.0f;
+					total_cost += 10.0f;
 				}
 				//壁
 				if (next_node->GetIsWallNode() == true)
@@ -225,7 +230,7 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueL
 				{
 					if (!next_node->GetIsWallNode())//探索候補が壁なら候補に入れない
 					{
-						candidate.emplace_back(edge);
+						candidate.push_back(edge);
 					}
 				}
 				//最短経路を算出
@@ -238,7 +243,7 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueL
 std::shared_ptr<Edge> HeuristicSearch::SearchMinCost(std::vector<std::shared_ptr<Edge>>& candidate, const std::shared_ptr<Edge> now_edge, int goal_id)
 {
 	std::shared_ptr<Edge> shortest = nullptr;// 最短エッジ候補格納用
-	int shortest_num = 0;// 最短エッジ候補番号格納用
+	int shortest_num;// 最短エッジ候補番号格納用
 	float min_cost = FLT_MAX;
 
 	for (int candidate_num = 0; candidate_num < static_cast<int>(candidate.size()); candidate_num++)
@@ -246,8 +251,8 @@ std::shared_ptr<Edge> HeuristicSearch::SearchMinCost(std::vector<std::shared_ptr
 		Edge* edge = candidate[candidate_num].get();
 		// edgeのスタート位置からのコストを計算する。
 		float total_cost = 0;
-		std::shared_ptr<Node> origin_node = nodes[edge->origin_node_id];
-		std::shared_ptr<Node> destnation_node = nodes[edge->destination_node_id];
+		const std::shared_ptr<Node> origin_node = nodes[edge->origin_node_id];
+		const std::shared_ptr<Node> destination_node = nodes[edge->destination_node_id];
 		total_cost += (origin_node->cost_from_start + edge->cost);
 		// cost増減
 
@@ -255,22 +260,22 @@ std::shared_ptr<Edge> HeuristicSearch::SearchMinCost(std::vector<std::shared_ptr
 
 		// 接続先の「スタート位置からのコスト」をfront_costに取り出す(まだ登録されていないなら０となる)
 		float front_cost = 0;
-		front_cost = destnation_node->cost_from_start;
+		front_cost = destination_node->cost_from_start;
 
 		// front_costがまだ登録されていないか、front_costより少ないコストルートが
 		// 発見されたなら、接続先のスタート位置からのコストをtotal_costに書き換え。
 		if (front_cost == 0.f || front_cost >= total_cost)
 		{
-			std::shared_ptr<Node> goalNode = nodes[goal_id];//ゴールのノード
-			const float AstarCost = HeuristicCalculation(destnation_node, goalNode);
+			const std::shared_ptr<Node> goal_node = nodes[goal_id];//ゴールのノード
+			const float astar_cost = HeuristicCalculation(destination_node, goal_node);
 
-			destnation_node->cost_from_start = total_cost;
-			front_cost = total_cost + AstarCost;
+			destination_node->cost_from_start = total_cost;
+			front_cost = total_cost + astar_cost;
 		}
 
 		// front_costが、今調べているエッジの接続先のトータルコスト以上のもの中で
 		// 一番小さい接続先のスタート位置からのコストを持つエッジを最短として保存。
-		std::shared_ptr<Node> now_node = nodes[now_edge->destination_node_id];
+		const std::shared_ptr<Node> now_node = nodes[now_edge->destination_node_id];
 		if (min_cost > front_cost)
 		{
 			// candidateと現在探索中のegdeの比較

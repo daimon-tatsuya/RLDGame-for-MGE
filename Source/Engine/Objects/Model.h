@@ -14,7 +14,7 @@ class ModelResource;
 /// <summary>
 /// モデルのアニメーションなどを行うクラス
 /// </summary>
-class Model
+class Model final
 {
 public:
 	Model(const char* filename);

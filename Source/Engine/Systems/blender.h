@@ -1,7 +1,7 @@
 #pragma once
 //**********************************************************
 //
-//		Blenderクラス
+//		Blender.h
 //
 //**********************************************************
 
@@ -11,11 +11,10 @@
 /// <summary>
 /// BlendStateを作成するクラス
 /// </summary>
-class Blender
+class Blender final 
 {
-private:
-
 public:
+
 	enum  BLEND_STATE : int
 	{
 		BS_NONE,
@@ -31,5 +30,6 @@ public:
 	};
 	Microsoft::WRL::ComPtr<ID3D11BlendState> states[BS_END];
 public:
+
 	Blender(ID3D11Device* device);
 };

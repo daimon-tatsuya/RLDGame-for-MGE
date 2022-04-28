@@ -14,7 +14,7 @@ class Shader;
 /// <summary>
 /// Shader‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 /// </summary>
-class ShaderManager
+class ShaderManager final
 {
 public:
 	enum class ShaderName : int
@@ -35,7 +35,7 @@ private:
 
 public:
 
-	ShaderManager() {};
+	ShaderManager() = default;;
 	~ShaderManager();
 
 	void AddShader(ShaderName shader_name, std::shared_ptr<Shader>);

@@ -379,7 +379,7 @@ void ImGuiRenderer::Render(ID3D11DeviceContext* deviceContext)
 		deviceContext->IASetIndexBuffer(index_buffer.Get(), sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT, 0);
 
 		// ステート
-		constexpr float blend_factor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		const float blend_factor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		deviceContext->OMSetBlendState(blend_state.Get(), blend_factor, 0xFFFFFFFF);
 		deviceContext->OMSetDepthStencilState(depth_stencil_tate.Get(), 0);
 		deviceContext->RSSetState(rasterizer_state.Get());

@@ -1,6 +1,6 @@
 //**********************************************************
 //
-//		Loggerクラス
+//		Blender.cpp
 //
 //**********************************************************
 
@@ -8,6 +8,7 @@
 #include "Engine/Systems/Blender.h"
 #include "Engine/Systems/Misc.h"
 
+//コンストラクタ
 Blender::Blender(ID3D11Device* device)
 {
 	HRESULT hr = S_OK;

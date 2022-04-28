@@ -17,7 +17,7 @@ enum class MESSAGE_TYPE : int
 /// <summary>
 /// メッセージを設定するクラス
 /// </summary>
-class Telegram
+class Telegram final
 {
 public:
 	int sender;			// 送り手のID

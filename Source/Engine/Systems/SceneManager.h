@@ -11,7 +11,7 @@ class Scene;
 /// <summary>
 /// シーンを管理するクラス
 /// </summary>
-class SceneManager
+class SceneManager final
 {
 private:
 

@@ -9,7 +9,7 @@
 #include<functional>
 #include<map>
 
-constexpr int NonState = -1;
+const int NonState = -1;
 
 //template‚ğƒwƒbƒ_[‘‚¢‚½ê‡
 //https://pknight.hatenablog.com/entry/20090826/1251303641

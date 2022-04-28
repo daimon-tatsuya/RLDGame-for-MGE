@@ -7,6 +7,7 @@
 #include "Engine/Systems/Camera.h"
 #include "Engine/Systems/Graphics.h"
 
+//コンストラクタ
 Camera::Camera()
 {
 	const Graphics& graphics = Graphics::Instance();
@@ -15,6 +16,7 @@ Camera::Camera()
 	aspect = width / height;
 }
 
+//指定方向を向く
 void Camera::SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& focus, const DirectX::XMFLOAT3& up)
 {
 	// 視点、注視点、上方向からビュー行列を作成
@@ -47,6 +49,7 @@ void Camera::SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& fo
 	this->focus = focus;
 }
 
+//	パースペクティブの設定
 void Camera::SetPerspectiveFov(const float fovY, const float aspect, const float nearZ, const float farZ)
 {
 	this->fovY = fovY;
@@ -56,6 +59,7 @@ void Camera::SetPerspectiveFov(const float fovY, const float aspect, const float
 	OrthoMode = false;
 }
 
+//	 オルソの設定
 void Camera::SetOrthoFov(const float width, const float height, const float nearZ, const float farZ)
 {
 	this->width = width;
@@ -65,6 +69,7 @@ void Camera::SetOrthoFov(const float width, const float height, const float near
 	OrthoMode = true;
 }
 
+// カメラをアクティブにする
 void Camera::ActivateCamera()
 {
 	const DirectX::XMVECTOR eye_position = DirectX::XMVectorSet(eye.x, eye.y, eye.z, 0);

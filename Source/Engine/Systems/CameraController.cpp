@@ -13,12 +13,13 @@
 #include "Engine/Systems/Math.h"
 #include "Engine/AI/MetaAI.h"
 #include "Engine/Systems/Character.h"
+#include "Engine/Systems/ActionGameCharacter.h"
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/Collision.h"
 
 CameraController::CameraController()
 	: position(Camera::Instance().GetEye()),
-	new_position(Camera::Instance().GetEye())
+	  new_position(Camera::Instance().GetEye()), frustum()
 {
 }
 
@@ -26,7 +27,7 @@ CameraController::CameraController()
 void CameraController::ActionGameCameraUpdate(const float elapsed_time)
 {
 	// フリーカメラ
-	CharacterManager& character_manager = CharacterManager::Instance();
+	const CharacterManager& character_manager = CharacterManager::Instance();
 	const Character* pl = character_manager.GetCharacterFromId(static_cast<int>(Meta::Identity::Player));
 	this->new_target = pl->GetPosition();
 	GamePad& gamePad = Input::Instance().GetGamePad();
@@ -71,7 +72,7 @@ void CameraController::ActionGameCameraUpdate(const float elapsed_time)
 	new_position.z = target.z - front.z * range;
 
 	// 徐々に目標に近づける
-	static constexpr	float	Speed = 1.0f / 8.0f;
+	static const	float	Speed = 1.0f / 8.0f;
 	position.x += (new_position.x - position.x) * Speed;
 	position.y += (new_position.y - position.y) * Speed;
 	position.z += (new_position.z - position.z) * Speed;

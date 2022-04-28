@@ -21,7 +21,7 @@ class Sprite;
 /// <summary>
 /// •`‰æü‚èŠÇ—ƒNƒ‰ƒX
 /// </summary>
-class Graphics
+class Graphics final
 {
 private:
 	static Graphics* instance;

@@ -6,7 +6,7 @@
 
 #include "Engine/Systems/Mouse.h"
 
-static constexpr int key_map[] =
+static const int key_map[] =
 {
 	VK_LBUTTON,		// 左ボタン
 	VK_MBUTTON,		// 中ボタン

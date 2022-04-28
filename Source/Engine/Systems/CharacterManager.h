@@ -1,8 +1,7 @@
 #pragma once
-
 //**********************************************************
 //
-//	CharacterManagerクラス
+//	   CharacterManagerクラス
 //
 //**********************************************************
 
@@ -18,12 +17,12 @@ class Character;
 /// <summary>
 /// Characterを管理するクラス
 /// </summary>
-class CharacterManager
+class CharacterManager final
 {
 private:
 
 	std::vector<std::shared_ptr<Character>>	  characters;			// 敵味方関係なく格納する
-	//std::vector<std::shared_ptr<Character>>	  removes;				// 削除するCharacterを格納するして,characteresのindexを指定して直接削除するのを回避
+	//std::vector<std::shared_ptr<RogueLikeGameCharacter>>	  removes;				// 削除するCharacterを格納するして,characteresのindexを指定して直接削除するのを回避
 
 	int enemy_number = 0;	// 付与するIDの値(この値にMetaAI::Identity::Enemyを加算して付与する)
 	int team_number = 0;	// 付与するIDの値(この値にMetaAI::Identity::Teamを加算して付与する)
@@ -67,7 +66,7 @@ public:
 	void DrawDebugPrimitive() const;
 
 	// デバッグ用GUI描画
-	void DrawDebugGUI();
+	void DrawDebugGUI() const;
 
 	/// <summary>
 	/// キャラクターを登録
@@ -87,7 +86,7 @@ public:
 	/// キャラクターを削除
 	/// </summary>
 	/// <param name="character">削除するキャラクター</param>
-	//   void Remove(Character* character);
+	//   void Remove(RogueLikeGameCharacter* character);
 
 //------------------------------------------------
 //
@@ -98,7 +97,7 @@ public:
 	/// <summary>
 	/// IDからキャラクターを取得
 	/// </summary>
-	/// <param name="id">取得するキャラクターのID</param>
+	/// <param name="exist">取得するキャラクターのID</param>
 	/// <returns></returns>
 	Character* GetCharacterFromId(int id) const;
 

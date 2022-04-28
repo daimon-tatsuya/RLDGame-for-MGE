@@ -43,12 +43,6 @@
     <Filter Include="Source Files\Engine\Systems\Texture">
       <UniqueIdentifier>{a40cf411-c231-4245-bac1-43a0586dd647}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Shader">
-      <UniqueIdentifier>{c7141395-4af5-4f19-a9d9-eb26809528bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\Shader\Lambert">
-      <UniqueIdentifier>{9550a8aa-855e-4f4d-bbc0-8b61825d419c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Graphics\ImGuiRenderer">
       <UniqueIdentifier>{121fcde6-ecb0-4686-9fb5-7523f937ad20}</UniqueIdentifier>
     </Filter>
@@ -70,12 +64,6 @@
     <Filter Include="HLSL\Lambert">
       <UniqueIdentifier>{a612bcbd-3972-41bb-ad6b-e57220ffa262}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Scene">
-      <UniqueIdentifier>{e0e2067b-4d97-4ed3-9bf3-80fe3cda74d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\Scene\SceneManager">
-      <UniqueIdentifier>{82a12c04-f183-49e8-81d3-1a2e8c87fb6e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Camera">
       <UniqueIdentifier>{7681e782-386d-479f-b13e-2c548e460389}</UniqueIdentifier>
     </Filter>
@@ -90,15 +78,6 @@
     </Filter>
     <Filter Include="Source Files\Engine\AI\MetaAI">
       <UniqueIdentifier>{8acfe35c-8b60-485d-89ab-901656dc4926}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\Character">
-      <UniqueIdentifier>{944d8e67-5793-4f0c-bf15-279933f07ceb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\Stage">
-      <UniqueIdentifier>{c4c6f021-bf24-4096-af6c-f9cd5be4f210}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\Stage\StageManeger">
-      <UniqueIdentifier>{57dfd7f9-a42b-4a36-ac51-774e99cb14bc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Systems\Collision">
       <UniqueIdentifier>{dd1ef98e-9068-4f11-ae7b-f4bd7a29a137}</UniqueIdentifier>
@@ -121,9 +100,6 @@
     <Filter Include="Source Files\Game\Characters\Player">
       <UniqueIdentifier>{3c8f846a-6896-4ecf-bbce-a863458e5eb0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Shader\Wireframe">
-      <UniqueIdentifier>{d82b0e80-2eeb-4e5a-8480-5b16838ac0e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\ShaderManager">
       <UniqueIdentifier>{968c76de-13b6-4c6a-84e4-15f57d4eedb9}</UniqueIdentifier>
     </Filter>
@@ -132,9 +108,6 @@
     </Filter>
     <Filter Include="HLSL\NoTexture">
       <UniqueIdentifier>{8952d226-ca8d-42a3-a761-bced7c620f18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\Shader\NoTexture">
-      <UniqueIdentifier>{d909c3e1-61a7-443b-8f69-ec681855bd35}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\AI\Aster">
       <UniqueIdentifier>{9104f65e-d15e-48be-bdd6-6e56f16dc899}</UniqueIdentifier>
@@ -148,9 +121,6 @@
     <Filter Include="Source Files\Engine\AI\Aster\Node">
       <UniqueIdentifier>{dfd9d9d3-5c23-4c6c-ae07-805cfcb44721}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Stage\RogueLikeStage">
-      <UniqueIdentifier>{e6050c99-73e7-4c39-a0dd-5b608bdca43f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Characters\Enemis">
       <UniqueIdentifier>{057d3564-f1fa-4b8f-8eae-d996194c0169}</UniqueIdentifier>
     </Filter>
@@ -160,17 +130,11 @@
     <Filter Include="Source Files\Engine\Systems\StateMachine">
       <UniqueIdentifier>{e2eea2b4-c833-4bf3-886e-b1efb4362056}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Character\CharacterManager">
-      <UniqueIdentifier>{2d38a632-97a5-4cee-83aa-5abc48a96ded}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Framework">
       <UniqueIdentifier>{3f50b83f-a4ff-467d-b356-2243f3db2a9e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Systems\HighResolutionTimer">
       <UniqueIdentifier>{2ec1b6c0-0678-4abf-8d2d-56c673dde1d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Characters\Enemis\Snake\State">
-      <UniqueIdentifier>{21dc3dc4-6382-4271-b60e-2391985080c7}</UniqueIdentifier>
     </Filter>
     <Filter Include="HLSL\NoUsing">
       <UniqueIdentifier>{80fbfaa6-5dd7-4d87-a781-7b8599e491ca}</UniqueIdentifier>
@@ -199,22 +163,58 @@
     <Filter Include="Source Files\Engine\Systems\Blender">
       <UniqueIdentifier>{6739962c-a840-4691-9aae-2657ab236654}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Load Objects\Sprite">
-      <UniqueIdentifier>{f9dacbfb-171f-4cb6-ae89-368ad3c08061}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Logger">
       <UniqueIdentifier>{d6a2edb5-9593-4f44-8925-50d3b1307d87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\AI\DungeonMake">
+    <Filter Include="Source Files\Engine\Systems\DungeonSystem">
+      <UniqueIdentifier>{0389f049-dca9-4b21-bbb9-5a5a19f64a2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Load Objects\Sprite">
+      <UniqueIdentifier>{8e5ecc51-3236-4989-968f-69568f9c9567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\CharacterManager">
+      <UniqueIdentifier>{2d38a632-97a5-4cee-83aa-5abc48a96ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\CharacterManager\Character">
+      <UniqueIdentifier>{944d8e67-5793-4f0c-bf15-279933f07ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\SceneManager">
+      <UniqueIdentifier>{82a12c04-f183-49e8-81d3-1a2e8c87fb6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\SceneManager\Scene">
+      <UniqueIdentifier>{e0e2067b-4d97-4ed3-9bf3-80fe3cda74d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\ShaderManager\Shader">
+      <UniqueIdentifier>{c7141395-4af5-4f19-a9d9-eb26809528bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\ShaderManager\Shader\Lambert">
+      <UniqueIdentifier>{9550a8aa-855e-4f4d-bbc0-8b61825d419c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\ShaderManager\Shader\Wireframe">
+      <UniqueIdentifier>{d82b0e80-2eeb-4e5a-8480-5b16838ac0e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\ShaderManager\Shader\NoTexture">
+      <UniqueIdentifier>{d909c3e1-61a7-443b-8f69-ec681855bd35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\StageManeger">
+      <UniqueIdentifier>{57dfd7f9-a42b-4a36-ac51-774e99cb14bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\StageManeger\Stage">
+      <UniqueIdentifier>{c4c6f021-bf24-4096-af6c-f9cd5be4f210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\StageManeger\Stage\RogueLikeStage">
+      <UniqueIdentifier>{e6050c99-73e7-4c39-a0dd-5b608bdca43f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\CharacterManager\Character\Action">
+      <UniqueIdentifier>{b5372a16-c989-490d-9c73-cdacea71773e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AI\MetaAI\DungeonMake">
       <UniqueIdentifier>{f360e16e-d629-4400-b8fe-b35c2c745ae7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp">
       <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Objects\Sprite.cpp">
-      <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Main.cpp">
       <Filter>Source Files\Engine\Systems</Filter>
@@ -241,10 +241,10 @@
       <Filter>Source Files\Engine\Systems\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Shader.cpp">
-      <Filter>Source Files\Engine\Systems\Shader</Filter>
+      <Filter>Source Files\Engine\Systems\ShaderManager\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\LambertShader.cpp">
-      <Filter>Source Files\Engine\Systems\Shader\Lambert</Filter>
+      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\Lambert</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Graphics.cpp">
       <Filter>Source Files\Engine\Systems\Graphics</Filter>
@@ -262,7 +262,7 @@
       <Filter>Source Files\Engine\Systems\Camera\CameraController</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\SceneManager.cpp">
-      <Filter>Source Files\Engine\Systems\Scene\SceneManager</Filter>
+      <Filter>Source Files\Engine\Systems\SceneManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Camera.cpp">
       <Filter>Source Files\Engine\Systems\Camera</Filter>
@@ -279,17 +279,14 @@
     <ClCompile Include="Source\Engine\AI\MetaAI.cpp">
       <Filter>Source Files\Engine\AI\MetaAI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Character.cpp">
-      <Filter>Source Files\Engine\Systems\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Collision.cpp">
       <Filter>Source Files\Engine\Systems\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\CharacterManager.cpp">
-      <Filter>Source Files\Engine\Systems\Character\CharacterManager</Filter>
+      <Filter>Source Files\Engine\Systems\CharacterManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\StageManager.cpp">
-      <Filter>Source Files\Engine\Systems\Stage\StageManeger</Filter>
+      <Filter>Source Files\Engine\Systems\StageManeger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Scene\SceneLoading.cpp">
       <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
@@ -304,7 +301,7 @@
       <Filter>Source Files\Engine\Systems\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\WireframeLambert.cpp">
-      <Filter>Source Files\Engine\Systems\Shader\Wireframe</Filter>
+      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\Wireframe</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\ShaderManager.cpp">
       <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
@@ -313,7 +310,7 @@
       <Filter>Source Files\Engine\Systems\Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\NoTextureShader.cpp">
-      <Filter>Source Files\Engine\Systems\Shader\NoTexture</Filter>
+      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\NoTexture</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\AI\HeuristicSearch.cpp">
       <Filter>Source Files\Engine\AI\Aster\HeuristicSearch</Filter>
@@ -325,7 +322,7 @@
       <Filter>Source Files\Engine\AI\Aster\Node</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\RogueLikeStage.cpp">
-      <Filter>Source Files\Engine\Systems\Stage\RogueLikeStage</Filter>
+      <Filter>Source Files\Engine\Systems\StageManeger\Stage\RogueLikeStage</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Characters\EnemySnake.cpp">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
@@ -346,15 +343,21 @@
       <Filter>Source Files\Engine\Systems\Logger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\AI\DungeonMake.cpp">
-      <Filter>Source Files\Engine\AI\DungeonMake</Filter>
+      <Filter>Source Files\Engine\AI\MetaAI\DungeonMake</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\DungeonSystem.cpp">
+      <Filter>Source Files\Engine\Systems\DungeonSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Objects\Sprite.cpp">
+      <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Character.cpp">
+      <Filter>Source Files\Engine\Systems\CharacterManager\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Scene\SceneTitle.h">
       <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Objects\Sprite.h">
-      <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Imgui.h">
       <Filter>Source Files\Engine\Systems</Filter>
@@ -387,10 +390,10 @@
       <Filter>Source Files\Engine\Systems\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Shader.h">
-      <Filter>Source Files\Engine\Systems\Shader</Filter>
+      <Filter>Source Files\Engine\Systems\ShaderManager\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\LambertShader.h">
-      <Filter>Source Files\Engine\Systems\Shader\Lambert</Filter>
+      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\Lambert</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Graphics.h">
       <Filter>Source Files\Engine\Systems\Graphics</Filter>
@@ -411,7 +414,7 @@
       <Filter>Source Files\Engine\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\SceneManager.h">
-      <Filter>Source Files\Engine\Systems\Scene\SceneManager</Filter>
+      <Filter>Source Files\Engine\Systems\SceneManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Camera.h">
       <Filter>Source Files\Engine\Systems\Camera</Filter>
@@ -431,20 +434,17 @@
     <ClInclude Include="Source\Engine\AI\MetaAI.h">
       <Filter>Source Files\Engine\AI\MetaAI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Character.h">
-      <Filter>Source Files\Engine\Systems\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Collision.h">
       <Filter>Source Files\Engine\Systems\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\CharacterManager.h">
-      <Filter>Source Files\Engine\Systems\Character\CharacterManager</Filter>
+      <Filter>Source Files\Engine\Systems\CharacterManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Stage.h">
-      <Filter>Source Files\Engine\Systems\Stage</Filter>
+      <Filter>Source Files\Engine\Systems\StageManeger\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\StageManager.h">
-      <Filter>Source Files\Engine\Systems\Stage\StageManeger</Filter>
+      <Filter>Source Files\Engine\Systems\StageManeger</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Scene\SceneLoading.h">
       <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
@@ -465,7 +465,7 @@
       <Filter>Source Files\Game\Characters\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\WireframeLambert.h">
-      <Filter>Source Files\Engine\Systems\Shader\Wireframe</Filter>
+      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\Wireframe</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\ShaderManager.h">
       <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
@@ -474,7 +474,7 @@
       <Filter>Source Files\Engine\Systems\Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\NoTextureShader.h">
-      <Filter>Source Files\Engine\Systems\Shader\NoTexture</Filter>
+      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\NoTexture</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\AI\HeuristicSearch.h">
       <Filter>Source Files\Engine\AI\Aster\HeuristicSearch</Filter>
@@ -486,7 +486,7 @@
       <Filter>Source Files\Engine\AI\Aster\Node</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\RogueLikeStage.h">
-      <Filter>Source Files\Engine\Systems\Stage\RogueLikeStage</Filter>
+      <Filter>Source Files\Engine\Systems\StageManeger\Stage\RogueLikeStage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Characters\EnemySnake.h">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
@@ -504,13 +504,22 @@
       <Filter>Source Files\Engine\Systems\Logger</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\AI\DungeonMake.h">
-      <Filter>Source Files\Engine\AI\DungeonMake</Filter>
+      <Filter>Source Files\Engine\AI\MetaAI\DungeonMake</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Misc.h">
       <Filter>Source Files\Engine\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Scene.h">
-      <Filter>Source Files\Engine\Systems\Scene</Filter>
+      <Filter>Source Files\Engine\Systems\SceneManager\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\DungeonSystem.h">
+      <Filter>Source Files\Engine\Systems\DungeonSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Objects\Sprite.h">
+      <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Character.h">
+      <Filter>Source Files\Engine\Systems\CharacterManager\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@
 
 #include "Engine/Systems/Math.h"
 
-class DebugRenderer
+class DebugRenderer final
 {
 private:
 	struct ConstantBufferMesh

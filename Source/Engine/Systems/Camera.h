@@ -10,7 +10,7 @@
 /// <summary>
 /// カメラ情報を持つクラス
 /// </summary>
-class Camera
+class Camera final
 {
 private:
 	DirectX::XMFLOAT4X4 view{};			// ビュー行列
@@ -45,6 +45,7 @@ public:
 		return camera;
 	}
 
+	// カメラをアクティブにする
 	void ActivateCamera();
 
 	//------------------------------------------------
@@ -71,7 +72,7 @@ public:
 	void SetPerspectiveFov(float fovY, float aspect, float nearZ, float farZ);
 
 	/// <summary>
-	/// オルトの設定
+	/// オルソ(平衡投影)の設定
 	/// </summary>
 	/// <param name="width">幅</param>
 	/// <param name="height">高さ</param>

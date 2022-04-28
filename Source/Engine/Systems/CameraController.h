@@ -11,7 +11,7 @@
 class AxisAlignedBoundingBox;
 
 //‹‘ä
-struct Frustum
+struct Frustum final
 {
 	float									shortest_direction[6]{};			// Œ´“_(0,0,0)‚©‚ç‚ÌÅ’Z‹——£
 	DirectX::XMFLOAT3			normal[6]{};							// ‹‘ä‚ÌŠe–Ê‚Ì–@ü

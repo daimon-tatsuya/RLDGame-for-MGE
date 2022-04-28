@@ -11,11 +11,6 @@
 
 Meta* Meta::instance = nullptr;
 
-Meta& Meta::Instance()
-{
-	return *instance;
-}
-
 Meta::Meta()
 {
 	// インスタンス設定
@@ -81,12 +76,21 @@ bool Meta::OnMessage(const Telegram& telegram)
 	switch (telegram.msg)
 	{
 	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:	// プレイヤーのターンが終わった
-		this->SendMessaging
-		(
-			static_cast<int>(Identity::Meta),
-			static_cast<int>(Identity::CharacterManager),
-			MESSAGE_TYPE::MSG_END_PLAYER_TURN
-		);
+		//this->SendMessaging
+		//(
+		//	static_cast<int>(Identity::Meta),
+		//	static_cast<int>(Identity::CharacterManager),
+		//	MESSAGE_TYPE::MSG_END_PLAYER_TURN
+		//);
+		for (int i=0;i <character_manager.GetEnemyCount();++i )
+		{
+			this->SendMessaging(
+				static_cast<int>(Identity::Meta),
+				character_manager.GetEnemy(i)->GetId(),
+				MESSAGE_TYPE::MSG_END_PLAYER_TURN
+			);
+
+		}
 
 		return true;
 	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:	// 敵のターンが終わった
@@ -96,9 +100,10 @@ bool Meta::OnMessage(const Telegram& telegram)
 		this->SendMessaging
 		(
 			static_cast<int>(Identity::Meta),
-			static_cast<int>(Identity::CharacterManager),
+			player_id,
 			MESSAGE_TYPE::MSG_END_ENEMY_TURN
 		);
+
 		return true;
 	}
 
@@ -131,25 +136,30 @@ void Meta::SendMessaging(int sender, int receiver, MESSAGE_TYPE msg)
 	}
 
 	//// プレイヤー宛
-	//else if (receiver == static_cast<int>(Identity::Player))
-	//{
-	//	// メッセージデータを作成
-	//	const Telegram telegram(sender, receiver, msg);
-	//	// ディレイ無しメッセージ（即時配送メッセージ）
-	//	Discharge(telegram);
-	//}
+	else if (receiver == static_cast<int>(Identity::Player))
+	{
+		// 受信者のポインタを取得
+		Character* receive_player = character_manager.GetCharacterFromId(receiver);
+		// レシーバー居ないとき関数を終了する
+		if (receive_player == nullptr)
+		{return;}
+		// メッセージデータを作成
+		const Telegram telegram(sender, receiver, msg);
+		// ディレイ無しメッセージ（即時配送メッセージ）
+		Discharge(receive_player,telegram);
+	}
 
-	//// 敵宛
-	//else if (receiver >= static_cast<int>(Identity::Enemy))
-	//{
-	//	// 受信者のポインタを取得
-	//	Character* receive_enemy = character_manager.GetEnemy(receiver);
-	//	// レシーバー居ないとき関数を終了する
-	//	if (receive_enemy)
-	//	{ return; }
-	//	// メッセージデータを作成
-	//	const Telegram telegram(sender, receiver, msg);
-	//	// ディレイ無しメッセージ（即時配送メッセージ）
-	//	Discharge(receive_enemy, telegram);
-	//}
+	// 敵宛
+	else if (receiver >= static_cast<int>(Identity::Enemy))
+	{
+		// 受信者のポインタを取得
+		Character* receive_enemy = character_manager.GetCharacterFromId(receiver);
+		// レシーバー居ないとき関数を終了する
+		if (receive_enemy==nullptr)
+		{ return; }
+		// メッセージデータを作成
+		const Telegram telegram(sender, receiver, msg);
+		// ディレイ無しメッセージ（即時配送メッセージ）
+		Discharge(receive_enemy, telegram);
+	}
 }

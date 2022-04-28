@@ -12,7 +12,7 @@ using MouseButton = unsigned int;
 /// <summary>
 ///マウスの操作入力を検知するクラス
 /// </summary>
-class Mouse
+class Mouse final
 {
 private:
 	MouseButton		button_state[2] = { 0 };
@@ -25,9 +25,9 @@ private:
 	int						screen_height = 0;
 	HWND				hWnd = nullptr;
 public:
-	static constexpr MouseButton BTN_LEFT = (1 << 0);
-	static constexpr MouseButton BTN_MIDDLE = (1 << 1);
-	static constexpr MouseButton BTN_RIGHT = (1 << 2);
+	static const MouseButton BTN_LEFT = (1 << 0);
+	static const MouseButton BTN_MIDDLE = (1 << 1);
+	static const MouseButton BTN_RIGHT = (1 << 2);
 
 public:
 	Mouse(HWND hWnd);

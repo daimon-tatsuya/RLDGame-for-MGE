@@ -11,7 +11,7 @@
 class Model;
 
 // ヒット結果
-struct HitResult
+struct HitResult final
 {
 	DirectX::XMFLOAT3		position = { 0, 0, 0 };	// レイとポリゴンの交点
 	DirectX::XMFLOAT3		normal = { 0, 0, 0 };		// 衝突したポリゴンの法線ベクトル
@@ -23,7 +23,7 @@ struct HitResult
 ///<summary>
 ///AABBのクラス
 ///</summary>
-class AxisAlignedBoundingBox
+class AxisAlignedBoundingBox final
 {
 private:
 public:
@@ -46,7 +46,7 @@ public:
 /// <summary>
 /// 当たり判定クラス
 /// </summary>
-class Collision
+class Collision final
 {
 public:
 

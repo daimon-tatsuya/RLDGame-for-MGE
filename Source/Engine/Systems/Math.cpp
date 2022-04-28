@@ -215,8 +215,9 @@ DirectX::XMFLOAT3 Math::AddVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
 
 bool Math::Comparison(float x, float y)
 {
-	const float fabs_num = fabs(x - y);
-	if (fabs_num <  DBL_EPSILON)
+	const float fab_num = fabs(x - y);//x‚Æy‚Ì·‚Ìâ‘Î’l
+
+	if (fab_num <  DBL_EPSILON)//·‚Ìâ‘Î’l‚ªDBL_EPSILONˆÈ‰º‚È‚ç‚Ù‚Ú“¯‚¶’l‚Æ‚·‚é
 	{
 		return true;
 	}

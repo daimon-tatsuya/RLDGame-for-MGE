@@ -14,7 +14,7 @@
 /// <summary>
 /// ƒ‰ƒCƒ“‚ğ•`‰æ‚·‚éƒNƒ‰ƒX
 /// </summary>
-class LineRenderer
+class LineRenderer final
 {
 private:
 	struct ConstantBuffer

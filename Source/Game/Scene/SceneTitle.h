@@ -35,6 +35,6 @@ private:
 public:
 
 	float	timer = 0.0f;
-	int		counter = 0;
+	int	counter = 0;
 	char	message[32] = { 0 };
 };

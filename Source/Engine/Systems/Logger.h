@@ -8,7 +8,7 @@
 /// <summary>
 /// 　Visual Stadioの出力ウィンドウにデバッグ文字列を出力するクラス
 /// </summary>
-class Logger
+class Logger final
 {
 private:
 

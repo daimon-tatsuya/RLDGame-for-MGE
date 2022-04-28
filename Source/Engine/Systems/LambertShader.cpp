@@ -183,7 +183,7 @@ void LambertShader::Activate(ID3D11DeviceContext* context, const RenderContext& 
 	context->VSSetConstantBuffers(0, ARRAYSIZE(constantBuffers), constantBuffers);
 	context->PSSetConstantBuffers(0, ARRAYSIZE(constantBuffers), constantBuffers);
 
-	constexpr float blend_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const float blend_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	context->OMSetBlendState(blend_state.Get(), blend_factor, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(depth_stencil_state.Get(), 0);
 	context->RSSetState(rasterizer_state.Get());

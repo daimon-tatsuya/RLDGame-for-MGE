@@ -14,7 +14,7 @@
 /// <summary>
 /// モデルの読み込み、シリアライズを行うクラス
 /// </summary>
-class ModelResource
+class ModelResource final
 {
 private:
 

@@ -11,7 +11,7 @@
 /// <summary>
 /// “ü—ÍŠÇ—ƒNƒ‰ƒX
 /// </summary>
-class Input
+class Input final
 {
 private:
 	static Input* instance;

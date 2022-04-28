@@ -12,7 +12,7 @@
 //前方宣言
 class Edge;
 
-class Node
+class Node final
 {
 private:
 
@@ -22,7 +22,6 @@ private:
 	bool is_enemy_node = false;	// 敵のいる地点ならtrue
 	bool is_wall_node = false;		// 壁のある地点ならtrue
 	bool is_item_node = false;		// アイテムのある地点ならtrue
-	bool is_searched_node = false;// 探索済みの地点ならtrue
 
 public:
 	int node_id = 0;
@@ -30,7 +29,7 @@ public:
 	std::vector<std::shared_ptr<Edge>> edge;// このノードが所有するエッジ情報
 	float cost = 1.0f;		                             // ノード自体のコスト
 	float cost_from_start = 100.f;                 // A*を始めた地点からの合計コスト
-
+	bool is_searched_node = false;// 探索済みの地点ならtrue
 private:
 
 public:
@@ -120,19 +119,6 @@ public:
 	/// </summary>
 	/// <returns>is_item_node</returns>
 	bool GetIsItemNode() const { return is_item_node; }
-
-	/// <summary>
-	/// <para>searched_node_flagの設定</para>
-	/// <para>trueならこのnodeは探索済み</para>
-	/// </summary>
-	/// <param name="set"></param>
-	void SetIsSearchedNode(bool set) { is_searched_node = set; }
-
-	/// <summary>
-	/// trueならこのnodeは探索済み
-	/// </summary>
-	/// <returns>is_searched_node</returns>
-	bool GetIsSearchedNode() const { return is_searched_node; }
 
 	/// <summary>
 	/// nodeのpositionの設定
