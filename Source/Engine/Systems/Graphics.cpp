@@ -173,5 +173,6 @@ Graphics::Graphics(HWND hWnd)
 // デストラクタ
 Graphics::~Graphics()
 {
+	//ウィンドウにする
 	swapchain->SetFullscreenState(false,nullptr);
 }

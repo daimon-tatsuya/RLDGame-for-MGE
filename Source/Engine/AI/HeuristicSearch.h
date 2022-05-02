@@ -74,17 +74,15 @@ public:
 	/// <summary>
 	/// nodesの初期化
 	/// </summary>
-	/// <param name="rogue_like_dungeon">マップ情報</param>
-	void Reset(const RogueLikeDungeon& rogue_like_dungeon);
+	void Reset();
 
 	/// <summary>
 	/// start_idからgoal_idのコストを抑えた最短経路を計算
 	/// </summary>
 	/// <param name="start_id">マップ情報を見た時のスタ―ト地点</param>
 	/// <param name="goal_id">マップ情報を見た時のスタ―ト地点</param>
-	/// /// <param name="rogue_like_dungeon">マップ情報</param>
 	/// <returns>最短経路の位置</returns>
-	std::vector<int> Search(int start_id, int goal_id, const RogueLikeDungeon& rogue_like_dungeon);
+	std::vector<int> Search(int start_id, int goal_id);
 
 	///<summary>
 	///2次元配列に変換する

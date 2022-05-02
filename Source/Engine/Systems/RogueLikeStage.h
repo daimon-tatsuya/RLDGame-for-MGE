@@ -8,15 +8,14 @@
 #include "Engine/Systems/Stage.h"
 
 //前方宣言
-class RogueLikeDungeon;
-struct RogueLikeMap;
+
 
 class RogueLikeStage
 	: public Stage
 {
 private:
 public:
-	RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon);
+	RogueLikeStage();
 	~RogueLikeStage() override;
 
 	// 更新処理
@@ -35,7 +34,7 @@ public:
 	void DrawDebugGUI()override;
 
 	//オブジェクト配置
-	void SetStageObject(std::vector<std::vector<RogueLikeMap>> map_role);
+	void SetStageObject();
 
 	//ステージの削除
 	void Clear();
@@ -44,6 +43,5 @@ private:
 protected:
 	std::vector <Stage> stage_chip;
 	//imgui
-	RogueLikeDungeon* storage_dungeon_information;
 public:
 };

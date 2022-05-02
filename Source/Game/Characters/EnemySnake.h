@@ -16,9 +16,6 @@ class EnemySnake :
 {
 private:
 
-//	bool end_explore = false; //たんさく
-
-
 public:
 
 	//親ステート
@@ -175,7 +172,8 @@ protected:
 
 public:
 
-	EnemySnake(RogueLikeDungeon* rogue_like_dungeon);
+	//EnemySnake(RogueLikeDungeon* rogue_like_dungeon);
+	EnemySnake();
 
 	~EnemySnake() override;
 

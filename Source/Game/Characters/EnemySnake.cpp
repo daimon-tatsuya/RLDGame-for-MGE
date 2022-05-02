@@ -16,13 +16,12 @@
 
 #include "Engine/AI/HeuristicSearch.h"
 
-EnemySnake::EnemySnake(RogueLikeDungeon* rogue_like_dungeon)
+EnemySnake::EnemySnake()
 {
 	SetModel("Assets/FBX/Animals/Rattlesnake.bin");
 	SetScale(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
 	SetPositionY(0.f);
 	SetExist(true);
-	stage_information = rogue_like_dungeon;
 
 	//初期ステート
 	EnemySnake::FiniteStateMachineInitialize();
@@ -36,10 +35,10 @@ EnemySnake::EnemySnake(RogueLikeDungeon* rogue_like_dungeon)
 		}
 		for (int x = 0; x < MapSize_X; x++)
 		{
-			if (stage_information->map_role[y][x].map_data == static_cast<size_t>(Attribute::Enemy))
+			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Enemy))
 			{
-				const float pos_x = static_cast<float>(x * CellSize);
-				const float pos_z = static_cast<float> (y * CellSize);
+				const auto pos_x = static_cast<float>(x * CellSize);
+				const auto pos_z = static_cast<float> (y * CellSize);
 
 				SetPosition(DirectX::XMFLOAT3(pos_x, 0, pos_z));
 				SetIsDecidePos(true);
@@ -349,7 +348,7 @@ void EnemySnake::ExploreState(const float elapsed_time)
 		DirectX::XMFLOAT3 shortest{};//通路の入り口の位置
 		float min_length = FLT_MAX;
 
-		for (const auto& road_entrance : stage_information->roads_entrance)
+		for (const auto& road_entrance : RogueLikeDungeon::Instance().GetRoadsEntrance())
 		{
 			DirectX::XMFLOAT2 r = road_entrance;
 
@@ -376,9 +375,10 @@ void EnemySnake::ExploreState(const float elapsed_time)
 		}
 		shortest_path->destination_pos = shortest;
 		goal_id = static_cast<int>(shortest.z) * MapSize_Y + static_cast<int>(shortest.x);
+
 		//最短経路を求める
 		HeuristicSearch& Astar = HeuristicSearch::Instance();
-		shortest_path->path_information = Astar.Search(start_id, goal_id, *stage_information);//到達
+		shortest_path->path_information = Astar.Search(start_id, goal_id);//到達
 		shortest_path->SetPathSize();//最短経路のサイズを設定
 	}
 	else//探索先がある

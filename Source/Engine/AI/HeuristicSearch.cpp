@@ -25,7 +25,7 @@ HeuristicSearch::~HeuristicSearch()
 	}
 }
 
-void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
+void HeuristicSearch::Reset()
 {
 	// nodeの初期化
 	searched_edge.clear();
@@ -39,15 +39,15 @@ void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
 			piece->SetNodePosition(static_cast<float>(x), static_cast<float>(y));
 
 			// マップデータからデータを取り出す
-
+			RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
 			// 壁
-			if (rogue_like_dungeon.map_role[y][x].map_data == static_cast<size_t>(Attribute::Wall))
+			if (rogue_like_dungeon.GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Wall))
 			{
 				piece->SetIsWallNode(true);//壁フラグ
 			}
 
 			// 敵(保留)
-			if (rogue_like_dungeon.map_role[y][x].map_data == static_cast<size_t>(Attribute::Enemy))
+			if (rogue_like_dungeon.GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Enemy))
 			{
 				piece->SetIsEnemyNode(true);//敵フラグ
 			}
@@ -161,12 +161,12 @@ void HeuristicSearch::Reset(const RogueLikeDungeon& rogue_like_dungeon)
 	}
 }
 
-std::vector<int> HeuristicSearch::Search(int start_id, int goal_id, const RogueLikeDungeon& rogue_like_dungeon)
+std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
 {
 	// サーチ候補の配列
 	std::vector<std::shared_ptr<Edge>> candidate;
 
-	Reset(rogue_like_dungeon);
+	Reset();
 
 	// 初期化
 	for (int i = 0; i < MapSize; i++)

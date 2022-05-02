@@ -67,21 +67,20 @@ void SceneGame::Initialize()
 	camera_controller = std::make_unique<CameraController>();
 
 	//ダンジョン生成初期化
-	RogueLikeDungeon rogue_like_dungeon;
-	rogue_like_dungeon.MapReMake();
-	storage_dungeon = rogue_like_dungeon;
+	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+	rogue_like_dungeon.MakeDungeon();
 
 	// ステージ初期化
 	StageManager& stage_manager = StageManager::Instance();
-	RogueLikeStage* rogue_like_stage = new RogueLikeStage(&storage_dungeon);
-	StageManager::Instance().Register(rogue_like_stage);
+	RogueLikeStage* rogue_like_stage = new RogueLikeStage();
+	stage_manager.Register(rogue_like_stage);
 
 	// キャラクター生成処理
 	{
 		//	 プレイヤー
-		CharacterManager::Instance().Register(new Player(&storage_dungeon), static_cast<int>(Meta::Identity::Player));
+		CharacterManager::Instance().Register(new Player(), static_cast<int>(Meta::Identity::Player));
 		// 敵
-		CharacterManager::Instance().Register(new EnemySnake(&storage_dungeon), static_cast<int>(Meta::Identity::Enemy));
+		CharacterManager::Instance().Register(new EnemySnake(), static_cast<int>(Meta::Identity::Enemy));
 		Meta& meta = Meta::Instance();
 
 		meta.SendMessaging(static_cast<int>(Meta::Identity::Meta), static_cast<int>(Meta::Identity::CharacterManager), MESSAGE_TYPE::MSG_END_ENEMY_TURN);
@@ -90,7 +89,7 @@ void SceneGame::Initialize()
 	//生成されなかったオブジェクトをマップデータから消す
 	//storage_dungeon.UpdateMapRolePlayer();
 	//storage_dungeon.UpdateMapRoleEnemies();
-	storage_dungeon.UpdateMapRole();
+	rogue_like_dungeon.UpdateMapRole();
 
 	//視錐台カリング用のAABBの初期設定
 	//axis_aligned_bounding_box_for_frustum.clear();
@@ -116,11 +115,13 @@ void SceneGame::Finalize()
 void SceneGame::Update(const float elapsed_time)
 {
 	Camera& camera = Camera::Instance();
+	Meta& meta = Meta::Instance();
 
 	camera.ActivateCamera();
 	// カメラコントローラー更新処理
 	camera_controller->FollowCameraUpdate(elapsed_time);
 
+	meta.Update();
 	// ステージ更新処理
 	StageManager::Instance().Update(elapsed_time);
 
@@ -129,9 +130,9 @@ void SceneGame::Update(const float elapsed_time)
 
 	const GamePad& game_pad = Input::Instance().GetGamePad();
 
-	//storage_dungeon.UpdateMapRolePlayer();
-	//storage_dungeon.UpdateMapRoleEnemies();
-	storage_dungeon.UpdateMapRole();
+	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
+	rogue_like_dungeon.UpdateMapRole();
 
 
 	// Aボタン(Zｷｰ)を押したらタイトルシーンへ切り替え
@@ -166,7 +167,7 @@ void SceneGame::Render()
 
 	// 描画処理
 	RenderContext render_context{};
-	render_context.light_direction = { -0.5f, -1.0f, -0.5f, 0.0f };	// ライト方向（下方向）
+	render_context.light_direction = { 0.0f, -1.0f, 0.f, 0.0f };	// ライト方向（下方向）
 
 	// カメラパラメータ設定
 	const Camera& camera = Camera::Instance();
@@ -177,17 +178,24 @@ void SceneGame::Render()
 	{	// ステージ描画
 		ShaderManager* shader_manager = graphics.GetShaderManager();
 
-		const std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::NoTexture);
+		 std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::NoTexture);
 
 		shader->Activate(device_context, render_context);
 		{
 			// ステージ描画
 			StageManager::Instance().Render(device_context, shader);
-
 			// キャラクター描画
 			CharacterManager::Instance().Render(device_context, shader);
 		}
 		shader->Deactivate(device_context);
+
+		//shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
+		//shader->Activate(device_context, render_context);
+		//{
+		//	// ステージ描画
+		//	StageManager::Instance().Render(device_context, shader);
+		//}
+		//shader->Deactivate(device_context);
 	}
 	// 3Dエフェクト描画
 	{
@@ -212,10 +220,11 @@ void SceneGame::Render()
 	// 2DデバッグGUI描画
 #if 1
 	{
+
 		CharacterManager::Instance().DrawDebugGUI();
 		camera_controller->DrawDebugGUI();
 		StageManager::Instance().DrawDebugGUI();
-		storage_dungeon.DrawDebugGUI();
+		RogueLikeDungeon::Instance().DrawDebugGUI();
 	}
 #endif
 }

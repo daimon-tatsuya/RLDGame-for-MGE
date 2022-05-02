@@ -24,7 +24,6 @@ private:
 public:
 
 	std::unique_ptr<CameraController> camera_controller = nullptr;
-	RogueLikeDungeon storage_dungeon{};//シーンが持っているマップ情報
 
 private:
 

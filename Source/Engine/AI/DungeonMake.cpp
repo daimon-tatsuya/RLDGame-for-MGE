@@ -15,6 +15,9 @@
 #include "Engine/Systems/ImGuiRenderer.h"
 #include "Engine/Systems/Math.h"
 
+
+//* RogueLikeDungeon::instance = nullptr;
+
 //コンストラクタ
 RogueLikeDungeon::RogueLikeDungeon()
 {
@@ -87,35 +90,33 @@ void RogueLikeDungeon::UpdateMapRole()
 	map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x)].map_data = static_cast<int>(Attribute::Player);
 }
 
-void RogueLikeDungeon::DungeonMake()
+void RogueLikeDungeon::MakeDungeon()
 {
+	//なぜか
+	srand(static_cast<unsigned int>(time(nullptr)));
+
+	//	解放
+	ClearMap();
+
+	//サイズの再設定
+	InitializeMapSize();
+
 	//マップの生成
-	MapMake();
+	MakeMap();
 
 	for (int i = 0; i < ObjectMax; i++)
 	{
-		//ランダムに敵を
-		ObjectMake(i);
+		//ランダムにObjectの位置を設定する
+		SetObjectPos(i);
 	}
 }
 
-void RogueLikeDungeon::MapClear()
+void RogueLikeDungeon::ClearMap()
 {
 	//	解放
 	map_role.clear();
 }
 
-void RogueLikeDungeon::MapReMake()
-{
-	//	解放
-	MapClear();
-
-	//サイズの再設定
-	InitializeMapSize();
-
-	//ダンジョン生成
-	DungeonMake();
-}
 
 void RogueLikeDungeon::DrawDebugGUI() const
 {
@@ -157,71 +158,80 @@ void RogueLikeDungeon::DrawDebugGUI() const
 	ImGui::End();
 }
 
-bool RogueLikeDungeon::ObjectMake(const int id)
+void RogueLikeDungeon::SetObjectPos(const int id)
 {
 	//Mobを設置する
-	int random_room_id = static_cast<int>(dungeon_map_role.map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room_count)))]); //マップ上の部屋をランダムに指定する
+	const int random_room_id = static_cast<int>(dungeon_map_role.map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room_count)))]); //マップ上の部屋をランダムに指定する
 
-	int random_pos_y = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[random_room_id][0] - dungeon_map_role.map_room[random_room_id][2]))); //マップのY座標の長さの中からランダムに指定
+	const int random_pos_y = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[random_room_id][0] - dungeon_map_role.map_room[random_room_id][2]))); //マップのY座標の長さの中からランダムに指定
 	int position_y = static_cast<int>(dungeon_map_role.map_room[random_room_id][2]) + random_pos_y; //マップ上の部屋のランダムなY座標
 
-	int random_pos_x = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[random_room_id][1] - dungeon_map_role.map_room[random_room_id][3]))); //マップのX座標の長さの中からランダムに指定
+	const int random_pos_x = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[random_room_id][1] - dungeon_map_role.map_room[random_room_id][3]))); //マップのX座標の長さの中からランダムに指定
 	int position_x = static_cast<int>(dungeon_map_role.map_room[random_room_id][3]) + random_pos_x; //マップ上の部屋のランダムなX座標
 
-
-	if (id == 0)	//idの0番目はプレイヤーとしている
+	//単体オブジェクトの位置設定
+	if (id == 0)	//idの0番目はプレイヤー
 	{
-		//	プレイヤーの位置
-		map_role[position_y][position_x].map_data = static_cast<size_t>(Attribute::Player);
-		player_pos = { static_cast<float>(position_x),static_cast<float>(position_y) };
+		//	プレイヤーの位置を保存
+		player_pos = { position_x,position_y };
 		map_room_player = random_room_id; //部屋にプレイヤーがいる
 	}
-	else if (id == 1)	//idの1番目は階段としている
+	else if (id == 1)	//idの1番目は階段
 	{
-		//	階段の位置
-		map_role[position_y][position_x].map_data = static_cast<size_t>(Attribute::Exit);
-		stairs_pos = { static_cast<float>(position_x),static_cast<float>(position_y) };
-
+		//	階段の位置を保存
+		stairs_pos = { position_x,position_y };
 	}
 	else
 	{
-		while (
-			Math::Comparison(player_pos.y, static_cast<float>(position_y)) && Math::Comparison(player_pos.x, static_cast<float>(position_x)) //敵がプレイヤーと重なっている
-																														||																													//もしくは
-			Math::Comparison(stairs_pos.y, static_cast<float>(position_y)) &&Math::Comparison(stairs_pos.x, static_cast<float>(position_x))	//敵が階段と重なっている
-			)
-		{//プレイヤーと重なっていなかったらこのループを抜ける
-			//Mobを設置する
-			random_room_id = static_cast<int>(dungeon_map_role.map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room_count)))]); //マップ上の部屋をランダムに指定する
-
-			random_pos_y = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[random_room_id][0] - dungeon_map_role.map_room[random_room_id][2]))); //マップのY座標の長さの中からランダムに指定
-			position_y = static_cast<int>(dungeon_map_role.map_room[random_room_id][2]) + random_pos_y; //マップ上の部屋のランダムなY座標
-
-			random_pos_x = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[random_room_id][1] - dungeon_map_role.map_room[random_room_id][3]))); //マップのX座標の長さの中からランダムに指定
-			position_x = static_cast<int>(dungeon_map_role.map_room[random_room_id][3]) + random_pos_x; //マップ上の部屋のランダムなX座標
-		}
+		//while (
+		//	Math::Comparison(player_pos.y, static_cast<float>(position_y)) && Math::Comparison(player_pos.x, static_cast<float>(position_x)) //敵がプレイヤーと重なっている
+		//																												||																													//もしくは
+		//	Math::Comparison(stairs_pos.y, static_cast<float>(position_y)) &&Math::Comparison(stairs_pos.x, static_cast<float>(position_x))	//敵が階段と重なっている
+		//	)
+		//{//プレイヤーと重なっていなかったらこのループを抜ける
+		//	//Mobを設置する
+		//	random_room_id = static_cast<int>(dungeon_map_role.map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room_count)))]); //マップ上の部屋をランダムに指定する
+		//	random_pos_y = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[random_room_id][0] - dungeon_map_role.map_room[random_room_id][2]))); //マップのY座標の長さの中からランダムに指定
+		//	position_y = static_cast<int>(dungeon_map_role.map_room[random_room_id][2]) + random_pos_y; //マップ上の部屋のランダムなY座標
+		//	random_pos_x = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[random_room_id][1] - dungeon_map_role.map_room[random_room_id][3]))); //マップのX座標の長さの中からランダムに指定
+		//	position_x = static_cast<int>(dungeon_map_role.map_room[random_room_id][3]) + random_pos_x; //マップ上の部屋のランダムなX座標
+		//}
 		//敵の位置
 		//if (!Math::Comparison(player_pos.y, static_cast<float>(position_y)) &&
 		//	!Math::Comparison(player_pos.x, static_cast<float>(position_x))&&
 		//	!Math::Comparison(stairs_pos.y, static_cast<float>(position_y)) &&
 		//	!Math::Comparison(stairs_pos.x, static_cast<float>(position_x)))
 		//{
-			map_role[position_y][position_x].map_data = static_cast<size_t>(Attribute::Enemy);
+		//map_role[position_y][position_x].map_data = static_cast<size_t>(Attribute::Enemy);
 		//}
+		map_role[position_y][position_x].map_data = static_cast<size_t>(Attribute::Enemy);
+	}
 
+	if (id == ObjectMax - ONE)//idが最大数に達したら
+	{//単体オブジェクトの配置
+		while (Math::Comparison(static_cast<float>(player_pos.y), static_cast<float>(stairs_pos.y)) && Math::Comparison(static_cast<float>(player_pos.x), static_cast<float>(stairs_pos.x))) //階段とプレイヤーと重なっている
+		{
+			const int room_id = static_cast<int>(dungeon_map_role.map_room_id[static_cast<size_t>(Math::RandomInt(static_cast<int>(dungeon_map_role.map_room_count)))]); //マップ上の部屋をランダムに指定する
 
+			 int pos_y = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[room_id][0] - dungeon_map_role.map_room[room_id][2]))); //マップのY座標の長さの中からランダムに指定
+			pos_y = static_cast<int>(dungeon_map_role.map_room[room_id][2]) + pos_y; //マップ上の部屋のランダムなY座標
+
+			 int pos_x = (Math::RandomInt(static_cast<int>(dungeon_map_role.map_room[room_id][1] - dungeon_map_role.map_room[room_id][3]))); //マップのX座標の長さの中からランダムに指定
+			pos_x = static_cast<int>(dungeon_map_role.map_room[room_id][3]) + pos_x; //マップ上の部屋のランダムなX座標
+			player_pos = DirectX::XMINT2(pos_x,pos_y);
+		}
+		map_role[player_pos.y][player_pos.x].map_data = static_cast<size_t>(Attribute::Player);
+		map_role[stairs_pos.y][stairs_pos.x].map_data = static_cast<size_t>(Attribute::Exit);
 	}
 
 
-
-	return true;
 }
 
-bool RogueLikeDungeon::MapMake()
+void RogueLikeDungeon::MakeMap()
 {
 	if (map_role.empty() || map_role.front().empty())
 	{
-		return false;
+
 	}
 
 	//マップを壁で埋める
@@ -240,7 +250,7 @@ bool RogueLikeDungeon::MapMake()
 
 	if (dungeon_map_role.map_division_count > dungeon_map_role.division_count_max)
 	{
-		return false;
+
 	}
 
 	//部屋の初期化
@@ -536,7 +546,7 @@ bool RogueLikeDungeon::MapMake()
 	//エラーチェック
 	if (!dungeon_map_role.map_division_count)
 	{
-		return false;
+
 	}
 
 	//通路の入り口だけを格納する
@@ -552,5 +562,5 @@ bool RogueLikeDungeon::MapMake()
 		}
 	}
 
-	return true;
+
 }

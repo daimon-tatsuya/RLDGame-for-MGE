@@ -8,6 +8,8 @@
 #include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/Character.h"
 #include "Engine/AI/MetaAI.h"
+#include "Engine/AI/DungeonMake.h"
+#include "Engine/Systems/DungeonSystem.h"
 
 Meta* Meta::instance = nullptr;
 
@@ -20,6 +22,13 @@ Meta::Meta()
 void Meta::Update()
 {
 	// メタAIが監視している処理
+	const DungeonSystem dungeon_system=DungeonSystem::Instance();
+
+	//現在の経過ターンが最大経過ターンを超えたら
+	if (dungeon_system.GetElapsedTurn() > dungeon_system.GetMaxTurn())
+	{
+		LOG("Success : elapsed_turn is  over the max_turn")
+	}
 }
 
 void Meta::Discharge(Character* receiver, const Telegram& telegram)
@@ -76,12 +85,7 @@ bool Meta::OnMessage(const Telegram& telegram)
 	switch (telegram.msg)
 	{
 	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:	// プレイヤーのターンが終わった
-		//this->SendMessaging
-		//(
-		//	static_cast<int>(Identity::Meta),
-		//	static_cast<int>(Identity::CharacterManager),
-		//	MESSAGE_TYPE::MSG_END_PLAYER_TURN
-		//);
+
 		for (int i=0;i <character_manager.GetEnemyCount();++i )
 		{
 			this->SendMessaging(
@@ -103,6 +107,9 @@ bool Meta::OnMessage(const Telegram& telegram)
 			player_id,
 			MESSAGE_TYPE::MSG_END_ENEMY_TURN
 		);
+		//ターンの経過
+		DungeonSystem& dungeon_system= DungeonSystem::Instance();
+		dungeon_system.TurnsElapse();
 
 		return true;
 	}

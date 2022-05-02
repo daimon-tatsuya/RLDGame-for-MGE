@@ -17,7 +17,6 @@ private:
 	int current_floor = 1;//現在の階数
 	int max_floor = 99;   //最大階数
 
-	static  DungeonSystem* instance;//唯一のポインタ
 
 public:
 
@@ -27,8 +26,12 @@ public:
 	//デストラクタ
 	~DungeonSystem() = default;
 
-	//唯一のインスタンス
-	static DungeonSystem& Instance() { return *instance; }
+		// 唯一のインスタンス取得
+	static DungeonSystem& Instance()
+	{
+		static DungeonSystem instance;
+		return instance;
+	}
 
 	//ターンを経過させる
 	void TurnsElapse() { ++elapsed_turn; }
@@ -38,6 +41,9 @@ public:
 
 	//最大経過ターンの設定
 	void SetMaxTurn(int max) { max_turn = max; }
+
+	//最大経過ターンの取得
+	int GetMaxTurn() const { return max_turn; }
 };
 
 

@@ -21,7 +21,7 @@
 
 const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
 
-Player::Player(RogueLikeDungeon* rogue_like_dungeon)
+Player::Player()
 {
 	SetModel("Assets/FBX/Animals/BlackWidow.bin");
 
@@ -31,32 +31,31 @@ Player::Player(RogueLikeDungeon* rogue_like_dungeon)
 
 	SetExist(true);
 
-	stage_information = rogue_like_dungeon;
-
 	// 初期ステート
 	Player::FiniteStateMachineInitialize();
 
-	//オブジェクト配置
-	for (int y = 0; y < MapSize_Y; y++)
-	{
-		if (GetIsDecidePos() == true)
-		{
-			break;
-		}
-
-		for (int x = 0; x < MapSize_X; x++)
-		{
-			if (stage_information->map_role[y][x].map_data == static_cast<size_t>(Attribute::Player))
-			{
-				const float pos_x = static_cast<float>(x * CellSize);
-				const float pos_z = static_cast<float> (y * CellSize);
-
-				SetPosition(DirectX::XMFLOAT3(pos_x, 0, pos_z));
-				SetIsDecidePos(true);
-				break;
-			}
-		}
-	}
+//オブジェクト配置
+	const RogueLikeDungeon rogue_like_dungeon = RogueLikeDungeon::Instance();
+	const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x)*CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize);
+	SetPosition(pos);
+	//for (int y = 0; y < MapSize_Y; y++)
+	//{
+	//	if (GetIsDecidePos() == true)
+	//	{
+	//		break;
+	//	}
+	//	for (int x = 0; x < MapSize_X; x++)
+	//	{
+	//		if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Player))
+	//		{
+	//			const float pos_x = static_cast<float>(x * CellSize);
+	//			const float pos_z = static_cast<float> (y * CellSize);
+	//			SetPosition(DirectX::XMFLOAT3(pos_x, 0, pos_z));
+	//			SetIsDecidePos(true);
+	//			break;
+	//		}
+	//	}
+	//}
 }
 
 Player::~Player()
@@ -370,28 +369,29 @@ void Player::DrawDebugGUI()
 		if (ImGui::CollapsingHeader("Player Omni Attribute", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			// 周囲のマップ情報
-			//const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
-			//const size_t up_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
-			//const size_t down_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
-			//const size_t right_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
-			//const size_t left_data = GetStageInformation()->map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
+			RogueLikeDungeon& rogue_like_dungeon =RogueLikeDungeon::Instance();
+			const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
+			const size_t up_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
+			const size_t down_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
+			const size_t right_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
+			const size_t left_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
 
-			//ImGui::Text("Omni Attribute");
-			//ImGui::Text("            up:%zu", up_data);
-			//ImGui::Text("  left:%zu          right:%zu ", left_data, right_data);
-			//ImGui::Text("           down:%zu", down_data);
+			ImGui::Text("Omni Attribute");
+			ImGui::Text("            up:%zu", up_data);
+			ImGui::Text("  left:%zu          right:%zu ", left_data, right_data);
+			ImGui::Text("           down:%zu", down_data);
 		}
 		if (ImGui::CollapsingHeader("Player initialize Position", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			//プレイヤーのマップ情報上での初期位置
-			ImGui::Text("Player Map Position: 	%f %f",
-				GetStageInformation()->player_pos.x, GetStageInformation()->player_pos.y);
+			ImGui::Text("Player Map Position: 	%d %d",
+				RogueLikeDungeon::Instance().player_pos.x, RogueLikeDungeon::Instance().player_pos.y);
 
 			//プレイヤーの初期位置
-			const float player_positionX = GetStageInformation()->player_pos.x * CellSize;
-			const float player_positionY = GetStageInformation()->player_pos.y * CellSize;
+			const int player_positionX = RogueLikeDungeon::Instance().player_pos.x * CellSize;
+			const int player_positionY = RogueLikeDungeon::Instance().player_pos.y * CellSize;
 
-			ImGui::Text("Player Position:	 %f %f", player_positionX, player_positionY);
+			ImGui::Text("Player Position:	 %d %d", player_positionX, player_positionY);
 		}
 	}
 	ImGui::End();
@@ -519,6 +519,7 @@ void	Player::SelectState(const float elapsed_time)
 	}
 }
 
+
 void	Player::AttackState(const float elapsed_time)
 {
 	if (player_entry_state.IsStateFirstTime())
@@ -615,6 +616,7 @@ void	Player::WayChangeState(const float elapsed_time)
 
 }
 
+
 void	Player::MoveState(const float elapsed_time)
 {
 	if (player_entry_state.IsStateFirstTime())//一度だけ実行
@@ -656,15 +658,18 @@ void	Player::MoveState(const float elapsed_time)
 	//右上
 	if (ax == 1.f && ay == 1.f)
 	{
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
 		SetAngleY(Math::ConvertToRadianAngle(45));
-		const size_t map_data_diagonal = GetStageInformation()->//現在のステージの情報から一つ右上の升目を見る
-			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x) + 1].map_data;
 
-		const size_t map_data_horizon = GetStageInformation()->//現在のステージの情報から一つ右の升目を見る
-			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;
+		const size_t map_data_diagonal = rogue_like_dungeon.//現在のステージの情報から一つ右上の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x) + 1].map_data;
 
-		const size_t map_data_vertical = GetStageInformation()->//現在のステージの情報から一つ上の升目を見る
-			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
+		const size_t map_data_horizon = rogue_like_dungeon.//現在のステージの情報から一つ右の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;
+
+		const size_t map_data_vertical = rogue_like_dungeon.//現在のステージの情報から一つ上の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
 
 		//壁か敵でないなら
 		//ななめの移動なので上下左右の位置も確認する
@@ -686,15 +691,18 @@ void	Player::MoveState(const float elapsed_time)
 	//左上
 	else if (ax == -1.f && ay == 1.f)
 	{
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
 		SetAngleY(Math::ConvertToRadianAngle(315));
-		const size_t map_data_diagonal = GetStageInformation()->//現在のステージの情報から一つ左上の升目を見る
-			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x) - 1].map_data;
 
-		const size_t map_data_horizon = GetStageInformation()->//現在のステージの情報から一つ左の升目を見る
-			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;
+		const size_t map_data_diagonal = rogue_like_dungeon.//現在のステージの情報から一つ左上の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x) - 1].map_data;
 
-		const size_t map_data_vertical = GetStageInformation()->//現在のステージの情報から一つ上の升目を見る
-			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
+		const size_t map_data_horizon = rogue_like_dungeon.//現在のステージの情報から一つ左の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;
+
+		const size_t map_data_vertical = rogue_like_dungeon.//現在のステージの情報から一つ上の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
 
 		//進行方向が移動可能な属性かをチェック
 		//ななめの移動なので上下左右の位置も確認する
@@ -715,15 +723,18 @@ void	Player::MoveState(const float elapsed_time)
 	//左下
 	else if (ax == -1.f && ay == -1.f)
 	{
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
 		SetAngleY(Math::ConvertToRadianAngle(225));
-		const size_t map_data_diagonal = GetStageInformation()->//現在のステージの情報から一つ左下の升目を見る
-			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x) - 1].map_data;
 
-		const size_t map_data_horizon = GetStageInformation()->//現在のステージの情報から一つ左の升目を見る
-			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;
+		const size_t map_data_diagonal = rogue_like_dungeon.//現在のステージの情報から一つ左下の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x) - 1].map_data;
 
-		const size_t map_data_vertical = GetStageInformation()->//現在のステージの情報から一つ下の升目を見る
-			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;
+		const size_t map_data_horizon = rogue_like_dungeon.//現在のステージの情報から一つ左の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;
+
+		const size_t map_data_vertical = rogue_like_dungeon.//現在のステージの情報から一つ下の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;
 
 		//進行方向が移動可能な属性かをチェック
 		//ななめの移動なので上下左右の位置も確認する
@@ -745,15 +756,18 @@ void	Player::MoveState(const float elapsed_time)
 	//右下
 	else if (ax == 1.f && ay == -1.f)
 	{
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
 		SetAngleY(Math::ConvertToRadianAngle(135));
-		const size_t map_data_diagonal = GetStageInformation()->//現在のステージの情報から一つ右下の升目を見る
-			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x) + 1].map_data;
 
-		const size_t map_data_horizon = GetStageInformation()->//現在のステージの情報から一つ右の升目を見る
-			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;
+		const size_t map_data_diagonal = rogue_like_dungeon.//現在のステージの情報から一つ右下の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x) + 1].map_data;
 
-		const size_t map_data_vertical = GetStageInformation()->//現在のステージの情報から一つ下の升目を見る
-			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;
+		const size_t map_data_horizon = rogue_like_dungeon.//現在のステージの情報から一つ右の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;
+
+		const size_t map_data_vertical = rogue_like_dungeon.//現在のステージの情報から一つ下の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;
 
 		//進行方向が移動可能な属性かをチェック
 		//ななめの移動なので上下左右の位置も確認する
@@ -776,9 +790,12 @@ void	Player::MoveState(const float elapsed_time)
 	//上
 	if (ax == 0.f && ay == 1.f)
 	{
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
 		SetAngleY(Math::ConvertToRadianAngle(0));
-		const size_t map_data = GetStageInformation()->
-			map_role[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
+
+		const size_t map_data = rogue_like_dungeon.
+		GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
 
 		//進行方向が移動可能な属性かをチェック
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
@@ -794,9 +811,13 @@ void	Player::MoveState(const float elapsed_time)
 	//下
 	else if (ax == 0.f && ay == -1.f)
 	{
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
+
 		SetAngleY(Math::ConvertToRadianAngle(180));
-		const size_t map_data = GetStageInformation()->
-			map_role[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
+		const size_t map_data =rogue_like_dungeon.
+		GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
+
 		//進行方向が移動可能な属性かをチェック
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
@@ -810,10 +831,14 @@ void	Player::MoveState(const float elapsed_time)
 	//右
 	else if (ax == 1.f && ay == 0.f)
 	{
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
 		SetAngleY(Math::ConvertToRadianAngle(90));
-		const size_t map_data = GetStageInformation()->
-			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
-	//進行方向が移動可能な属性かをチェック
+
+		const size_t map_data = rogue_like_dungeon.
+			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
+
+		//進行方向が移動可能な属性かをチェック
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
 			//右に移動
@@ -826,10 +851,13 @@ void	Player::MoveState(const float elapsed_time)
 	//左
 	else if (ax == -1.f && ay == 0.f)
 	{
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
 		SetAngleY(Math::ConvertToRadianAngle(270));
 
-		const size_t map_data = GetStageInformation()->
-			map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
+		const size_t map_data = rogue_like_dungeon.
+			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
+
 		//進行方向が移動可能な属性かをチェック
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
@@ -843,6 +871,7 @@ void	Player::MoveState(const float elapsed_time)
 	}
 	player_entry_state.SetState(Entry::Select);
 }
+
 
 // ReactionState
 
@@ -888,6 +917,7 @@ void Player::WaitState(const float elapsed_time)
 	}
 
 }
+
 
 
 //void Player::CallState(const float elapsed_time)

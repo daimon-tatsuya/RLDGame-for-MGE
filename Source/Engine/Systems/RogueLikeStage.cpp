@@ -13,12 +13,12 @@
 #include "Engine/Systems/Collision.h"
 
 
-RogueLikeStage::RogueLikeStage(RogueLikeDungeon* rogue_like_dungeon) : storage_dungeon_information(rogue_like_dungeon)
+RogueLikeStage::RogueLikeStage()
 {
 	SetScale(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
 	SetPosition(DirectX::XMFLOAT3(0.f, 0.f, 0.f));
 	SetAngle(DirectX::XMFLOAT3(0.f, 0.f, 0.f));
-	SetStageObject(rogue_like_dungeon->map_role);
+	SetStageObject();
 }
 
 RogueLikeStage::~RogueLikeStage()
@@ -78,10 +78,22 @@ void RogueLikeStage::DrawDebugGUI()
 		//モデル数
 		ImGui::Text("Number of Models:%d", static_cast<int>(stage_chip.size()));
 	}
+	if (ImGui::CollapsingHeader("Stairs initialize Position", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		//プレイヤーのマップ情報上での初期位置
+		ImGui::Text("Stairs Map Position: 	%d %d",
+			RogueLikeDungeon::Instance().stairs_pos.x, RogueLikeDungeon::Instance().stairs_pos.y);
+
+		//プレイヤーの初期位置
+		const int stairs_pos_positionX = RogueLikeDungeon::Instance().stairs_pos.x * CellSize;
+		const int stairs_pos_positionY = RogueLikeDungeon::Instance().stairs_pos.y * CellSize;
+
+		ImGui::Text("Stairs Position:	 %d %d", stairs_pos_positionX, stairs_pos_positionY);
+	}
 	ImGui::End();
 }
 
-void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_role)
+void RogueLikeStage::SetStageObject()
 {
 	this->Clear();
 
@@ -93,16 +105,17 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 		for (int x = 0; x < MapSize_X; x++)
 		{
 			//階段
-			if (map_role[y][x].map_data == static_cast<size_t>(Attribute::Exit) && is_once == false)
+			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Exit) && is_once == false)
 			{
 				float pos_x = static_cast<float>(x * CellSize);
 				float pos_z = static_cast<float> (y * CellSize);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
+				//Stage st("Assets/FBX/StageMapTip/MRTP_Obj/tento.fbx", pos, object_num);
 				Stage st("Assets/FBX/geometry/stairs.bin", pos, object_num);
 				stage_chip.emplace_back(st);
 			}
 			//壁
-			if (map_role[y][x].map_data == static_cast<size_t>(Attribute::Wall))
+			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Wall))
 			{
 				float pos_x = static_cast<float>(x * CellSize);
 				float pos_z = static_cast<float> (y * CellSize);
@@ -111,7 +124,7 @@ void RogueLikeStage::SetStageObject(std::vector<std::vector<RogueLikeMap>> map_r
 				stage_chip.emplace_back(st);
 			}
 			//部屋
-			else if (map_role[y][x].map_data >= static_cast<size_t>(Attribute::Room))
+			else if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data >= static_cast<size_t>(Attribute::Room))
 			{
 				float pos_x = static_cast<float>(x * CellSize);
 				float pos_z = static_cast<float> (y * CellSize);

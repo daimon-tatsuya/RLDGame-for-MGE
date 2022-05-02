@@ -26,6 +26,28 @@ const static int RoomMax = 8;	// 部屋の数
 const static int	 ONE = 1; // DXlibのGetRand関数を使わない場合+1する必要がある
 const static int CellSize = 2;	// world座標での升目の大きさ
 
+	// マップの情報の雛型
+	struct DungeonMapRole final
+	{
+		//生成される部屋の数 (正確に言うと生成される区域の数)
+		size_t division_count_min = 4; // マップの区分け最小数
+		size_t division_count_rand = 4; // マップの区分け数に加算する最大値
+		size_t division_count_max = division_count_rand + division_count_min; // マップの区分け最大
+
+		//生成される部屋のサイズ
+		size_t room_length_minX = 5;  // 部屋のX座標の最小サイズ
+		size_t room_length_minY = 5;  // 部屋のY座標の最小サイズ
+		size_t room_length_randX = 5; // 部屋のX座標のサイズ加算
+		size_t room_length_randY = 5; // 部屋のY座標のサイズ加算
+
+		size_t map_division_count{};					// マップの区分け数 (部屋の個数) 0~nまでの部屋ID
+		size_t map_division[RoomMax][4]{};		// マップの区域 [部屋ID][Y終点 , X終点 , Y始点 , X始点]
+		size_t map_room_id[RoomMax]{};			// 部屋のID
+		size_t map_room_count{};						// 部屋の数
+		size_t map_room[RoomMax][4]{};			// マップの部屋 [部屋ID][Y終点 , X終点 , Y始点 , X始点]
+		size_t map_road[RoomMax][4]{};			// マップの通路 [部屋ID(前)] [繋がる先の部屋ID(後) , (0:Y座標 , 1:X座標) , (前)側の通路の位置 , (後)側の通路の位置]
+		size_t map_room_area[RoomMax]{};		// 部屋の面積
+	};
 
 ///<summary>
 ///マップ情報の属性
@@ -33,7 +55,7 @@ const static int CellSize = 2;	// world座標での升目の大きさ
 ///<para>
 ///床のオブジェクト通路より小さい値にする
 ///</para>
-enum class Attribute 
+enum class Attribute
 {
 	Wall = 0,// 0:壁
 	Floor,    // 1:床
@@ -72,6 +94,12 @@ class  RogueLikeDungeon final
 {
 private:
 
+	//static RogueLikeDungeon* instance;//	唯一のインスタンス
+
+	std::vector<std::vector<RogueLikeMap>> map_role{};// マップ情報を格納するコンテナ
+
+	std::vector<DirectX::XMFLOAT2>  roads_entrance{};//通路の入り口の位置だけを格納するコンテナ
+
 public:
 
 	enum class  Road : int//  マップの通路の軸
@@ -80,43 +108,43 @@ public:
 		Axis_X
 	};
 
-	// マップの情報の雛型
-	struct DungeonMapRole final
-	{
-		//生成される部屋の数 (正確に言うと生成される区域の数)
-		size_t division_count_min = 4; // マップの区分け最小数
-		size_t division_count_rand = 4; // マップの区分け数に加算する最大値
-		size_t division_count_max = division_count_rand + division_count_min; // マップの区分け最大
-
-		//生成される部屋のサイズ
-		size_t room_length_minX = 5;  // 部屋のX座標の最小サイズ
-		size_t room_length_minY = 5;  // 部屋のY座標の最小サイズ
-		size_t room_length_randX = 5; // 部屋のX座標のサイズ加算
-		size_t room_length_randY = 5; // 部屋のY座標のサイズ加算
-
-		size_t map_division_count{};					// マップの区分け数 (部屋の個数) 0~nまでの部屋ID
-		size_t map_division[RoomMax][4]{};		// マップの区域 [部屋ID][Y終点 , X終点 , Y始点 , X始点]
-		size_t map_room_id[RoomMax]{};			// 部屋のID
-		size_t map_room_count{};						// 部屋の数
-		size_t map_room[RoomMax][4]{};			// マップの部屋 [部屋ID][Y終点 , X終点 , Y始点 , X始点]
-		size_t map_road[RoomMax][4]{};			// マップの通路 [部屋ID(前)] [繋がる先の部屋ID(後) , (0:Y座標 , 1:X座標) , (前)側の通路の位置 , (後)側の通路の位置]
-		size_t map_room_area[RoomMax]{};		// 部屋の面積
-	};
-
-	std::vector<std::vector<RogueLikeMap>> map_role{};// マップ情報を格納するコンテナ
-
-	std::vector<DirectX::XMFLOAT2>  roads_entrance{};//通路の入り口の位置だけを格納するコンテナ
-
 	DungeonMapRole dungeon_map_role{};// マップ情報の雛形　マッププール
 
 	size_t map_room_player{};	// プレイヤーのいる部屋の番号
 
-	//上書き防止用
-	DirectX::XMFLOAT2 player_pos{};
-	DirectX::XMFLOAT2 stairs_pos{};
+	//上書き防止保存用
+	DirectX::XMINT2 player_pos{};
+	DirectX::XMINT2 stairs_pos{};
+
 private:
 
+	//マップのサイズを初期化する
+	void InitializeMapSize();
+
+
+	// マップ生成を行う
+	void MakeMap();
+
+	/// <summary>
+	/// マップ情報をもとにマップ上にobjectの位置を設定する
+	/// </summary>
+	/// <param name="id">マップ上のobjectに付与するid</param>
+	/// <returns></returns>
+	void SetObjectPos(int id);
+
+	// マップ情報を消去
+	void ClearMap();
+
+
 public:
+
+	// 唯一のインスタンス取得
+	static RogueLikeDungeon& Instance()
+	{
+		// インスタンス設定
+		static RogueLikeDungeon instance;
+		return instance;
+	}
 
 	//コンストラクタ
 	RogueLikeDungeon();
@@ -124,31 +152,16 @@ public:
 	//デストラクタ
 	~RogueLikeDungeon();
 
-	//マップのサイズを初期化する
-	void InitializeMapSize();
-
 	//マップ情報を更新する
 	void UpdateMapRole();
 
-	// マップ生成関数
-	bool MapMake();
-
-	/// <summary>
-	/// マップ情報をもとにマップ上にmobを配置する関数
-	/// </summary>
-	/// <param name="id">マップ上のmobに付与するid</param>
-	/// <returns></returns>
-	bool ObjectMake(int id);
-
-	//新規ダンジョン作成の関数
-	void DungeonMake();
-
-	// マップ情報を消去
-	void MapClear();
-
-	// マップ情報を初期化
-	void MapReMake();
+	//新規ダンジョン作成を行う
+	void MakeDungeon();
 
 	// デバッグ用GUI描画
 	void DrawDebugGUI() const;
+
+	std::vector<std::vector<RogueLikeMap>> GetMapRole() { return  map_role; }
+
+	std::vector<DirectX::XMFLOAT2> GetRoadsEntrance() { return roads_entrance; }
 };

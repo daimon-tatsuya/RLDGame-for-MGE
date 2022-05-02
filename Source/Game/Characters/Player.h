@@ -178,7 +178,7 @@ private:
 
 public:
 
-	Player(RogueLikeDungeon* rogue_like_dungeon);
+	Player();
 	~Player()override;
 
 	/// <summary>
