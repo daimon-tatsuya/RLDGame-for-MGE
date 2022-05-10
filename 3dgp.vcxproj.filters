@@ -199,17 +199,17 @@
     <Filter Include="Source Files\Engine\Systems\StageManeger">
       <UniqueIdentifier>{57dfd7f9-a42b-4a36-ac51-774e99cb14bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Systems\StageManeger\Stage">
+      <UniqueIdentifier>{c4c6f021-bf24-4096-af6c-f9cd5be4f210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\StageManeger\Stage\RogueLikeStage">
+      <UniqueIdentifier>{e6050c99-73e7-4c39-a0dd-5b608bdca43f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Engine\Systems\CharacterManager\Character\Action">
       <UniqueIdentifier>{b5372a16-c989-490d-9c73-cdacea71773e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\AI\MetaAI\DungeonMake">
       <UniqueIdentifier>{f360e16e-d629-4400-b8fe-b35c2c745ae7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Stage">
-      <UniqueIdentifier>{c4c6f021-bf24-4096-af6c-f9cd5be4f210}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Stage\RogueLikeStage">
-      <UniqueIdentifier>{e6050c99-73e7-4c39-a0dd-5b608bdca43f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -322,7 +322,7 @@
       <Filter>Source Files\Engine\AI\Aster\Node</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\RogueLikeStage.cpp">
-      <Filter>Source Files\Game\Stage\RogueLikeStage</Filter>
+      <Filter>Source Files\Engine\Systems\StageManeger\Stage\RogueLikeStage</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Characters\EnemySnake.cpp">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
@@ -440,6 +440,9 @@
     <ClInclude Include="Source\Engine\Systems\CharacterManager.h">
       <Filter>Source Files\Engine\Systems\CharacterManager</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Stage.h">
+      <Filter>Source Files\Engine\Systems\StageManeger\Stage</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\StageManager.h">
       <Filter>Source Files\Engine\Systems\StageManeger</Filter>
     </ClInclude>
@@ -483,7 +486,7 @@
       <Filter>Source Files\Engine\AI\Aster\Node</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\RogueLikeStage.h">
-      <Filter>Source Files\Game\Stage\RogueLikeStage</Filter>
+      <Filter>Source Files\Engine\Systems\StageManeger\Stage\RogueLikeStage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Characters\EnemySnake.h">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
@@ -517,9 +520,6 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Character.h">
       <Filter>Source Files\Engine\Systems\CharacterManager\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Stage.h">
-      <Filter>Source Files\Engine\Systems\StageManeger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

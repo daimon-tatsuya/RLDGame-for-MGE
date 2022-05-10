@@ -10,10 +10,8 @@
 /// </summary>
 enum class MESSAGE_TYPE : int
 {
-	END_PLAYER_TURN,
-	END_ENEMY_TURN,
-	GOING_TO_NEXT_FLOOR
-
+	MSG_END_PLAYER_TURN,
+	MSG_END_ENEMY_TURN,
 };
 
 /// <summary>

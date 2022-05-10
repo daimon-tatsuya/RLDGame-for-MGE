@@ -12,19 +12,6 @@
 class CharacterManager;
 class Character;
 
-//IDの列挙
-enum class Identity : int
-{
-	Meta = 0,
-	Camera,
-	SceneManager,
-	CharacterManager,
-	StageManager,
-	Player,					// プレイヤーID
-	Team,					// 仲間のID
-	Enemy = 8				// 以降の値は全て敵のID
-};
-
 /// <summary>
 /// メタAIクラス
 /// </summary>
@@ -39,7 +26,17 @@ private:
 
 public:
 
-
+	//IDの列挙
+	enum class Identity : int
+	{
+		Meta = 0,
+		Stage,
+		Camera,
+		CharacterManager,
+		Player,					// プレイヤーIDは4
+		Team,					// 仲間のIDは5~7
+		Enemy=8				// 以降の値は全て敵のID
+	};
 private:
 
 public:

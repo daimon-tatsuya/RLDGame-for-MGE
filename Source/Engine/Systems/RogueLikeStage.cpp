@@ -110,11 +110,8 @@ void RogueLikeStage::SetStageObject()
 				float pos_x = static_cast<float>(x * CellSize);
 				float pos_z = static_cast<float> (y * CellSize);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				Stage st("Assets/FBX/StageMapTip/MRTP_Obj/tento.bin", pos, object_num);
-				st.SetScale(DirectX::XMFLOAT3(3.5, 3.5, 3.5));
-				st.SetAngleY(Math::ConvertToRadianAngle(180));
-				//Stage st("Assets/FBX/geometry/stairs.bin", pos, object_num);
-
+				//Stage st("Assets/FBX/StageMapTip/MRTP_Obj/tento.fbx", pos, object_num);
+				Stage st("Assets/FBX/geometry/stairs.bin", pos, object_num);
 				stage_chip.emplace_back(st);
 			}
 			//•Ç

@@ -22,12 +22,13 @@ class CharacterManager final
 private:
 
 	std::vector<std::shared_ptr<Character>>	  characters;			// 敵味方関係なく格納する
-	std::vector<std::shared_ptr<Character>>	  removes;				// 削除するCharacterを格納するして,charactersのindexを指定して直接削除するのを回避
+	//std::vector<std::shared_ptr<RogueLikeGameCharacter>>	  removes;				// 削除するCharacterを格納するして,characteresのindexを指定して直接削除するのを回避
+
 	int enemy_number = 0;	// 付与するIDの値(この値にMetaAI::Identity::Enemyを加算して付与する)
 	int team_number = 0;	// 付与するIDの値(この値にMetaAI::Identity::Teamを加算して付与する)
 
-	//bool	is_player_turn = true;//プレイヤーのターンのときにtrueになって、更新関数が実行される
-	//bool	is_enemy_turn = false;//敵のターンのときにtrueになって、更新関数が実行される
+	bool	is_player_turn = true;//プレイヤーのターンのときにtrueになって、更新関数が実行される
+	bool	is_enemy_turn = false;//敵のターンのときにtrueになって、更新関数が実行される
 public:
 
 private:
@@ -49,7 +50,7 @@ public:
 	/// 更新処理
 	/// </summary>
 	/// <param name="elapsed_time"></param>
-	void Update(float elapsed_time);
+	void Update(float elapsed_time) const;
 
 	/// <summary>
 	/// 描画処理
@@ -58,7 +59,7 @@ public:
 	/// <param name="shader">描画の仕方</param>
 	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader) const;
 
-	// キャラクターの削除
+	// キャラクターのを全削除
 	void Clear();
 
 	// デバッグプリミティブ描画
@@ -82,10 +83,10 @@ public:
 	bool OnMessage(const Telegram& telegram);
 
 	/// <summary>
-	/// キャラクターを削除用コンテナに格納
+	/// キャラクターを削除
 	/// </summary>
 	/// <param name="character">削除するキャラクター</param>
-	void Remove(Character* character);
+	//   void Remove(RogueLikeGameCharacter* character);
 
 //------------------------------------------------
 //
@@ -96,7 +97,7 @@ public:
 	/// <summary>
 	/// IDからキャラクターを取得
 	/// </summary>
-	/// <param name="id">取得するキャラクターのID</param>
+	/// <param name="exist">取得するキャラクターのID</param>
 	/// <returns></returns>
 	Character* GetCharacterFromId(int id) const;
 
@@ -111,7 +112,7 @@ public:
 
 
 	//　index 番目のキャラクターを取得
-	std::shared_ptr<Character> GetCharacter(int index) const { return characters.at(index); }
+	Character* GetCharacter(int index) const { return characters.at(index).get(); }
 
 	//キャラクターのコンテナを取得
 	std::vector<std::shared_ptr<Character>> GetCharacters() const { return characters; }

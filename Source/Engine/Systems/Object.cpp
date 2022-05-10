@@ -49,8 +49,8 @@ void Object::SendMessaging(MESSAGE_TYPE msg)
 {
 	switch (msg)
 	{
-	case MESSAGE_TYPE::END_PLAYER_TURN: break;
-	case MESSAGE_TYPE::END_ENEMY_TURN: break;
+	case MESSAGE_TYPE::MSG_END_PLAYER_TURN: break;
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN: break;
 	default: ;
 	}
 }

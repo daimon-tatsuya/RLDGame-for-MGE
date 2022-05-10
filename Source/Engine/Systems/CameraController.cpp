@@ -27,7 +27,7 @@ void CameraController::ActionGameCameraUpdate(const float elapsed_time)
 {
 	// フリーカメラ
 	const CharacterManager& character_manager = CharacterManager::Instance();
-	const Character* pl = character_manager.GetCharacterFromId(static_cast<int>(Identity::Player));
+	const Character* pl = character_manager.GetCharacterFromId(static_cast<int>(Meta::Identity::Player));
 	this->new_target = pl->GetPosition();
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	// カメラの回転速度
@@ -87,7 +87,7 @@ void CameraController::FollowCameraUpdate(float elapsed_time)
 {
 	// フリーカメラ
 	CharacterManager& character_manager = CharacterManager::Instance();
-	const Character* player = character_manager.GetCharacterFromId(static_cast<int>(Identity::Player));
+	const Character* player = character_manager.GetCharacterFromId(static_cast<int>(Meta::Identity::Player));
 	this->new_target = player->GetPosition();
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	// カメラの回転速度

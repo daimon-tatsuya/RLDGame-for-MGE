@@ -36,7 +36,7 @@ SceneGame::~SceneGame()
 	StageManager::Instance().Clear();
 	// キャラクター終了化
 	CharacterManager::Instance().Clear();
-	LOG("\nsuccess: SceneGame's destructor | MetaAI.cpp")
+	LOG("success: SceneGame's destructor\n")
 }
 
 void SceneGame::Initialize()
@@ -58,8 +58,8 @@ void SceneGame::Initialize()
 
 	//平衡投影カメラ
 	camera.SetOrthoFov(
-		graphics.GetScreenWidth(),
-		graphics.GetScreenHeight(),
+		graphics.GetScreenWidth() / 30,
+		graphics.GetScreenHeight() / 30,
 		0.1f,
 		100.f);
 
@@ -78,12 +78,12 @@ void SceneGame::Initialize()
 	// キャラクター生成処理
 	{
 		//	 プレイヤー
-		CharacterManager::Instance().Register(new Player(), static_cast<int>(Identity::Player));
+		CharacterManager::Instance().Register(new Player(), static_cast<int>(Meta::Identity::Player));
 		// 敵
-		CharacterManager::Instance().Register(new EnemySnake(), static_cast<int>(Identity::Enemy));
+		CharacterManager::Instance().Register(new EnemySnake(), static_cast<int>(Meta::Identity::Enemy));
 		Meta& meta = Meta::Instance();
 
-		meta.SendMessaging(static_cast<int>(Identity::Meta), static_cast<int>(Identity::CharacterManager), MESSAGE_TYPE::END_ENEMY_TURN);
+		meta.SendMessaging(static_cast<int>(Meta::Identity::Meta), static_cast<int>(Meta::Identity::CharacterManager), MESSAGE_TYPE::MSG_END_ENEMY_TURN);
 	}
 
 	//生成されなかったオブジェクトをマップデータから消す
@@ -148,7 +148,7 @@ void SceneGame::Update(const float elapsed_time)
 	// Startボタン(Nｷｰ)を押したら 敵の削除
 	//if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_START))
 	//{
-	////	CharacterManager::Instance().Remove(CharacterManager::Instance().GetCharacterFromId(static_cast<int>(Identity::Enemy)));
+	////	CharacterManager::Instance().Remove(CharacterManager::Instance().GetCharacterFromId(static_cast<int>(Meta::Identity::Enemy)));
 	//}
 }
 
@@ -178,7 +178,7 @@ void SceneGame::Render()
 	{	// ステージ描画
 		ShaderManager* shader_manager = graphics.GetShaderManager();
 
-		std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
+		 std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::NoTexture);
 
 		shader->Activate(device_context, render_context);
 		{
@@ -228,85 +228,3 @@ void SceneGame::Render()
 	}
 #endif
 }
-
-
-void SceneGame::ClearFloor()
-{
-	StageManager::Instance().Clear();
-//CharacterManager::Instance().RemoveEnemy();
-
-
-}
-
-void SceneGame::NextFloor()
-{
-	//ダンジョン生成初期化
-	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-	rogue_like_dungeon.MakeDungeon();
-
-	// ステージ初期化
-	StageManager& stage_manager = StageManager::Instance();
-	RogueLikeStage* rogue_like_stage = new RogueLikeStage();
-	stage_manager.Register(rogue_like_stage);
-
-	// キャラクター生成処理
-	{
-		DirectX::XMFLOAT3 player_pos = { static_cast<float>(rogue_like_dungeon.player_pos.x)*CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y)*CellSize };
-		CharacterManager::Instance().GetPlayer()->SetPosition(player_pos);
-
-	}
-
-	//生成されなかったオブジェクトをマップデータから消す
-	rogue_like_dungeon.UpdateMapRole();
-
-}
-
-
-bool SceneGame::OnMessage(const Telegram& telegram)
-{
-	switch (telegram.msg)
-	{
-	case MESSAGE_TYPE::END_PLAYER_TURN:
-
-		LOG("\n error : No Function | SceneGame.cpp")
-		break;
-	case MESSAGE_TYPE::END_ENEMY_TURN:
-
-		LOG("\n error : No Function | SceneGame.cpp")
-		break;
-	case MESSAGE_TYPE::GOING_TO_NEXT_FLOOR:
-
-		ClearFloor();
-		NextFloor();
-		return true;
-
-	default:
-		LOG("\n error : No Message | SceneGame.cpp")
-	}
-	return false;
-}
-
-void SceneGame::SendMessaging(MESSAGE_TYPE msg)
-{
-	//switch (msg)
-	//{
-	//case MESSAGE_TYPE::END_PLAYER_TURN:
-
-	//	LOG("\n error : No Function ")
-	//	break;
-
-	//case MESSAGE_TYPE::END_ENEMY_TURN:
-	//	LOG("\n error : No Function ")
-	//	break;
-
-	//case MESSAGE_TYPE::GOING_TO_NEXT_FLOOR:
-	//	LOG("\n error : No Function ")
-	//	break;
-
-	//default:
-	//	LOG("\n error : No Message")
-	//	;
-	//}
-
-}
-

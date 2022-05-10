@@ -127,7 +127,7 @@ LambertShader::LambertShader(ID3D11Device* device) :Shader(device)
 	// ラスタライザーステート
 	{
 		D3D11_RASTERIZER_DESC desc = {};
-		desc.FrontCounterClockwise = false;
+		desc.FrontCounterClockwise = true;
 		desc.DepthBias = 0;
 		desc.DepthBiasClamp = 0;
 		desc.SlopeScaledDepthBias = 0;
@@ -147,7 +147,7 @@ LambertShader::LambertShader(ID3D11Device* device) :Shader(device)
 		D3D11_SAMPLER_DESC desc = {};
 		desc.MipLODBias = 0.0f;
 		desc.MaxAnisotropy = 1;
-		desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		desc.MinLOD = -FLT_MAX;
 		desc.MaxLOD = FLT_MAX;
 		desc.BorderColor[0] = 1.0f;

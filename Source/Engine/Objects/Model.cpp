@@ -182,22 +182,13 @@ void Model::CalculateLocalTransform()
 // ワールド変換行列計算
 void Model::CalculateWorldTransform(const DirectX::XMMATRIX& world_transform)
 {
-	// Maya用逆行列。
-	DirectX::XMFLOAT4X4 coordinate_conversion =
-{
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, -1, 0,
-    0, 0, 0, 1
-};
 	for (Node& node : nodes)
 	{
 		DirectX::XMMATRIX local_transform = DirectX::XMLoadFloat4x4(&node.local_transform);
 		if (node.parent != nullptr)
 		{
 			const DirectX::XMMATRIX parent_transform = DirectX::XMLoadFloat4x4(&node.parent->world_transform);
-			const DirectX::XMMATRIX coordinate_conversion_transform = DirectX::XMLoadFloat4x4(&coordinate_conversion);
-			DirectX::XMStoreFloat4x4(&node.world_transform, local_transform * parent_transform* coordinate_conversion_transform);
+			DirectX::XMStoreFloat4x4(&node.world_transform, local_transform * parent_transform);
 		}
 		else
 		{

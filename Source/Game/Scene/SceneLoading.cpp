@@ -82,15 +82,6 @@ void SceneLoading::Render()
 	}
 }
 
-bool SceneLoading::OnMessage(const Telegram& telegram)
-{
-	return false;
-}
-
-void SceneLoading::SendMessaging(MESSAGE_TYPE msg)
-{
-}
-
 // ローディングスレッド
 void SceneLoading::LoadingThread(const SceneLoading* scene)
 {

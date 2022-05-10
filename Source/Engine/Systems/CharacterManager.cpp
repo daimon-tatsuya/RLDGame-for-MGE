@@ -12,41 +12,19 @@
 #include "Game/Characters/EnemySnake.h"
 #include "Game/Characters/Player.h"
 
-
-
-
-void CharacterManager::Update(float elapsed_time)
+void CharacterManager::Update(float elapsed_time) const
 {
-
 	for (const auto& character : characters)
 	{
 			character->Update(elapsed_time);
 	}
-
-	// 破棄処理
-	// ※charactersの範囲for文中でerase()すると不具合が発生してしまうため、
-	// 　更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
-	for (std::shared_ptr<Character> character : removes)
-	{
-		// std::vectorから要素を削除する場合はイテレーターで削除しなければならない
-		auto itr = std::ranges::find(characters, character);
-		if (itr != characters.end())
-		{
-			characters.erase(itr);
-		}
-		// 削除
-		delete character.get();
-	}
-	// 破棄リストをクリア
-	removes.clear();
-
 }
 
-void CharacterManager::Render(ID3D11DeviceContext* context, const std::shared_ptr<Shader> shader) const
+void CharacterManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader) const
 {
 	for (const auto& character : characters)
 	{
-			character->Render(context, shader);
+		character->Render(context, shader);
 	}
 }
 
@@ -69,19 +47,19 @@ void CharacterManager::DrawDebugGUI() const
 void CharacterManager::Register(Character* character, int character_type)
 {
 	// 登録するキャラクターが	プレイヤーなら
-	if (character_type == static_cast<int>(Identity::Player))
+	if (character_type == static_cast<int>(Meta::Identity::Player))
 	{
 		// IDを設定
-		character->SetId(team_number + static_cast<int>(Identity::Player));
+		character->SetId(team_number + static_cast<int>(Meta::Identity::Player));
 
 		//team_number++;// 設定したらインクリメントする
 	}
 
 	// 登録するキャラクターが敵なら
-	if (character_type == static_cast<int>(Identity::Enemy))
+	if (character_type == static_cast<int>(Meta::Identity::Enemy))
 	{
 		// IDを設定
-		character->SetId(enemy_number + static_cast<int>(Identity::Enemy));
+		character->SetId(enemy_number + static_cast<int>(Meta::Identity::Enemy));
 
 		enemy_number++;// 設定したらインクリメントする
 	}
@@ -91,45 +69,47 @@ void CharacterManager::Register(Character* character, int character_type)
 
 bool CharacterManager::OnMessage(const Telegram& telegram)
 {
-	//switch (telegram.msg)
-	//{
-	//case MESSAGE_TYPE::END_PLAYER_TURN:
+	switch (telegram.msg)
+	{
+	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
 
-	//	return true;
-	//case MESSAGE_TYPE::END_ENEMY_TURN:
+		return true;
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
 
 
-	//	return true;
-	//case MESSAGE_TYPE::GOING_TO_NEXT_FLOOR:
-
-	//	return true;
-	//default:
-	//	break;
-	//}
+		return true;
+	default:
+		break;
+	}
 	return false;
 }
 
 void CharacterManager::Clear()
 {
-	//for (auto& character:characters)
-	//{
-	//	delete character.get();
-	//}
-	removes.clear();
+	for (auto& character : characters)
+	{
+		if (character->GetId() == static_cast<int>(Meta::Identity::Player))
+		{
+			continue;
+		}
+		character.reset();
+	}
 	characters.clear();
+	team_number = 0;
+	enemy_number = 0;
 }
 
-void CharacterManager::Remove(Character* character)
-{
-	// 破棄リストにすでにあれば弾く
-	for (const auto& it : removes)
-	{
-		if (it.get() == character)
-			break;
-	}
-	// 破棄リストに追加
-	removes.emplace_back(character);
-}
+//void CharacterManager::Remove(RogueLikeGameCharacter* character)
+//{
+//	// 破棄リストにすでにあれば弾く
+//	for (const auto& it : removes)
+//	{
+//		if (it.get() == character)
+//			break;
+//	}
+//	// 破棄リストに追加
+//	removes.emplace_back(character);
+//}
 
 Character* CharacterManager::GetCharacterFromId(int id) const
 {
@@ -145,7 +125,7 @@ Character* CharacterManager::GetPlayer() const
 {
 	for (const auto& character : characters)
 	{
-		if (character->GetId() == static_cast<int>(Identity::Player))
+		if (character->GetId() == static_cast<int>(Meta::Identity::Player))
 			return character.get();
 	}
 	return nullptr;
@@ -155,7 +135,7 @@ Character* CharacterManager::GetEnemy(int index) const
 {
 	for (const auto& character : characters)
 	{
-		if (character->GetId() == static_cast<int>(Identity::Enemy) + index)
+		if (character->GetId() == static_cast<int>(Meta::Identity::Enemy) + index)
 			return character.get();
 	}
 	return nullptr;

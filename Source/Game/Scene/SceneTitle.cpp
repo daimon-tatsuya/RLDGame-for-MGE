@@ -97,15 +97,6 @@ void SceneTitle::Render()
 	}
 }
 
-bool SceneTitle::OnMessage(const Telegram& telegram)
-{
-	return  false;
-}
-
-void SceneTitle::SendMessaging(MESSAGE_TYPE msg)
-{
-}
-
 void SceneTitle::Finalize()
 {
 }

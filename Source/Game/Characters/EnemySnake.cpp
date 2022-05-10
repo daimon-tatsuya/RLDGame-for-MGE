@@ -169,10 +169,12 @@ void EnemySnake::FiniteStateMachineInitialize()
 	enemy_snake_receive_state.SetState(Receive::Called);
 }
 
-void EnemySnake::Destroy()
-{
-	CharacterManager::Instance().Remove(this);
-}
+//void EnemySnake::Destroy()
+//{
+//	CharacterManager& character_manager = CharacterManager::Instance();
+//	//キャラクターマネージャーのリストから消去
+//	//character_manager.Remove(this);
+//}
 
 void EnemySnake::DrawDebugGUI()
 {
@@ -192,30 +194,24 @@ void EnemySnake::SendMessaging(MESSAGE_TYPE msg)
 
 	switch (msg)
 	{
-	case MESSAGE_TYPE::END_PLAYER_TURN:
+	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
 
-		LOG("\n error : No Function | EnemySnake.cpp")
+		LOG("\n error: No Function")
 			break;
 
-	case MESSAGE_TYPE::END_ENEMY_TURN:
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
 
 		//メタAIにターンの終了を伝える
 
 		meta.SendMessaging(GetId(),
-			static_cast<int>(Identity::Meta),
-			MESSAGE_TYPE::END_ENEMY_TURN);
+			static_cast<int>(Meta::Identity::Meta),
+			MESSAGE_TYPE::MSG_END_ENEMY_TURN);
 		//ステートマシンの設定
 		enemy_snake_state_machine.SetState(ParentState::Receive);
 		break;
-
-	case MESSAGE_TYPE::GOING_TO_NEXT_FLOOR:
-		SetExist(false);
-		//Destroy();
-			break;
 	default:
-		LOG("\n error : No Message | EnemySnake.cpp")
+		LOG("\n No Message")
 			break;
-
 	}
 }
 
@@ -229,33 +225,23 @@ void EnemySnake::OnDead()
 
 bool EnemySnake::OnMessage(const Telegram & telegram)
 {
-
-
 	//メタAIからの受信処理
 	switch (telegram.msg)
 	{
-	case MESSAGE_TYPE::END_PLAYER_TURN:
+	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
 
 		enemy_snake_state_machine.SetState(ParentState::Entry);
 
 		return true;
-	case MESSAGE_TYPE::END_ENEMY_TURN:
+	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
 
-		LOG("\n error : No Function | EnemySnake.cpp")
+		LOG("\n error: MESSAGE_TYPE::MSG_END_ENEMY_TURN Messages not received")
 			return false;
-
-	case MESSAGE_TYPE::GOING_TO_NEXT_FLOOR:
-
-
-
 	default:
 
-		LOG("\n error: No Message | EnemySnake.cpp")
+		LOG("\n error: No Message")
 
 			return false;
-
-
-		break;
 	}
 }
 
@@ -331,7 +317,7 @@ void EnemySnake::ApproachState(const float elapsed_time)
 	{
 	}
 
-	SendMessaging(MESSAGE_TYPE::END_ENEMY_TURN);
+	SendMessaging(MESSAGE_TYPE::MSG_END_ENEMY_TURN);
 }
 
 void EnemySnake::ExploreState(const float elapsed_time)
