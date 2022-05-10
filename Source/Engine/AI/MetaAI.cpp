@@ -84,20 +84,20 @@ bool Meta::OnMessage(const Telegram& telegram)
 	// ステートマシンにできるかも？
 	switch (telegram.msg)
 	{
-	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:	// プレイヤーのターンが終わった
+	case MESSAGE_TYPE::END_PLAYER_TURN:	// プレイヤーのターンが終わった
 
 		for (int i=0;i <character_manager.GetEnemyCount();++i )
 		{
 			this->SendMessaging(
 				static_cast<int>(Identity::Meta),
 				character_manager.GetEnemy(i)->GetId(),
-				MESSAGE_TYPE::MSG_END_PLAYER_TURN
+				MESSAGE_TYPE::END_PLAYER_TURN
 			);
 
 		}
 
 		return true;
-	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:	// 敵のターンが終わった
+	case MESSAGE_TYPE::END_ENEMY_TURN:	// 敵のターンが終わった
 
 		const int player_id = character_manager.GetPlayer()->GetId();
 
@@ -105,7 +105,7 @@ bool Meta::OnMessage(const Telegram& telegram)
 		(
 			static_cast<int>(Identity::Meta),
 			player_id,
-			MESSAGE_TYPE::MSG_END_ENEMY_TURN
+			MESSAGE_TYPE::END_ENEMY_TURN
 		);
 		//ターンの経過
 		DungeonSystem& dungeon_system= DungeonSystem::Instance();

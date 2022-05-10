@@ -125,7 +125,7 @@ WireLambertShader::WireLambertShader(ID3D11Device* device) :Shader(device)
 	// ラスタライザーステート
 	{
 		D3D11_RASTERIZER_DESC desc = {};
-		desc.FrontCounterClockwise = true;
+		desc.FrontCounterClockwise = false;
 		desc.DepthBias = 0;
 		desc.DepthBiasClamp = 0;
 		desc.SlopeScaledDepthBias = 0;

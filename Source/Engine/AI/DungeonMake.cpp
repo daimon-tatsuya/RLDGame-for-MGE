@@ -73,7 +73,7 @@ void RogueLikeDungeon::UpdateMapRole()
 	const CharacterManager& character_manager = CharacterManager::Instance();
 	for (const auto& enemy : character_manager.GetCharacters())
 	{
-		if (enemy->GetId() < static_cast<int>(Meta::Identity::Enemy))//IDが敵の値でないなら以下なら
+		if (enemy->GetId() < static_cast<int>(Identity::Enemy))//IDが敵の値でないなら以下なら
 		{
 			continue;
 		}
@@ -83,7 +83,7 @@ void RogueLikeDungeon::UpdateMapRole()
 		map_role[static_cast<size_t>(enemy_pos.y)][static_cast<size_t>(enemy_pos.x)].map_data = static_cast<int>(Attribute::Enemy);
 	}
 
-	const DirectX::XMFLOAT3 pl_pos = character_manager.GetCharacterFromId(static_cast<int>(Meta::Identity::Player))->GetPosition();
+	const DirectX::XMFLOAT3 pl_pos = character_manager.GetCharacterFromId(static_cast<int>(Identity::Player))->GetPosition();
 	const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(pl_pos.x / CellSize, pl_pos.z / CellSize);//データ上の値にするためCell_Sizeで割る
 
 	//更新後のプレイヤーのデータの書き換え

@@ -57,7 +57,7 @@ private:
 	enum class Receive
 	{
 		Wait,
-		Call,
+	//	Call,
 
 		StateEnd
 	};

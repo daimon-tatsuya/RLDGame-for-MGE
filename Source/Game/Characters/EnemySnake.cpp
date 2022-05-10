@@ -194,18 +194,18 @@ void EnemySnake::SendMessaging(MESSAGE_TYPE msg)
 
 	switch (msg)
 	{
-	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+	case MESSAGE_TYPE::END_PLAYER_TURN:
 
 		LOG("\n error: No Function")
 			break;
 
-	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+	case MESSAGE_TYPE::END_ENEMY_TURN:
 
 		//メタAIにターンの終了を伝える
 
 		meta.SendMessaging(GetId(),
-			static_cast<int>(Meta::Identity::Meta),
-			MESSAGE_TYPE::MSG_END_ENEMY_TURN);
+			static_cast<int>(Identity::Meta),
+			MESSAGE_TYPE::END_ENEMY_TURN);
 		//ステートマシンの設定
 		enemy_snake_state_machine.SetState(ParentState::Receive);
 		break;
@@ -228,14 +228,14 @@ bool EnemySnake::OnMessage(const Telegram & telegram)
 	//メタAIからの受信処理
 	switch (telegram.msg)
 	{
-	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+	case MESSAGE_TYPE::END_PLAYER_TURN:
 
 		enemy_snake_state_machine.SetState(ParentState::Entry);
 
 		return true;
-	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+	case MESSAGE_TYPE::END_ENEMY_TURN:
 
-		LOG("\n error: MESSAGE_TYPE::MSG_END_ENEMY_TURN Messages not received")
+		LOG("\n error: MESSAGE_TYPE::END_ENEMY_TURN Messages not received")
 			return false;
 	default:
 
@@ -317,7 +317,7 @@ void EnemySnake::ApproachState(const float elapsed_time)
 	{
 	}
 
-	SendMessaging(MESSAGE_TYPE::MSG_END_ENEMY_TURN);
+	SendMessaging(MESSAGE_TYPE::END_ENEMY_TURN);
 }
 
 void EnemySnake::ExploreState(const float elapsed_time)

@@ -78,12 +78,12 @@ void SceneGame::Initialize()
 	// キャラクター生成処理
 	{
 		//	 プレイヤー
-		CharacterManager::Instance().Register(new Player(), static_cast<int>(Meta::Identity::Player));
+		CharacterManager::Instance().Register(new Player(), static_cast<int>(Identity::Player));
 		// 敵
-		CharacterManager::Instance().Register(new EnemySnake(), static_cast<int>(Meta::Identity::Enemy));
+		CharacterManager::Instance().Register(new EnemySnake(), static_cast<int>(Identity::Enemy));
 		Meta& meta = Meta::Instance();
 
-		meta.SendMessaging(static_cast<int>(Meta::Identity::Meta), static_cast<int>(Meta::Identity::CharacterManager), MESSAGE_TYPE::MSG_END_ENEMY_TURN);
+		meta.SendMessaging(static_cast<int>(Identity::Meta), static_cast<int>(Identity::CharacterManager), MESSAGE_TYPE::END_ENEMY_TURN);
 	}
 
 	//生成されなかったオブジェクトをマップデータから消す
@@ -148,7 +148,7 @@ void SceneGame::Update(const float elapsed_time)
 	// Startボタン(Nｷｰ)を押したら 敵の削除
 	//if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_START))
 	//{
-	////	CharacterManager::Instance().Remove(CharacterManager::Instance().GetCharacterFromId(static_cast<int>(Meta::Identity::Enemy)));
+	////	CharacterManager::Instance().Remove(CharacterManager::Instance().GetCharacterFromId(static_cast<int>(Identity::Enemy)));
 	//}
 }
 
@@ -167,7 +167,7 @@ void SceneGame::Render()
 
 	// 描画処理
 	RenderContext render_context{};
-	render_context.light_direction = { 0.0f, -1.0f, 0.f, 0.0f };	// ライト方向（下方向）
+	render_context.light_direction = { 0.0f, 1.0f, 0.f, 0.0f };	// ライト方向（下方向）
 
 	// カメラパラメータ設定
 	const Camera& camera = Camera::Instance();
@@ -178,7 +178,7 @@ void SceneGame::Render()
 	{	// ステージ描画
 		ShaderManager* shader_manager = graphics.GetShaderManager();
 
-		 std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::NoTexture);
+		 std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
 
 		shader->Activate(device_context, render_context);
 		{

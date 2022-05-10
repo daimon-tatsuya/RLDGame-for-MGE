@@ -191,8 +191,8 @@ void Player::FiniteStateMachineInitialize()
 	player_reaction_string.emplace_back("Damaged");
 	player_reaction_string.emplace_back("Death");
 
-	//	player_receive_string.emplace_back("Wait");
-	player_receive_string.emplace_back("Called");
+	player_receive_string.emplace_back("Wait");
+	//player_receive_string.emplace_back("Called");
 
 	player_states_string.emplace_back(player_entry_string);
 	player_states_string.emplace_back(player_reaction_string);
@@ -205,12 +205,12 @@ bool Player::OnMessage(const Telegram & telegram)
 
 	switch (telegram.msg)
 	{
-	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+	case MESSAGE_TYPE::END_PLAYER_TURN:
 
-		LOG("\n error: MESSAGE_TYPE::MSG_END_PLAYER_TURN Messages not received | MetaAI.cpp 207")
+		LOG("\n error: MESSAGE_TYPE::END_PLAYER_TURN Messages not received | MetaAI.cpp 207")
 			return false;
 
-	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+	case MESSAGE_TYPE::END_ENEMY_TURN:
 
 		player_state_machine.SetState(ParentState::Entry);
 
@@ -230,18 +230,18 @@ void Player::SendMessaging(MESSAGE_TYPE msg)
 
 	switch (msg)
 	{
-	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+	case MESSAGE_TYPE::END_PLAYER_TURN:
 
 		//メタAIにターンの終了を伝える
 		meta.SendMessaging(GetId(),
-			static_cast<int>(Meta::Identity::Meta),
-			MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			static_cast<int>(Identity::Meta),
+			MESSAGE_TYPE::END_PLAYER_TURN);
 
 		//ステートマシンの設定
 		player_entry_state.SetState(Entry::Select);
 		player_state_machine.SetState(ParentState::Receive);
 		break;
-	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+	case MESSAGE_TYPE::END_ENEMY_TURN:
 
 		LOG("\n error: No Function | MetaAI.cpp 243")
 			break;
@@ -684,7 +684,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(CellSize);
 
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -716,7 +716,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionZ(CellSize);
 			AddPositionX(-CellSize);
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -749,7 +749,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(-CellSize);
 
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -782,7 +782,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(CellSize);
 
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -804,7 +804,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionZ(CellSize);
 
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -824,7 +824,7 @@ void	Player::MoveState(const float elapsed_time)
 			//下に移動
 			AddPositionZ(-CellSize);
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -844,7 +844,7 @@ void	Player::MoveState(const float elapsed_time)
 			//右に移動
 			AddPositionX(CellSize);
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -864,7 +864,7 @@ void	Player::MoveState(const float elapsed_time)
 			//左に移動
 			AddPositionX(-CellSize);
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 
@@ -925,7 +925,7 @@ void Player::WaitState(const float elapsed_time)
 //	if (player_receive_state.IsStateFirstTime())
 //	{
 //		//プレイヤーが行動したことを伝える
-//		SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+//		SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 //		//行動ステートを選択するステートに戻す
 //		player_entry_state.SetState(Entry::Select);
 //	}
