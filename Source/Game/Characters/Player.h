@@ -224,4 +224,6 @@ public:
 	/// </summary>
 	/// <returns>ˆÚ“®‚µ‚Ä‚¢‚½‚çtrue</returns>
 	bool IsMoved();
+
+	void Destroy() override;
 };

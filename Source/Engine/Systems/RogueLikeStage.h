@@ -43,5 +43,6 @@ private:
 protected:
 	std::vector <Stage> stage_chip;
 	//imgui
+	int stairs_object_num = 0;
 public:
 };

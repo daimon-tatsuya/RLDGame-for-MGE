@@ -36,6 +36,15 @@ public:
 	// 描画処理
 	void Render() override;
 
+	/// <summary>
+	/// メッセージ受信処理
+	/// </summary>
+	/// <param name="telegram">命令</param>
+	/// <returns>受信の有無</returns>
+	bool OnMessage(const Telegram& telegram) override;
+
+	//メタAIにターンの終了を伝える
+	void SendMessaging(MESSAGE_TYPE msg)override;
 private:
 	// ローディングスレッド
 	static void LoadingThread(const SceneLoading* scene);

@@ -49,4 +49,8 @@ public:
 	bool GetIsDecidePos() const { return  is_decide_pos; }
 
 	void SetIsDecidePos(bool set) { is_decide_pos = set; }
+
+	virtual void Destroy()=0;
 };
+
+

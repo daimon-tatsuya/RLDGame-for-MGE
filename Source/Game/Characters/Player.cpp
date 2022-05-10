@@ -19,6 +19,8 @@
 
 #include "Game/Characters/Player.h"
 
+#include "Engine/Systems/CharacterManager.h"
+
 const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
 
 Player::Player()
@@ -34,9 +36,9 @@ Player::Player()
 	// 初期ステート
 	Player::FiniteStateMachineInitialize();
 
-//オブジェクト配置
+	//オブジェクト配置
 	const RogueLikeDungeon rogue_like_dungeon = RogueLikeDungeon::Instance();
-	const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x)*CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize);
+	const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize);
 	SetPosition(pos);
 	//for (int y = 0; y < MapSize_Y; y++)
 	//{
@@ -67,12 +69,7 @@ void Player::Update(const float elapsed_time)
 
 	player_state_machine.Update(elapsed_time);
 
-	{
-		//--追加---------------------------------------
-		// AABB
-		//
-		//-----------------------------------------------
-	}
+
 
 	// 回転角の正規化
 	NormalizeAngle();
@@ -81,10 +78,18 @@ void Player::Update(const float elapsed_time)
 	UpdateTransform();
 
 	// モデルアニメーション更新処理
-	GetModel()->UpdateAnimation(elapsed_time);
+	//GetModel()->UpdateAnimation(elapsed_time);
 
 	// モデル行列更新
 	GetModel()->UpdateTransform(GetTransform());
+
+	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+	//プレイヤーと階段の位置が重なったら
+	if (static_cast<int>(GetPosition().x / CellSize) == rogue_like_dungeon.stairs_pos.x &&
+		static_cast<int>(GetPosition().z) / CellSize == rogue_like_dungeon.stairs_pos.y)
+	{
+		SendMessaging(MESSAGE_TYPE::GOING_TO_NEXT_FLOOR);
+	}
 }
 
 void Player::Render(ID3D11DeviceContext * dc, std::shared_ptr<Shader> shader)
@@ -191,8 +196,8 @@ void Player::FiniteStateMachineInitialize()
 	player_reaction_string.emplace_back("Damaged");
 	player_reaction_string.emplace_back("Death");
 
-	//	player_receive_string.emplace_back("Wait");
-	player_receive_string.emplace_back("Called");
+	player_receive_string.emplace_back("Wait");
+	//player_receive_string.emplace_back("Called");
 
 	player_states_string.emplace_back(player_entry_string);
 	player_states_string.emplace_back(player_reaction_string);
@@ -201,26 +206,38 @@ void Player::FiniteStateMachineInitialize()
 
 bool Player::OnMessage(const Telegram & telegram)
 {
-	// メタAIからの受信処理
 
+	const RogueLikeDungeon rogue_like_dungeon = RogueLikeDungeon::Instance();
+
+	// メタAIからの受信処理
 	switch (telegram.msg)
 	{
-	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+	case MESSAGE_TYPE::END_PLAYER_TURN:
 
-		LOG("\n error: MESSAGE_TYPE::MSG_END_PLAYER_TURN Messages not received | MetaAI.cpp 207")
+		LOG("\n error: MESSAGE_TYPE::END_PLAYER_TURN Messages not received | Player.cpp")
 			return false;
 
-	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
+	case MESSAGE_TYPE::END_ENEMY_TURN:
 
 		player_state_machine.SetState(ParentState::Entry);
 
 		return true;
 
+	case MESSAGE_TYPE::GOING_TO_NEXT_FLOOR:
+
+		//位置と向きを再設定
+		SetPositionY(0.f);
+		const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize);
+		SetPosition(pos);
+
+		return true;
+
 	default:
 
-		LOG("\n error: No Message  | MetaAI.cpp 218")
+		LOG("\n error: No Message | Player.cpp")
 
 			return false;
+
 	}
 }
 
@@ -230,24 +247,36 @@ void Player::SendMessaging(MESSAGE_TYPE msg)
 
 	switch (msg)
 	{
-	case MESSAGE_TYPE::MSG_END_PLAYER_TURN:
+	case MESSAGE_TYPE::END_PLAYER_TURN:
 
 		//メタAIにターンの終了を伝える
 		meta.SendMessaging(GetId(),
-			static_cast<int>(Meta::Identity::Meta),
-			MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			static_cast<int>(Identity::Meta),
+			MESSAGE_TYPE::END_PLAYER_TURN);
 
 		//ステートマシンの設定
-		player_entry_state.SetState(Entry::Select);
 		player_state_machine.SetState(ParentState::Receive);
 		break;
-	case MESSAGE_TYPE::MSG_END_ENEMY_TURN:
 
-		LOG("\n error: No Function | MetaAI.cpp 243")
+	case MESSAGE_TYPE::END_ENEMY_TURN:
+
+		LOG("\n error: No Function | Player.cpp")
 			break;
 
+
+	case MESSAGE_TYPE::GOING_TO_NEXT_FLOOR:
+
+		//メタAIに次の階層への進行を伝える
+		meta.SendMessaging(GetId(),
+			static_cast<int>(Identity::Meta),
+			MESSAGE_TYPE::GOING_TO_NEXT_FLOOR);
+
+		//ステートマシンの設定
+		player_state_machine.SetState(ParentState::Receive);
+		break;
+
 	default:
-		LOG("\n No Message | MetaAI.cpp 247 ")
+		LOG("\n No Message | Player.cpp ")
 			break;
 	}
 }
@@ -275,8 +304,10 @@ void Player::DrawDebugGUI()
 		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			DirectX::XMFLOAT3 pos_for_imgui = GetPosition();
+			DirectX::XMFLOAT3 old_pos_for_imgui = GetOldPosition();
 			DirectX::XMFLOAT3 angle_for_imgui = GetAngle();
 			DirectX::XMFLOAT3 scale_for_imgui = GetScale();
+
 			// 位置
 			ImGui::InputFloat3("Position", &pos_for_imgui.x);
 			// 回転
@@ -289,7 +320,8 @@ void Player::DrawDebugGUI()
 			//SetAngle(a);
 			// スケール
 			ImGui::InputFloat3("Scale", &scale_for_imgui.x);
-
+			// 位置
+			ImGui::InputFloat3("OldPosition", &old_pos_for_imgui.x);
 		}
 
 		//現在のステートを表示
@@ -369,7 +401,7 @@ void Player::DrawDebugGUI()
 		if (ImGui::CollapsingHeader("Player Omni Attribute", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			// 周囲のマップ情報
-			RogueLikeDungeon& rogue_like_dungeon =RogueLikeDungeon::Instance();
+			RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
 			const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
 			const size_t up_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
 			const size_t down_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
@@ -417,6 +449,11 @@ bool Player::IsMoved()
 	//	return true;
 	//}
 	return true;
+}
+
+void Player::Destroy()
+{
+	CharacterManager::Instance().Remove(this);
 }
 
 //----------------------------------------------------------------
@@ -622,7 +659,7 @@ void	Player::MoveState(const float elapsed_time)
 	if (player_entry_state.IsStateFirstTime())//一度だけ実行
 	{
 	}
-	//SetOldPosition();//前回の位置を保存
+	SetOldPosition();//前回の位置を保存
 
 	const GamePad& game_pad = Input::Instance().GetGamePad();
 
@@ -684,7 +721,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(CellSize);
 
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -716,7 +753,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionZ(CellSize);
 			AddPositionX(-CellSize);
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -749,7 +786,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(-CellSize);
 
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -782,7 +819,7 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(CellSize);
 
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -795,16 +832,16 @@ void	Player::MoveState(const float elapsed_time)
 		SetAngleY(Math::ConvertToRadianAngle(0));
 
 		const size_t map_data = rogue_like_dungeon.
-		GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
+			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
 
-		//進行方向が移動可能な属性かをチェック
+			//進行方向が移動可能な属性かをチェック
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
 			//上に移動
 			AddPositionZ(CellSize);
 
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -815,16 +852,16 @@ void	Player::MoveState(const float elapsed_time)
 
 
 		SetAngleY(Math::ConvertToRadianAngle(180));
-		const size_t map_data =rogue_like_dungeon.
-		GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
+		const size_t map_data = rogue_like_dungeon.
+			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
 
-		//進行方向が移動可能な属性かをチェック
+			//進行方向が移動可能な属性かをチェック
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
 			//下に移動
 			AddPositionZ(-CellSize);
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -844,7 +881,7 @@ void	Player::MoveState(const float elapsed_time)
 			//右に移動
 			AddPositionX(CellSize);
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
@@ -864,7 +901,7 @@ void	Player::MoveState(const float elapsed_time)
 			//左に移動
 			AddPositionX(-CellSize);
 			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
 		}
 
@@ -911,11 +948,11 @@ void Player::DeathState(const float elapsed_time)
 
 void Player::WaitState(const float elapsed_time)
 {
-	if (player_receive_state.IsStateFirstTime())
-	{
+	//if (player_receive_state.IsStateFirstTime())
+	//{
 
-	}
-
+	//}
+	//何もしない
 }
 
 
@@ -925,7 +962,7 @@ void Player::WaitState(const float elapsed_time)
 //	if (player_receive_state.IsStateFirstTime())
 //	{
 //		//プレイヤーが行動したことを伝える
-//		SendMessaging(MESSAGE_TYPE::MSG_END_PLAYER_TURN);
+//		SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 //		//行動ステートを選択するステートに戻す
 //		player_entry_state.SetState(Entry::Select);
 //	}

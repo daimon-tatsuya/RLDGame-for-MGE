@@ -1020,7 +1020,7 @@ void ModelResource::Serialize(const char* filename)
 		}
 		catch (...)
 		{
-			LOG("model deserialize failed.\n%s\n", result);
+			LOG("\n model deserialize failed.\n%s", result);
 			return;
 		}
 	}
@@ -1045,7 +1045,7 @@ void ModelResource::Deserialize(const char* filename)
 		}
 		catch (...)
 		{
-			LOG("model deserialize failed.\n%s\n", filename);
+			LOG("\nmodel deserialize failed.\n%s", filename);
 			return;
 		}
 	}

@@ -158,9 +158,10 @@ rsq r1.x, r1.x
 mul r1.xyz, r1.xxxx, r2.xyzx  // r1.x <- N.x; r1.y <- N.y; r1.z <- N.z
 
 #line 24
-dp3 r1.w, cb0[4].xyzx, cb0[4].xyzx
+mov r2.xyz, -cb0[4].xyzx
+dp3 r1.w, r2.xyzx, r2.xyzx
 rsq r1.w, r1.w
-mul r2.xyz, r1.wwww, cb0[4].xyzx  // r2.x <- L.x; r2.y <- L.y; r2.z <- L.z
+mul r2.xyz, r1.wwww, r2.xyzx  // r2.x <- L.x; r2.y <- L.y; r2.z <- L.z
 
 #line 25
 dp3 r1.x, r2.xyzx, r1.xyzx  // r1.x <- d
@@ -182,4 +183,4 @@ mov o2.xyz, r1.xyzx
 mov o2.w, r1.w
 mov o1.xy, r2.xyxx
 ret 
-// Approximately 66 instruction slots used
+// Approximately 67 instruction slots used

@@ -42,4 +42,6 @@ public:
 
 	// ƒV[ƒ“Ø‚è‘Ö‚¦
 	void ChangeScene(Scene* scene);
+
+	 Scene* GetCurrentScene() const { return current_scene; }
 };

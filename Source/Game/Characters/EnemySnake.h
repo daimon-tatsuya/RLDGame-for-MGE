@@ -186,7 +186,7 @@ public:
 	void FiniteStateMachineInitialize() override;
 
 	// 破棄
-	//void Destroy() override;
+	void Destroy() override;
 
 	// デバッグエネミー情報表示
 	void DrawDebugGUI()override;

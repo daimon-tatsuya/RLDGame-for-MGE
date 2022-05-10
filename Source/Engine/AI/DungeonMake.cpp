@@ -40,6 +40,7 @@ void RogueLikeDungeon::InitializeMapSize()
 //マップ情報の更新
 void RogueLikeDungeon::UpdateMapRole()
 {
+
 	//一度上書き
 	for (int y = 0; y < MapSize_Y; y++)
 	{
@@ -66,6 +67,7 @@ void RogueLikeDungeon::UpdateMapRole()
 			{
 				map_role[y][x].map_data = static_cast<size_t>(Attribute::Room);
 			}
+
 		}
 	}
 
@@ -73,7 +75,8 @@ void RogueLikeDungeon::UpdateMapRole()
 	const CharacterManager& character_manager = CharacterManager::Instance();
 	for (const auto& enemy : character_manager.GetCharacters())
 	{
-		if (enemy->GetId() < static_cast<int>(Meta::Identity::Enemy))//IDが敵の値でないなら以下なら
+		if (enemy->GetId() < static_cast<int>(Identity::Enemy)||enemy->GetExist()==false
+			)//IDが敵の値でないなら以下または存在フラグが無効なら
 		{
 			continue;
 		}
@@ -82,9 +85,6 @@ void RogueLikeDungeon::UpdateMapRole()
 	//更新後の敵のデータの書き換え
 		map_role[static_cast<size_t>(enemy_pos.y)][static_cast<size_t>(enemy_pos.x)].map_data = static_cast<int>(Attribute::Enemy);
 	}
-
-	const DirectX::XMFLOAT3 pl_pos = character_manager.GetCharacterFromId(static_cast<int>(Meta::Identity::Player))->GetPosition();
-	const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(pl_pos.x / CellSize, pl_pos.z / CellSize);//データ上の値にするためCell_Sizeで割る
 
 	//更新後のプレイヤーのデータの書き換え
 	map_role[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x)].map_data = static_cast<int>(Attribute::Player);

@@ -18,6 +18,13 @@ private:
 
 public:
 
+	float	timer = 0.0f;
+	int	counter = 0;
+	char	message[32] = { 0 };
+private:
+
+public:
+
 	SceneTitle() = default;
 
 	~SceneTitle() override = default;
@@ -30,11 +37,15 @@ public:
 
 	void Render()override;
 
-private:
+	/// <summary>
+/// メッセージ受信処理
+/// </summary>
+/// <param name="telegram">命令</param>
+/// <returns>受信の有無</returns>
+	bool OnMessage(const Telegram& telegram) override;
 
-public:
+	//メタAIにターンの終了を伝える
+	void SendMessaging(MESSAGE_TYPE msg)override;
 
-	float	timer = 0.0f;
-	int	counter = 0;
-	char	message[32] = { 0 };
+
 };
