@@ -7,6 +7,8 @@
 #include <crtdbg.h>
 #include <memory>
 
+#include <sstream>
+
 #include "Engine/Systems/Framework.h"
 #include "Engine/Systems/DebugRenderer.h"
 #include "Engine/Systems/ImGuiRenderer.h"

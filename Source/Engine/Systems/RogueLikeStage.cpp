@@ -111,6 +111,7 @@ void RogueLikeStage::SetStageObject()
 				float pos_z = static_cast<float> (y * CellSize);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
 				Stage st("Assets/FBX/StageMapTip/MRTP_Obj/tento.bin", pos, object_num);
+				st.SetScale(DirectX::XMFLOAT3(CellSize, CellSize, CellSize));
 				//Stage st("Assets/FBX/geometry/stairs.bin", pos, object_num);
 				stage_chip.emplace_back(st);
 			}
