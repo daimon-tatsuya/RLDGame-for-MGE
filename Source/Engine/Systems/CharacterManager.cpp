@@ -11,7 +11,6 @@
 #include "Engine/Systems/Character.h"
 #include "Game/Characters/EnemySnake.h"
 #include "Game/Characters/Player.h"
-#include "Engine/Systems/Logger.h"
 
 void CharacterManager::Update(float elapsed_time)
 {
@@ -113,9 +112,6 @@ void CharacterManager::Clear()
 		character.reset();
 	}
 	characters.clear();
-	characters.shrink_to_fit();
-	removes.clear();
-	removes.shrink_to_fit();
 	team_number = 0;
 	enemy_number = 0;
 }
@@ -162,11 +158,6 @@ Character* CharacterManager::GetEnemy(int index) const
 	return nullptr;
 }
 
-CharacterManager::~CharacterManager()
-{
-	LOG("success : ~CharacterManager\n")
-}
-
 void CharacterManager::CollisionCharacterToCharacter() const
 {
 	const size_t count = characters.size();
@@ -177,7 +168,7 @@ void CharacterManager::CollisionCharacterToCharacter() const
 		{
 			Character* characterB = characters.at(j).get();
 
-			DirectX::XMFLOAT3 out_positionA, out_positionB{};
+			DirectX::XMFLOAT3 out_positionA, out_positionB;
 
 			if (Collision::IntersectSphereToSphere(
 				characterA->GetPosition(),

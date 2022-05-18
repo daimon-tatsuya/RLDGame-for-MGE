@@ -22,7 +22,6 @@ HeuristicSearch::~HeuristicSearch()
 	if (!advance.empty())
 	{
 		advance.clear();
-		advance.shrink_to_fit();
 	}
 }
 
@@ -30,7 +29,6 @@ void HeuristicSearch::Reset()
 {
 	// node‚Ì‰Šú‰»
 	searched_edge.clear();
-	
 	int node_id = 0;
 	for (int y = 0; y < MapSize_Y - 1; y++)
 	{

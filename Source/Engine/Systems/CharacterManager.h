@@ -33,7 +33,7 @@ public:
 
 private:
 	CharacterManager() = default;
-	~CharacterManager();
+	~CharacterManager() = default;
 public:
 
 	// 唯一のインスタンス取得

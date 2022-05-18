@@ -29,7 +29,6 @@ RogueLikeDungeon::~RogueLikeDungeon()
 {
 	//	‰ð•ú
 	map_role.clear();
-	map_role.shrink_to_fit();
 }
 
 void RogueLikeDungeon::InitializeMapSize()
@@ -116,7 +115,6 @@ void RogueLikeDungeon::ClearMap()
 {
 	//	‰ð•ú
 	map_role.clear();
-	map_role.shrink_to_fit();
 }
 
 

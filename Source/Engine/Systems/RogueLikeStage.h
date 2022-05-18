@@ -14,11 +14,8 @@ class RogueLikeStage
 	: public Stage
 {
 private:
-
 public:
-private:
-public:
-	RogueLikeStage(const char* filename, DirectX::XMFLOAT3& pos, const int id);
+	RogueLikeStage();
 	~RogueLikeStage() override;
 
 	// 更新処理
@@ -36,11 +33,15 @@ public:
 	// デバッグ用GUI描画
 	void DrawDebugGUI()override;
 
-	////オブジェクト配置
-	//void SetStageObject();
+	//オブジェクト配置
+	void SetStageObject();
 
-	////ステージの削除
-	//void Clear();
+	//ステージの削除
+	void Clear();
 
-
+private:
+protected:
+	std::vector <Stage> stage_chip;
+	//imgui
+public:
 };

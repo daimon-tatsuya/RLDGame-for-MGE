@@ -32,13 +32,11 @@
 
 SceneGame::~SceneGame()
 {
-
 	// ステージ終了化
 	StageManager::Instance().Clear();
 	// キャラクター終了化
 	CharacterManager::Instance().Clear();
 	LOG("success: SceneGame's destructor\n")
-
 }
 
 void SceneGame::Initialize()
@@ -60,72 +58,38 @@ void SceneGame::Initialize()
 
 	//平衡投影カメラ
 	camera.SetOrthoFov(
-		graphics.GetScreenWidth(),
-		graphics.GetScreenHeight(),
+		graphics.GetScreenWidth() / 30,
+		graphics.GetScreenHeight() / 30,
 		0.1f,
-		1000.f);
+		100.f);
 
 	// カメラコントローラー初期化
 	camera_controller = std::make_unique<CameraController>();
 
 	//ダンジョン生成初期化
-	RogueLikeDungeon::Instance().MakeDungeon();
+	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+	rogue_like_dungeon.MakeDungeon();
 
 	// ステージ初期化
 	StageManager& stage_manager = StageManager::Instance();
-//	stage_manager.Register(new RogueLikeStage());
-
-	int object_num = 0;
-	bool is_once = false;//for文中、一度だけ行う作業のためのフラグ
-	//オブジェクト配置
-	for (int y = 0; y < MapSize_Y; y++)
-	{
-		for (int x = 0; x < MapSize_X; x++)
-		{
-			//階段
-			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Exit) && is_once == false)
-			{
-				float pos_x = static_cast<float>(x * CellSize);
-				float pos_z = static_cast<float> (y * CellSize);
-				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				RogueLikeStage* st =new RogueLikeStage("Assets/FBX/StageMapTip/MRTP_Obj/tento.bin", pos, object_num);
-				st->SetScale(DirectX::XMFLOAT3(2.7f, 2.7f, 3));
-				stage_manager.Register(st);
-				is_once = true;
-			}
-			//壁
-			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Wall))
-			{
-				float pos_x = static_cast<float>(x * CellSize);
-				float pos_z = static_cast<float> (y * CellSize);
-				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				RogueLikeStage* st = new RogueLikeStage("Assets/FBX/geometry/wall.bin", pos, object_num);
-				stage_manager.Register(st);
-			}
-			//部屋
-			else if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data >= static_cast<size_t>(Attribute::Room))
-			{
-				float pos_x = static_cast<float>(x * CellSize);
-				float pos_z = static_cast<float> (y * CellSize);
-				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				RogueLikeStage* st = new RogueLikeStage("Assets/FBX/geometry/floor.bin", pos, object_num);
-				stage_manager.Register(st);
-			}
-
-			object_num++;
-		}
-	}
+	RogueLikeStage* rogue_like_stage = new RogueLikeStage();
+	stage_manager.Register(rogue_like_stage);
 
 	// キャラクター生成処理
+	{
+		//	 プレイヤー
+		CharacterManager::Instance().Register(new Player(), static_cast<int>(Identity::Player));
+		// 敵
+		CharacterManager::Instance().Register(new EnemySnake(), static_cast<int>(Identity::Enemy));
+		Meta& meta = Meta::Instance();
 
-	//	 プレイヤー
-	CharacterManager::Instance().Register(new Player(), static_cast<int>(Identity::Player));
-	// 敵
-	CharacterManager::Instance().Register(new EnemySnake(), static_cast<int>(Identity::Enemy));
-	Meta::Instance().SendMessaging(static_cast<int>(Identity::Meta), static_cast<int>(Identity::CharacterManager), MESSAGE_TYPE::END_ENEMY_TURN);
+		meta.SendMessaging(static_cast<int>(Identity::Meta), static_cast<int>(Identity::CharacterManager), MESSAGE_TYPE::END_ENEMY_TURN);
+	}
 
 	//生成されなかったオブジェクトをマップデータから消す
-	RogueLikeDungeon::Instance().UpdateMapRole();
+	//storage_dungeon.UpdateMapRolePlayer();
+	//storage_dungeon.UpdateMapRoleEnemies();
+	rogue_like_dungeon.UpdateMapRole();
 
 	//視錐台カリング用のAABBの初期設定
 	//axis_aligned_bounding_box_for_frustum.clear();
@@ -142,7 +106,6 @@ void SceneGame::Initialize()
 	//		}
 	//	}
 	//}
-
 }
 
 void SceneGame::Finalize()
@@ -151,12 +114,14 @@ void SceneGame::Finalize()
 
 void SceneGame::Update(const float elapsed_time)
 {
+	Camera& camera = Camera::Instance();
+	Meta& meta = Meta::Instance();
 
-	Camera::Instance().ActivateCamera();
+	camera.ActivateCamera();
 	// カメラコントローラー更新処理
 	camera_controller->FollowCameraUpdate(elapsed_time);
 
-	Meta::Instance().Update();
+	meta.Update();
 	// ステージ更新処理
 	StageManager::Instance().Update(elapsed_time);
 
@@ -165,7 +130,9 @@ void SceneGame::Update(const float elapsed_time)
 
 	const GamePad& game_pad = Input::Instance().GetGamePad();
 
-	RogueLikeDungeon::Instance().UpdateMapRole();
+	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
+	rogue_like_dungeon.UpdateMapRole();
 
 
 	// Aボタン(Zｷｰ)を押したらタイトルシーンへ切り替え
@@ -211,7 +178,7 @@ void SceneGame::Render()
 	{	// ステージ描画
 		ShaderManager* shader_manager = graphics.GetShaderManager();
 
-		std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
+		 std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
 
 		shader->Activate(device_context, render_context);
 		{
@@ -222,6 +189,13 @@ void SceneGame::Render()
 		}
 		shader->Deactivate(device_context);
 
+		//shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
+		//shader->Activate(device_context, render_context);
+		//{
+		//	// ステージ描画
+		//	StageManager::Instance().Render(device_context, shader);
+		//}
+		//shader->Deactivate(device_context);
 	}
 	// 3Dエフェクト描画
 	{
