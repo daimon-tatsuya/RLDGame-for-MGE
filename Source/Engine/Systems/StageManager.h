@@ -20,7 +20,7 @@ struct HitResult;
 class StageManager final
 {
 private:
-	std::vector<Stage*>		stages;
+	std::vector < std::shared_ptr<Stage> > stages;
 
 private:
 	StageManager() {}
@@ -38,7 +38,7 @@ public:
 	void Update(float elapsedTime);
 
 	// •`‰æˆ—
-	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader);
+	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader) const;
 
 	// ƒXƒe[ƒW“o˜^
 	void Register(Stage* stage);

@@ -7,7 +7,7 @@
 #include "Engine/Systems/Stage.h"
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/Systems/Collision.h"
-
+#include "Engine/Systems/Logger.h"
 StageManager::~StageManager()
 {
 	this->Clear();
@@ -16,16 +16,16 @@ StageManager::~StageManager()
 // 更新処理
 void StageManager::Update(float elapsedTime)
 {
-	for (auto& stage : stages)
+	for (const auto& stage : stages)
 	{
 		stage->Update(elapsedTime);
 	}
 }
 
 // 描画処理
-void StageManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader)
+void StageManager::Render(ID3D11DeviceContext* context, std::shared_ptr<Shader> shader) const
 {
-	for (auto& stage : stages)
+	for (const auto& stage : stages)
 	{
 		stage->Render(context, shader);
 	}
@@ -42,9 +42,15 @@ void StageManager::Clear()
 {
 	for (auto& stage : stages)
 	{
-		delete stage;
+		//const int b = stage.use_count();
+		//LOG("before%d\n",b)
+		stage.reset();
+		//const int a = stage.use_count();
+		//LOG("after%d\n", a)
 	}
+	std::vector<std::shared_ptr<Stage>>().swap(stages);
 	stages.clear();
+	stages.shrink_to_fit();
 }
 
 // レイキャスト

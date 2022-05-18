@@ -85,8 +85,8 @@ void SceneLoading::Render()
 // ローディングスレッド
 void SceneLoading::LoadingThread(const SceneLoading* scene)
 {
-	//シリアライズしていてロードが速すぎるのでミリ秒単位で止める
-	Sleep(3000);
+	//ロードが速すぎるのでミリ秒単位で止める
+	Sleep(2000);
 	// COM関連の初期化でスレッド毎に呼ぶ必要がある
 
 	/*HRSULT hr =*/ CoInitialize(nullptr);

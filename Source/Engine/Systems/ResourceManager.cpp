@@ -30,7 +30,7 @@ std::shared_ptr<ModelResource> ResourceManager::LoadModelResource(const char* fi
 	}
 	// 新規モデルリソース作成＆読み込み
 	ID3D11Device* device = Graphics::Instance().GetDevice();
-	auto model = std::make_shared<ModelResource>(device, filename);
+	std::shared_ptr<ModelResource> model = std::make_shared<ModelResource>(device, filename);
 
 	// マップに登録
 	models[filename] = model;
