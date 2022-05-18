@@ -36,11 +36,4 @@ public:
 	// デバッグ用GUI描画
 	void DrawDebugGUI()override;
 
-	////オブジェクト配置
-	//void SetStageObject();
-
-	////ステージの削除
-	//void Clear();
-
-
 };
