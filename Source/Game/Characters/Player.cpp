@@ -684,8 +684,8 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(CellSize);
 
 			//プレイヤーの行動を終了する
-			//SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			//player_state_machine.SetState(ParentState::Receive);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
+			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
 	//左上
@@ -716,8 +716,8 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionZ(CellSize);
 			AddPositionX(-CellSize);
 			//プレイヤーの行動を終了する
-			//SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			//player_state_machine.SetState(ParentState::Receive);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
+			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
 	//左下
@@ -749,8 +749,8 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(-CellSize);
 
 			//プレイヤーの行動を終了する
-			//SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			//player_state_machine.SetState(ParentState::Receive);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
+			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
 	//右下
@@ -782,8 +782,8 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionX(CellSize);
 
 			//プレイヤーの行動を終了する
-			//SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			//player_state_machine.SetState(ParentState::Receive);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
+			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
 
@@ -804,8 +804,8 @@ void	Player::MoveState(const float elapsed_time)
 			AddPositionZ(CellSize);
 
 			//プレイヤーの行動を終了する
-			//SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			//player_state_machine.SetState(ParentState::Receive);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
+			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
 	//下
@@ -824,8 +824,8 @@ void	Player::MoveState(const float elapsed_time)
 			//下に移動
 			AddPositionZ(-CellSize);
 			//プレイヤーの行動を終了する
-			//SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			//player_state_machine.SetState(ParentState::Receive);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
+			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
 	//右
@@ -843,9 +843,9 @@ void	Player::MoveState(const float elapsed_time)
 		{
 			//右に移動
 			AddPositionX(CellSize);
-			////プレイヤーの行動を終了する
-			//SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			//player_state_machine.SetState(ParentState::Receive);
+			//プレイヤーの行動を終了する
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
+			player_state_machine.SetState(ParentState::Receive);
 		}
 	}
 	//左
@@ -864,12 +864,12 @@ void	Player::MoveState(const float elapsed_time)
 			//左に移動
 			AddPositionX(-CellSize);
 			//プレイヤーの行動を終了する
-			//SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			//player_state_machine.SetState(ParentState::Receive);
+			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
+			player_state_machine.SetState(ParentState::Receive);
 		}
 
 	}
-	//player_entry_state.SetState(Entry::Select);
+	player_entry_state.SetState(Entry::Select);
 }
 
 
