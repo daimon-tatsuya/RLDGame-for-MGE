@@ -18,7 +18,7 @@
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/LineRenderer.h"
 #include "Engine/Systems/RenderContext.h"
-#include "Engine/Systems/RogueLikeStage.h"
+#include "Game/Stage/RogueLikeStage.h"
 #include "Engine/Systems/SceneManager.h"
 #include "Engine/Systems/Shader.h"
 #include "Engine/Systems/ShaderManager.h"
@@ -36,7 +36,7 @@ SceneGame::~SceneGame()
 	StageManager::Instance().Clear();
 	// キャラクター終了化
 	CharacterManager::Instance().Clear();
-	LOG("success: SceneGame's destructor\n")
+	LOG("executed: SceneGame's destructor\n")
 }
 
 void SceneGame::Initialize()
@@ -72,7 +72,7 @@ void SceneGame::Initialize()
 
 	// ステージ初期化
 	StageManager& stage_manager = StageManager::Instance();
-	RogueLikeStage* rogue_like_stage = new RogueLikeStage();
+	RogueLikeStages* rogue_like_stage = new RogueLikeStages();
 	stage_manager.Register(rogue_like_stage);
 
 	// キャラクター生成処理

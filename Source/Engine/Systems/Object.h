@@ -6,6 +6,8 @@
 //**********************************************************
 
 #include <memory>
+
+#include "Shader.h"
 #include "Engine/Systems/Math.h"
 #include "Engine/AI/Telegram.h"
 
@@ -128,7 +130,7 @@ public:
 	virtual void Update(float elapsed_time) {}
 
 	// 描画処理
-	virtual void Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader) {}
+	virtual void Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader);
 
 	// デバッグ用GUI描画
 	virtual	void DrawDebugGUI() {}

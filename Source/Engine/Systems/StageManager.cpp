@@ -7,11 +7,14 @@
 #include "Engine/Systems/Stage.h"
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/Systems/Collision.h"
+#include "Engine/Systems/Logger.h"
 
 StageManager::~StageManager()
 {
 	this->Clear();
+	LOG("executed: StageManager's destructor\n")
 }
+
 
 // 更新処理
 void StageManager::Update(float elapsedTime)
@@ -44,7 +47,9 @@ void StageManager::Clear()
 	{
 		delete stage;
 	}
+
 	stages.clear();
+	stages.shrink_to_fit();
 }
 
 // レイキャスト

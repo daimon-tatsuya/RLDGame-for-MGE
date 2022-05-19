@@ -173,6 +173,7 @@ Graphics::Graphics(HWND hWnd)
 // デストラクタ
 Graphics::~Graphics()
 {
-	//ウィンドウにする
+	//ステータスがフルスクリーンで終了すると
+	//メモリーリークが起きるのでステータスをウィンドウにする
 	swapchain->SetFullscreenState(false,nullptr);
 }

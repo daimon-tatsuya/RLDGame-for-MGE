@@ -10,13 +10,13 @@
 //‘O•ûéŒ¾
 
 
-class RogueLikeStage
+class RogueLikeStages
 	: public Stage
 {
 private:
 public:
-	RogueLikeStage();
-	~RogueLikeStage() override;
+	RogueLikeStages();
+	~RogueLikeStages() override;
 
 	// XVˆ—
 	void Update(float elapsed_time) override;
@@ -41,7 +41,7 @@ public:
 
 private:
 protected:
-	std::vector <Stage> stage_chip;
+	std::vector <std::shared_ptr<Stage>> stage_chip;
 	//imgui
 public:
 };

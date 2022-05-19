@@ -9,8 +9,7 @@
 #include "Engine/Systems/Math.h"
 #include "Engine/Systems/Shader.h"
 #include "Engine/Systems/Character.h"
-#include "Game/Characters/EnemySnake.h"
-#include "Game/Characters/Player.h"
+#include "Engine/Systems/Logger.h"
 
 void CharacterManager::Update(float elapsed_time)
 {
@@ -112,8 +111,11 @@ void CharacterManager::Clear()
 		character.reset();
 	}
 	characters.clear();
+	characters.shrink_to_fit();
 	team_number = 0;
 	enemy_number = 0;
+
+	LOG("executed: CharacterManager's Clear Method\n")
 }
 
 void CharacterManager::Remove(Character* character)

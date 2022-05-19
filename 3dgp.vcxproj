@@ -244,7 +244,6 @@
     <ClCompile Include="Source\Engine\Systems\NoTextureShader.cpp" />
     <ClCompile Include="Source\Engine\Systems\Object.cpp" />
     <ClCompile Include="Source\Engine\Systems\ResourceManager.cpp" />
-    <ClCompile Include="Source\Engine\Systems\RogueLikeStage.cpp" />
     <ClCompile Include="Source\Engine\Systems\SceneManager.cpp" />
     <ClCompile Include="Source\Engine\Systems\Shader.cpp" />
     <ClCompile Include="Source\Engine\Systems\ShaderManager.cpp" />
@@ -256,6 +255,7 @@
     <ClCompile Include="Source\Game\Scene\SceneGame.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneLoading.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp" />
+    <ClCompile Include="Source\Game\Stage\RogueLikeStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h" />
@@ -298,7 +298,6 @@
     <ClInclude Include="Source\Engine\Systems\Object.h" />
     <ClInclude Include="Source\Engine\Systems\RenderContext.h" />
     <ClInclude Include="Source\Engine\Systems\ResourceManager.h" />
-    <ClInclude Include="Source\Engine\Systems\RogueLikeStage.h" />
     <ClInclude Include="Source\Engine\Systems\Scene.h" />
     <ClInclude Include="Source\Engine\Systems\SceneManager.h" />
     <ClInclude Include="Source\Engine\Systems\Shader.h" />
@@ -313,6 +312,7 @@
     <ClInclude Include="Source\Game\Scene\SceneGame.h" />
     <ClInclude Include="Source\Game\Scene\SceneLoading.h" />
     <ClInclude Include="Source\Game\Scene\SceneTitle.h" />
+    <ClInclude Include="Source\Game\Stage\RogueLikeStage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\DebugRender.hlsli" />

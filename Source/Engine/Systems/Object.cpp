@@ -33,6 +33,11 @@ void Object::UpdateTransform()
 	DirectX::XMStoreFloat4x4(&transform, W);
 }
 
+void Object::Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader)
+{
+	shader->Draw(device_context, this->GetModel());
+}
+
 float Object::NormalizeAnyAngle(float radian)
 {
 	return Math::NormalizeRadianAngle(radian);
@@ -45,14 +50,19 @@ void Object::NormalizeAngle()
 	angle.z = NormalizeAnyAngle(angle.z);
 }
 
-void Object::SendMessaging(MESSAGE_TYPE msg)
+void Object::SendMessaging(const MESSAGE_TYPE msg)
 {
-	switch (msg)
-	{
-	case MESSAGE_TYPE::END_PLAYER_TURN: break;
-	case MESSAGE_TYPE::END_ENEMY_TURN: break;
-	default: ;
-	}
+	//switch (msg)
+	//{
+	//case MESSAGE_TYPE::END_PLAYER_TURN:
+
+	//	break;
+	//case MESSAGE_TYPE::END_ENEMY_TURN:
+
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void	Object::SetModel(const char* pass)

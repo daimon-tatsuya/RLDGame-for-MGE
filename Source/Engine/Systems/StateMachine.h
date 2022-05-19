@@ -13,6 +13,7 @@ const int NonState = -1;
 
 //templateをヘッダー書いた場合
 //https://pknight.hatenablog.com/entry/20090826/1251303641
+
 /// <summary>
 ///  有限ステートマシンクラス
 /// </summary>
