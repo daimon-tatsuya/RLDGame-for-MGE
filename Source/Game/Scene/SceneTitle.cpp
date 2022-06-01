@@ -7,6 +7,7 @@
 #include "Engine/Systems/Blender.h"
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Input.h"
+#include "Engine/Systems/Logger.h"
 
 #include "Engine/Objects/Sprite.h"
 #include "Engine/Systems/CameraController.h"
@@ -17,6 +18,7 @@
 #include "Game/Scene/SceneTitle.h"
 #include "Game/Scene/SceneGame.h"
 #include "Game/Scene/SceneLoading.h"
+
 
 void SceneTitle::Initialize()
 {
@@ -95,6 +97,17 @@ void SceneTitle::Render()
 	{
 		//	CharacterManager::Instance().DrawDebugGUI();
 	}
+}
+
+bool SceneTitle::OnMessage(const Telegram& telegram)
+{
+	LOG(" Error :  No Function | SceneTitle::OnMessage\n")
+	return  false;
+}
+
+void SceneTitle::SendMessaging(MESSAGE_TYPE msg)
+{
+	LOG(" Error : No Function | SceneTitle::SendMessaging\n")
 }
 
 void SceneTitle::Finalize()

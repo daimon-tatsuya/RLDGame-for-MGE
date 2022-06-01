@@ -86,9 +86,10 @@ int Framework::Run()
 			//_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示解放
 		}
 	}
-
+	//LOG(" Execute : Detect memory leaks | Framework.cpp\n")
 	//_CrtDumpMemoryLeaks();	// この時点で開放されていないメモリの情報の表示
-
+	//LOG(" Executed:Detected memory leaks | Framework.cpp\n")
+	LOG(" Warning : Memory leaks that appear after this are real | Framework.cpp\n")
 	return static_cast<int>(msg.wParam);
 }
 

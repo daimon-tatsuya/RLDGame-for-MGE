@@ -18,9 +18,11 @@ class Character;
 		Meta = 0,
 		Stage,
 		Camera,
+		SceneManager,
 		CharacterManager,
-		Player,					// プレイヤーIDは4
-		Team,					// 仲間のIDは5~7
+		
+		Player,					// プレイヤーID
+		Team,					// 仲間のID
 		Enemy=8				// 以降の値は全て敵のID
 	};
 
@@ -93,4 +95,9 @@ public:
 	/// <param name="receiver">受信者</param>
 	/// <param name="msg">命令</param>
 	void SendMessaging(int sender, int receiver, MESSAGE_TYPE msg);
+
+	// デバッグ用GUI描画
+	void DrawDebugGUI() ;
+
+
 };

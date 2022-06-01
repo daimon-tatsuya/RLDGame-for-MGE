@@ -173,10 +173,12 @@ protected:
 public:
 
 	//EnemySnake(RogueLikeDungeon* rogue_like_dungeon);
+
 	EnemySnake();
 
 	~EnemySnake() override;
 
+	//更新処理
 	void Update(float elapsed_time)override;
 
 	// 描画処理
@@ -185,8 +187,8 @@ public:
 	//有限ステートマシンの初期化
 	void FiniteStateMachineInitialize() override;
 
-	// 破棄
-	//void Destroy() override;
+	//キャラクターマネージャーのリストから自身を消去
+	void Destroy() override;
 
 	// デバッグエネミー情報表示
 	void DrawDebugGUI()override;

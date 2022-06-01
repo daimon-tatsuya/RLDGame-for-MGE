@@ -4,8 +4,33 @@
 //
 //**********************************************************
 
-#include "Engine/Systems/DungeonSystem.h"
 #include <crtdbg.h>
+#include <Engine/Systems/DungeonSystem.h>
+#include "Engine/Systems/Logger.h"
 
 DungeonSystem::DungeonSystem()
-= default;
+{
+	LOG(" Error : DungeonSystem's destructor\n")
+}
+
+bool DungeonSystem::ExceededMaxTurn() const
+{
+	//Œo‰ßƒ^[ƒ“‚ªÅ‘å”‚ð
+	//’´‚¦‚Ä‚¢‚é‚È‚çtrue
+	if (GetElapsedTurn() > GetMaxTurn())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool DungeonSystem::ExceededMaxFloor() const
+{
+	//Œ»Ý‚ÌŠK”‚ªÅ‘å”‚ð
+	//’´‚¦‚Ä‚¢‚é‚È‚çtrue
+	if (GetCurrentFloor() > GetMaxFloor())
+	{
+		return true;
+	}
+	return false;
+}

@@ -24,6 +24,7 @@ struct ShortestPath
 	{
 		destination_pos = DirectX::XMFLOAT3(0, 0,0);
 		path_information.clear();
+		path_information.shrink_to_fit();
 		path_index = 0;
 		path_size = 0;
 	}

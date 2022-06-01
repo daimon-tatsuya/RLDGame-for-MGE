@@ -10,13 +10,15 @@
 //前方宣言
 
 
-class RogueLikeStages
+class RogueLikeStage
 	: public Stage
 {
 private:
 public:
-	RogueLikeStages();
-	~RogueLikeStages() override;
+	RogueLikeStage();
+	RogueLikeStage(const char* filename, DirectX::XMFLOAT3& pos, const int id):Stage(filename,pos,id){}
+	RogueLikeStage(const char* filename, DirectX::XMFLOAT3& pos,DirectX::XMFLOAT3 scale, const int id) :Stage(filename, pos, scale,id) {}
+	~RogueLikeStage() override;
 
 	// 更新処理
 	void Update(float elapsed_time) override;
@@ -39,9 +41,12 @@ public:
 	//ステージの削除
 	void Clear();
 
+	// ステージ登録
+	void Register(Stage stage);
+
 private:
 protected:
-	std::vector <std::shared_ptr<Stage>> stage_chip;
+	std::vector <Stage> stage_chip;
 	//imgui
 public:
 };

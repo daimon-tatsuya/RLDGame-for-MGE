@@ -14,6 +14,10 @@ struct HitResult;
 class Stage
 	: public Object
 {
+private:
+	int Identity = 0;
+public:
+private:
 public:
 	Stage() = default;
 
@@ -40,7 +44,10 @@ public:
 	void Update(float elapsed_time) override {}
 
 	// 描画処理
-	void Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader) override { shader->Draw(device_context, this->GetModel()); }
+	void Render(ID3D11DeviceContext* device_context, std::shared_ptr<Shader> shader) override
+	{
+		shader->Draw(device_context, this->GetModel());
+	}
 
 	// レイキャスト
 	virtual bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) { return false; }

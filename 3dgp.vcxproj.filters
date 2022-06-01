@@ -202,9 +202,6 @@
     <Filter Include="Source Files\Engine\Systems\StageManeger\Stage">
       <UniqueIdentifier>{c4c6f021-bf24-4096-af6c-f9cd5be4f210}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\CharacterManager\Character\Action">
-      <UniqueIdentifier>{b5372a16-c989-490d-9c73-cdacea71773e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\AI\MetaAI\DungeonMake">
       <UniqueIdentifier>{f360e16e-d629-4400-b8fe-b35c2c745ae7}</UniqueIdentifier>
     </Filter>

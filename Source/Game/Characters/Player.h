@@ -80,7 +80,9 @@ public:
 
 private:
 
+	//--------------------------
 	//親ステート
+	//--------------------------
 
 	/// <summary>
 	/// 行動(入力)ステート
@@ -100,7 +102,9 @@ private:
 	/// <param name="elapsed_time">経過時間</param>
 	void ReceiveState(const float elapsed_time);
 
+	//--------------------------
 	//子ステート
+	//--------------------------
 
 	//?EntryState
 
@@ -163,22 +167,19 @@ private:
 
 	//?ReceiveState
 
-	///// <summary>
-	///// <para>待機ステート</para>
-	///// </summary>
-	///// <param name="elapsed_time">経過時間</param>
-	void WaitState(const float elapsed_time);
-
 	/// <summary>
-	/// <para>メッセージを送信ステート</para>
-	/// <para>MetaAIへ命令(メッセージ)を送るステート</para>
+	/// <para>待機ステート</para>
+	/// <para>メッセージ受信待ちのステート</para>
 	/// </summary>
-	/// <param name="elapsed_time">経過時間</param>k
-	//void CallState(const float elapsed_time);
+	/// <param name="elapsed_time">経過時間</param>
+	void WaitState(const float elapsed_time);
 
 public:
 
+	//コンストラクタ
 	Player();
+
+	//デストラクタ
 	~Player()override;
 
 	/// <summary>
@@ -210,7 +211,7 @@ public:
 	/// <returns>受信の有無</returns>
 	bool OnMessage(const Telegram& telegram) override;
 
- 	//メタAIにターンの終了を伝える
+ 	//メタAIにメッセージを送信する
 	void SendMessaging(MESSAGE_TYPE msg)override;
 
 	// デバッグ用GUI描画
@@ -219,9 +220,20 @@ public:
 	// デバッグプリミティブ描画
 	void DrawDebugPrimitive()override;
 
+	//キャラクターマネージャーのリストから自身を消去
+	void Destroy() override;
+
 	/// <summary>
 	/// 移動しているかをチェック
 	/// </summary>
 	/// <returns>移動していたらtrue</returns>
 	bool IsMoved();
+
+	/// <summary>
+	/// <para> ロード明けなど</para>
+	/// <para>ゲーム開始時の最初の位置</para>
+	/// </summary>
+	void SetFirstPos();
+
+
 };

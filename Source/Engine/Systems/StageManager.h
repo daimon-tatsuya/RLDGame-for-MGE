@@ -20,7 +20,7 @@ struct HitResult;
 class StageManager final
 {
 private:
-	std::vector<Stage*>		stages;
+	std::vector<std::shared_ptr<Stage>>		stages;
 
 private:
 	StageManager() {}

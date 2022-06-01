@@ -6,10 +6,13 @@
 
 #include "Engine/Systems/Logger.h"
 #include "Engine/Systems/CharacterManager.h"
+#include "Engine/Systems/SceneManager.h"
 #include "Engine/Systems/Character.h"
 #include "Engine/AI/MetaAI.h"
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/Systems/DungeonSystem.h"
+#include "Engine/Systems/Scene.h"
+#include "Engine/Systems/ImGuiRenderer.h"
 
 Meta* Meta::instance = nullptr;
 
@@ -22,24 +25,32 @@ Meta::Meta()
 void Meta::Update()
 {
 	// メタAIが監視している処理
-	const DungeonSystem dungeon_system=DungeonSystem::Instance();
 
-	//現在の経過ターンが最大経過ターンを超えたら
-	if (dungeon_system.GetElapsedTurn() > dungeon_system.GetMaxTurn())
+	const DungeonSystem dungeon_system = DungeonSystem::Instance();
+
+	//経過ターンが最大数を超えたら
+	if (dungeon_system.ExceededMaxTurn())
 	{
-		LOG("Success : elapsed_turn is  over the max_turn")
+		LOG("Success : elapsed_turn ecceed max_turn | MetaAI.cpp  Update\n")
+	}
+	//現在の階数が最大数を超えたら
+	if (dungeon_system.ExceededMaxFloor())
+	{
+		LOG("Success : current_floor ecceed max_floor | MetaAI.cpp  Update\n")
 	}
 }
 
+//	キャラクタークラスにメッセージ送信する
 void Meta::Discharge(Character* receiver, const Telegram& telegram)
 {
 	if (!receiver->OnMessage(telegram))
 	{
 		// 受信できなかったときの処理
-		LOG("\n error:Character Receive Failed")
+		LOG("\n error:Character Receive Failed | MetaAI.cpp  Character Discharge\n")
 	}
 }
 
+//
 void Meta::Discharge(int identity, const Telegram& telegram)
 {
 	if (identity == static_cast<int>(Identity::CharacterManager))
@@ -48,13 +59,22 @@ void Meta::Discharge(int identity, const Telegram& telegram)
 		if (!character_manager.OnMessage(telegram))
 		{
 			// 受信できなかったときの処理
-			LOG("\n error:CharacterManager Receive Failed")
+			LOG("\n error:CharacterManager Receive Failed | MetaAI.cpp  CharacterManager Discharge\n")
+		}
+	}
+	if (identity == static_cast<int>(Identity::SceneManager))
+	{
+		const SceneManager& scene_manager = SceneManager::Instance();
+		if (!scene_manager.GetCurrentScene()->OnMessage(telegram))
+		{
+			// 受信できなかったときの処理
+			LOG("\n error:CharacterManager Receive Failed | MetaAI.cpp  SceneManager Discharge\n")
 		}
 	}
 	else
 	{
 		// 受信できなかったときの処理
-		LOG("\n error:All Receive Failed")
+		LOG("\n error:All Receive Failed | MetaAI.cpp  identity Discharge\n")
 	}
 }
 
@@ -63,7 +83,7 @@ void Meta::Discharge(const Telegram& telegram)
 	if (!HandleMessage(telegram))
 	{
 		// 受信できなかったときの処理
-		LOG("\n error: Receive Failed")
+		LOG("\n error: Receive Failed | MetaAI.cpp  Discharge\n")
 	}
 }
 
@@ -80,13 +100,15 @@ bool Meta::HandleMessage(const Telegram& telegram)
 bool Meta::OnMessage(const Telegram& telegram)
 {
 	const CharacterManager& character_manager = CharacterManager::Instance();
+	const int player_id = character_manager.GetPlayer()->GetId();
+	DungeonSystem& dungeon_system = DungeonSystem::Instance();
 
 	// ステートマシンにできるかも？
 	switch (telegram.msg)
 	{
 	case MESSAGE_TYPE::END_PLAYER_TURN:	// プレイヤーのターンが終わった
 
-		for (int i=0;i <character_manager.GetEnemyCount();++i )
+		for (int i = 0; i < character_manager.GetEnemyCount(); ++i)
 		{
 			this->SendMessaging(
 				static_cast<int>(Identity::Meta),
@@ -99,7 +121,7 @@ bool Meta::OnMessage(const Telegram& telegram)
 		return true;
 	case MESSAGE_TYPE::END_ENEMY_TURN:	// 敵のターンが終わった
 
-		const int player_id = character_manager.GetPlayer()->GetId();
+
 
 		this->SendMessaging
 		(
@@ -107,10 +129,39 @@ bool Meta::OnMessage(const Telegram& telegram)
 			player_id,
 			MESSAGE_TYPE::END_ENEMY_TURN
 		);
-		//ターンの経過
-		DungeonSystem& dungeon_system= DungeonSystem::Instance();
-		dungeon_system.TurnsElapse();
 
+		//ターンの経過
+		dungeon_system.ElapseTurns();
+
+		return true;
+
+	case MESSAGE_TYPE::GO_NEXT_FLOOR:
+
+		//------------------------------敵宛--------------------------------------
+		for (auto& enemy : character_manager.GetCharacters())
+		{
+			if (enemy->GetId() == static_cast<int>(Identity::Player))
+			{
+				continue;
+			}
+			this->SendMessaging
+			(
+				static_cast<int>(Identity::Meta),
+				enemy->GetId(),
+				MESSAGE_TYPE::GO_NEXT_FLOOR
+			);
+
+		}
+		//-------------------------------------------------------------------------
+		this->SendMessaging
+		(
+			static_cast<int>(Identity::Meta),
+			static_cast<int>(Identity::SceneManager),
+			MESSAGE_TYPE::GO_NEXT_FLOOR
+		);
+		//ターンの経過
+		dungeon_system.ElapseTurns();
+		dungeon_system.ElapseCurrentFloor();
 		return true;
 	}
 
@@ -122,7 +173,8 @@ void Meta::SendMessaging(int sender, int receiver, MESSAGE_TYPE msg)
 	// キャラクターマネージャー
 	const CharacterManager& character_manager = CharacterManager::Instance();
 
-	// メッセージがMetaAI宛
+
+	//--------------------メッセージがMetaAI宛----------------------------
 	if (receiver == static_cast<int>(Identity::Meta))
 	{
 		// メッセージデータを作成
@@ -130,43 +182,79 @@ void Meta::SendMessaging(int sender, int receiver, MESSAGE_TYPE msg)
 		// ディレイ無しメッセージ（即時配送メッセージ）
 		Discharge(telegram);
 	}
+	//------------------------------------------------------------------------Z
+
 
 	//メッセージがMetaAIから他オブジェクト宛
 
-	//キャラクターマネージャー宛
+	//---------------------キャラクターマネージャー宛----------------------
 	else if (receiver == static_cast<int>(Identity::CharacterManager))
 	{
 		// メッセージデータを作成
 		const Telegram telegram(sender, receiver, msg);
 		// ディレイ無しメッセージ（即時配送メッセージ）
-		Discharge(receiver,telegram);
+		Discharge(receiver, telegram);
 	}
+	//------------------------------------------------------------------------
 
-	//// プレイヤー宛
+	//---------------------シーンマネージャー宛----------------------------
+	if (receiver == static_cast<int>(Identity::SceneManager))
+	{
+		// メッセージデータを作成
+		const Telegram telegram(sender, receiver, msg);
+		// ディレイ無しメッセージ（即時配送メッセージ）
+		Discharge(static_cast<int>(Identity::SceneManager), telegram);
+	}
+	//------------------------------------------------------------------------
+
+	// ---------------------------プレイヤー宛---------------------------
 	else if (receiver == static_cast<int>(Identity::Player))
 	{
 		// 受信者のポインタを取得
 		Character* receive_player = character_manager.GetCharacterFromId(receiver);
 		// レシーバー居ないとき関数を終了する
 		if (receive_player == nullptr)
-		{return;}
+		{
+			return;
+		}
 		// メッセージデータを作成
 		const Telegram telegram(sender, receiver, msg);
 		// ディレイ無しメッセージ（即時配送メッセージ）
-		Discharge(receive_player,telegram);
+		Discharge(receive_player, telegram);
 	}
+	//---------------------------------------------------------------------
 
-	// 敵宛
+
+	//------------------------------敵宛--------------------------------------
 	else if (receiver >= static_cast<int>(Identity::Enemy))
 	{
 		// 受信者のポインタを取得
 		Character* receive_enemy = character_manager.GetCharacterFromId(receiver);
 		// レシーバー居ないとき関数を終了する
-		if (receive_enemy==nullptr)
-		{ return; }
+		if (receive_enemy == nullptr)
+		{
+			return;
+		}
 		// メッセージデータを作成
 		const Telegram telegram(sender, receiver, msg);
 		// ディレイ無しメッセージ（即時配送メッセージ）
 		Discharge(receive_enemy, telegram);
 	}
+	//-------------------------------------------------------------------------
+}
+void Meta::DrawDebugGUI()
+{
+	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("MetaAI", nullptr, ImGuiWindowFlags_None))
+	{
+
+		if (ImGui::CollapsingHeader("DungeonSystem", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Text(" elapsed_turn : %d", DungeonSystem::Instance().GetElapsedTurn());
+			ImGui::Text(" current_floor : %d", DungeonSystem::Instance().GetCurrentFloor());
+		}
+
+	}
+	ImGui::End();
 }

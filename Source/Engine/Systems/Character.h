@@ -18,8 +18,14 @@ private:
 
 	bool	is_decide_pos = false;//位置が決まった時にbreakするために使う
 
-public:
 
+
+
+public:
+	//-遅延させるために使う変数-
+	float delay_time = 1.5f;
+	float counted_time = 0.f;
+	//-----------------------------
 	ShortestPath* shortest_path{};//最短経路
 
 private:
@@ -27,9 +33,15 @@ private:
 	/// <summary>
 /// 有限ステートマシンの初期化
 /// </summary>
-	virtual void FiniteStateMachineInitialize() {}
+	virtual void FiniteStateMachineInitialize() {};
 
 public:
+
+	Character() = default;
+	~Character() override;
+
+	//キャラクターマネージャーのリストから自身を消去
+	virtual void Destroy();
 
 	// 体力値を取得
 	int GetCurrentHealth() const { return current_health; }
@@ -48,5 +60,8 @@ public:
 
 	bool GetIsDecidePos() const { return  is_decide_pos; }
 
-	void SetIsDecidePos(bool set) { is_decide_pos = set; }
+	void SetIsDecidePos(const bool set) { is_decide_pos = set; }
 };
+
+
+

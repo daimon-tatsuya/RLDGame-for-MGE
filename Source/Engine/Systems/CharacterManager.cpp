@@ -115,7 +115,7 @@ void CharacterManager::Clear()
 	team_number = 0;
 	enemy_number = 0;
 
-	LOG("executed: CharacterManager's Clear Method\n")
+	LOG(" Executed : CharacterManager's Clear Method\n")
 }
 
 void CharacterManager::Remove(Character* character)
@@ -128,6 +128,18 @@ void CharacterManager::Remove(Character* character)
 	}
 	// 破棄リストに追加
 	removes.emplace_back(character);
+}
+
+void CharacterManager::RemoveEnemy() const
+{
+	for(const auto& enemy :characters)
+	{
+		//IDが敵でなければスキップ
+		if (enemy->GetId()< static_cast<int>(Identity::Enemy)){continue;}
+
+		//敵を削除用コンテナに入れる
+		enemy->Destroy();
+	}
 }
 
 Character* CharacterManager::GetCharacterFromId(int id) const

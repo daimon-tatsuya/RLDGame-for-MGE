@@ -21,9 +21,9 @@ class Shader;
 class Object
 {
 private:
-	//ToDo protectedである必要がないので変更する,あとカプセル化する(全てのクラス)
+
 	DirectX::XMFLOAT3		position{};
-	DirectX::XMFLOAT3		old_position{};
+	DirectX::XMFLOAT3		old_position{};//前フレームの位置または行動前の位置
 	DirectX::XMFLOAT3		angle{};// ラジアン角
 	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 	DirectX::XMFLOAT4X4	transform =
@@ -34,11 +34,11 @@ private:
 		0, 0, 0, 1
 	};
 
-	DirectX::XMFLOAT3		velocity{};
+	DirectX::XMFLOAT3		velocity{};//移動方向への
 
-	std::shared_ptr<Model> model = nullptr;
+	std::shared_ptr<Model> model = nullptr;//モデルの情報の保存先
 
-	int				id = 0;
+	int				id = 0;//管理番号
 	float				radius = 0.5f;// 半径
 	float				height = 2.0f;// 高さ
 
@@ -48,9 +48,9 @@ public:
 
 	float				invincible_timer = 0.0f;// 無敵時間
 
-	float				gravity = -1.0f;
+	float				gravity = -1.0f;//ローカル行列y軸マイナス方向にかかる重力
 	float				gravity_cut_time = 0;// 重力を無視するときに使う
-	float				air_control = 0.3f;
+	float				air_control = 0.3f;//空中でダッシュする際に使用する
 	bool				is_ground = false;// 地面判定用
 
 	float				friction = 0.5f;

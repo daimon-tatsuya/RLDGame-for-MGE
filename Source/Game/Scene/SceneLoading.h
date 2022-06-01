@@ -20,6 +20,9 @@ private:
 	int		counter = 0;
 	char		message[32] = { 0 };
 
+private:
+	// ローディングスレッド
+	static void LoadingThread(const SceneLoading* scene);
 public:
 	explicit SceneLoading(Scene* next_scene) : next_scene(next_scene) {}
 	~SceneLoading() override = default;
@@ -36,7 +39,7 @@ public:
 	// 描画処理
 	void Render() override;
 
-private:
-	// ローディングスレッド
-	static void LoadingThread(const SceneLoading* scene);
+	bool OnMessage(const Telegram& telegram) override;
+
+	void SendMessaging(MESSAGE_TYPE msg) override;
 };

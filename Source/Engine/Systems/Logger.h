@@ -21,7 +21,7 @@ public:
 	static void Print(const char* format, ...);
 };
 //__VA_ARGS__Å@https://cpprefjp.github.io/lang/cpp11/variadic_macros.html
-#if 	defined(_DEBUG)
+#if defined(DEBUG) | defined(_DEBUG)
 #define	LOG(...)		{ Logger::Print(__VA_ARGS__); }
 #else
 #define	LOG(...)		{}

@@ -29,6 +29,7 @@ EnemySnake::EnemySnake()
 	//オブジェクト配置
 	for (int y = 0; y < MapSize_Y; y++)
 	{
+		//	設定したらループを抜ける
 		if (GetIsDecidePos() == true)
 		{
 			break;
@@ -48,7 +49,10 @@ EnemySnake::EnemySnake()
 	}
 }
 
-EnemySnake::~EnemySnake() = default;
+EnemySnake::~EnemySnake()
+{
+	LOG(" Executed : EnemySnake's destructor\n")
+}
 
 void EnemySnake::Update(float elapsed_time)
 {
@@ -169,12 +173,11 @@ void EnemySnake::FiniteStateMachineInitialize()
 	enemy_snake_receive_state.SetState(Receive::Called);
 }
 
-//void EnemySnake::Destroy()
-//{
-//	CharacterManager& character_manager = CharacterManager::Instance();
-//	//キャラクターマネージャーのリストから消去
-//	//character_manager.Remove(this);
-//}
+void EnemySnake::Destroy()
+{
+	//キャラクターマネージャーのリストから自身を消去
+	Character::Destroy();
+}
 
 void EnemySnake::DrawDebugGUI()
 {
@@ -196,7 +199,7 @@ void EnemySnake::SendMessaging(MESSAGE_TYPE msg)
 	{
 	case MESSAGE_TYPE::END_PLAYER_TURN:
 
-		LOG("\n error: No Function")
+		LOG(" Error : No Function | EnemySnake.cpp\n")
 			break;
 
 	case MESSAGE_TYPE::END_ENEMY_TURN:
@@ -210,7 +213,7 @@ void EnemySnake::SendMessaging(MESSAGE_TYPE msg)
 		enemy_snake_state_machine.SetState(ParentState::Receive);
 		break;
 	default:
-		LOG("\n No Message")
+		LOG(" Error : No Message | EnemySnake.cpp\n")
 			break;
 	}
 }
@@ -235,13 +238,18 @@ bool EnemySnake::OnMessage(const Telegram & telegram)
 		return true;
 	case MESSAGE_TYPE::END_ENEMY_TURN:
 
-		LOG("\n error: MESSAGE_TYPE::END_ENEMY_TURN Messages not received")
-			return false;
+		LOG(" Error : MESSAGE_TYPE::END_ENEMY_TURN Messages not received | EnemySnake.cpp\n")
+			return true;
+	case MESSAGE_TYPE::GO_NEXT_FLOOR:
+		SetExist(false);
+		//Destroy();
+		return true;
 	default:
 
-		LOG("\n error: No Message")
+		LOG(" Error : No Message | EnemySnake.cpp\n")
 
 			return false;
+
 	}
 }
 
@@ -390,7 +398,7 @@ void EnemySnake::ExploreState(const float elapsed_time)
 		}
 		else
 		{
-			LOG("error:shortest_path->path_information is nothing")//最短経路の値がない
+			LOG(" Error : shortest_path->path_information is nothing | EnemySnake.cpp")//最短経路の値がない
 		}
 	}
 

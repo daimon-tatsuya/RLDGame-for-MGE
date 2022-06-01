@@ -12,7 +12,7 @@
 StageManager::~StageManager()
 {
 	this->Clear();
-	LOG("executed: StageManager's destructor\n")
+	LOG(" Executed : StageManager's destructor\n")
 }
 
 
@@ -45,7 +45,8 @@ void StageManager::Clear()
 {
 	for (auto& stage : stages)
 	{
-		delete stage;
+		//delete stage;
+		stage.reset();
 	}
 
 	stages.clear();

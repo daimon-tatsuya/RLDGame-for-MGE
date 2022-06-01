@@ -10,7 +10,7 @@
 #include "Engine/Objects//Sprite.h"
 #include "Engine/Systems/SceneManager.h"
 #include "Game/Scene/SceneLoading.h"
-
+#include "Engine/Systems/Logger.h"
 
 
 // 初期化
@@ -82,6 +82,17 @@ void SceneLoading::Render()
 
 		font->TextOutW(device_context, message, positionX, positionY, 32, 32);
 	}
+}
+
+bool SceneLoading::OnMessage(const Telegram& telegram)
+{
+	LOG(" Error : SceneLoading::OnMessage is No Function\n")
+	return false;
+}
+
+void SceneLoading::SendMessaging(MESSAGE_TYPE msg)
+{
+	LOG(" Error : SceneLoading::SendMessaging is No Function\n")
 }
 
 // ローディングスレッド

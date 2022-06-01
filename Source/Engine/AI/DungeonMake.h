@@ -76,6 +76,7 @@ enum class Attribute
 // 書き換え可能なマップ
 struct RogueLikeMap final
 {
+
 	RogueLikeMap(const size_t var) :map_data(var) {}
 	RogueLikeMap() = default;
 
@@ -108,7 +109,7 @@ public:
 		Axis_X
 	};
 
-	DungeonMapRole dungeon_map_role{};// マップ情報の雛形　マッププール
+	DungeonMapRole dungeon_map_role{};// マップ構成情報
 
 	size_t map_room_player{};	// プレイヤーのいる部屋の番号
 
@@ -123,16 +124,16 @@ private:
 
 
 	// マップ生成を行う
-	void MakeMap();
+	bool MakeMap();
 
 	/// <summary>
-	/// マップ情報をもとにマップ上にobjectの位置を設定する
+	/// マップ情報をもとにマップ上の部屋にobjectの位置を設定する
 	/// </summary>
 	/// <param name="id">マップ上のobjectに付与するid</param>
 	/// <returns></returns>
 	void SetObjectPos(int id);
 
-	// マップ情報を消去
+	// マップ情報を解放
 	void ClearMap();
 
 
@@ -161,7 +162,9 @@ public:
 	// デバッグ用GUI描画
 	void DrawDebugGUI() const;
 
+	//	マップ情報の取得
 	std::vector<std::vector<RogueLikeMap>> GetMapRole() { return  map_role; }
 
+	//通路の入り口のコンテナを取得
 	std::vector<DirectX::XMFLOAT2> GetRoadsEntrance() { return roads_entrance; }
 };

@@ -5,7 +5,8 @@
 //**********************************************************
 #include "Engine/Systems/Scene.h"
 #include "Engine/Systems/SceneManager.h"
-
+#include "Engine/Systems/Logger.h"
+#include "Engine/AI/MetaAI.h"
 SceneManager::~SceneManager()
 {
 	delete current_scene;

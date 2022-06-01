@@ -66,9 +66,16 @@ Graphics::Graphics(HWND hWnd)
 			swapchain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			swapchain_desc.BufferCount = 1;			// バックバッファの数
 			swapchain_desc.OutputWindow = hWnd;	// DirectXで描いた画を表示するウインドウ
-			swapchain_desc.Windowed = true;			// ウインドウモードか、フルスクリーンにするか。
+
+#if defined(DEBUG) | defined(_DEBUG)
+			swapchain_desc.Windowed = true;			// ウインドウモードにする
+#else
+			swapchain_desc.Windowed = false;			//フルスクリーンにする
+#endif
+
 			swapchain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 			swapchain_desc.Flags = 0;						// DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
+
 		}
 
 		D3D_FEATURE_LEVEL feature_level;
@@ -175,5 +182,5 @@ Graphics::~Graphics()
 {
 	//ステータスがフルスクリーンで終了すると
 	//メモリーリークが起きるのでステータスをウィンドウにする
-	swapchain->SetFullscreenState(false,nullptr);
+	swapchain->SetFullscreenState(false, nullptr);
 }

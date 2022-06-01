@@ -9,6 +9,8 @@
 
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/AI/MetaAI.h"
+#include "Engine/Systems/Logger.h"
+
 
 #include "Engine/Systems/Camera.h"
 #include "Engine/Systems/CameraController.h"
@@ -34,9 +36,11 @@ SceneGame::~SceneGame()
 {
 	// ステージ終了化
 	StageManager::Instance().Clear();
+
 	// キャラクター終了化
 	CharacterManager::Instance().Clear();
-	LOG("executed: SceneGame's destructor\n")
+
+	LOG(" Executed : SceneGame's destructor\n")
 }
 
 void SceneGame::Initialize()
@@ -72,10 +76,10 @@ void SceneGame::Initialize()
 
 	// ステージ初期化
 	StageManager& stage_manager = StageManager::Instance();
-	RogueLikeStages* rogue_like_stage = new RogueLikeStages();
+	RogueLikeStage* rogue_like_stage = new RogueLikeStage();
 	stage_manager.Register(rogue_like_stage);
 
-	// キャラクター生成処理
+	
 	{
 		//	 プレイヤー
 		CharacterManager::Instance().Register(new Player(), static_cast<int>(Identity::Player));
@@ -87,8 +91,6 @@ void SceneGame::Initialize()
 	}
 
 	//生成されなかったオブジェクトをマップデータから消す
-	//storage_dungeon.UpdateMapRolePlayer();
-	//storage_dungeon.UpdateMapRoleEnemies();
 	rogue_like_dungeon.UpdateMapRole();
 
 	//視錐台カリング用のAABBの初期設定
@@ -117,23 +119,25 @@ void SceneGame::Update(const float elapsed_time)
 	Camera& camera = Camera::Instance();
 	Meta& meta = Meta::Instance();
 
+	//	カメラをアクティブにする
 	camera.ActivateCamera();
+
 	// カメラコントローラー更新処理
 	camera_controller->FollowCameraUpdate(elapsed_time);
 
+	//メタAIの更新
 	meta.Update();
+
 	// ステージ更新処理
 	StageManager::Instance().Update(elapsed_time);
 
 	// キャラクター更新処理
 	CharacterManager::Instance().Update(elapsed_time);
 
+	//マップ情報の更新
+	 RogueLikeDungeon::Instance().UpdateMapRole();
+
 	const GamePad& game_pad = Input::Instance().GetGamePad();
-
-	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-	rogue_like_dungeon.UpdateMapRole();
-
 
 	// Aボタン(Zｷｰ)を押したらタイトルシーンへ切り替え
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
@@ -189,22 +193,16 @@ void SceneGame::Render()
 		}
 		shader->Deactivate(device_context);
 
-		//shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
-		//shader->Activate(device_context, render_context);
-		//{
-		//	// ステージ描画
-		//	StageManager::Instance().Render(device_context, shader);
-		//}
-		//shader->Deactivate(device_context);
 	}
 	// 3Dエフェクト描画
 	{
+
 	}
 	// 2Dスプライト描画
 	{
-		// HUD更新
-	}
 
+	}
+#if defined(DEBUG) | defined(_DEBUG)
 	// 3Dデバッグ描画
 	{
 		// キャラクターデバッグ描画
@@ -218,13 +216,76 @@ void SceneGame::Render()
 	}
 
 	// 2DデバッグGUI描画
-#if 1
+
 	{
 
 		CharacterManager::Instance().DrawDebugGUI();
 		camera_controller->DrawDebugGUI();
 		StageManager::Instance().DrawDebugGUI();
 		RogueLikeDungeon::Instance().DrawDebugGUI();
+		Meta::Instance().DrawDebugGUI();
 	}
 #endif
+}
+
+void SceneGame::ClearFloor()
+{
+	StageManager::Instance().Clear();
+	//CharacterManager::Instance().RemoveEnemy();
+}
+
+void SceneGame::NextFloor()
+{
+	//ダンジョン生成初期化
+	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+	rogue_like_dungeon.MakeDungeon();
+
+	// ステージ初期化
+	StageManager& stage_manager = StageManager::Instance();
+	RogueLikeStage* rogue_like_stage = new RogueLikeStage();
+	stage_manager.Register(rogue_like_stage);
+
+	// キャラクター生成処理
+	{
+		DirectX::XMFLOAT3 player_pos = { static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize };
+		CharacterManager::Instance().GetPlayer()->SetPosition(player_pos);
+
+	}
+
+	//生成されなかったオブジェクトをマップデータから消す
+	rogue_like_dungeon.UpdateMapRole();
+
+}
+bool SceneGame::OnMessage(const Telegram& telegram)
+{
+	switch (telegram.msg)
+	{
+	case MESSAGE_TYPE::END_PLAYER_TURN:
+
+		LOG(" Error : No Function | SceneGame.cpp   MESSAGE_TYPE::END_PLAYER_TURN\n")
+
+		return true;
+
+	case MESSAGE_TYPE::END_ENEMY_TURN:
+
+		LOG(" Error : No Function | SceneGame.cpp  MESSAGE_TYPE::END_ENEMY_TURN\n")
+
+		return true;
+
+	case MESSAGE_TYPE::GO_NEXT_FLOOR:
+
+		ClearFloor();
+		NextFloor();
+
+		return true;
+
+	default: ;
+	}
+
+	return false;
+}
+
+void SceneGame::SendMessaging(MESSAGE_TYPE msg)
+{
+	LOG(" Error :  No Function | SceneGame::SendMessaging\n")
 }

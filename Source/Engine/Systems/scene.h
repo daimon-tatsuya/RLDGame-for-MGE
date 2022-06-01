@@ -4,7 +4,7 @@
 //		Scenesクラス
 //
 //**********************************************************
-
+#include "Engine/AI/Telegram.h"
 /// <summary>
 /// シーンの基底クラス
 /// </summary>
@@ -37,4 +37,13 @@ public:
 	bool IsReady() const { return ready; }
 	// 準備完了設定
 	void SetReady() { ready = true; }
+
+	/// <summary>
+	/// メタAI経由受信処理
+	/// </summary>
+	/// <param name="telegram">命令</param>
+	/// <returns>受信の有無</returns>
+	virtual	bool OnMessage(const Telegram& telegram) = 0;
+	//メタAIにターンの終了を伝える
+	virtual	void SendMessaging(MESSAGE_TYPE msg) = 0;
 };

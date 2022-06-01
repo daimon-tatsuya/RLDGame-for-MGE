@@ -13,7 +13,7 @@
 #include "Engine/Systems/Collision.h"
 
 
-RogueLikeStages::RogueLikeStages()
+RogueLikeStage::RogueLikeStage()
 {
 	SetScale(DirectX::XMFLOAT3(1.f, 1.f, 1.f));
 	SetPosition(DirectX::XMFLOAT3(0.f, 0.f, 0.f));
@@ -21,12 +21,12 @@ RogueLikeStages::RogueLikeStages()
 	SetStageObject();
 }
 
-RogueLikeStages::~RogueLikeStages()
+RogueLikeStage::~RogueLikeStage()
 {
 	this->Clear();
 }
 
-void RogueLikeStages::Update(float elapsed_time)
+void RogueLikeStage::Update(float elapsed_time)
 {
 
 	//プレイヤーと階段の当たり判定
@@ -35,28 +35,28 @@ void RogueLikeStages::Update(float elapsed_time)
 	for (auto& stage : stage_chip)
 	{
 		// オブジェクト行列を更新
-		stage->UpdateTransform();
+		stage.UpdateTransform();
 		// モデル行列更新
-		stage->GetModel()->UpdateTransform(stage->GetTransform());
+		stage.GetModel()->UpdateTransform(stage.GetTransform());
 	}
 
 
 }
 
-void RogueLikeStages::Render(ID3D11DeviceContext* dc, const std::shared_ptr<Shader> shader)
+void RogueLikeStage::Render(ID3D11DeviceContext* dc, const std::shared_ptr<Shader> shader)
 {
 	for (auto& stage : stage_chip)
 	{
-		shader->Draw(dc, stage->GetModel());
+		shader->Draw(dc, stage.GetModel());
 	}
 }
 
-bool RogueLikeStages::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
+bool RogueLikeStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
 {
 	for (auto& stage : stage_chip)
 	{
 		//trueの時のHitResultを返す
-		if (Collision::IntersectRayToModel(start, end, stage->GetModel(), hit))
+		if (Collision::IntersectRayToModel(start, end, stage.GetModel(), hit))
 		{
 			return true;
 		}
@@ -64,16 +64,16 @@ bool RogueLikeStages::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMF
 	return false;
 }
 
-bool RogueLikeStages::OnMessage(const Telegram& telegram)
+bool RogueLikeStage::OnMessage(const Telegram& telegram)
 {
 	return false;
 }
 
-void RogueLikeStages::DrawDebugGUI()
+void RogueLikeStage::DrawDebugGUI()
 {
 	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
-	if (ImGui::Begin("RogueLikeStages", nullptr, ImGuiWindowFlags_None))
+	if (ImGui::Begin("RogueLikeStage", nullptr, ImGuiWindowFlags_None))
 	{
 		//モデル数
 		ImGui::Text("Number of Models:%d", static_cast<int>(stage_chip.size()));
@@ -93,7 +93,7 @@ void RogueLikeStages::DrawDebugGUI()
 	ImGui::End();
 }
 
-void RogueLikeStages::SetStageObject()
+void RogueLikeStage::SetStageObject()
 {
 	this->Clear();
 
@@ -107,27 +107,31 @@ void RogueLikeStages::SetStageObject()
 			//階段
 			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Exit) && is_once == false)
 			{
-				float pos_x = static_cast<float>(x * CellSize);
-				float pos_z = static_cast<float> (y * CellSize);
+				const float pos_x = static_cast<float>(x * CellSize);
+				const float pos_z = static_cast<float> (y * CellSize);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				DirectX::XMFLOAT3 scale=DirectX::XMFLOAT3(CellSize, CellSize, CellSize);
-				stage_chip.emplace_back(new Stage("Assets/FBX/StageMapTip/MRTP_Obj/tento.bin", pos, scale, object_num));
+				DirectX::XMFLOAT3 scale = DirectX::XMFLOAT3(CellSize, CellSize, CellSize);
+				Stage stage("Assets/FBX/StageMapTip/MRTP_Obj/tento.bin", pos, scale, object_num);
+				Register(stage);
+				is_once = true;
 			}
 			//壁
 			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Wall))
 			{
-				float pos_x = static_cast<float>(x * CellSize);
-				float pos_z = static_cast<float> (y * CellSize);
+				const float pos_x = static_cast<float>(x * CellSize);
+				const float pos_z = static_cast<float> (y * CellSize);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				stage_chip.emplace_back(new Stage("Assets/FBX/geometry/wall.bin", pos, object_num));
+				Stage stage("Assets/FBX/geometry/wall.bin", pos, object_num);
+				Register(stage);
 			}
 			//部屋
 			else if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data >= static_cast<size_t>(Attribute::Room))
 			{
-				float pos_x = static_cast<float>(x * CellSize);
-				float pos_z = static_cast<float> (y * CellSize);
+				const float pos_x = static_cast<float>(x * CellSize);
+				const float pos_z = static_cast<float> (y * CellSize);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				stage_chip.emplace_back(new Stage("Assets/FBX/geometry/floor.bin", pos, object_num));
+				Stage stage("Assets/FBX/geometry/floor.bin", pos, object_num);
+				Register(stage);
 			}
 
 			object_num++;
@@ -135,12 +139,14 @@ void RogueLikeStages::SetStageObject()
 	}
 }
 
-void RogueLikeStages::Clear()
+void RogueLikeStage::Clear()
 {
-	for (auto& stage:stage_chip)
-	{
-		 stage.reset();
-	}
+
 	stage_chip.clear();
 	stage_chip.shrink_to_fit();
+}
+
+void RogueLikeStage::Register(Stage stage)
+{
+	stage_chip.emplace_back(stage);
 }
