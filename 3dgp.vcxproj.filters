@@ -211,6 +211,12 @@
     <Filter Include="Source Files\Game\Stage\RogueLikeStage">
       <UniqueIdentifier>{e6050c99-73e7-4c39-a0dd-5b608bdca43f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Systems\Fade">
+      <UniqueIdentifier>{df4becc8-899c-4292-abb3-e3518fec65d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scenes\SceneGameOver">
+      <UniqueIdentifier>{b639f014-9df9-4617-9d96-ec78e36569f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp">
@@ -330,9 +336,6 @@
     <ClCompile Include="Source\Engine\Systems\Blender.cpp">
       <Filter>Source Files\Engine\Systems\Blender</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Framework.cpp">
-      <Filter>Source Files\Engine\Systems\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Systems\HighResolutionTimer.cpp">
       <Filter>Source Files\Engine\Systems\HighResolutionTimer</Filter>
     </ClCompile>
@@ -353,6 +356,15 @@
     </ClCompile>
     <ClCompile Include="Source\Game\Stage\RogueLikeStage.cpp">
       <Filter>Source Files\Game\Stage\RogueLikeStage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Framework.cpp">
+      <Filter>Source Files\Engine\Systems\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Fade.cpp">
+      <Filter>Source Files\Engine\Systems\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\SceneGameOver.cpp">
+      <Filter>Source Files\Game\Scenes\SceneGameOver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -491,9 +503,6 @@
     <ClInclude Include="Source\Engine\Systems\Blender.h">
       <Filter>Source Files\Engine\Systems\Blender</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Framework.h">
-      <Filter>Source Files\Engine\Systems\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\HighResolutionTimer.h">
       <Filter>Source Files\Engine\Systems\HighResolutionTimer</Filter>
     </ClInclude>
@@ -506,9 +515,6 @@
     <ClInclude Include="Source\Engine\Systems\Misc.h">
       <Filter>Source Files\Engine\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Scene.h">
-      <Filter>Source Files\Engine\Systems\SceneManager\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Systems\DungeonSystem.h">
       <Filter>Source Files\Engine\Systems\DungeonSystem</Filter>
     </ClInclude>
@@ -520,6 +526,18 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Stage\RogueLikeStage.h">
       <Filter>Source Files\Game\Stage\RogueLikeStage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Framework.h">
+      <Filter>Source Files\Engine\Systems\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Scene.h">
+      <Filter>Source Files\Engine\Systems\SceneManager\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Fade.h">
+      <Filter>Source Files\Engine\Systems\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scene\SceneGameOver.h">
+      <Filter>Source Files\Game\Scenes\SceneGameOver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -548,4 +548,5 @@ bool RogueLikeDungeon::MakeMap()
 	}
 
 
+	return true;
 }

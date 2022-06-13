@@ -20,7 +20,8 @@ public:
 
 	float	timer = 0.0f;
 	int	counter = 0;
-	char	message[32] = { 0 };
+	char	title_name[TEXT_BUFFER_SIZE] = { 0 };
+	char	push_text[TEXT_BUFFER_SIZE] = { 0 };
 private:
 
 public:

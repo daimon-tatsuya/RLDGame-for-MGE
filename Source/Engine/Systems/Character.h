@@ -58,8 +58,10 @@ public:
 	//最短経路を設定
 	void SetShortestPath(std::vector<int> path) const { shortest_path->path_information = std::move(path); }
 
+	//位置を決定しているかのフラグを取得
 	bool GetIsDecidePos() const { return  is_decide_pos; }
 
+	//位置を決定しているかのフラグの設定
 	void SetIsDecidePos(const bool set) { is_decide_pos = set; }
 };
 

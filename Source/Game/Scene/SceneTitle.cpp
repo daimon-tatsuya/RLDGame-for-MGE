@@ -22,17 +22,16 @@
 
 void SceneTitle::Initialize()
 {
-	ID3D11Device* device = Graphics::Instance().GetDevice();
-
-	strcpy_s(message, "Title");
+	strcpy_s(title_name, "Title");
+	strcpy_s(push_text, "Push ABXY");
 }
 
 void SceneTitle::Update(float elapsed_time)
 {
-	const GamePad& gamePad = Input::Instance().GetGamePad();
+	const GamePad& game_pad = Input::Instance().GetGamePad();
 
 	// なにかボタンを押したらローディングシーンへ切り替え
-	if (gamePad.GetButtonDown() & static_cast<GamePadButton>(GamePad::AnyBTN))
+	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::AnyBTN))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 	}
@@ -55,10 +54,6 @@ void SceneTitle::Render()
 	RenderContext render_context{};
 	render_context.light_direction = { -0.5f, -1.0f, -0.5f, 0.0f };	// ライト方向（下方向）
 
-	// 2Dスプライト描画
-	{
-	}
-
 	// 3Dエフェクト描画
 	{
 	}
@@ -77,26 +72,26 @@ void SceneTitle::Render()
 
 	// 2Dスプライト描画
 	{
-		// HUD更新
-	//	headUpDisplay->Render(dc);
-
 		const Sprite* font = graphics.GetFont();
 
 		// 「Title」を描画
-		const float screen_width = static_cast<float>(graphics.GetScreenWidth());
-		const float screen_height = static_cast<float>(graphics.GetScreenHeight());
-		const float texture_width = 32.f;// static_cast<float>(font->GetTextureWidth());
-		const float texture_height = 32.f;// static_cast<float>(font->GetTextureHeight());
+		const float screen_width = graphics.GetScreenWidth();
+		const float screen_height =graphics.GetScreenHeight();
+		const float texture_width = static_cast<float>(font->GetTextureWidth());
+		const float texture_height =static_cast<float>(font->GetTextureHeight());
 		const float positionX = screen_width / 3;// - textureWidth;// * (textureWidth / 2);
 		const float positionY = (screen_height / 2) - texture_height;
 
-		font->TextOutW(device_context, message, positionX, positionY, 128, 128);
+		font->TextOutW(device_context, title_name, positionX, positionY, texture_width/2, texture_height/2);
+		font->TextOutW(device_context, push_text, positionX, screen_height - texture_height, texture_width / 4, texture_height / 4);
 	}
 
+#if defined(DEBUG) | defined(_DEBUG)
 	// 2DデバッグGUI描画
 	{
-		//	CharacterManager::Instance().DrawDebugGUI();
 	}
+#endif
+
 }
 
 bool SceneTitle::OnMessage(const Telegram& telegram)

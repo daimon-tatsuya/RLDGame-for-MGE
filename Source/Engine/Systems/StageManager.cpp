@@ -51,6 +51,8 @@ void StageManager::Clear()
 
 	stages.clear();
 	stages.shrink_to_fit();
+
+	LOG(" Executed : StageManager's Clear Method\n")
 }
 
 // レイキャスト

@@ -17,8 +17,8 @@ class SceneManager final
 {
 private:
 
-	Scene* current_scene = nullptr;
-
+	Scene* current_scene = nullptr;	//現在のシーン
+	bool is_game_clear = false;//ゲームをクリアしたならtrue
 public:
 private:
 	SceneManager() = default;
@@ -45,6 +45,13 @@ public:
 	// シーン切り替え
 	void ChangeScene(Scene* scene);
 
-
+	//現在のシーンを取得
 	Scene* GetCurrentScene() const { return current_scene; }
+
+	//ゲームをクリアしているかのフラグを取得
+	bool GetIsGameClear()const { return  is_game_clear; }
+
+	//ゲームをクリアしているかのフラグを取得
+	void SetIsGameClear(bool flag) {   is_game_clear=flag; }
+
 };

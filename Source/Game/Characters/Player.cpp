@@ -71,7 +71,9 @@ void Player::Update(const float elapsed_time)
 	GetModel()->UpdateTransform(GetTransform());
 
 	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
 	//プレイヤーと階段の位置が重なったら
+	//階を進める
 	if (static_cast<int>(GetPosition().x / CellSize) == rogue_like_dungeon.stairs_pos.x &&
 		static_cast<int>(GetPosition().z) / CellSize == rogue_like_dungeon.stairs_pos.y)
 	{

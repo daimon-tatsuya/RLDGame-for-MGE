@@ -16,6 +16,7 @@ Sprite::Sprite()
 }
 
 // コンストラクタ
+//テクスチャの読み込みと各ステートの設定
 Sprite::Sprite(const wchar_t* filename)
 {
 	ID3D11Device* device = Graphics::Instance().GetDevice();
@@ -25,8 +26,8 @@ Sprite::Sprite(const wchar_t* filename)
 	// 頂点データの定義
 	// 0               1
 	// +-----------+
-	// |			       |
-	// |			       |
+	// |					  |
+	// |					  |
 	// +-----------+
 	// 2                3
 	Vertex vertices[] = {
@@ -147,12 +148,12 @@ Sprite::Sprite(const wchar_t* filename)
 		// テクスチャの生成
 	hr = LoadTextureFromFile(device, filename, &shader_resource_view, &texture2d_desc);
 
-	texture_width = texture2d_desc.Width;
-	texture_height = texture2d_desc.Height;
+	texture_width = static_cast<float>(texture2d_desc.Width);
+	texture_height = static_cast<float>(texture2d_desc.Height);
 }
 
-// 描画実行
-void Sprite::Render(ID3D11DeviceContext* immediate_context,
+// 読み込んだテクスチャを描画する
+void Sprite::Render(ID3D11DeviceContext* device_context,
 	float dx, float dy,
 	float dw, float dh,
 	float sx, float sy,
@@ -164,7 +165,7 @@ void Sprite::Render(ID3D11DeviceContext* immediate_context,
 		// 現在設定されているビューポートからスクリーンサイズを取得する。
 		D3D11_VIEWPORT viewport;
 		UINT num_viewports = 1;
-		immediate_context->RSGetViewports(&num_viewports, &viewport);
+		device_context->RSGetViewports(&num_viewports, &viewport);
 		float screen_width = viewport.Width;
 		float screen_height = viewport.Height;
 
@@ -197,8 +198,7 @@ void Sprite::Render(ID3D11DeviceContext* immediate_context,
 		}
 
 		// 頂点を回転させる
-		const float PI = 3.141592653589793f;
-		float theta = angle * (PI / 180.0f);	// 角度をラジアン(θ)に変換
+		float theta = angle * (DirectX::XM_PI / 180.0f);	// 角度をラジアン(θ)に変換
 		float c = cosf(theta);
 		float s = sinf(theta);
 		for (auto& p : positions)
@@ -224,7 +224,7 @@ void Sprite::Render(ID3D11DeviceContext* immediate_context,
 
 		// 頂点バッファの内容の編集を開始する。
 		D3D11_MAPPED_SUBRESOURCE mapped_buffer;
-		HRESULT hr = immediate_context->Map(vertex_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_buffer);
+		HRESULT hr = device_context->Map(vertex_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_buffer);
 		_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 
 		// pDataを編集することで頂点データの内容を書き換えることができる。
@@ -245,46 +245,46 @@ void Sprite::Render(ID3D11DeviceContext* immediate_context,
 		}
 
 		// 頂点バッファの内容の編集を終了する。
-		immediate_context->Unmap(vertex_buffer.Get(), 0);
+		device_context->Unmap(vertex_buffer.Get(), 0);
 	}
 
 	{
 		// パイプライン設定
 		UINT stride = sizeof(Vertex);
 		UINT offset = 0;
-		immediate_context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
-		immediate_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-		immediate_context->IASetInputLayout(input_layout.Get());
+		device_context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
+		device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+		device_context->IASetInputLayout(input_layout.Get());
 
-		immediate_context->RSSetState(rasterizer_state.Get());
+		device_context->RSSetState(rasterizer_state.Get());
 		const float blendFactor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		immediate_context->OMSetBlendState(blend_state.Get(), blendFactor, 0xFFFFFFFF);
+		device_context->OMSetBlendState(blend_state.Get(), blendFactor, 0xFFFFFFFF);
 
-		immediate_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
-		immediate_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
+		device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
+		device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
 
-		immediate_context->PSSetShaderResources(0, 1, shader_resource_view.GetAddressOf());
-		immediate_context->PSSetSamplers(0, 1, sampler_state.GetAddressOf());
+		device_context->PSSetShaderResources(0, 1, shader_resource_view.GetAddressOf());
+		device_context->PSSetSamplers(0, 1, sampler_state.GetAddressOf());
 
 		// 描画
-		immediate_context->Draw(4, 0);
+		device_context->Draw(4, 0);
 	}
 }
 
-void Sprite::TextOut(ID3D11DeviceContext* immediate_context, std::string s, float x, float y, float w, float h, float r, float g, float b, float a) const
+void Sprite::TextOut(ID3D11DeviceContext* device_context, std::string s, float x, float y, float w, float h, float r, float g, float b, float a) const
 {
 	float sw = static_cast<float>(texture2d_desc.Width / 16);
 	float sh = static_cast<float>(texture2d_desc.Height / 16);
+
 	float cursor = 0;
 	for (auto c : s)
 	{
-		LONG sx = c % 0x0F;
-		Render(immediate_context, x + cursor, y, w, h, sw * (c & 0x0F), sh * (c >> 4), sw, sh, 0, r, g, b, a);
+		Render(device_context, x + cursor, y, w, h, sw * (c & 0x0F), sh * (c >> 4), sw, sh, 0, r, g, b, a);
 		cursor += w;
 	}
 }
 
-SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t max_instance) : MAX_INSTANCES(max_instance)
+SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t max_instance) : max_instances(max_instance)
 {
 	HRESULT hr = S_OK;
 
@@ -323,12 +323,12 @@ SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t m
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 	};
 
-	Instance* instances = new Instance[MAX_INSTANCES];
+	Instance* instances = new Instance[max_instances];
 	{
 		D3D11_BUFFER_DESC buffer_desc = {};
 		D3D11_SUBRESOURCE_DATA subresource_data = {};
 
-		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(Instance) * MAX_INSTANCES);
+		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(Instance) * max_instances);
 		buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
 		buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -396,37 +396,37 @@ SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t m
 	_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 }
 
-void SpriteBatch::Begin(ID3D11DeviceContext* immediateContext)
+void SpriteBatch::Begin(ID3D11DeviceContext* device_context)
 {
 	HRESULT hr = S_OK;
 
 	UINT strides[2] = { sizeof(Vertex), sizeof(Instance) };
 	UINT offsets[2] = { 0, 0 };
 	ID3D11Buffer* vbs[2] = { vertex_buffer.Get(), instance_buffer.Get() };
-	immediateContext->IASetVertexBuffers(0, 2, vbs, strides, offsets);
-	immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	immediateContext->IASetInputLayout(input_layout.Get());
-	immediateContext->OMSetDepthStencilState(depth_stencil_state.Get(), 1);
-	immediateContext->RSSetState(rasterizer_state.Get());
-	immediateContext->VSSetShader(vertex_shader.Get(), nullptr, 0);
-	immediateContext->PSSetShader(pixel_shader.Get(), nullptr, 0);
-	immediateContext->PSSetShaderResources(0, 1, shader_resource_view.GetAddressOf());
-	immediateContext->PSSetSamplers(0, 1, sampler_state.GetAddressOf());
+	device_context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
+	device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	device_context->IASetInputLayout(input_layout.Get());
+	device_context->OMSetDepthStencilState(depth_stencil_state.Get(), 1);
+	device_context->RSSetState(rasterizer_state.Get());
+	device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
+	device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
+	device_context->PSSetShaderResources(0, 1, shader_resource_view.GetAddressOf());
+	device_context->PSSetSamplers(0, 1, sampler_state.GetAddressOf());
 
 	UINT num_viewports = 1;
-	immediateContext->RSGetViewports(&num_viewports, &viewport);
+	device_context->RSGetViewports(&num_viewports, &viewport);
 
 	D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
 	D3D11_MAPPED_SUBRESOURCE mapped_buffer;
-	hr = immediateContext->Map(instance_buffer.Get(), 0, map, 0, &mapped_buffer);
+	hr = device_context->Map(instance_buffer.Get(), 0, map, 0, &mapped_buffer);
 	_ASSERT_EXPR(SUCCEEDED(hr), HResultTrace(hr));
 	instances = static_cast<Instance*>(mapped_buffer.pData);
 
 	count_instance = 0;
 }
 
-void SpriteBatch::Render(ID3D11DeviceContext* immediate_context, float dx, float dy, float dw, float dh, float sx, float sy, float sw, float sh, float angle/*degree*/, float r, float g, float b, float a) {
-	_ASSERT_EXPR(count_instance < MAX_INSTANCES, L"Number of instances must be less than MAX_INSTANCES.");
+void SpriteBatch::Render(ID3D11DeviceContext* device_context, float dx, float dy, float dw, float dh, float sx, float sy, float sw, float sh, float angle/*degree*/, float r, float g, float b, float a) {
+	_ASSERT_EXPR(count_instance < max_instances, L"Number of instances must be less than max_instances.");
 
 	float cx = dw * 0.5f, cy = dh * 0.5f; /*Center of Rotation*/
 #if 0
@@ -470,9 +470,9 @@ void SpriteBatch::Render(ID3D11DeviceContext* immediate_context, float dx, float
 
 	count_instance++;
 }
-void SpriteBatch::End(ID3D11DeviceContext* immediate_context)
+void SpriteBatch::End(ID3D11DeviceContext* device_context)
 {
-	immediate_context->Unmap(instance_buffer.Get(), 0);
+	device_context->Unmap(instance_buffer.Get(), 0);
 
-	immediate_context->DrawInstanced(4, count_instance, 0, 0);
+	device_context->DrawInstanced(4, count_instance, 0, 0);
 }

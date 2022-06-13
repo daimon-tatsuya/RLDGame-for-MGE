@@ -6,12 +6,13 @@
 //**********************************************************
 #include <memory>
 #include "Engine/Systems/Scene.h"
-#include "Engine/AI/DungeonMake.h"
+
 
 //前方宣言
 class Player;
 class CameraController;
-//class AxisAlignedBoundingBox;
+
+//class AxisAlignedBoundingBox;幅 高さ
 
 /// <summary>
 /// ゲームシーン
@@ -23,25 +24,33 @@ private:
 
 public:
 
-	std::unique_ptr<CameraController> camera_controller = nullptr;
+	std::unique_ptr<CameraController> camera_controller = nullptr; //カメラ操作クラスのポインタ
 
+	bool is_darking = true; //画面を暗くするときtrue
+	bool is_next_floor = false;//次のフロアに進むならtrue
 private:
+	//階を移動する
+	void GoingToTheNextFloor();
+
+	//ダンジョンを削除する
 	void ClearFloor();
 
-	void NextFloor();
+	//次のダンジョンを生成、配置
+	void CreateNextFloor();
+
 public:
 
 	SceneGame() = default;
 
 	~SceneGame() override;
 
-	void Initialize()override;
+	void Initialize() override;
 
 	void Finalize() override;
 
-	void Update(float elapsed_time)override;
+	void Update(float elapsed_time) override;
 
-	void Render()override;
+	void Render() override;
 
 	/// <summary>
 	/// メッセージ受信処理

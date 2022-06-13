@@ -43,8 +43,8 @@ public:
 	/// <para>HeuristicSearchで使用</para>
 	/// <para>trueのnodeからHeuristicSearchを行う</para>
 	/// </summary>
-	/// <param name="set"></param>
-	void SetIsStartNode(const bool set) { is_start_node = set; }
+	/// <param name="set_flag"></param>
+	void SetIsStartNode(const bool set_flag) { is_start_node = set_flag; }
 
 	/// <summary>
 	/// <para>HeuristicSearchで使用</para>
@@ -58,8 +58,8 @@ public:
 	/// <para>HeuristicSearchで使用</para>
 	/// <para>trueのnodeを目的地としてHeuristicSearchを行う</para>
 	/// </summary>
-	/// <param name="set"></param>
-	void SetIsGoalNode(bool set) { is_goal_node = set; }
+	/// <param name="set_flag"></param>
+	void SetIsGoalNode(bool set_flag) { is_goal_node = set_flag; }
 
 	/// <summary>
 	/// <para>HeuristicSearchで使用</para>
@@ -72,8 +72,8 @@ public:
 	/// <para>player_node_flagの設定</para>
 	/// <para>trueならこのnodeはプレイヤーがいる</para>
 	/// </summary>
-	/// <param name="set"></param>
-	void SetIsPlayerNode(bool set) { is_player_node = set; }
+	/// <param name="set_flag"></param>
+	void SetIsPlayerNode(bool set_flag) { is_player_node = set_flag; }
 
 	/// <summary>
 	/// trueならこのnodeはプレイヤーがいる
@@ -85,8 +85,8 @@ public:
 	/// <para>enemy_node_flagの設定</para>
 	/// <para>trueならこのnodeは敵がいる</para>
 	/// </summary>
-	/// <param name="set"></param>
-	void SetIsEnemyNode(bool set) { is_enemy_node = set; }
+	/// <param name="set_flag"></param>
+	void SetIsEnemyNode(bool set_flag) { is_enemy_node = set_flag; }
 
 	/// <summary>
 	/// trueならこのnodeは敵がいる
@@ -98,8 +98,8 @@ public:
 	/// <para>wall_node_flagの設定</para>
 	/// <para>trueならこのnodeは壁</para>
 	/// </summary>
-	/// <param name="set"></param>
-	void SetIsWallNode(bool set) { is_wall_node = set; }
+	/// <param name="set_flag"></param>
+	void SetIsWallNode(bool set_flag) { is_wall_node = set_flag; }
 
 	/// <summary>
 	/// trueならこのnodeは壁
@@ -111,8 +111,8 @@ public:
 	/// <para>item_node_flagの設定</para>
 	/// <para>trueならこのnodeにはアイテムが置かれている</para>
 	/// </summary>
-	/// <param name="set"></param>
-	void SetIsItemNode(bool set) { is_item_node = set; }
+	/// <param name="set_flag"></param>
+	void SetIsItemNode(bool set_flag) { is_item_node = set_flag; }
 
 	/// <summary>
 	/// trueならこのnodeにはアイテムが置かれている

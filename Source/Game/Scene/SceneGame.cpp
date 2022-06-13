@@ -5,13 +5,10 @@
 //**********************************************************
 
 #include "Game/Scene/SceneGame.h"
-#include "Engine/Systems/Logger.h"
 
 #include "Engine/AI/DungeonMake.h"
 #include "Engine/AI/MetaAI.h"
-#include "Engine/Systems/Logger.h"
-
-
+#include "Engine/Objects/Sprite.h"
 #include "Engine/Systems/Camera.h"
 #include "Engine/Systems/CameraController.h"
 #include "Engine/Systems/CharacterManager.h"
@@ -19,27 +16,22 @@
 #include "Engine/Systems/Graphics.h"
 #include "Engine/Systems/Input.h"
 #include "Engine/Systems/LineRenderer.h"
+#include "Engine/Systems/Logger.h"
 #include "Engine/Systems/RenderContext.h"
-#include "Game/Stage/RogueLikeStage.h"
 #include "Engine/Systems/SceneManager.h"
 #include "Engine/Systems/Shader.h"
 #include "Engine/Systems/ShaderManager.h"
 #include "Engine/Systems/StageManager.h"
-
-#include"Game/Characters/Player.h"
 #include "Game/Characters/EnemySnake.h"
-
+#include"Game/Characters/Player.h"
 #include "Game/Scene/SceneLoading.h"
 #include "Game/Scene/SceneTitle.h"
+#include "Game/Scene/SceneGameOver.h"
+#include "Game/Stage/RogueLikeStage.h"
+#include "Engine/Systems/DungeonSystem.h"
 
 SceneGame::~SceneGame()
 {
-	// ステージ終了化
-	StageManager::Instance().Clear();
-
-	// キャラクター終了化
-	CharacterManager::Instance().Clear();
-
 	LOG(" Executed : SceneGame's destructor\n")
 }
 
@@ -79,7 +71,7 @@ void SceneGame::Initialize()
 	RogueLikeStage* rogue_like_stage = new RogueLikeStage();
 	stage_manager.Register(rogue_like_stage);
 
-	
+
 	{
 		//	 プレイヤー
 		CharacterManager::Instance().Register(new Player(), static_cast<int>(Identity::Player));
@@ -90,28 +82,21 @@ void SceneGame::Initialize()
 		meta.SendMessaging(static_cast<int>(Identity::Meta), static_cast<int>(Identity::CharacterManager), MESSAGE_TYPE::END_ENEMY_TURN);
 	}
 
-	//生成されなかったオブジェクトをマップデータから消す
+	//生成されなかったオブジェクトのマップデータを上書き
 	rogue_like_dungeon.UpdateMapRole();
+	const int test_max_floor = 4;
+	DungeonSystem::Instance().SetMaxFloor(test_max_floor	);
 
-	//視錐台カリング用のAABBの初期設定
-	//axis_aligned_bounding_box_for_frustum.clear();
-	//for (int array_index = 0; array_index < 16; array_index++)
-	//{
-	//	for (int z = 0; z < 4; z++)
-	//	{
-	//		for (int x = 0; x < 4; x++)
-	//		{
-	//			AxisAlignedBoundingBox* aabb=new AxisAlignedBoundingBox;
-	//			aabb->center = DirectX::XMFLOAT3(16.f*x, 2.f, 16.f*z);
-	//			aabb->radius = DirectX::XMFLOAT3(16.f*x, 2.f, 16.f*z);
-	//			axis_aligned_bounding_box_for_frustum.emplace_back(aabb);
-	//		}
-	//	}
-	//}
+
 }
 
 void SceneGame::Finalize()
 {
+	// ステージ終了化
+	StageManager::Instance().Clear();
+
+	// キャラクター終了化
+	CharacterManager::Instance().Clear();
 }
 
 void SceneGame::Update(const float elapsed_time)
@@ -131,11 +116,21 @@ void SceneGame::Update(const float elapsed_time)
 	// ステージ更新処理
 	StageManager::Instance().Update(elapsed_time);
 
-	// キャラクター更新処理
-	CharacterManager::Instance().Update(elapsed_time);
+	//次の階に進むなら更新しない
+	if (is_next_floor != true)
+	{
+		// キャラクター更新処理
+		CharacterManager::Instance().Update(elapsed_time);
+	}
+
 
 	//マップ情報の更新
-	 RogueLikeDungeon::Instance().UpdateMapRole();
+	RogueLikeDungeon::Instance().UpdateMapRole();
+
+	//階移動処理
+	//GoingToTheNextFloor();//GO_NEXT_FLOORのメッセージを受け取るまで動かない
+
+
 
 	const GamePad& game_pad = Input::Instance().GetGamePad();
 
@@ -144,15 +139,15 @@ void SceneGame::Update(const float elapsed_time)
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
 	}
-	// Bボタン(Xｷｰ)を押したら 再ロード
+	// Bボタン(Xｷｰ)を押したらゲームオーバーシーンへ切り替え
 	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_B))
 	{
-		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameOver));
 	}
-	// Startボタン(Nｷｰ)を押したら 敵の削除
-	//if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_START))
+	//
+	//if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_X))
 	//{
-	////	CharacterManager::Instance().Remove(CharacterManager::Instance().GetCharacterFromId(static_cast<int>(Identity::Enemy)));
+	//	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameOver));
 	//}
 }
 
@@ -182,7 +177,7 @@ void SceneGame::Render()
 	{	// ステージ描画
 		ShaderManager* shader_manager = graphics.GetShaderManager();
 
-		 std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
+		std::shared_ptr<Shader> shader = shader_manager->GetShader(ShaderManager::ShaderName::Lambert);
 
 		shader->Activate(device_context, render_context);
 		{
@@ -195,10 +190,6 @@ void SceneGame::Render()
 
 	}
 	// 3Dエフェクト描画
-	{
-
-	}
-	// 2Dスプライト描画
 	{
 
 	}
@@ -215,6 +206,10 @@ void SceneGame::Render()
 		graphics.GetDebugRenderer()->Render(device_context, render_context.view, render_context.projection);
 	}
 
+	// 2Dスプライト描画
+	{
+
+	}
 	// 2DデバッグGUI描画
 
 	{
@@ -228,13 +223,22 @@ void SceneGame::Render()
 #endif
 }
 
+void SceneGame::GoingToTheNextFloor()
+{
+
+
+
+}
+
+
+//ダンジョンを削除する
 void SceneGame::ClearFloor()
 {
 	StageManager::Instance().Clear();
 	//CharacterManager::Instance().RemoveEnemy();
 }
-
-void SceneGame::NextFloor()
+//次のダンジョンを生成、配置
+void SceneGame::CreateNextFloor()
 {
 	//ダンジョン生成初期化
 	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
@@ -247,15 +251,17 @@ void SceneGame::NextFloor()
 
 	// キャラクター生成処理
 	{
-		DirectX::XMFLOAT3 player_pos = { static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize };
+		const DirectX::XMFLOAT3 player_pos = { static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize };
 		CharacterManager::Instance().GetPlayer()->SetPosition(player_pos);
 
 	}
 
-	//生成されなかったオブジェクトをマップデータから消す
+	//生成されなかったオブジェクトのマップデータを上書き
 	rogue_like_dungeon.UpdateMapRole();
 
+	is_darking = false;//明転開始
 }
+
 bool SceneGame::OnMessage(const Telegram& telegram)
 {
 	switch (telegram.msg)
@@ -264,22 +270,25 @@ bool SceneGame::OnMessage(const Telegram& telegram)
 
 		LOG(" Error : No Function | SceneGame.cpp   MESSAGE_TYPE::END_PLAYER_TURN\n")
 
-		return true;
+			return true;
 
 	case MESSAGE_TYPE::END_ENEMY_TURN:
 
 		LOG(" Error : No Function | SceneGame.cpp  MESSAGE_TYPE::END_ENEMY_TURN\n")
 
-		return true;
+			return true;
 
 	case MESSAGE_TYPE::GO_NEXT_FLOOR:
 
-		ClearFloor();
-		NextFloor();
+		//	暗転する
+		//is_darking = true;
 
+		ClearFloor();
+		CreateNextFloor();
 		return true;
 
-	default: ;
+	default:
+		;
 	}
 
 	return false;

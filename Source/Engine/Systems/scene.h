@@ -5,6 +5,9 @@
 //
 //**********************************************************
 #include "Engine/AI/Telegram.h"
+
+const int TEXT_BUFFER_SIZE = 32;
+
 /// <summary>
 /// シーンの基底クラス
 /// </summary>
