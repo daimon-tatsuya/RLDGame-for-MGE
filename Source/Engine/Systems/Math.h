@@ -114,12 +114,13 @@ public:
 	static float ConvertToDegreeAngle(float radian);
 
 	/// <summary>
-	/// 浮動小数点数の誤差を考慮した比較
+	///	誤差を考慮した比較
+	///	xとyの差の絶対値がDBL_EPSILON以下ならほぼ同じ値
 	/// </summary>
-	/// <param name="a"></param>
-	/// <param name="b"></param>
-	/// <returns>a≒b</returns>
-	static bool BoolianFloat(float a, float b);
+	///	<param name="x"></param>
+	///	<param name="y"></param>
+	/// <returns>trueならほぼ同じ</returns>
+	static bool Comparison(double x, double y);
 
 	/// <summary>
 	/// 正規化
@@ -172,13 +173,6 @@ public:
 	/// <returns>v1+v2のベクトル</returns>
 	static  DirectX::XMFLOAT3 AddVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2);
 
-	/// <summary>
-	///	誤差を考慮した比較
-	///	xとyの差の絶対値がDBL_EPSILON以下ならほぼ同じ値
-	/// </summary>
-	///	<param name="x"></param>
-	///	<param name="y"></param>
-	/// <returns>trueならほぼ同じ</returns>
-	static bool Comparison(float x,float y);
+
 
 };

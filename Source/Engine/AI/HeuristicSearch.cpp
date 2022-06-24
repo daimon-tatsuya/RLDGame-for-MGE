@@ -196,6 +196,8 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
 		// 次のnowEdgeのdestination_nodeが目的地なら目的地までの最短進行ルートを返す
 		if (now_edge->destination_node_id == goal_id)
 		{
+			//
+			advance.push_back(-1);
 			return advance;
 		}
 		// now_edgeの接続先のノードを取得する。
@@ -298,4 +300,52 @@ float  HeuristicSearch::HeuristicCalculation(const std::shared_ptr<Node> n1, con
 	const float y = N1_pos.y - N2_pos.y;
 	const float x = N1_pos.x - N2_pos.x;
 	return  sqrtf((y * y) + (x * x)) / 20;
+}
+//Asterの結果を2次元配列に変換する
+void HeuristicSearch::ConvertTwoDimensionalArray()
+{
+	for (int y = 0; y < MapSize_Y ; y++)
+	{
+		for (int x = 0; x < MapSize_X ; x++)
+		{
+			//   x →
+			// y		MapSize_Y*0----------------------MapSize_X*1-1
+			//↓		MapSize_Y*1----------------------MapSize_X*2-1
+			//			MapSize_Y*2----------------------MapSize_X*3-1
+			//			MapSize_Y*3----------------------MapSize_X*4-1
+			//			MapSize_Y*4----------------------MapSize_X*5-1
+			//			MapSize_Y*5----------------------MapSize_X*6-1
+			//~~~~~~~~~~~~~~~~~
+			//			MapSize_Y*  ----------------------MapSize_X*x-1
+			//		  (MapSize_Y - 1)							MapSize_X - 1
+			const int array_num = y * MapSize_Y + x;
+			//進行ルートを二次元配列に格納
+			advance_vector[y][x] = advance[array_num];
+		}
+	}
+}
+//マップ情報を1次元配列に変換する
+void HeuristicSearch::ConvertOneDimensionalArray()
+{
+	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+	// 壁
+	for (int y = 0; y < MapSize_Y; y++)
+	{
+		for (int x = 0; x < MapSize_X; x++)
+		{
+			//   x →
+			// y		MapSize_Y*0----------------------MapSize_X*1-1
+			//↓		MapSize_Y*1----------------------MapSize_X*2-1
+			//			MapSize_Y*2----------------------MapSize_X*3-1
+			//			MapSize_Y*3----------------------MapSize_X*4-1
+			//			MapSize_Y*4----------------------MapSize_X*5-1
+			//			MapSize_Y*5----------------------MapSize_X*6-1
+			//~~~~~~~~~~~~~~~~~
+			//			MapSize_Y* x----------------------MapSize_X*x-1
+			//		(MapSize_Y - 1)							MapSize_X - 1
+			const int array_num = y*MapSize_Y + x;
+			//マップ情報を一次元配列に格納
+			map_info[array_num] = static_cast<int>(rogue_like_dungeon.GetMapRole()[y][x].map_data);
+		}
+	}
 }

@@ -21,6 +21,9 @@
 #include "Game/Scene/SceneTitle.h"
 #include "Engine/Systems/DungeonSystem.h"
 
+
+const float ajust = 48.f;//over_textが少しずれていたので目押しで修正
+
 // デストラクタ
 SceneGameOver::~SceneGameOver()
 {
@@ -30,7 +33,7 @@ SceneGameOver::~SceneGameOver()
 // 初期化
 void SceneGameOver::Initialize()
 {
-	if (SceneManager::Instance().GetIsGameClear() == true)//ゲームをクリアしているなら
+	if (DungeonSystem::Instance().GetIsDungeonClear() == true)//ゲームをクリアしているなら
 	{
 		strcpy_s(over_text, "Game Clear");//ゲームクリアのテキスト
 	}
@@ -45,7 +48,7 @@ void SceneGameOver::Initialize()
 	//経過ターンをchar型に変換する
 	char turn_text[TEXT_BUFFER_SIZE];
 	snprintf(turn_text, TEXT_BUFFER_SIZE, "%d", turn_number);
-
+	strcat_s(turn_text, "turn");
 	strcpy_s(turn_number_text, turn_text);//ゲームを終えたときのターン数のテキスト
 }
 
@@ -96,14 +99,14 @@ void SceneGameOver::Render()
 		const float screen_height = graphics.GetScreenHeight();// 画面サイズ縦
 		const float texture_width = font->GetTextureWidth();// フォントサイズ横
 		const float texture_height = font->GetTextureHeight();// フォントサイズ横
-		const float positionX = screen_width / 3;// テキストを描画するときの開始位置
-		const float positionY = (screen_height / 3) - texture_height;// テキストを描画するときの開始位置
+		//const float positionX = screen_width / 3;// テキストを描画するときの開始位置
+		//const float positionY = (screen_height / 3) - texture_height;// テキストを描画するときの開始位置
 
 		// ゲーム終了時のテキストの描画
-		font->TextOutW(device_context, over_text, positionX, positionY, texture_width / 2, texture_height / 2);
+		font->TextOutW(device_context, over_text, screen_width / 4 - ajust, (screen_height / 2) - texture_height, texture_width / 2, texture_height / 2);
 
 		// ゲーム終了時の経過ターンの描画
-		font->TextOutW(device_context, turn_number_text, positionX, screen_height - texture_height, texture_width / 4, texture_height / 4);
+		font->TextOutW(device_context, turn_number_text, screen_width / 2, screen_height - texture_height, texture_width / 4, texture_height / 4);
 	}
 }
 

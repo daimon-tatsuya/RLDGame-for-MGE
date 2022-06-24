@@ -15,9 +15,11 @@ private:
 	int max_turn = 999;		//最大経過ターン 経過ターンがこの値を超えたら
 
 	int current_floor = 1;//現在の階数
-	int max_floor = 99;   //最大階層
+	int max_floor = 4;   //最大階層
 
+	bool is_next_floor = false;//次のフロアに進むならtrue
 
+	bool is_dungeon_clear = false;//ダンジョンをクリアをしたらtrue
 public:
 
 	//	コンストラクタ
@@ -33,8 +35,24 @@ public:
 		return instance;
 	}
 
+	//初期化関数
+	void Initialize();
+
+
+	void Initialize(int max_floor,int max_turn);
+
+	//現在の経過ターンが最大経過ターンを超えているかのチェック
+	bool  ExceededMaxTurn() const;
+
+	//現在の階数が最大階数に到達しているかのチェック
+	bool  BreakingThroughTopFloor() const;
+
 	//ターンを経過させる
 	void ElapseTurns() { ++elapsed_turn; }
+
+	//--------------------------------------------
+	//	 Getter Setter
+	//--------------------------------------------
 
 	//最大階層の設定
 	void SetMaxFloor(int max) { max_floor = max; }
@@ -57,11 +75,17 @@ public:
 	//最大経過ターンの取得
 	int GetMaxTurn() const { return max_turn; }
 
-	//現在の経過ターンが最大経過ターンを超えているかのチェック
-	bool  ExceededMaxTurn() const;
+	//ダンジョンクリアのフラグの設定
+	void SetIsDungeonClear(bool set_flag) { is_dungeon_clear = set_flag; }
 
-	//現在の現在の階数が最大階数を超えているかのチェック
-	bool  ExceededMaxFloor() const;
+	//ダンジョンクリアのフラグの取得
+	bool GetIsDungeonClear() const { return is_dungeon_clear; }
+
+	//次の階に進むのフラグの設定
+	void SetIsNextFloor(bool set_flag) { is_next_floor = set_flag; }
+
+	//次の階に進むのフラグの取得
+	bool GetIsNextFloor() const { return is_next_floor; }
 
 };
 

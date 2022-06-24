@@ -20,7 +20,7 @@ class Character;
 		Camera,
 		SceneManager,
 		CharacterManager,
-		
+
 		Player,					// プレイヤーID
 		Team,					// 仲間のID
 		Enemy=8				// 以降の値は全て敵のID

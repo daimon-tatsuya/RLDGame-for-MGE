@@ -76,19 +76,19 @@ void RogueLikeStage::DrawDebugGUI()
 	if (ImGui::Begin("RogueLikeStage", nullptr, ImGuiWindowFlags_None))
 	{
 		//モデル数
-		ImGui::Text("Number of Models:%d", static_cast<int>(stage_chip.size()));
+		ImGui::Text("Number of Models : %d", static_cast<int>(stage_chip.size()));
 	}
 	if (ImGui::CollapsingHeader("Stairs initialize Position", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		//プレイヤーのマップ情報上での初期位置
-		ImGui::Text("Stairs Map Position: 	%d %d",
+		ImGui::Text("Stairs Map Position :  x : %d y : %d",
 			RogueLikeDungeon::Instance().stairs_pos.x, RogueLikeDungeon::Instance().stairs_pos.y);
 
 		//プレイヤーの初期位置
 		const int stairs_pos_positionX = RogueLikeDungeon::Instance().stairs_pos.x * CellSize;
 		const int stairs_pos_positionY = RogueLikeDungeon::Instance().stairs_pos.y * CellSize;
 
-		ImGui::Text("Stairs Position:	 %d %d", stairs_pos_positionX, stairs_pos_positionY);
+		ImGui::Text("Stairs Position : x : %d y : %d", stairs_pos_positionX, stairs_pos_positionY);
 	}
 	ImGui::End();
 }

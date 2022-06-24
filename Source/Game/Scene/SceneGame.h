@@ -17,7 +17,7 @@ class CameraController;
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class SceneGame :
+class SceneGame:
 	public Scene
 {
 private:
@@ -26,8 +26,6 @@ public:
 
 	std::unique_ptr<CameraController> camera_controller = nullptr; //カメラ操作クラスのポインタ
 
-	bool is_darking = true; //画面を暗くするときtrue
-	bool is_next_floor = false;//次のフロアに進むならtrue
 private:
 	//階を移動する
 	void GoingToTheNextFloor();

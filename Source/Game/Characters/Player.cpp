@@ -82,7 +82,7 @@ void Player::Update(const float elapsed_time)
 }
 
 //描画処理
-void Player::Render(ID3D11DeviceContext * dc, std::shared_ptr<Shader> shader)
+void Player::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
 {
 	shader->Draw(dc, GetModel());
 }
@@ -195,7 +195,7 @@ void Player::FiniteStateMachineInitialize()
 }
 
 //	メタAI経由受信処理
-bool Player::OnMessage(const Telegram & telegram)
+bool Player::OnMessage(const Telegram& telegram)
 {
 	const RogueLikeDungeon rogue_like_dungeon = RogueLikeDungeon::Instance();
 	// メタAIからの受信処理
@@ -203,8 +203,8 @@ bool Player::OnMessage(const Telegram & telegram)
 	{
 	case MESSAGE_TYPE::END_PLAYER_TURN:
 
-		LOG(" Error : No Function | Player.cpp\n")
-			return false;
+		LOG(" Error : END_PLAYER_TURN is No Function | Player.cpp OnMessage Method\n")
+			return true;
 
 	case MESSAGE_TYPE::END_ENEMY_TURN:
 		//プレイヤー
@@ -214,12 +214,22 @@ bool Player::OnMessage(const Telegram & telegram)
 	case MESSAGE_TYPE::GO_NEXT_FLOOR:
 
 		SetPositionY(0.f);
+
 		const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize);
+
 		SetPosition(pos);
+
 		return true;
+
+	case MESSAGE_TYPE::GO_MAX_FLOOR:
+
+		LOG(" Error : GO_MAX_FLOOR is No Function  | Player.cpp OnMessage Method\n ")
+
+			return true;
+
 	default:
 
-		LOG(" Error : No Message  | Player.cpp\n ")
+		LOG(" Error : No Message  | Player.cpp  OnMessage Method\n ")
 
 			return false;
 
@@ -290,7 +300,7 @@ void Player::DrawDebugGUI()
 	if (ImGui::Begin("Player", nullptr, ImGuiWindowFlags_None))
 	{
 		// ID
-		ImGui::Text("Character ID:%d", GetId());
+		ImGui::Text("Character ID : %d", GetId());
 		// トランスフォーム
 		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -363,8 +373,8 @@ void Player::DrawDebugGUI()
 				strcat_s(current_state_name, sizeof(current_state_name), state_name);
 			}
 
-			ImGui::Text("Parent State Name:%s", parent_state_name);
-			ImGui::Text("Current State Name:%s", current_state_name);
+			ImGui::Text("Parent State Name : %s", parent_state_name);
+			ImGui::Text("Current State Name : %s", current_state_name);
 		}
 		if (ImGui::CollapsingHeader("Game Pad Status", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -388,9 +398,9 @@ void Player::DrawDebugGUI()
 			{
 				ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
 			}
-			ImGui::Text("Game Pad Axis On Step: x:%f y:%f", ax, ay);
+			ImGui::Text("Game Pad Axis On Step: x : %f y : %f", ax, ay);
 		}
-		if (ImGui::CollapsingHeader("Player Omni Attribute", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader("Player Map Status", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			// 周囲のマップ情報
 			RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
@@ -401,21 +411,23 @@ void Player::DrawDebugGUI()
 			const size_t left_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
 
 			ImGui::Text("Omni Attribute");
-			ImGui::Text("            up:%zu", up_data);
-			ImGui::Text("  left:%zu          right:%zu ", left_data, right_data);
-			ImGui::Text("           down:%zu", down_data);
+			ImGui::Text("            up : %zu", up_data);
+			ImGui::Text("  left : %zu          right : %zu ", left_data, right_data);
+			ImGui::Text("           down : %zu", down_data);
+			ImGui::Text("");
+			ImGui::Text("Be RoomNumber : %zu" ,rogue_like_dungeon.map_room_player);
 		}
 		if (ImGui::CollapsingHeader("Player initialize Position", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			//プレイヤーのマップ情報上での初期位置
-			ImGui::Text("Player Map Position: 	%d %d",
+			ImGui::Text("Player Map Position : x : %d  y : %d",
 				RogueLikeDungeon::Instance().player_pos.x, RogueLikeDungeon::Instance().player_pos.y);
 
 			//プレイヤーの初期位置
 			const int player_positionX = RogueLikeDungeon::Instance().player_pos.x * CellSize;
 			const int player_positionY = RogueLikeDungeon::Instance().player_pos.y * CellSize;
 
-			ImGui::Text("Player Position:	 %d %d", player_positionX, player_positionY);
+			ImGui::Text("Player Position : x : %d  y : %d", player_positionX, player_positionY);
 		}
 	}
 	ImGui::End();
@@ -600,7 +612,7 @@ void	Player::WayChangeState(const float elapsed_time)
 	//左スティックのx軸のステップ処理
 	if (ax > 0.f)
 	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f)); ;
+		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f));
 	}
 	else if (ax < 0.f)
 	{
@@ -610,7 +622,7 @@ void	Player::WayChangeState(const float elapsed_time)
 	//左スティックのy軸のステップ処理
 	if (ay > 0.f)
 	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f)); ;
+		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f));
 	}
 	else if (ay < 0.f)
 	{
@@ -706,13 +718,13 @@ void	Player::MoveState(const float elapsed_time)
 	}
 	else if (ay < 0.f)
 	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true); ;
+		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
 	}
 
 	//移動処理
 
 	//右上
-	if (Math::Comparison(ax,1.f) && Math::Comparison(ay, 1.f))
+	if (Math::Comparison(ax, 1.f) && Math::Comparison(ay, 1.f))
 	{
 		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
 

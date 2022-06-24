@@ -40,10 +40,11 @@ const static int CellSize = 2;	// world座標での升目の大きさ
 		size_t room_length_randX = 5; // 部屋のX座標のサイズ加算
 		size_t room_length_randY = 5; // 部屋のY座標のサイズ加算
 
+		//	保存される情報
 		size_t map_division_count{};					// マップの区分け数 (部屋の個数) 0~nまでの部屋ID
 		size_t map_division[RoomMax][4]{};		// マップの区域 [部屋ID][Y終点 , X終点 , Y始点 , X始点]
 		size_t map_room_id[RoomMax]{};			// 部屋のID
-		size_t map_room_count{};						// 部屋の数
+		size_t map_room_count{};					// 部屋の数
 		size_t map_room[RoomMax][4]{};			// マップの部屋 [部屋ID][Y終点 , X終点 , Y始点 , X始点]
 		size_t map_road[RoomMax][4]{};			// マップの通路 [部屋ID(前)] [繋がる先の部屋ID(後) , (0:Y座標 , 1:X座標) , (前)側の通路の位置 , (後)側の通路の位置]
 		size_t map_room_area[RoomMax]{};		// 部屋の面積
@@ -83,23 +84,25 @@ struct RogueLikeMap final
 	size_t map_data = static_cast<size_t>(Attribute::Wall);// マスの属性情報
 
 	//通路の入り口かそうでないかのフラグ
-	bool is_road_entrance = false; //  false:通路 、true:通路の入り口
+	//bool is_road_entrance = false; //  false:通路 、true:通路の入り口
 
 	//プレーヤーや敵、アイテムが乗っていても潜在的に分かるようするフラグ
 	bool is_room = false; // false:通路、true:部屋　※壁は部屋ではない扱い(falseのまま)とする。
 	//\また、新たに増える場合はこのフラグを消して、enum class で判別するようにする
 };
 
+
+
 // 自作のマップデータを扱う
 class  RogueLikeDungeon final
 {
 private:
 
-	//static RogueLikeDungeon* instance;//	唯一のインスタンス
-
 	std::vector<std::vector<RogueLikeMap>> map_role{};// マップ情報を格納するコンテナ
 
-	std::vector<DirectX::XMFLOAT2>  roads_entrance{};//通路の入り口の位置だけを格納するコンテナ
+	std::vector<DirectX::XMINT2>  rooms_center{};//部屋の中心を格納するコンテナ
+
+	std::vector<DirectX::XMINT2>  roads{};//通路の位置を格納するコンテナ
 
 public:
 
@@ -165,6 +168,20 @@ public:
 	//	マップ情報の取得
 	std::vector<std::vector<RogueLikeMap>> GetMapRole() { return  map_role; }
 
-	//通路の入り口のコンテナを取得
-	std::vector<DirectX::XMFLOAT2> GetRoadsEntrance() { return roads_entrance; }
+	//通路のコンテナを取得
+	std::vector<DirectX::XMINT2> GetRoads() { return roads; }
+
+	//通路のコンテナを取得
+	std::vector<DirectX::XMINT2> GetRoom_Center() { return rooms_center; }
+
+	//部屋の番号を取得
+	//オブジェクトのマップ位置情報を部屋XYそれぞれのの終点始点の範囲内だったらその部屋の番号を返す
+
+	/// <summary>
+	///部屋の番号を取得
+	/// </summary>
+	/// <para>オブジェクトのマップ位置情報を部屋XYそれぞれのの終点始点の範囲内だったらその部屋の番号を返す</para>
+	/// <param name="object_pos">objectのマップ上の位置</param>
+	/// <returns>部屋の番号(部屋にいないなら-1	)</returns>
+	int GetLocateRoomNunber(DirectX::XMINT2 object_pos);
 };

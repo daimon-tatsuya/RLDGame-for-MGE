@@ -84,8 +84,9 @@ void SceneGame::Initialize()
 
 	//生成されなかったオブジェクトのマップデータを上書き
 	rogue_like_dungeon.UpdateMapRole();
-	const int test_max_floor = 4;
-	DungeonSystem::Instance().SetMaxFloor(test_max_floor	);
+
+	//ダンジョンのシステムの初期化
+	DungeonSystem::Instance().Initialize();
 
 
 }
@@ -117,7 +118,7 @@ void SceneGame::Update(const float elapsed_time)
 	StageManager::Instance().Update(elapsed_time);
 
 	//次の階に進むなら更新しない
-	if (is_next_floor != true)
+	if (DungeonSystem::Instance().GetIsNextFloor() != true)
 	{
 		// キャラクター更新処理
 		CharacterManager::Instance().Update(elapsed_time);
@@ -139,9 +140,12 @@ void SceneGame::Update(const float elapsed_time)
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
 	}
-	// Bボタン(Xｷｰ)を押したらゲームオーバーシーンへ切り替え
-	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_B))
+	// ダンジョンをクリアしてたらゲームオーバーシーンに遷移
+	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_X) ||
+		DungeonSystem::Instance().GetIsDungeonClear()==true )
 	{
+
+		//LOG("No Func\n");
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameOver));
 	}
 	//
@@ -259,7 +263,7 @@ void SceneGame::CreateNextFloor()
 	//生成されなかったオブジェクトのマップデータを上書き
 	rogue_like_dungeon.UpdateMapRole();
 
-	is_darking = false;//明転開始
+	//is_darking = false;//明転開始
 }
 
 bool SceneGame::OnMessage(const Telegram& telegram)
@@ -278,6 +282,7 @@ bool SceneGame::OnMessage(const Telegram& telegram)
 
 			return true;
 
+	//	最上階に到達メッセージ
 	case MESSAGE_TYPE::GO_NEXT_FLOOR:
 
 		//	暗転する
@@ -285,6 +290,12 @@ bool SceneGame::OnMessage(const Telegram& telegram)
 
 		ClearFloor();
 		CreateNextFloor();
+		return true;
+		//	最上階に到達メッセージ
+	case MESSAGE_TYPE::GO_MAX_FLOOR:
+
+		////ダンジョンクリアのフラグをtrue
+		DungeonSystem::Instance().SetIsDungeonClear(true);
 		return true;
 
 	default:

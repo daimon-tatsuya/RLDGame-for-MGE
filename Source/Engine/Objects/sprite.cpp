@@ -273,13 +273,13 @@ void Sprite::Render(ID3D11DeviceContext* device_context,
 
 void Sprite::TextOut(ID3D11DeviceContext* device_context, std::string s, float x, float y, float w, float h, float r, float g, float b, float a) const
 {
-	float sw = static_cast<float>(texture2d_desc.Width / 16);
-	float sh = static_cast<float>(texture2d_desc.Height / 16);
+	float sw = static_cast<float>(texture2d_desc.Width) / 16;
+	float sh = static_cast<float>(texture2d_desc.Height )/ 16;
 
 	float cursor = 0;
 	for (auto c : s)
 	{
-		Render(device_context, x + cursor, y, w, h, sw * (c & 0x0F), sh * (c >> 4), sw, sh, 0, r, g, b, a);
+		Render(device_context, x + cursor, y, w, h, sw * ( c & 0x0F), sh * (c >> 4), sw, sh, 0, r, g, b, a);
 		cursor += w;
 	}
 }

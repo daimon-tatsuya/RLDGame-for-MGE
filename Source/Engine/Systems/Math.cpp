@@ -146,16 +146,14 @@ float Math::ConvertToDegreeAngle(const float radian)
 	return  DirectX::XMConvertToDegrees(radian);
 }
 
-bool Math::BoolianFloat(const float a, const float b)
+bool Math::Comparison(const double a, const double b)
 {
 	if (fabsf(a - b) <= FLT_EPSILON * fmaxf(1.f, fmaxf(fabsf(a), fabsf(b))))
 	{
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }
 
 DirectX::XMFLOAT3 Math::Normalize(const DirectX::XMFLOAT3 v1)
@@ -213,17 +211,17 @@ DirectX::XMFLOAT3 Math::AddVector(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
 	return vec;
 }
 
-bool Math::Comparison(float x, float y)
-{
-	const float fab_num = fabs(x - y);//xとyの差の絶対値
-
-	if (fab_num <  DBL_EPSILON)//差の絶対値がDBL_EPSILON以下ならほぼ同じ値とする
-	{
-		return true;
-	}
-
-	return false;
-}
+//bool Math::Comparison(float x, float y)
+//{
+//	const float fab_num = fabs(x - y);//xとyの差の絶対値
+//
+//	if (fab_num < DBL_EPSILON)//差の絶対値がDBL_EPSILON以下ならほぼ同じ値とする
+//	{
+//		return true;
+//	}
+//
+//	return false;
+//}
 
 //int Math::GetOneDimensionalArrayIndex(DirectX::XMINT2 array_num)
 //{

@@ -9,7 +9,7 @@
 #include "Engine/Objects/Model.h"
 #include "Engine/Systems/StageManager.h"
 #include "Engine/Systems/Collision.h"
-
+#include "Engine/Systems/Logger.h"
 void Object::UpdateTransform()
 {
 	// スケール行列を作成
@@ -52,17 +52,24 @@ void Object::NormalizeAngle()
 
 void Object::SendMessaging(const MESSAGE_TYPE msg)
 {
-	//switch (msg)
-	//{
-	//case MESSAGE_TYPE::END_PLAYER_TURN:
-
-	//	break;
-	//case MESSAGE_TYPE::END_ENEMY_TURN:
-
-	//	break;
-	//default:
-	//	break;
-	//}
+	switch (msg)
+	{
+	case MESSAGE_TYPE::END_PLAYER_TURN:
+		LOG("\n")
+		break;
+	case MESSAGE_TYPE::END_ENEMY_TURN:
+		LOG("\n")
+		break;
+	case MESSAGE_TYPE::GO_NEXT_FLOOR:
+		LOG("\n")
+		break;
+	case MESSAGE_TYPE::GO_MAX_FLOOR:
+		LOG("\n")
+		break;
+	default:
+		LOG("\n")
+		break;
+	}
 }
 
 void	Object::SetModel(const char* pass)

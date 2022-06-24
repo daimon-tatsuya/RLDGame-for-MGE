@@ -70,7 +70,7 @@ void EnemySnake::Update(float elapsed_time)
 	GetModel()->UpdateTransform(GetTransform());
 }
 
-void EnemySnake::Render(ID3D11DeviceContext * dc, std::shared_ptr<Shader> shader)
+void EnemySnake::Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)
 {
 	shader->Draw(dc, GetModel());
 }
@@ -199,21 +199,32 @@ void EnemySnake::SendMessaging(MESSAGE_TYPE msg)
 	{
 	case MESSAGE_TYPE::END_PLAYER_TURN:
 
-		LOG(" Error : No Function | EnemySnake.cpp\n")
+		LOG(" Error : END_PLAYER_TURN is No Function | EnemySnake.cpp SendMessaging Method\n")
 			break;
 
 	case MESSAGE_TYPE::END_ENEMY_TURN:
 
 		//メタAIにターンの終了を伝える
-
 		meta.SendMessaging(GetId(),
 			static_cast<int>(Identity::Meta),
 			MESSAGE_TYPE::END_ENEMY_TURN);
+
 		//ステートマシンの設定
 		enemy_snake_state_machine.SetState(ParentState::Receive);
 		break;
+
+	case MESSAGE_TYPE::GO_NEXT_FLOOR:
+
+		LOG(" Error : GO_NEXT_FLOOR is No Function | EnemySnake.cpp SendMessaging Method\n")
+		break;
+
+	case MESSAGE_TYPE::GO_MAX_FLOOR:
+
+		LOG(" Error : GO_MAX_FLOOR is No Function | EnemySnake.cpp SendMessaging Method\n")
+		break;
+
 	default:
-		LOG(" Error : No Message | EnemySnake.cpp\n")
+		LOG(" Error : No Message | EnemySnake.cpp SendMessaging Method\n")
 			break;
 	}
 }
@@ -226,7 +237,7 @@ void EnemySnake::OnDead()
 {
 }
 
-bool EnemySnake::OnMessage(const Telegram & telegram)
+bool EnemySnake::OnMessage(const Telegram& telegram)
 {
 	//メタAIからの受信処理
 	switch (telegram.msg)
@@ -236,17 +247,27 @@ bool EnemySnake::OnMessage(const Telegram & telegram)
 		enemy_snake_state_machine.SetState(ParentState::Entry);
 
 		return true;
+
 	case MESSAGE_TYPE::END_ENEMY_TURN:
 
-		LOG(" Error : MESSAGE_TYPE::END_ENEMY_TURN Messages not received | EnemySnake.cpp\n")
+		LOG(" Error : END_ENEMY_TURN is No Function | EnemySnake.cpp OnMessage Method\n")
+
 			return true;
+
 	case MESSAGE_TYPE::GO_NEXT_FLOOR:
+
 		SetExist(false);
 		//Destroy();
 		return true;
+
+	case MESSAGE_TYPE::GO_MAX_FLOOR:
+
+
+		return true;
+
 	default:
 
-		LOG(" Error : No Message | EnemySnake.cpp\n")
+		LOG(" Error : No Message | EnemySnake.cpp OnMessage Method\n")
 
 			return false;
 
@@ -336,71 +357,6 @@ void EnemySnake::ExploreState(const float elapsed_time)
 	}
 
 
-
-	//対象までの探索
-	if (shortest_path->path_information.empty() == true)	//最短経路がない
-	{
-		int start_id{}, goal_id{};//Astarの始める位置と目的地
-		shortest_path->Clear();//初期化
-
-		/*敵の情報(position)→マップ情報(2次元配列)map_role[enemy_posZX[0]][enemy_posZX[1]]*/
-		//ｙにはＺ軸の情報を入れておく
-		const DirectX::XMFLOAT3 enemy_posZX = { GetPosition().x / CellSize, 0,GetPosition().z / CellSize };
-
-		/*マップ情報(2次元配列)→Astar(1次元配列)*/
-		//Astarの始める位置
-		start_id = static_cast<int>(enemy_posZX.y) * MapSize_Y + static_cast<int>(enemy_posZX.x);
-
-		//目的地
-		//最も近い場所を見つける　→　通路の入り口
-		DirectX::XMFLOAT3 shortest{};//通路の入り口の位置
-		float min_length = FLT_MAX;
-
-		for (const auto& road_entrance : RogueLikeDungeon::Instance().GetRoadsEntrance())
-		{
-			DirectX::XMFLOAT2 r = road_entrance;
-
-			//マップ情報→ワールド座標
-			r.y = r.y * CellSize;
-			r.x = r.x * CellSize;
-
-			const DirectX::XMFLOAT3 road_pos = DirectX::XMFLOAT3(r.x, 0.f, r.y);//通路の入り口のワールド座標
-
-			//自身が検索中の通路の上にいるときスキップする
-			if (Math::Comparison(GetPosition().x, road_pos.x) && Math::Comparison(GetPosition().z, road_pos.z))
-			{
-				continue;
-			}
-
-			const float length = Math::Length(Math::SubtractVector(GetPosition(), road_pos));//自身(敵)から通路への最短距離
-
-			//現在の最短距離の入れ替える
-			if (length < min_length)
-			{
-				min_length = length;//現在の最短距離の入れ替え
-				shortest = DirectX::XMFLOAT3(static_cast<float>(r.x), 0, static_cast<float>(r.y));//最も近い通路のワールド座標を格納
-			}
-		}
-		shortest_path->destination_pos = shortest;
-		goal_id = static_cast<int>(shortest.z) * MapSize_Y + static_cast<int>(shortest.x);
-
-		//最短経路を求める
-		HeuristicSearch& Astar = HeuristicSearch::Instance();
-		shortest_path->path_information = Astar.Search(start_id, goal_id);//到達
-		shortest_path->SetPathSize();//最短経路のサイズを設定
-	}
-	else//探索先がある
-	{
-		//shortest_path->path_informationは最短経路の示す数字の配列
-		if (true)
-		{
-
-		}
-		else
-		{
-			LOG(" Error : shortest_path->path_information is nothing | EnemySnake.cpp")//最短経路の値がない
-		}
-	}
 
 }
 

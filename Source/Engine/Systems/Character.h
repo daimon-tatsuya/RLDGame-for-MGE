@@ -63,6 +63,7 @@ public:
 
 	//ˆÊ’u‚ğŒˆ’è‚µ‚Ä‚¢‚é‚©‚Ìƒtƒ‰ƒO‚Ìİ’è
 	void SetIsDecidePos(const bool set) { is_decide_pos = set; }
+
 };
 
 

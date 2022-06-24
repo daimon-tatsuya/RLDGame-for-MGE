@@ -89,11 +89,28 @@ bool CharacterManager::OnMessage(const Telegram& telegram)
 	{
 	case MESSAGE_TYPE::END_PLAYER_TURN:
 
+
+
 		return true;
+
 	case MESSAGE_TYPE::END_ENEMY_TURN:
 
 
+
 		return true;
+
+	case MESSAGE_TYPE::GO_NEXT_FLOOR:
+
+
+
+		return true;
+
+	case MESSAGE_TYPE::GO_MAX_FLOOR:
+
+
+
+		return true;
+
 	default:
 		break;
 	}

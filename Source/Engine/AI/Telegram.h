@@ -13,6 +13,7 @@ enum class MESSAGE_TYPE : int
 	END_PLAYER_TURN,
 	END_ENEMY_TURN,
 	GO_NEXT_FLOOR,
+	GO_MAX_FLOOR
 };
 
 /// <summary>

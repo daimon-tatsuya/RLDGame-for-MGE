@@ -33,11 +33,6 @@ void Meta::Update()
 	{
 		LOG("Success : elapsed_turn ecceed max_turn | MetaAI.cpp  Update\n")
 	}
-	//現在の階数が最大数を超えたら
-	if (dungeon_system.ExceededMaxFloor())
-	{
-		LOG("Success : current_floor ecceed max_floor | MetaAI.cpp  Update\n")
-	}
 }
 
 //	キャラクタークラスにメッセージ送信する
@@ -108,6 +103,7 @@ bool Meta::OnMessage(const Telegram& telegram)
 	{
 	case MESSAGE_TYPE::END_PLAYER_TURN:	// プレイヤーのターンが終わった
 
+		//敵宛
 		for (int i = 0; i < character_manager.GetEnemyCount(); ++i)
 		{
 			this->SendMessaging(
@@ -122,7 +118,7 @@ bool Meta::OnMessage(const Telegram& telegram)
 	case MESSAGE_TYPE::END_ENEMY_TURN:	// 敵のターンが終わった
 
 
-
+		//	プレイヤー宛
 		this->SendMessaging
 		(
 			static_cast<int>(Identity::Meta),
@@ -153,16 +149,37 @@ bool Meta::OnMessage(const Telegram& telegram)
 
 		}
 		//-------------------------------------------------------------------------
-		this->SendMessaging
-		(
-			static_cast<int>(Identity::Meta),
-			static_cast<int>(Identity::SceneManager),
-			MESSAGE_TYPE::GO_NEXT_FLOOR
-		);
+		//---------------------------シーンマネージャー宛-----------------------
+		//現在の階数が最大数に到達したら
+		if (dungeon_system.BreakingThroughTopFloor())
+		{
+			this->SendMessaging
+			(
+				static_cast<int>(Identity::Meta),
+				static_cast<int>(Identity::SceneManager),
+				MESSAGE_TYPE::GO_MAX_FLOOR
+			);
+			LOG("Success : current_floor reach max_floor | MetaAI.cpp  Update\n")
+		}
+		else
+		{
+			this->SendMessaging
+			(
+				static_cast<int>(Identity::Meta),
+				static_cast<int>(Identity::SceneManager),
+				MESSAGE_TYPE::GO_NEXT_FLOOR
+			);
+		}
+		//-------------------------------------------------------------------------
+
 		//ターンの経過
-		dungeon_system.ElapseTurns();
+		//メッセージを送信した後で階を進ませる
 		dungeon_system.ElapseCurrentFloor();
+
 		return true;
+	default:
+		break;
+
 	}
 
 	return false;
@@ -251,7 +268,9 @@ void Meta::DrawDebugGUI()
 
 		if (ImGui::CollapsingHeader("DungeonSystem", ImGuiTreeNodeFlags_DefaultOpen))
 		{
+			ImGui::Text(" elapsed_turn : %d", DungeonSystem::Instance().GetMaxTurn());
 			ImGui::Text(" elapsed_turn : %d", DungeonSystem::Instance().GetElapsedTurn());
+			ImGui::Text(" current_floor : %d", DungeonSystem::Instance().GetMaxFloor());
 			ImGui::Text(" current_floor : %d", DungeonSystem::Instance().GetCurrentFloor());
 		}
 
