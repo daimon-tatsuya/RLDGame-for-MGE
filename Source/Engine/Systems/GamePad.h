@@ -29,24 +29,24 @@ private:
 
 public:
 
-	static const GamePadButton BTN_UP = (1 << 0);        // 十字キー上
-	static const GamePadButton BTN_RIGHT = (1 << 1);  // 十字キー右
-	static const GamePadButton BTN_DOWN = (1 << 2);	 // 十字キー下
-	static const GamePadButton BTN_LEFT = (1 << 3);	 // 十字キー左
-	static const GamePadButton BTN_A = (1 << 4);//Aボタン
-	static const GamePadButton BTN_B = (1 << 5);//Bボタン
-	static const GamePadButton BTN_X = (1 << 6);//Xボタン
-	static const GamePadButton BTN_Y = (1 << 7);//Yボタン
-	static const GamePadButton BTN_START = (1 << 8);//右スタートボタン
-	static const GamePadButton BTN_BACK = (1 << 9);  //左スタートボタン
-	static const GamePadButton BTN_LEFT_THUMB = (1 << 10);		// 左スティック押し込み
-	static const GamePadButton BTN_RIGHT_THUMB = (1 << 11); // 右スティック押し込み
-	static const GamePadButton BTN_LEFT_SHOULDER = (1 << 12);		// LB：L1
-	static const GamePadButton BTN_RIGHT_SHOULDER = (1 << 13);	// RB：R1
-	static const GamePadButton BTN_LEFT_TRIGGER = (1 << 14);			// LT：L2
-	static const GamePadButton BTN_RIGHT_TRIGGER = (1 << 15);		// RT：R2
+	const static  GamePadButton BTN_UP = (1 << 0);        // 十字キー上
+	const static  GamePadButton BTN_RIGHT = (1 << 1);  // 十字キー右
+	const static  GamePadButton BTN_DOWN = (1 << 2);	 // 十字キー下
+	const static  GamePadButton BTN_LEFT = (1 << 3);	 // 十字キー左
+	const static  GamePadButton BTN_A = (1 << 4);//Aボタン
+	const static  GamePadButton BTN_B = (1 << 5);//Bボタン
+	const static  GamePadButton BTN_X = (1 << 6);//Xボタン
+	const static  GamePadButton BTN_Y = (1 << 7);//Yボタン
+	const static  GamePadButton BTN_START = (1 << 8);//右スタートボタン
+	const static  GamePadButton BTN_BACK = (1 << 9);  //左スタートボタン
+	const static  GamePadButton BTN_LEFT_THUMB = (1 << 10);		// 左スティック押し込み
+	const static  GamePadButton BTN_RIGHT_THUMB = (1 << 11); // 右スティック押し込み
+	const static  GamePadButton BTN_LEFT_SHOULDER = (1 << 12);		// LB：L1
+	const static  GamePadButton BTN_RIGHT_SHOULDER = (1 << 13);	// RB：R1
+	const static  GamePadButton BTN_LEFT_TRIGGER = (1 << 14);			// LT：L2
+	const static  GamePadButton BTN_RIGHT_TRIGGER = (1 << 15);		// RT：R2
 
-	static const GamePadButton AnyBTN =// ABXYボタン
+	const static  GamePadButton AnyBTN =// ABXYボタン
 		GamePad::BTN_A
 		| GamePad::BTN_B
 		| GamePad::BTN_X

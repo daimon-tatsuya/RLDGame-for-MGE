@@ -174,14 +174,14 @@ void NoTextureShader::Activate(ID3D11DeviceContext* context, const RenderContext
 
 	context->IASetInputLayout(input_layout.Get());
 
-	ID3D11Buffer* constantBuffers[] =
+	ID3D11Buffer* constant_buffers[] =
 	{
 		scene_constant_buffer.Get(),
 		mesh_constant_buffer.Get(),
 		subset_constant_buffer.Get()
 	};
-	context->VSSetConstantBuffers(0, ARRAYSIZE(constantBuffers), constantBuffers);
-	context->PSSetConstantBuffers(0, ARRAYSIZE(constantBuffers), constantBuffers);
+	context->VSSetConstantBuffers(0, ARRAYSIZE(constant_buffers), constant_buffers);
+	context->PSSetConstantBuffers(0, ARRAYSIZE(constant_buffers), constant_buffers);
 
 	const float blend_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	context->OMSetBlendState(blend_state.Get(), blend_factor, 0xFFFFFFFF);

@@ -9,7 +9,7 @@
 #include<functional>
 #include<map>
 
-const int NonState = -1;
+const int NO_STATE = -1;
 
 //templateをヘッダー書いた場合
 //https://pknight.hatenablog.com/entry/20090826/1251303641
@@ -24,8 +24,8 @@ template<typename Key, typename ReturnValue = void, typename... Args>
 class StateMachine final
 {
 private:
-	Key current_state{ NonState };
-	Key old_state{ NonState };		// Stateの初期化などに使う
+	Key current_state{ NO_STATE };
+	Key old_state{ NO_STATE };		// Stateの初期化などに使う
 
 	/// <summary>
 	/// Stateを格納する

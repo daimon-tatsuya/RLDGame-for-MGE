@@ -18,14 +18,14 @@ ResourceManager::~ResourceManager()
 std::shared_ptr<ModelResource> ResourceManager::LoadModelResource(const char* filename)
 {
 	//モデル検索
-	const ModelMap::iterator it = models.find(filename);
-	if (it != models.end())
+	const ModelMap::iterator iterator = models.find(filename);
+	if (iterator != models.end())
 	{
 		//参照先が解放されてないか確認する
-		if (!it->second.expired())
+		if (!iterator->second.expired())
 		{
 			// 読み込み済みのモデルリソースを返す
-			return it->second.lock();
+			return iterator->second.lock();
 		}
 	}
 	// 新規モデルリソース作成＆読み込み

@@ -105,7 +105,7 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState>		depth_stencil_state;
 
-	const size_t max_instances = 256;
+	const size_t MAX_INSTANCES = 256;
 	struct Instance
 	{
 		DirectX::XMFLOAT4X4 ndc_transform;

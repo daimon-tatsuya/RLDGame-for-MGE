@@ -59,13 +59,13 @@ public:
 		StateEnd
 	};
 
-	StateMachine<ParentState, void, const float> enemy_snake_state_machine;	// ヘビの親ステート
+	StateMachine<ParentState, void, const float> enemy_snake_state_machine;	// 親ステート
 
-	using EnemySnakeEntryState = StateMachine<Entry, void, const float>; // ヘビの子ステート
-	using EnemySnakeReactionState = StateMachine<Reaction, void, const float>; // ヘビの子ステート
-	using EnemySnakeReceiveState = StateMachine<Receive, void, const float>; // ヘビの子ステート
-	EnemySnakeEntryState      enemy_snake_entry_state;   // 行動(入力)ステート
-	EnemySnakeReactionState enemy_snake_reaction_state;// HP関係の反応ステート
+	using EnemySnakeEntryState = StateMachine<Entry, void, const float>; // 行動ステートの宣言
+	using EnemySnakeReactionState = StateMachine<Reaction, void, const float>; // 反応ステートの宣言
+	using EnemySnakeReceiveState = StateMachine<Receive, void, const float>; // MetaAIからの指示待ちステートの宣言
+	EnemySnakeEntryState      enemy_snake_entry_state;   // 行動ステート
+	EnemySnakeReactionState enemy_snake_reaction_state;//反応ステート
 	EnemySnakeReceiveState   enemy_snake_receive_state; // MetaAIからの指示待ちステート
 
 private:

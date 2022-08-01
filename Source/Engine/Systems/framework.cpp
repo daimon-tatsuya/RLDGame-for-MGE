@@ -22,12 +22,12 @@
 #include "Game/Scene/SceneGame.h"
 
 // 垂直同期間隔設定 //1の時フレームを固定
-static const int syncInterval = 1;
+static const int SYNCHRONOUS_INTERVAL = 1;
 
-Framework::Framework(HWND hwnd)
-	: hwnd(hwnd),
-	graphics(hwnd),
-	input(hwnd)
+Framework::Framework(HWND handle_window)
+	: handle_window(handle_window),
+	graphics(handle_window),
+	input(handle_window)
 {
 	// シーン初期化
 	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
@@ -60,7 +60,7 @@ void Framework::Render(float elapsedTime/*Elapsed seconds from last frame*/) con
 	graphics.GetImGuiRenderer()->Render(device_context);
 
 	// バックバッファに描画した画を画面に表示する。
-	graphics.GetSwapChain()->Present(syncInterval, 0);
+	graphics.GetSwapChain()->Present(SYNCHRONOUS_INTERVAL, 0);
 }
 
 int Framework::Run()
@@ -79,7 +79,7 @@ int Framework::Run()
 			timer.Tick();
 			CalculateFrameStates();
 
-			float elapsedTime = syncInterval == 0 ? timer.TimeInterval() : syncInterval / 60.0f;
+			float elapsed_time = SYNCHRONOUS_INTERVAL == 0 ? timer.TimeInterval() : SYNCHRONOUS_INTERVAL / 60.0f;
 
 			Update(timer.TimeInterval());
 			Render(timer.TimeInterval());
@@ -110,7 +110,7 @@ void Framework::CalculateFrameStates() const
 		std::ostringstream outs;
 		outs.precision(6);
 		outs << "RougeLikeGame(NoName)" << "FPS : " << fps << " / " << "Frame Time : " << mspf << " (ms)";
-		SetWindowTextA(hwnd, outs.str().c_str());
+		SetWindowTextA(handle_window, outs.str().c_str());
 
 		// 次の平均値のためにリセットします。
 		frames = 0;
@@ -118,9 +118,9 @@ void Framework::CalculateFrameStates() const
 	}
 }
 
-LRESULT Framework::HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT Framework::HandleMessage(HWND handle_window, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	if (Graphics::Instance().GetImGuiRenderer()->HandleMessage(hwnd, msg, wparam, lparam))
+	if (Graphics::Instance().GetImGuiRenderer()->HandleMessage(handle_window, msg, wparam, lparam))
 	{
 		return true;
 	}
@@ -130,8 +130,8 @@ LRESULT Framework::HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 	{
 		PAINTSTRUCT ps;
 		HDC hdc;
-		hdc = BeginPaint(hwnd, &ps);
-		EndPaint(hwnd, &ps);
+		hdc = BeginPaint(handle_window, &ps);
+		EndPaint(handle_window, &ps);
 		break;
 	}
 	case WM_DESTROY:
@@ -140,7 +140,7 @@ LRESULT Framework::HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 	case WM_CREATE:
 		break;
 	case WM_KEYDOWN:
-		if (wparam == VK_ESCAPE) PostMessage(hwnd, WM_CLOSE, 0, 0);
+		if (wparam == VK_ESCAPE) PostMessage(handle_window, WM_CLOSE, 0, 0);
 		break;
 	case WM_ENTERSIZEMOVE:
 		// WM_EXITSIZEMOVEは、ユーザーがリサイズバーを掴んだときに送られます。
@@ -152,7 +152,7 @@ LRESULT Framework::HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 		timer.Start();
 		break;
 	default:
-		return DefWindowProc(hwnd, msg, wparam, lparam);
+		return DefWindowProc(handle_window, msg, wparam, lparam);
 	}
 	return 0;
 }

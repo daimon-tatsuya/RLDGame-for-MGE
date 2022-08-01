@@ -20,7 +20,7 @@ class Framework final
 {
 private:
 
-	const HWND				hwnd;
+	const HWND				handle_window;
 	HighResolutionTimer	timer;	// フレーム管理クラス
 	Graphics					graphics;// 描画周り管理クラス
 	Input							input;		// 入力管理クラス
@@ -45,12 +45,12 @@ private:
 
 public:
 
-	Framework(HWND hwnd);
+	Framework(HWND handle_window);
 
 	~Framework() = default;
 
 	//Q WIN32メッセージハンドラー
-	LRESULT CALLBACK HandleMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	LRESULT CALLBACK HandleMessage(HWND handle_window, UINT msg, WPARAM wparam, LPARAM lparam);
 
 	int Run();
 };

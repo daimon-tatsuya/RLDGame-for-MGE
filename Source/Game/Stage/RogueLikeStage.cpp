@@ -85,8 +85,8 @@ void RogueLikeStage::DrawDebugGUI()
 			RogueLikeDungeon::Instance().stairs_pos.x, RogueLikeDungeon::Instance().stairs_pos.y);
 
 		//プレイヤーの初期位置
-		const int stairs_pos_positionX = RogueLikeDungeon::Instance().stairs_pos.x * CellSize;
-		const int stairs_pos_positionY = RogueLikeDungeon::Instance().stairs_pos.y * CellSize;
+		const int stairs_pos_positionX = RogueLikeDungeon::Instance().stairs_pos.x * CELL_SIZE;
+		const int stairs_pos_positionY = RogueLikeDungeon::Instance().stairs_pos.y * CELL_SIZE;
 
 		ImGui::Text("Stairs Position : x : %d y : %d", stairs_pos_positionX, stairs_pos_positionY);
 	}
@@ -100,17 +100,17 @@ void RogueLikeStage::SetStageObject()
 	int object_num = 0;
 	bool is_once = false;//for文中、一度だけ行う作業のためのフラグ
 	//オブジェクト配置
-	for (int y = 0; y < MapSize_Y; y++)
+	for (int y = 0; y < MAP_SIZE_Y; y++)
 	{
-		for (int x = 0; x < MapSize_X; x++)
+		for (int x = 0; x < MAP_SIZE_X; x++)
 		{
 			//階段
 			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Exit) && is_once == false)
 			{
-				const float pos_x = static_cast<float>(x * CellSize);
-				const float pos_z = static_cast<float> (y * CellSize);
+				const float pos_x = static_cast<float>(x * CELL_SIZE);
+				const float pos_z = static_cast<float> (y * CELL_SIZE);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
-				DirectX::XMFLOAT3 scale = DirectX::XMFLOAT3(CellSize, CellSize, CellSize);
+				DirectX::XMFLOAT3 scale = DirectX::XMFLOAT3(CELL_SIZE, CELL_SIZE, CELL_SIZE);
 				Stage stage("Assets/FBX/StageMapTip/MRTP_Obj/tento.bin", pos, scale, object_num);
 				Register(stage);
 				is_once = true;
@@ -118,8 +118,8 @@ void RogueLikeStage::SetStageObject()
 			//壁
 			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Wall))
 			{
-				const float pos_x = static_cast<float>(x * CellSize);
-				const float pos_z = static_cast<float> (y * CellSize);
+				const float pos_x = static_cast<float>(x * CELL_SIZE);
+				const float pos_z = static_cast<float> (y * CELL_SIZE);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
 				Stage stage("Assets/FBX/geometry/wall.bin", pos, object_num);
 				Register(stage);
@@ -127,8 +127,8 @@ void RogueLikeStage::SetStageObject()
 			//部屋
 			else if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data >= static_cast<size_t>(Attribute::Room))
 			{
-				const float pos_x = static_cast<float>(x * CellSize);
-				const float pos_z = static_cast<float> (y * CellSize);
+				const float pos_x = static_cast<float>(x * CELL_SIZE);
+				const float pos_z = static_cast<float> (y * CELL_SIZE);
 				DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(pos_x, 0, pos_z);
 				Stage stage("Assets/FBX/geometry/floor.bin", pos, object_num);
 				Register(stage);

@@ -27,8 +27,8 @@ void CameraController::ActionGameCameraUpdate(const float elapsed_time)
 {
 	// フリーカメラ
 	const CharacterManager& character_manager = CharacterManager::Instance();
-	const Character* pl = character_manager.GetCharacterFromId(static_cast<int>(Identity::Player));
-	this->new_target = pl->GetPosition();
+	const Character* player = character_manager.GetCharacterFromId(static_cast<int>(Identity::Player));
+	this->new_target = player->GetPosition();
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	// カメラの回転速度
 	float speed = roll_speed * elapsed_time;
@@ -71,13 +71,13 @@ void CameraController::ActionGameCameraUpdate(const float elapsed_time)
 	new_position.z = target.z - front.z * range;
 
 	// 徐々に目標に近づける
-	static const	float	Speed = 1.0f / 8.0f;
-	position.x += (new_position.x - position.x) * Speed;
-	position.y += (new_position.y - position.y) * Speed;
-	position.z += (new_position.z - position.z) * Speed;
-	target.x += (new_target.x - target.x) * Speed;
-	target.y += (new_target.y - target.y) * Speed;
-	target.z += (new_target.z - target.z) * Speed;
+
+	position.x += (new_position.x - position.x) * CAMERA_MOVE_SPEED;
+	position.y += (new_position.y - position.y) * CAMERA_MOVE_SPEED;
+	position.z += (new_position.z - position.z) * CAMERA_MOVE_SPEED;
+	target.x += (new_target.x - target.x) * CAMERA_MOVE_SPEED;
+	target.y += (new_target.y - target.y) * CAMERA_MOVE_SPEED;
+	target.z += (new_target.z - target.z) * CAMERA_MOVE_SPEED;
 
 	// カメラに視点を注視点を設定
 	Camera::Instance().SetLookAt(position, target, DirectX::XMFLOAT3(0, 1, 0));
@@ -379,8 +379,8 @@ void CameraController::DrawDebugGUI()
 		ImGui::Text("nearZ:%f", camera.GetNear());
 		ImGui::Text("farZ:%f", camera.GetFar());
 
-		// 平衡投影カメラ
-		if (const bool ortho_mode = camera.GetOrthMode(); ortho_mode == true)
+		// 平行投影カメラ
+		if (camera.GetOrthMode() == true)
 		{
 			ImGui::Checkbox("ViewMap", &view_map);
 			if (view_map)
@@ -395,7 +395,8 @@ void CameraController::DrawDebugGUI()
 			}
 		}
 		else	//透視投影カメラ
-		{// カメラの高さ
+		{
+			// カメラの高さ
 			ImGui::DragFloat("Height", &camera_height);
 			ImGui::Checkbox("ViewMap", &view_map);
 			if (view_map)

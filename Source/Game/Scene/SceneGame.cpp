@@ -30,11 +30,13 @@
 #include "Game/Stage/RogueLikeStage.h"
 #include "Engine/Systems/DungeonSystem.h"
 
+//デストラクタ
 SceneGame::~SceneGame()
 {
 	LOG(" Executed : SceneGame's destructor\n")
 }
 
+//初期化
 void SceneGame::Initialize()
 {
 	// カメラ初期設定
@@ -45,6 +47,7 @@ void SceneGame::Initialize()
 		DirectX::XMFLOAT3(0, 0, 0),
 		DirectX::XMFLOAT3(0, 1, 0));
 
+	//透視投影
 	//camera.SetPerspectiveFov(
 	//	DirectX::XMConvertToRadians(45),
 	//	graphics.GetScreenWidth() / graphics.GetScreenHeight(),
@@ -52,10 +55,10 @@ void SceneGame::Initialize()
 	//	1000.0f
 	//);
 
-	//平衡投影カメラ
+	//平行投影カメラ
 	camera.SetOrthoFov(
-		graphics.GetScreenWidth() / 30,
-		graphics.GetScreenHeight() / 30,
+		graphics.GetScreenWidth(),
+		graphics.GetScreenHeight(),
 		0.1f,
 		100.f);
 
@@ -255,7 +258,7 @@ void SceneGame::CreateNextFloor()
 
 	// キャラクター生成処理
 	{
-		const DirectX::XMFLOAT3 player_pos = { static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize };
+		const DirectX::XMFLOAT3 player_pos = { static_cast<float>(rogue_like_dungeon.player_pos.x) * CELL_SIZE, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CELL_SIZE };
 		CharacterManager::Instance().GetPlayer()->SetPosition(player_pos);
 
 	}

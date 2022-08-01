@@ -27,21 +27,21 @@ EnemySnake::EnemySnake()
 	EnemySnake::FiniteStateMachineInitialize();
 
 	//オブジェクト配置
-	for (int y = 0; y < MapSize_Y; y++)
+	for (int y = 0; y < MAP_SIZE_Y; y++)
 	{
 		//	設定したらループを抜ける
 		if (GetIsDecidePos() == true)
 		{
 			break;
 		}
-		for (int x = 0; x < MapSize_X; x++)
+		for (int x = 0; x < MAP_SIZE_X; x++)
 		{
 			if (RogueLikeDungeon::Instance().GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Enemy))
 			{
-				const auto pos_x = static_cast<float>(x * CellSize);
-				const auto pos_z = static_cast<float> (y * CellSize);
+				const float posX = static_cast<float>(x * CELL_SIZE);
+				const float posZ = static_cast<float> (y * CELL_SIZE);
 
-				SetPosition(DirectX::XMFLOAT3(pos_x, 0, pos_z));
+				SetPosition(DirectX::XMFLOAT3(posX, 0, posZ));
 				SetIsDecidePos(true);
 				break;
 			}
@@ -216,12 +216,12 @@ void EnemySnake::SendMessaging(MESSAGE_TYPE msg)
 	case MESSAGE_TYPE::GO_NEXT_FLOOR:
 
 		LOG(" Error : GO_NEXT_FLOOR is No Function | EnemySnake.cpp SendMessaging Method\n")
-		break;
+			break;
 
 	case MESSAGE_TYPE::GO_MAX_FLOOR:
 
 		LOG(" Error : GO_MAX_FLOOR is No Function | EnemySnake.cpp SendMessaging Method\n")
-		break;
+			break;
 
 	default:
 		LOG(" Error : No Message | EnemySnake.cpp SendMessaging Method\n")
@@ -353,11 +353,55 @@ void EnemySnake::ExploreState(const float elapsed_time)
 {
 	if (enemy_snake_entry_state.IsStateFirstTime())
 	{
+		shortest_path->Clear();
+		//探索先を決める
+		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
+		DirectX::XMINT2 far_pos{};//自身より最も遠い位置を保存する
+
+		float most_long_length{};//最も長い距離を格納する変数
+
+		const DirectX::XMFLOAT2 enemy_map_pos =
+			DirectX::XMFLOAT2(GetPosition().x / CELL_SIZE, GetPosition().z / CELL_SIZE);//マップ情報上の自身の位置
+
+		//const DirectX::XMFLOAT2 enemy_map_pos =
+		//	DirectX::XMFLOAT2(GetPosition().x / CELL_SIZE, GetPosition().z / CELL_SIZE);//マップ情報上の自身の位置
+
+		for (const auto& room_center : rogue_like_dungeon.GetRoomsCenter())
+		{
+			DirectX::XMFLOAT2 room =//XMINT2がXMVECTORに出来なかったのでXMFLOAT2にキャスト
+				DirectX::XMFLOAT2(static_cast<float>(room_center.x), static_cast<float>(room_center.y));
+
+			float length = //部屋の中心と自身との二点間の距離
+				DirectX::XMVectorGetX(
+					DirectX::XMVector2Length(
+						DirectX::XMVectorSubtract(
+							DirectX::XMLoadFloat2(&room),
+							DirectX::XMLoadFloat2(&enemy_map_pos)
+						)
+					)
+				);
+
+			if (most_long_length < length)//最も遠いなら更新する
+			{
+				most_long_length = length;
+				far_pos = room_center;
+			}
+		}
+
+		int start_id = HeuristicSearch::Instance().ConvertWorldToOneDimensional(far_pos);//Asterのスタート地点
+		int goal_id = HeuristicSearch::Instance().ConvertWorldToOneDimensional(far_pos);//ASterのゴール地点
+
+		//shortest_path->path_information = HeuristicSearch::Instance().Search(start_id, goal_id);
 
 	}
 
+	int destination_position =//移動先
+		shortest_path->path_information[static_cast<int>(shortest_path->path_information.size() - shortest_path->path_index)];//末から引き出す
 
+	DirectX::XMINT2 destination_map_position = HeuristicSearch::Instance().ConvertMapPosition(destination_position); //
 
+	shortest_path->path_index++;//パスのインデックスをインクリメント
 }
 
 void EnemySnake::AttackState(const float elapsed_time)

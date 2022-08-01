@@ -31,7 +31,7 @@ public:
 	virtual void Deactivate(ID3D11DeviceContext* device_context) = 0;
 
 private:
-	static const int MaxBones = 256;
+	const static int MAX_BONES = 256;
 
 protected:
 	struct ConstantBufferScene
@@ -42,7 +42,7 @@ protected:
 
 	struct ConstantBufferMesh
 	{
-		DirectX::XMFLOAT4X4	bone_transforms[MaxBones];
+		DirectX::XMFLOAT4X4	bone_transforms[MAX_BONES];
 	};
 
 	struct ConstantBufferSubset

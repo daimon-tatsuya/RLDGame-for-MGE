@@ -6,6 +6,7 @@
 //**********************************************************
 
 #include <set>
+
 #include "Engine/AI/Telegram.h"
 
 // 前方宣言
@@ -39,13 +40,14 @@ private:
 	static Meta* instance;
 
 public:
-
-
 private:
 
 public:
 
+	//コンストラクタ
 	Meta();
+
+	//デストラクタ
 	~Meta() = default;
 
 	// 唯一のインスタンス取得

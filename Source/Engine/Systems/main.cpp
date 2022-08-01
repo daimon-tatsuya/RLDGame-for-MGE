@@ -8,10 +8,10 @@
 const static LONG SCREEN_WIDTH = 1920;
 const static LONG SCREEN_HEIGHT = 1080;
 
-LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK fnWndProc(HWND handle_window, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	Framework* f = reinterpret_cast<Framework*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-	return f ? f->HandleMessage(hwnd, msg, wparam, lparam) : DefWindowProc(hwnd, msg, wparam, lparam);
+	Framework* f = reinterpret_cast<Framework*>(GetWindowLongPtr(handle_window, GWLP_USERDATA));
+	return f ? f->HandleMessage(handle_window, msg, wparam, lparam) : DefWindowProc(handle_window, msg, wparam, lparam);
 }
 
 INT WINAPI	wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line, INT cmd_show)
@@ -37,11 +37,14 @@ INT WINAPI	wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 	RECT rc = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	const HWND hwnd = CreateWindow(_T("Alphonse"), _T(""), WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, instance, NULL);
-	ShowWindow(hwnd, cmd_show);
+	const HWND handle_window = CreateWindow(_T("Alphonse"), _T(""),
+	                                        WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE,
+	                                        CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL,
+	                                        NULL, instance, NULL);
+	ShowWindow(handle_window, cmd_show);
 
 
-	Framework f(hwnd);
-	SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(&f));
+	Framework f(handle_window);
+	SetWindowLongPtr(handle_window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(&f));
 	return f.Run();
 }

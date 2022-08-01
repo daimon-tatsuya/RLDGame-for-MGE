@@ -15,8 +15,8 @@ ShaderManager::~ShaderManager()
 void ShaderManager::AddShader(ShaderName shader_name, std::shared_ptr<Shader> shader)
 {
 	//モデル検索
-	ShaderMap::iterator it = shaders.find(shader_name);
-	if (it != shaders.end()) return;
+	ShaderMap::iterator iterator = shaders.find(shader_name);
+	if (iterator != shaders.end()) return;
 
 	shaders[shader_name] = shader;
 }
@@ -24,11 +24,11 @@ void ShaderManager::AddShader(ShaderName shader_name, std::shared_ptr<Shader> sh
 std::shared_ptr<Shader> ShaderManager::GetShader(ShaderName shader_name)
 {
 	//モデル検索
-	ShaderMap::iterator it = shaders.find(shader_name);
-	if (it != shaders.end())
+	ShaderMap::iterator iterator = shaders.find(shader_name);
+	if (iterator != shaders.end())
 	{
 		// 読み込み済みのモデルリソースを返す
-		return it->second.lock();
+		return iterator->second.lock();
 	}
 
 	return nullptr;

@@ -7,6 +7,9 @@
 
 #include "Engine/Systems/Math.h"
 
+const float CAMERA_NEAR = 0.1f;
+const float CAMERA_FAR = 100.f;
+
 /// <summary>
 /// カメラ情報を持つクラス
 /// </summary>
@@ -29,7 +32,7 @@ private:
 	float nearZ{ 0.1f };
 	float farZ{ 1000.f };
 
-	bool  OrthoMode = false;// 平行投影カメラモード
+	bool  ortho_mode = false;// 平行投影カメラモード
 
 private:
 
@@ -72,7 +75,7 @@ public:
 	void SetPerspectiveFov(float fovY, float aspect, float nearZ, float farZ);
 
 	/// <summary>
-	/// オルソ(平衡投影)の設定
+	/// オルソ(平行投影)の設定
 	/// </summary>
 	/// <param name="width">幅</param>
 	/// <param name="height">高さ</param>
@@ -139,8 +142,8 @@ public:
 	float GetFar() const { return  farZ; }
 
 	// 平行投影カメラモード取得
-	bool GetOrthMode() { return OrthoMode; }
+	bool GetOrthMode() { return ortho_mode; }
 
 	// 平行投影カメラモード設定
-	void SetOrthMode(bool mode) { OrthoMode = mode; }
+	void SetOrthMode(bool mode) { ortho_mode = mode; }
 };

@@ -6,7 +6,7 @@
 
 #include "Engine/Systems/Mouse.h"
 
-static const int key_map[] =
+const static int key_map[] =
 {
 	VK_LBUTTON,		// 左ボタン
 	VK_MBUTTON,		// 中ボタン
@@ -14,11 +14,11 @@ static const int key_map[] =
 };
 
 // コンストラクタ
-Mouse::Mouse(HWND hWnd)
-	: hWnd(hWnd)
+Mouse::Mouse(HWND handle_window)
+	: handle_window(handle_window)
 {
 	RECT rc;
-	GetClientRect(hWnd, &rc);
+	GetClientRect(handle_window, &rc);
 	screen_width = rc.right - rc.left;
 	screen_height = rc.bottom - rc.top;
 }
@@ -51,11 +51,11 @@ void Mouse::Update()
 	// カーソル位置の取得
 	POINT cursor;
 	::GetCursorPos(&cursor);
-	::ScreenToClient(hWnd, &cursor);
+	::ScreenToClient(handle_window, &cursor);
 
 	// 画面のサイズを取得する。
 	RECT rc;
-	GetClientRect(hWnd, &rc);
+	GetClientRect(handle_window, &rc);
 	UINT screenW = rc.right - rc.left;
 	UINT screenH = rc.bottom - rc.top;
 	UINT viewportW = screen_width;

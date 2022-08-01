@@ -3,13 +3,17 @@
 //		HeuristicSearchクラス
 //
 //**********************************************************
+
+// ヘッダー
 #include "Engine/AI/HeuristicSearch.h"
 #include "Engine/AI/Edge.h"
 #include "Engine/AI/Node.h"
 #include "Engine/AI/DungeonMake.h"
 
+// インスタンス
 HeuristicSearch* HeuristicSearch::instance = nullptr;
 
+// コンストラクタ
 HeuristicSearch::HeuristicSearch()
 {
 	// インスタンス設定
@@ -17,22 +21,25 @@ HeuristicSearch::HeuristicSearch()
 	instance = this;
 }
 
+// デストラクタ
 HeuristicSearch::~HeuristicSearch()
 {
+	// コンテナがあるなら
 	if (!advance.empty())
 	{
 		advance.clear();
 	}
 }
 
-void HeuristicSearch::Reset()
+//ノードの設定
+void HeuristicSearch::NodesInitialize()
 {
 	// nodeの初期化
 	searched_edge.clear();
 	int node_id = 0;
-	for (int y = 0; y < MapSize_Y - 1; y++)
+	for (int y = 0; y < MAP_SIZE_Y - 1; y++)
 	{
-		for (int x = 0; x < MapSize_X - 1; x++)
+		for (int x = 0; x < MAP_SIZE_X - 1; x++)
 		{
 			auto piece = std::make_shared<Node>();
 			piece->node_id = node_id;
@@ -40,16 +47,19 @@ void HeuristicSearch::Reset()
 
 			// マップデータからデータを取り出す
 			RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
+
+			//マップデータの敵や壁をノードに記憶
+
 			// 壁
 			if (rogue_like_dungeon.GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Wall))
 			{
-				piece->SetIsWallNode(true);//壁フラグ
+				piece->SetIsWallNode(true);// 壁フラグ
 			}
 
 			// 敵(保留)
 			if (rogue_like_dungeon.GetMapRole()[y][x].map_data == static_cast<size_t>(Attribute::Enemy))
 			{
-				piece->SetIsEnemyNode(true);//敵フラグ
+				piece->SetIsEnemyNode(true);// 敵フラグ
 			}
 
 			nodes.emplace_back(std::move(piece));
@@ -62,12 +72,12 @@ void HeuristicSearch::Reset()
 	// destination_nodeが- 1となら、edgeは無効
 	int destination = 0;
 
-	for (int y = 0; y < MapSize_Y; y++)
+	for (int y = 0; y < MAP_SIZE_Y; y++)
 	{
-		for (int x = 0; x < MapSize_X; x++)
+		for (int x = 0; x < MAP_SIZE_X; x++)
 		{
-			const int node = y * MapSize_Y + x;
-			//{関数化
+			const int node = y * MAP_SIZE_Y + x;
+			// {関数化
 
 			// edge上方向
 			std::shared_ptr<Edge> edge = nodes[node]->edge[static_cast<size_t>(EdgeDirection::TopCenter)];
@@ -76,7 +86,7 @@ void HeuristicSearch::Reset()
 			// 一番上の段でなければ
 			if (!(y <= 0))
 			{
-				destination = node - MapSize_X;
+				destination = node - MAP_SIZE_X;
 			}
 			edge->destination_node_id = destination;
 
@@ -85,20 +95,20 @@ void HeuristicSearch::Reset()
 			edge->Initialize(node, destination);
 
 			// 一番上の段で右端でなければ
-			if (!(y <= 0) && !(x >= MapSize_X - 1))
+			if (!(y <= 0) && !(x >= MAP_SIZE_X - 1))
 			{
-				destination = node - MapSize_X + 1;
+				destination = node - MAP_SIZE_X + 1;
 			}
 			edge->destination_node_id = destination;
 			edge->cost = OBLIQUE_COST;
 
-			//edge->cost = 1.414f;
+			
 
 			// edge右方向
 			edge = nodes[node]->edge[static_cast<int>(EdgeDirection::CenterRight)];
 			edge->Initialize(node, destination);
 			// 右端でなければ
-			if (!(x >= MapSize_X - 1))
+			if (!(x >= MAP_SIZE_X - 1))
 			{
 				destination = node + 1;
 			}
@@ -108,21 +118,21 @@ void HeuristicSearch::Reset()
 			edge = nodes[node]->edge[static_cast<int>(EdgeDirection::BottomRight)];
 			edge->Initialize(node, destination);
 			// 一番下の段で右端でなければ
-			if (!(y >= MapSize_Y - 1) && !(x >= MapSize_X - 1))
+			if (!(y >= MAP_SIZE_Y - 1) && !(x >= MAP_SIZE_X - 1))
 			{
-				destination = node + MapSize_X + 1;
+				destination = node + MAP_SIZE_X + 1;
 			}
 			edge->destination_node_id = destination;
-			//edge->cost = 1.414f;
+			// edge->cost = 1.414f;
 
 			// edge下方向
 			edge = nodes[node]->edge[static_cast<int>(EdgeDirection::BottomCenter)];
 			edge->Initialize(node, destination);
 
 			// 一番下の段でなければ
-			if (!(y >= MapSize_Y - 1))
+			if (!(y >= MAP_SIZE_Y - 1))
 			{
-				destination = node + MapSize_X;
+				destination = node + MAP_SIZE_X;
 			}
 			edge->destination_node_id = destination;
 
@@ -130,12 +140,12 @@ void HeuristicSearch::Reset()
 			edge = nodes[node]->edge[static_cast<int>(EdgeDirection::BottomLeft)];
 			edge->Initialize(node, destination);
 			// 一番下の段で左端でなければ
-			if (!(y >= MapSize_Y - 1) && !(x <= 0))
+			if (!(y >= MAP_SIZE_Y - 1) && !(x <= 0))
 			{
-				destination = node + MapSize_X - 1;
+				destination = node + MAP_SIZE_X - 1;
 			}
 			edge->destination_node_id = destination;
-			//edge->cost = 1.414f;
+			// edge->cost = 1.414f;
 
 			// edge左方向
 			edge = nodes[node]->edge[static_cast<int>(EdgeDirection::CenterLeft)];
@@ -153,35 +163,36 @@ void HeuristicSearch::Reset()
 			// 一番上の段で左端でなければ
 			if (!(y <= 0) && !(x <= 0))
 			{
-				destination = node - MapSize_X - 1;
+				destination = node - MAP_SIZE_X - 1;
 			}
 			edge->destination_node_id = destination;
-			//edge->cost = 1.414f;
+			// edge->cost = 1.414f;
 		}
 	}
 }
 
-std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
+//start_idからgoal_idのコストを抑えた最短経路を計算
+bool HeuristicSearch::Search(int start_id, int goal_id)
 {
 	// サーチ候補の配列
 	std::vector<std::shared_ptr<Edge>> candidate;
 
-	Reset();
+	NodesInitialize();
 
 	// 初期化
-	for (int i = 0; i < MapSize; i++)
+	for (int i = 0; i < MAP_SIZE; i++)
 	{
 		nodes[i]->is_searched_node = false;
 		nodes[i]->cost_from_start = 0.f;
 	}
 
-	//進行ルートの初期化
+	// 進行ルートの初期化
 	advance.clear();
 
-	//現在探索中のedgeを作成
+	// 現在探索中のedgeを作成
 	std::shared_ptr<Edge> now_edge = std::make_shared<Edge>();
 
-	//スタート
+	// スタート
 	now_edge->destination_node_id = start_id;
 	now_edge->origin_node_id = start_id;
 
@@ -189,21 +200,21 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
 	{
 		float total_cost = 0;
 		// 探索済みのedgeの保存
-		//advance.push_back(now_edge->origin_node_id);
+		// advance.push_back(now_edge->origin_node_id);
 
 		advance[now_edge->destination_node_id] = now_edge->origin_node_id;
 
 		// 次のnowEdgeのdestination_nodeが目的地なら目的地までの最短進行ルートを返す
 		if (now_edge->destination_node_id == goal_id)
 		{
-			//
+
 			advance.push_back(-1);
-			return advance;
+			return true;
 		}
 		// now_edgeの接続先のノードを取得する。
 		std::shared_ptr<Node>node = nodes[now_edge->destination_node_id];
 
-		for (int edge_num = 0; edge_num < EDGE_NUM; edge_num++)//8方向調べる
+		for (int edge_num = 0; edge_num < EDGE_NUM; edge_num++)// 8方向調べる
 		{
 			std::shared_ptr<Edge> edge = node->edge[edge_num];
 
@@ -215,12 +226,12 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
 				total_cost += (node->cost_from_start + edge->cost);
 
 				// cost増減
-				//敵
+				// 敵
 				if (next_node->GetIsEnemyNode() == true)
 				{
 					total_cost += 10.0f;
 				}
-				//壁
+				// 壁
 				if (next_node->GetIsWallNode() == true)
 				{
 					total_cost += 10.0f;
@@ -230,18 +241,24 @@ std::vector<int> HeuristicSearch::Search(int start_id, int goal_id)
 				// コストが一度も計算されてないか、新しいコストが低ければ探索候補にする
 				if (next_node->cost_from_start == 0.f || next_node->cost_from_start > total_cost)
 				{
-					if (!next_node->GetIsWallNode())//探索候補が壁なら候補に入れない
+					if (!next_node->GetIsWallNode())// 探索候補が壁なら候補に入れない
 					{
 						candidate.push_back(edge);
 					}
 				}
-				//最短経路を算出
+				// 最短経路を算出
 				now_edge = SearchMinCost(candidate, now_edge, goal_id);
+
+				if (now_edge == nullptr) { return false; }
 			}
 		}
 	}
+	return false;
 }
 
+
+
+// ２つのノードの物理距離を出してその距離を返す
 std::shared_ptr<Edge> HeuristicSearch::SearchMinCost(std::vector<std::shared_ptr<Edge>>& candidate, const std::shared_ptr<Edge> now_edge, int goal_id)
 {
 	std::shared_ptr<Edge> shortest = nullptr;// 最短エッジ候補格納用
@@ -301,50 +318,45 @@ float  HeuristicSearch::HeuristicCalculation(const std::shared_ptr<Node> n1, con
 	const float x = N1_pos.x - N2_pos.x;
 	return  sqrtf((y * y) + (x * x)) / 20;
 }
-//Asterの結果を2次元配列に変換する
-void HeuristicSearch::ConvertTwoDimensionalArray()
+
+// 一次元配列をマップ情報に変換
+DirectX::XMINT2 HeuristicSearch::ConvertMapPosition(int one_dimensional)
 {
-	for (int y = 0; y < MapSize_Y ; y++)
-	{
-		for (int x = 0; x < MapSize_X ; x++)
-		{
-			//   x →
-			// y		MapSize_Y*0----------------------MapSize_X*1-1
-			//↓		MapSize_Y*1----------------------MapSize_X*2-1
-			//			MapSize_Y*2----------------------MapSize_X*3-1
-			//			MapSize_Y*3----------------------MapSize_X*4-1
-			//			MapSize_Y*4----------------------MapSize_X*5-1
-			//			MapSize_Y*5----------------------MapSize_X*6-1
-			//~~~~~~~~~~~~~~~~~
-			//			MapSize_Y*  ----------------------MapSize_X*x-1
-			//		  (MapSize_Y - 1)							MapSize_X - 1
-			const int array_num = y * MapSize_Y + x;
-			//進行ルートを二次元配列に格納
-			advance_vector[y][x] = advance[array_num];
-		}
-	}
+	return {one_dimensional / MAP_SIZE_Y, one_dimensional - (one_dimensional / MAP_SIZE_Y)};
 }
-//マップ情報を1次元配列に変換する
-void HeuristicSearch::ConvertOneDimensionalArray()
+
+// ワールド座標(int x, int z)を1次元に変換する
+int HeuristicSearch::ConvertWorldToOneDimensional(DirectX::XMFLOAT2 world)
+{
+	return static_cast<int>(world.y) * MAP_SIZE_Y + static_cast<int>(world.x);
+}
+
+int HeuristicSearch::ConvertWorldToOneDimensional(DirectX::XMINT2 world)
+{
+	return (world.y) * MAP_SIZE_Y + (world.x);
+}
+
+// マップ情報を1次元配列に変換する
+void HeuristicSearch::ConvertMapInformationToOneDimensionalArray()
 {
 	RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
 	// 壁
-	for (int y = 0; y < MapSize_Y; y++)
+	for (int y = 0; y < MAP_SIZE_Y; y++)
 	{
-		for (int x = 0; x < MapSize_X; x++)
+		for (int x = 0; x < MAP_SIZE_X; x++)
 		{
 			//   x →
-			// y		MapSize_Y*0----------------------MapSize_X*1-1
-			//↓		MapSize_Y*1----------------------MapSize_X*2-1
-			//			MapSize_Y*2----------------------MapSize_X*3-1
-			//			MapSize_Y*3----------------------MapSize_X*4-1
-			//			MapSize_Y*4----------------------MapSize_X*5-1
-			//			MapSize_Y*5----------------------MapSize_X*6-1
-			//~~~~~~~~~~~~~~~~~
-			//			MapSize_Y* x----------------------MapSize_X*x-1
-			//		(MapSize_Y - 1)							MapSize_X - 1
-			const int array_num = y*MapSize_Y + x;
-			//マップ情報を一次元配列に格納
+			// y		MAP_SIZE_Y*0----------------------MAP_SIZE_X*1-1
+			//↓		MAP_SIZE_Y*1----------------------MAP_SIZE_X*2-1
+			//			MAP_SIZE_Y*2----------------------MAP_SIZE_X*3-1
+			//			MAP_SIZE_Y*3----------------------MAP_SIZE_X*4-1
+			//			MAP_SIZE_Y*4----------------------MAP_SIZE_X*5-1
+			//			MAP_SIZE_Y*5----------------------MAP_SIZE_X*6-1
+			// ~~~~~~~~~~~~~~~~~
+			//			MAP_SIZE_Y* x----------------------MAP_SIZE_X*x-1
+			//		(MAP_SIZE_Y - 1)							MAP_SIZE_X - 1
+			const int array_num = y * MAP_SIZE_Y + x;
+			// マップ情報を一次元配列に格納
 			map_info[array_num] = static_cast<int>(rogue_like_dungeon.GetMapRole()[y][x].map_data);
 		}
 	}

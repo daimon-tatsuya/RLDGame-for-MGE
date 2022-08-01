@@ -22,7 +22,7 @@
 #include "Engine/Systems/DungeonSystem.h"
 
 
-const float ajust = 48.f;//over_textが少しずれていたので目押しで修正
+const float TEXT_ADJUST_FROM_SCENE_OVER = 48.f;//over_textが少しずれていたので目押しで修正
 
 // デストラクタ
 SceneGameOver::~SceneGameOver()
@@ -103,7 +103,7 @@ void SceneGameOver::Render()
 		//const float positionY = (screen_height / 3) - texture_height;// テキストを描画するときの開始位置
 
 		// ゲーム終了時のテキストの描画
-		font->TextOutW(device_context, over_text, screen_width / 4 - ajust, (screen_height / 2) - texture_height, texture_width / 2, texture_height / 2);
+		font->TextOutW(device_context, over_text, screen_width / 4 - TEXT_ADJUST_FROM_SCENE_OVER, (screen_height / 2) - texture_height, texture_width / 2, texture_height / 2);
 
 		// ゲーム終了時の経過ターンの描画
 		font->TextOutW(device_context, turn_number_text, screen_width / 2, screen_height - texture_height, texture_width / 4, texture_height / 4);

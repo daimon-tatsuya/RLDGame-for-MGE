@@ -4,8 +4,10 @@
 //
 //**********************************************************
 
+// ƒwƒbƒ_[
 #include "Engine/AI/Edge.h"
 
+// ‰Šú‰»
 void Edge::Initialize(const int node, int& destination)
 {
 	origin_node_id = node;

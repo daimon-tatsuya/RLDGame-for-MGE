@@ -180,20 +180,20 @@ public:
 	Player();
 
 	//デストラクタ
-	~Player()override;
+	~Player() override;
 
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
-	void Update(float elapsed_time)override;
+	void Update(float elapsed_time) override;
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="dc"></param>
 	/// <param name="shader">描画方法</param>
-	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader)override;
+	void Render(ID3D11DeviceContext* dc, std::shared_ptr<Shader> shader) override;
 
 	// 有限ステートマシンの初期化
 	void FiniteStateMachineInitialize() override;
@@ -212,13 +212,13 @@ public:
 	bool OnMessage(const Telegram& telegram) override;
 
  	//メタAIにメッセージを送信する
-	void SendMessaging(MESSAGE_TYPE msg)override;
+	void SendMessaging(MESSAGE_TYPE msg) override;
 
 	// デバッグ用GUI描画
-	void DrawDebugGUI()override;
+	void DrawDebugGUI() override;
 
 	// デバッグプリミティブ描画
-	void DrawDebugPrimitive()override;
+	void DrawDebugPrimitive() override;
 
 	//キャラクターマネージャーのリストから自身を消去
 	void Destroy() override;

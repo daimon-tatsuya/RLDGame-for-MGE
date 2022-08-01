@@ -4,7 +4,7 @@
 //
 //**********************************************************
 
-//#include <string>
+#include "Game/Characters/Player.h"
 
 #include  "Engine/AI/MetaAI.h"
 #include "Engine/Systems/Logger.h"
@@ -17,11 +17,11 @@
 #include "Engine/Objects/Model.h"
 #include "Engine/AI/DungeonMake.h"
 
-#include "Game/Characters/Player.h"
+
 
 #include "Engine/Systems/CharacterManager.h"
 
-const float cos45 = cosf(DirectX::XMConvertToRadians(45.f));
+const float COS45 = cosf(DirectX::XMConvertToRadians(45.f));
 
 //コンストラクタ
 Player::Player()
@@ -74,8 +74,8 @@ void Player::Update(const float elapsed_time)
 
 	//プレイヤーと階段の位置が重なったら
 	//階を進める
-	if (static_cast<int>(GetPosition().x / CellSize) == rogue_like_dungeon.stairs_pos.x &&
-		static_cast<int>(GetPosition().z) / CellSize == rogue_like_dungeon.stairs_pos.y)
+	if (static_cast<int>(GetPosition().x / CELL_SIZE) == rogue_like_dungeon.stairs_pos.x &&
+		static_cast<int>(GetPosition().z) / CELL_SIZE == rogue_like_dungeon.stairs_pos.y)
 	{
 		SendMessaging(MESSAGE_TYPE::GO_NEXT_FLOOR);
 	}
@@ -215,7 +215,7 @@ bool Player::OnMessage(const Telegram& telegram)
 
 		SetPositionY(0.f);
 
-		const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize);
+		const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x) * CELL_SIZE, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CELL_SIZE);
 
 		SetPosition(pos);
 
@@ -383,20 +383,20 @@ void Player::DrawDebugGUI()
 			// ゲームパッドのスティック入力のステップ
 			if (ax > 0.f)
 			{
-				ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f));
+				ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f));
 			}
 			else if (ax < 0.f)
 			{
-				ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
+				ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true);
 			}
 
 			if (ay > 0.f)
 			{
-				ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f)); ;
+				ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f)); ;
 			}
 			else if (ay < 0.f)
 			{
-				ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
+				ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true);
 			}
 			ImGui::Text("Game Pad Axis On Step: x : %f y : %f", ax, ay);
 		}
@@ -404,7 +404,7 @@ void Player::DrawDebugGUI()
 		{
 			// 周囲のマップ情報
 			RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-			const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);//データ上の値にするためCell_Sizeで割る
+			const DirectX::XMFLOAT2 player_pos = DirectX::XMFLOAT2(GetPosition().x / CELL_SIZE, GetPosition().z / CELL_SIZE);//データ上の値にするためCell_Sizeで割る
 			const size_t up_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
 			const size_t down_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
 			const size_t right_data = rogue_like_dungeon.GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
@@ -415,7 +415,16 @@ void Player::DrawDebugGUI()
 			ImGui::Text("  left : %zu          right : %zu ", left_data, right_data);
 			ImGui::Text("           down : %zu", down_data);
 			ImGui::Text("");
-			ImGui::Text("Be RoomNumber : %zu" ,rogue_like_dungeon.map_room_player);
+			if (rogue_like_dungeon.map_room_player >= rogue_like_dungeon.dungeon_map_role.map_room_count ||
+				rogue_like_dungeon.map_room_player < 0)
+			{
+				ImGui::Text("Be RoomNumber : -1");
+			}
+			else
+			{
+				ImGui::Text("Be RoomNumber : %zu", rogue_like_dungeon.map_room_player);
+			}
+
 		}
 		if (ImGui::CollapsingHeader("Player initialize Position", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -424,8 +433,8 @@ void Player::DrawDebugGUI()
 				RogueLikeDungeon::Instance().player_pos.x, RogueLikeDungeon::Instance().player_pos.y);
 
 			//プレイヤーの初期位置
-			const int player_positionX = RogueLikeDungeon::Instance().player_pos.x * CellSize;
-			const int player_positionY = RogueLikeDungeon::Instance().player_pos.y * CellSize;
+			const int player_positionX = RogueLikeDungeon::Instance().player_pos.x * CELL_SIZE;
+			const int player_positionY = RogueLikeDungeon::Instance().player_pos.y * CELL_SIZE;
 
 			ImGui::Text("Player Position : x : %d  y : %d", player_positionX, player_positionY);
 		}
@@ -454,7 +463,7 @@ bool Player::IsMoved()
 void Player::SetFirstPos()
 {
 	const RogueLikeDungeon rogue_like_dungeon = RogueLikeDungeon::Instance();
-	const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x) * CellSize, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CellSize);
+	const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(static_cast<float>(rogue_like_dungeon.player_pos.x) * CELL_SIZE, 0, static_cast<float>(rogue_like_dungeon.player_pos.y) * CELL_SIZE);
 	SetPosition(pos);
 }
 
@@ -612,21 +621,21 @@ void	Player::WayChangeState(const float elapsed_time)
 	//左スティックのx軸のステップ処理
 	if (ax > 0.f)
 	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f));
+		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f));
 	}
 	else if (ax < 0.f)
 	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
+		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true);
 	}
 
 	//左スティックのy軸のステップ処理
 	if (ay > 0.f)
 	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f));
+		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f));
 	}
 	else if (ay < 0.f)
 	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
+		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true);
 	}
 
 	//方向転換
@@ -698,27 +707,27 @@ void	Player::MoveState(const float elapsed_time)
 	float ay = game_pad.GetAxisLY();
 
 	const DirectX::XMFLOAT2 player_pos =//データ上の値にするためCell_Sizeで割る
-		DirectX::XMFLOAT2(GetPosition().x / CellSize, GetPosition().z / CellSize);
+		DirectX::XMFLOAT2(GetPosition().x / CELL_SIZE, GetPosition().z / CELL_SIZE);
 
 	//ステップをして　左スティックの入力を0, 1 , -1 , 1 / √2(約0.71)にする
 	//左スティックのx軸のステップ
 	if (ax > 0.f)
 	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f)); ;
+		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f)); ;
 	}
 	else if (ax < 0.f)
 	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true); ;
+		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true); ;
 	}
 
 	//左スティックのy軸のステップ
 	if (ay > 0.f)
 	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, (cos45 / 2.f), 1.f - (cos45 / 2.f)); ;
+		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f)); ;
 	}
 	else if (ay < 0.f)
 	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), cos45, -1.f + (cos45 / 2.f), (cos45 / 2.f), true);
+		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true);
 	}
 
 	//移動処理
@@ -748,8 +757,8 @@ void	Player::MoveState(const float elapsed_time)
 			)
 		{
 			//右上に移動
-			AddPositionZ(CellSize);
-			AddPositionX(CellSize);
+			AddPositionZ(CELL_SIZE);
+			AddPositionX(CELL_SIZE);
 
 			//プレイヤーの行動を終了する
 			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
@@ -781,8 +790,8 @@ void	Player::MoveState(const float elapsed_time)
 			)
 		{
 			//左上に移動
-			AddPositionZ(CellSize);
-			AddPositionX(-CellSize);
+			AddPositionZ(CELL_SIZE);
+			AddPositionX(-CELL_SIZE);
 			//プレイヤーの行動を終了する
 			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
@@ -813,8 +822,8 @@ void	Player::MoveState(const float elapsed_time)
 			)
 		{
 			//左下に移動
-			AddPositionZ(-CellSize);
-			AddPositionX(-CellSize);
+			AddPositionZ(-CELL_SIZE);
+			AddPositionX(-CELL_SIZE);
 
 			//プレイヤーの行動を終了する
 			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
@@ -846,8 +855,8 @@ void	Player::MoveState(const float elapsed_time)
 			)
 		{
 			//右下に移動
-			AddPositionZ(-CellSize);
-			AddPositionX(CellSize);
+			AddPositionZ(-CELL_SIZE);
+			AddPositionX(CELL_SIZE);
 
 			//プレイヤーの行動を終了する
 			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
@@ -869,7 +878,7 @@ void	Player::MoveState(const float elapsed_time)
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
 			//上に移動
-			AddPositionZ(CellSize);
+			AddPositionZ(CELL_SIZE);
 
 			//プレイヤーの行動を終了する
 			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
@@ -890,7 +899,7 @@ void	Player::MoveState(const float elapsed_time)
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
 			//下に移動
-			AddPositionZ(-CellSize);
+			AddPositionZ(-CELL_SIZE);
 			//プレイヤーの行動を終了する
 			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
@@ -910,7 +919,7 @@ void	Player::MoveState(const float elapsed_time)
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
 			//右に移動
-			AddPositionX(CellSize);
+			AddPositionX(CELL_SIZE);
 			//プレイヤーの行動を終了する
 			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);
@@ -930,7 +939,7 @@ void	Player::MoveState(const float elapsed_time)
 		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
 		{
 			//左に移動
-			AddPositionX(-CellSize);
+			AddPositionX(-CELL_SIZE);
 			//プレイヤーの行動を終了する
 			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
 			player_state_machine.SetState(ParentState::Receive);

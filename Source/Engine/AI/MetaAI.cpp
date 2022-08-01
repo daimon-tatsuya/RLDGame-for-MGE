@@ -4,15 +4,15 @@
 //
 //**********************************************************
 
-#include "Engine/Systems/Logger.h"
-#include "Engine/Systems/CharacterManager.h"
-#include "Engine/Systems/SceneManager.h"
-#include "Engine/Systems/Character.h"
 #include "Engine/AI/MetaAI.h"
 #include "Engine/AI/DungeonMake.h"
+#include "Engine/Systems/Character.h"
+#include "Engine/Systems/CharacterManager.h"
 #include "Engine/Systems/DungeonSystem.h"
-#include "Engine/Systems/Scene.h"
 #include "Engine/Systems/ImGuiRenderer.h"
+#include "Engine/Systems/Logger.h"
+#include "Engine/Systems/Scene.h"
+#include "Engine/Systems/SceneManager.h"
 
 Meta* Meta::instance = nullptr;
 
@@ -199,7 +199,7 @@ void Meta::SendMessaging(int sender, int receiver, MESSAGE_TYPE msg)
 		// ディレイ無しメッセージ（即時配送メッセージ）
 		Discharge(telegram);
 	}
-	//------------------------------------------------------------------------Z
+	//------------------------------------------------------------------------
 
 
 	//メッセージがMetaAIから他オブジェクト宛
@@ -259,6 +259,7 @@ void Meta::SendMessaging(int sender, int receiver, MESSAGE_TYPE msg)
 	}
 	//-------------------------------------------------------------------------
 }
+
 void Meta::DrawDebugGUI()
 {
 	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);

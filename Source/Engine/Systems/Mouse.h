@@ -23,14 +23,14 @@ private:
 	int						wheel[2]{};
 	int						screen_width = 0;
 	int						screen_height = 0;
-	HWND				hWnd = nullptr;
+	HWND				handle_window = nullptr;
 public:
-	static const MouseButton BTN_LEFT = (1 << 0);
-	static const MouseButton BTN_MIDDLE = (1 << 1);
-	static const MouseButton BTN_RIGHT = (1 << 2);
+	const static MouseButton BTN_LEFT = (1 << 0);
+	const static MouseButton BTN_MIDDLE = (1 << 1);
+	const static MouseButton BTN_RIGHT = (1 << 2);
 
 public:
-	Mouse(HWND hWnd);
+	Mouse(HWND handle_window);
 	~Mouse() = default;
 
 	// XV

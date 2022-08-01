@@ -4,9 +4,11 @@
 //
 //**********************************************************
 
+//ヘッダー
 #include "Engine/AI/Node.h"
 #include "Engine/AI/Edge.h"
 
+//	コンストラクタ
 Node::Node()
 {
 	//edge配列のサイズ初期化

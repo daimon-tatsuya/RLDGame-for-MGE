@@ -257,8 +257,8 @@ void Sprite::Render(ID3D11DeviceContext* device_context,
 		device_context->IASetInputLayout(input_layout.Get());
 
 		device_context->RSSetState(rasterizer_state.Get());
-		const float blendFactor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		device_context->OMSetBlendState(blend_state.Get(), blendFactor, 0xFFFFFFFF);
+		const float blend_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		device_context->OMSetBlendState(blend_state.Get(), blend_factor, 0xFFFFFFFF);
 
 		device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
 		device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
@@ -284,7 +284,7 @@ void Sprite::TextOut(ID3D11DeviceContext* device_context, std::string s, float x
 	}
 }
 
-SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t max_instance) : max_instances(max_instance)
+SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t max_instance) : MAX_INSTANCES(max_instance)
 {
 	HRESULT hr = S_OK;
 
@@ -323,12 +323,12 @@ SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t m
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 	};
 
-	Instance* instances = new Instance[max_instances];
+	Instance* instances = new Instance[MAX_INSTANCES];
 	{
 		D3D11_BUFFER_DESC buffer_desc = {};
 		D3D11_SUBRESOURCE_DATA subresource_data = {};
 
-		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(Instance) * max_instances);
+		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(Instance) * MAX_INSTANCES);
 		buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
 		buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -426,7 +426,7 @@ void SpriteBatch::Begin(ID3D11DeviceContext* device_context)
 }
 
 void SpriteBatch::Render(ID3D11DeviceContext* device_context, float dx, float dy, float dw, float dh, float sx, float sy, float sw, float sh, float angle/*degree*/, float r, float g, float b, float a) {
-	_ASSERT_EXPR(count_instance < max_instances, L"Number of instances must be less than max_instances.");
+	_ASSERT_EXPR(count_instance < MAX_INSTANCES, L"Number of instances must be less than MAX_INSTANCES.");
 
 	float cx = dw * 0.5f, cy = dh * 0.5f; /*Center of Rotation*/
 #if 0
