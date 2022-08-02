@@ -5,8 +5,8 @@
 //
 //**********************************************************
 
-#include "Engine/Systems/Scene.h"
-#include "Engine/Systems/CameraController.h"
+#include "MyLiblary/Systems/Scene.h"
+#include "MyLiblary/Systems/CameraController.h"
 
 /// <summary>
 /// タイトルシーン

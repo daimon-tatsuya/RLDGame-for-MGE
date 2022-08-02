@@ -4,7 +4,7 @@
 //		SceneGameOverƒNƒ‰ƒX
 //
 //**********************************************************
-#include "Engine/Systems/Scene.h"
+#include "MyLiblary/Systems/Scene.h"
 
 //	‘O•ûéŒ¾
 class Sprite;

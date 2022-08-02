@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-#include "Engine/Systems/Math.h"
+#include "MyLiblary/Systems/Math.h"
 
 class ModelResource;
 
@@ -16,6 +16,7 @@ class ModelResource;
 /// </summary>
 class Model final
 {
+
 public:
 	Model(const char* filename);
 	~Model() {}
@@ -32,7 +33,17 @@ public:
 
 		std::vector<Node*>			children;
 	};
+private:
+	std::shared_ptr<ModelResource> resource;
+	std::vector<Node>							nodes;
+	int													current_animation = -1;
+	float													current_seconds = 0.0f;
+	bool													loop_animation = false;
+	bool													end_animation = false;
 
+private:
+
+public:
 	// çƒê∂íÜÇ©Çí≤Ç◊ÇÈ
 	bool IsPlayAnimation() const { return current_animation >= 0; }
 
@@ -77,11 +88,4 @@ public:
 	// ÉäÉ\Å[ÉXéÊìæ
 	const ModelResource* GetResource() const { return resource.get(); }
 
-private:
-	std::shared_ptr<ModelResource>resource;
-	std::vector<Node>						 nodes;
-	int												 current_animation = -1;
-	float											 current_seconds = 0.0f;
-	bool											 loop_animation = false;
-	bool											 end_animation = false;
 };

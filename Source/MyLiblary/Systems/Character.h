@@ -5,8 +5,8 @@
 //
 //**********************************************************
 
-#include "Engine/Systems/Object.h"
-#include "Engine/AI/HeuristicSearch.h"
+#include "MyLiblary/Systems/Object.h"
+#include "MyLiblary/AI/HeuristicSearch.h"
 
 class Character :
 	public Object

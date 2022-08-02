@@ -8,7 +8,7 @@
 #include <wrl.h>
 #include <string>
 
-#include "Engine/Systems/Math.h"
+#include "MyLiblary/Systems/Math.h"
 
 /// <summary>
 /// テクスチャーを描画するクラス

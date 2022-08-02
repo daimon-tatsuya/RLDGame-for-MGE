@@ -40,9 +40,6 @@
     <Filter Include="Source Files\Engine\Systems\Graphics">
       <UniqueIdentifier>{2573b810-52de-4e9c-aaa9-7cc015a86568}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Texture">
-      <UniqueIdentifier>{a40cf411-c231-4245-bac1-43a0586dd647}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Systems\Graphics\ImGuiRenderer">
       <UniqueIdentifier>{121fcde6-ecb0-4686-9fb5-7523f937ad20}</UniqueIdentifier>
     </Filter>
@@ -126,9 +123,6 @@
     </Filter>
     <Filter Include="Source Files\Game\Characters\Enemis\Snake">
       <UniqueIdentifier>{0f9bd635-0d41-4002-9a31-61d296cd6430}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Systems\StateMachine">
-      <UniqueIdentifier>{e2eea2b4-c833-4bf3-886e-b1efb4362056}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Systems\Framework">
       <UniqueIdentifier>{3f50b83f-a4ff-467d-b356-2243f3db2a9e}</UniqueIdentifier>
@@ -222,15 +216,6 @@
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp">
       <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Main.cpp">
-      <Filter>Source Files\Engine\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Objects\ModelResource.cpp">
-      <Filter>Source Files\Engine\Load Objects\ModelResource</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Objects\Model.cpp">
-      <Filter>Source Files\Engine\Load Objects\Model</Filter>
-    </ClCompile>
     <ClCompile Include="External\imgui\imgui.cpp">
       <Filter>External\imgui</Filter>
     </ClCompile>
@@ -243,89 +228,11 @@
     <ClCompile Include="External\imgui\imgui_widgets.cpp">
       <Filter>External\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Texture.cpp">
-      <Filter>Source Files\Engine\Systems\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Shader.cpp">
-      <Filter>Source Files\Engine\Systems\ShaderManager\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\LambertShader.cpp">
-      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\Lambert</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Graphics.cpp">
-      <Filter>Source Files\Engine\Systems\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\ImGuiRenderer.cpp">
-      <Filter>Source Files\Engine\Systems\Graphics\ImGuiRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\DebugRenderer.cpp">
-      <Filter>Source Files\Engine\Systems\Graphics\DebugRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\LineRenderer.cpp">
-      <Filter>Source Files\Engine\Systems\Graphics\LineRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\CameraController.cpp">
-      <Filter>Source Files\Engine\Systems\Camera\CameraController</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\SceneManager.cpp">
-      <Filter>Source Files\Engine\Systems\SceneManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Camera.cpp">
-      <Filter>Source Files\Engine\Systems\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Input.cpp">
-      <Filter>Source Files\Engine\Systems\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Mouse.cpp">
-      <Filter>Source Files\Engine\Systems\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\GamePad.cpp">
-      <Filter>Source Files\Engine\Systems\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\AI\MetaAI.cpp">
-      <Filter>Source Files\Engine\AI\MetaAI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Collision.cpp">
-      <Filter>Source Files\Engine\Systems\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\CharacterManager.cpp">
-      <Filter>Source Files\Engine\Systems\CharacterManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\StageManager.cpp">
-      <Filter>Source Files\Engine\Systems\StageManeger</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Scene\SceneLoading.cpp">
       <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Math.cpp">
-      <Filter>Source Files\Engine\Systems\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Scene\SceneGame.cpp">
       <Filter>Source Files\Game\Scenes\SceneGame</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\ResourceManager.cpp">
-      <Filter>Source Files\Engine\Systems\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\WireframeLambert.cpp">
-      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\Wireframe</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\ShaderManager.cpp">
-      <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Object.cpp">
-      <Filter>Source Files\Engine\Systems\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\NoTextureShader.cpp">
-      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\NoTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\AI\HeuristicSearch.cpp">
-      <Filter>Source Files\Engine\AI\Aster\HeuristicSearch</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\AI\Edge.cpp">
-      <Filter>Source Files\Engine\AI\Aster\Edge</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\AI\Node.cpp">
-      <Filter>Source Files\Engine\AI\Aster\Node</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Characters\EnemySnake.cpp">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
@@ -333,35 +240,8 @@
     <ClCompile Include="Source\Game\Characters\Player.cpp">
       <Filter>Source Files\Game\Characters\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Blender.cpp">
-      <Filter>Source Files\Engine\Systems\Blender</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\HighResolutionTimer.cpp">
-      <Filter>Source Files\Engine\Systems\HighResolutionTimer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Logger.cpp">
-      <Filter>Source Files\Engine\Systems\Logger</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\AI\DungeonMake.cpp">
-      <Filter>Source Files\Engine\AI\MetaAI\DungeonMake</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\DungeonSystem.cpp">
-      <Filter>Source Files\Engine\Systems\DungeonSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Objects\Sprite.cpp">
-      <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Character.cpp">
-      <Filter>Source Files\Engine\Systems\CharacterManager\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Stage\RogueLikeStage.cpp">
       <Filter>Source Files\Game\Stage\RogueLikeStage</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Framework.cpp">
-      <Filter>Source Files\Engine\Systems\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Fade.cpp">
-      <Filter>Source Files\Engine\Systems\Fade</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Scene\SceneGameOver.cpp">
       <Filter>Source Files\Game\Scenes\SceneGameOver</Filter>
@@ -370,15 +250,6 @@
   <ItemGroup>
     <ClInclude Include="Source\Game\Scene\SceneTitle.h">
       <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Imgui.h">
-      <Filter>Source Files\Engine\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Objects\ModelResource.h">
-      <Filter>Source Files\Engine\Load Objects\ModelResource</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Objects\Model.h">
-      <Filter>Source Files\Engine\Load Objects\Model</Filter>
     </ClInclude>
     <ClInclude Include="External\imgui\imconfig.h">
       <Filter>External\imgui</Filter>
@@ -398,143 +269,20 @@
     <ClInclude Include="External\imgui\imstb_truetype.h">
       <Filter>External\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Texture.h">
-      <Filter>Source Files\Engine\Systems\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Shader.h">
-      <Filter>Source Files\Engine\Systems\ShaderManager\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\LambertShader.h">
-      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\Lambert</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Graphics.h">
-      <Filter>Source Files\Engine\Systems\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\ImGuiRenderer.h">
-      <Filter>Source Files\Engine\Systems\Graphics\ImGuiRenderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\DebugRenderer.h">
-      <Filter>Source Files\Engine\Systems\Graphics\DebugRenderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\LineRenderer.h">
-      <Filter>Source Files\Engine\Systems\Graphics\LineRenderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\CameraController.h">
-      <Filter>Source Files\Engine\Systems\Camera\CameraController</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\RenderContext.h">
-      <Filter>Source Files\Engine\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\SceneManager.h">
-      <Filter>Source Files\Engine\Systems\SceneManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Camera.h">
-      <Filter>Source Files\Engine\Systems\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Input.h">
-      <Filter>Source Files\Engine\Systems\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Mouse.h">
-      <Filter>Source Files\Engine\Systems\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\GamePad.h">
-      <Filter>Source Files\Engine\Systems\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\AI\Telegram.h">
-      <Filter>Source Files\Engine\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\AI\MetaAI.h">
-      <Filter>Source Files\Engine\AI\MetaAI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Collision.h">
-      <Filter>Source Files\Engine\Systems\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\CharacterManager.h">
-      <Filter>Source Files\Engine\Systems\CharacterManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Stage.h">
-      <Filter>Source Files\Engine\Systems\StageManeger\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\StageManager.h">
-      <Filter>Source Files\Engine\Systems\StageManeger</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Scene\SceneLoading.h">
       <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Math.h">
-      <Filter>Source Files\Engine\Systems\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\StateMachine.h">
-      <Filter>Source Files\Engine\Systems\StateMachine</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Scene\SceneGame.h">
       <Filter>Source Files\Game\Scenes\SceneGame</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\ResourceManager.h">
-      <Filter>Source Files\Engine\Systems\ResourceManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Characters\Player.h">
       <Filter>Source Files\Game\Characters\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\WireframeLambert.h">
-      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\Wireframe</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\ShaderManager.h">
-      <Filter>Source Files\Engine\Systems\ShaderManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Object.h">
-      <Filter>Source Files\Engine\Systems\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\NoTextureShader.h">
-      <Filter>Source Files\Engine\Systems\ShaderManager\Shader\NoTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\AI\HeuristicSearch.h">
-      <Filter>Source Files\Engine\AI\Aster\HeuristicSearch</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\AI\Edge.h">
-      <Filter>Source Files\Engine\AI\Aster\Edge</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\AI\Node.h">
-      <Filter>Source Files\Engine\AI\Aster\Node</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Characters\EnemySnake.h">
       <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Blender.h">
-      <Filter>Source Files\Engine\Systems\Blender</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\HighResolutionTimer.h">
-      <Filter>Source Files\Engine\Systems\HighResolutionTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Logger.h">
-      <Filter>Source Files\Engine\Systems\Logger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\AI\DungeonMake.h">
-      <Filter>Source Files\Engine\AI\MetaAI\DungeonMake</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Misc.h">
-      <Filter>Source Files\Engine\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\DungeonSystem.h">
-      <Filter>Source Files\Engine\Systems\DungeonSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Objects\Sprite.h">
-      <Filter>Source Files\Engine\Load Objects\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Character.h">
-      <Filter>Source Files\Engine\Systems\CharacterManager\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Stage\RogueLikeStage.h">
       <Filter>Source Files\Game\Stage\RogueLikeStage</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Framework.h">
-      <Filter>Source Files\Engine\Systems\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Scene.h">
-      <Filter>Source Files\Engine\Systems\SceneManager\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Fade.h">
-      <Filter>Source Files\Engine\Systems\Fade</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Scene\SceneGameOver.h">
       <Filter>Source Files\Game\Scenes\SceneGameOver</Filter>

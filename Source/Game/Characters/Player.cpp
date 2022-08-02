@@ -6,20 +6,20 @@
 
 #include "Game/Characters/Player.h"
 
-#include  "Engine/AI/MetaAI.h"
-#include "Engine/Systems/Logger.h"
-#include "Engine/Systems/Input.h"
-#include "Engine/Systems/Graphics.h"
-#include "Engine/Systems/Shader.h"
-#include "Engine/Systems/ShaderManager.h"
-#include "Engine/Systems/DebugRenderer.h"
-#include "Engine/Systems/ImGuiRenderer.h"
-#include "Engine/Objects/Model.h"
-#include "Engine/AI/DungeonMake.h"
+#include  "MyLiblary/AI/MetaAI.h"
+#include "MyLiblary/Systems/Logger.h"
+#include "MyLiblary/Systems/Input.h"
+#include "MyLiblary/Systems/Graphics.h"
+#include "MyLiblary/Systems/Shader.h"
+#include "MyLiblary/Systems/ShaderManager.h"
+#include "MyLiblary/Systems/DebugRenderer.h"
+#include "MyLiblary/Systems/ImGuiRenderer.h"
+#include "MyLiblary/Objects/Model.h"
+#include "MyLiblary/AI/DungeonMake.h"
 
 
 
-#include "Engine/Systems/CharacterManager.h"
+#include "MyLiblary/Systems/CharacterManager.h"
 
 const float COS45 = cosf(DirectX::XMConvertToRadians(45.f));
 
@@ -118,8 +118,39 @@ void Player::FiniteStateMachineInitialize()
 
 	player_entry_state.AddState
 	(
-		Entry::Select,
-		[this](const float elapsed_time) {SelectState(elapsed_time); }
+		Entry::Wait,
+		[this](const float elapsed_time) {WaitState(elapsed_time); }
+	);
+
+	player_entry_state.AddState
+	(
+		Entry::Move,
+		[this](const float elapsed_time) {MoveState(elapsed_time); }
+	);
+
+	player_entry_state.AddState
+	(
+		Entry::Stop,
+		[this](const float elapsed_time) {StopState(elapsed_time); }
+	);
+
+
+	player_entry_state.AddState
+	(
+		Entry::Jump,
+		[this](const float elapsed_time) {JumpState(elapsed_time); }
+	);
+
+	player_entry_state.AddState
+	(
+		Entry::Landing,
+		[this](const float elapsed_time) {JumpState(elapsed_time); }
+	);
+
+	player_entry_state.AddState
+	(
+		Entry::Avoid,
+		[this](const float elapsed_time) {AvoidState((elapsed_time)); }
 	);
 
 	player_entry_state.AddState
@@ -130,22 +161,21 @@ void Player::FiniteStateMachineInitialize()
 
 	player_entry_state.AddState
 	(
-		Entry::WayChange,
-		[this](const float elapsed_time) {WayChangeState(elapsed_time); }
+		Entry::Counter,
+		[this](const float elapsed_time) {CounterState(elapsed_time); }
 	);
-
-	player_entry_state.AddState
-	(
-		Entry::Move,
-		[this](const float elapsed_time) {MoveState(elapsed_time); }
-	);
-
 	//ReactionStateの子ステート
 
 	player_reaction_state.AddState
 	(
 		Reaction::ReactionSelect,
 		[this](const float elapsed_time) {ReactionSelectState(elapsed_time); }
+	);
+
+	player_reaction_state.AddState
+	(
+		Reaction::Countered,
+		[this](const float elapsed_time) {CounteredState(elapsed_time); }
 	);
 
 	player_reaction_state.AddState
@@ -164,30 +194,34 @@ void Player::FiniteStateMachineInitialize()
 
 	player_receive_state.AddState
 	(
-		Receive::Wait,
-		[this](const float elapsed_time) {WaitState(elapsed_time); }
+		Receive::WaitReaction,
+		[this](const float elapsed_time) {WaitReactionState(elapsed_time); }
 	);
 
 	// 各ステートマシンの初期ステートの設定
 
 	player_state_machine.SetState(ParentState::Entry);
 
-	player_entry_state.SetState(Entry::Select);
+	player_entry_state.SetState(Entry::Wait);
 	player_reaction_state.SetState(Reaction::ReactionSelect);
-	player_receive_state.SetState(Receive::Wait);
+	player_receive_state.SetState(Receive::WaitReaction);
 
 
 	//ImGui
-	player_entry_string.emplace_back("Select");
-	player_entry_string.emplace_back("Attack");
-	player_entry_string.emplace_back("WayChange");
+	player_entry_string.emplace_back("Wait");
 	player_entry_string.emplace_back("Move");
+	player_entry_string.emplace_back("Stop");
+	player_entry_string.emplace_back("Jump");
+	player_entry_string.emplace_back("Avoid");
+	player_entry_string.emplace_back("Attack");
+	player_entry_string.emplace_back("Counter");
 
 	player_reaction_string.emplace_back("ReactionSelect");
+	player_reaction_string.emplace_back("Countered");
 	player_reaction_string.emplace_back("Damaged");
 	player_reaction_string.emplace_back("Death");
 
-	player_receive_string.emplace_back("Wait");
+	player_receive_string.emplace_back("WaitReaction");
 
 	player_states_string.emplace_back(player_entry_string);
 	player_states_string.emplace_back(player_reaction_string);
@@ -251,7 +285,7 @@ void Player::SendMessaging(MESSAGE_TYPE msg)
 			MESSAGE_TYPE::END_PLAYER_TURN);
 
 		//ステートマシンの設定
-		player_entry_state.SetState(Entry::Select);
+		player_entry_state.SetState(Entry::Wait);
 		player_state_machine.SetState(ParentState::Receive);
 		break;
 	case MESSAGE_TYPE::END_ENEMY_TURN:
@@ -487,12 +521,12 @@ void Player::Destroy()
 //----------------------------------------------------
 void Player::EntryState(const float elapsed_time)
 {
-	if (player_state_machine.IsStateFirstTime())
+	if (player_state_machine.IsStateFirstTime())//一度だけ実行
 	{
 		// 子ステートのの初期化
-		if (player_entry_state.GetState() != static_cast<int>(Entry::Select))
+		if (player_entry_state.GetState() != static_cast<int>(Entry::Wait))
 		{
-			player_entry_state.SetState(Entry::Select);
+			player_entry_state.SetState(Entry::Wait);
 
 		}
 	}
@@ -505,7 +539,7 @@ void Player::EntryState(const float elapsed_time)
 //----------------------------------------------------
 void Player::ReactionState(const float elapsed_time)
 {
-	if (player_state_machine.IsStateFirstTime())
+	if (player_state_machine.IsStateFirstTime())//一度だけ実行
 	{
 		// 子ステートのの初期化
 		if (player_reaction_state.GetState() != static_cast<int>(Reaction::ReactionSelect))
@@ -523,12 +557,12 @@ void Player::ReactionState(const float elapsed_time)
 //----------------------------------------------------
 void Player::ReceiveState(const float elapsed_time)
 {
-	if (player_state_machine.IsStateFirstTime())
+	if (player_state_machine.IsStateFirstTime())//一度だけ実行
 	{
 		// 子ステートのの初期化
-		if (player_receive_state.GetState() != static_cast<int>(Receive::Wait))
+		if (player_receive_state.GetState() != static_cast<int>(Receive::WaitReaction))
 		{
-			player_receive_state.SetState(Receive::Wait);
+			player_receive_state.SetState(Receive::WaitReaction);
 		}
 	}
 
@@ -542,152 +576,14 @@ void Player::ReceiveState(const float elapsed_time)
 
 //? EntryState
 
-
 //----------------------------------------------------
-//	SelectState
+//	WaitState
 //----------------------------------------------------
-void	Player::SelectState(const float elapsed_time)
+void	Player::WaitState(const float elapsed_time)
 {
-	if (player_entry_state.IsStateFirstTime())
-	{
-
-	}
-
-	GamePad& game_pad = Input::Instance().GetGamePad();
-
-	//攻撃
-	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
-	{
-		//Attackステートに遷移する
-		player_entry_state.SetState(Entry::Attack);
-	}
-
-	/*同時に処理をしたくないので else ifで他のif文入らないようにする*/
-
-	//メニュー
-	//else if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_B))
-	//{
-	//	//Menuステートに遷移する
-	//	player_entry_state.SetState( Entry::Menu);
-	//}
-
-	//方向転換
-	else if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_Y))
-	{
-		//WayChangeステートに遷移する
-		player_entry_state.SetState(Entry::WayChange);
-	}
-
-	//	移動
-	//左スティックもしくはDPadが入力されたとき
-	else if (game_pad.GetAxisLX() != 0 || game_pad.GetAxisLY() != 0)
-	{
-		//Moveステートに遷移する
-		player_entry_state.SetState(Entry::Move);
-	}
-}
-
-//----------------------------------------------------
-//	AttackState
-//----------------------------------------------------
-void	Player::AttackState(const float elapsed_time)
-{
-	if (player_entry_state.IsStateFirstTime())
+	if (player_entry_state.IsStateFirstTime())//一度だけ実行
 	{
 	}
-
-}
-
-//----------------------------------------------------
-//	WayChangeState
-//----------------------------------------------------
-void	Player::WayChangeState(const float elapsed_time)
-{
-	if (player_entry_state.IsStateFirstTime())
-	{
-	}
-
-	const GamePad& game_pad = Input::Instance().GetGamePad();
-	//Yボタンを長押ししている間
-	if (game_pad.GetButtonUp() & static_cast<GamePadButton>(GamePad::BTN_Y))
-	{
-		player_entry_state.SetState(Entry::Select);
-	}
-	float ax = game_pad.GetAxisLX();
-	float ay = game_pad.GetAxisLY();
-
-	/*ステップ処理をして左スティックの入力を0, 1, -1, 1 / √2(約0.71)にしる*/
-
-	//左スティックのx軸のステップ処理
-	if (ax > 0.f)
-	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f));
-	}
-	else if (ax < 0.f)
-	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true);
-	}
-
-	//左スティックのy軸のステップ処理
-	if (ay > 0.f)
-	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f));
-	}
-	else if (ay < 0.f)
-	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true);
-	}
-
-	//方向転換
-	//上
-	if (Math::Comparison(ax, 0.f) && Math::Comparison(ay, 1.f))
-	{
-		SetAngleY(Math::ConvertToRadianAngle(0));
-	}
-	//下
-	else if (Math::Comparison(ax, 0.f) && Math::Comparison(ay, -1.f))
-	{
-		SetAngleY(Math::ConvertToRadianAngle(180));
-	}
-	//右
-	else if (Math::Comparison(ax, 1.f) && Math::Comparison(ay, 0.f))
-	{
-		SetAngleY(Math::ConvertToRadianAngle(90));
-	}
-	//左
-	else if (Math::Comparison(ax, -1.f) && Math::Comparison(ay, 0.f))
-	{
-		SetAngleY(Math::ConvertToRadianAngle(270));
-	}
-
-	//右上
-	if (Math::Comparison(ax, 1.f) && Math::Comparison(ay, 1.f))
-	{
-		SetAngleY(Math::ConvertToRadianAngle(45));
-	}
-	//左上
-	else if (Math::Comparison(ax, -1.f) && Math::Comparison(ay, 1.f))
-	{
-		SetAngleY(Math::ConvertToRadianAngle(315));
-	}
-	//左下
-	else if (Math::Comparison(ax, -1.f) && Math::Comparison(ay, -1.f))
-	{
-		SetAngleY(Math::ConvertToRadianAngle(225));
-	}
-	//右下
-	else if (Math::Comparison(ax, 1.f) && Math::Comparison(ay, -1.f))
-	{
-		SetAngleY(Math::ConvertToRadianAngle(135));
-	}
-
-	//攻撃
-	else	if (game_pad.GetButtonDown() & static_cast<GamePadButton>(GamePad::BTN_A))
-	{
-		//Attackステートに遷移する
-		player_entry_state.SetState(Entry::Attack);
-	}
-
 }
 
 //----------------------------------------------------
@@ -697,258 +593,66 @@ void	Player::MoveState(const float elapsed_time)
 {
 	if (player_entry_state.IsStateFirstTime())//一度だけ実行
 	{
-		SetOldPosition();//前回の位置を保存
 	}
-	//SetOldPosition();//前回の位置を保存
-
-	const GamePad& game_pad = Input::Instance().GetGamePad();
-
-	float ax = game_pad.GetAxisLX();
-	float ay = game_pad.GetAxisLY();
-
-	const DirectX::XMFLOAT2 player_pos =//データ上の値にするためCell_Sizeで割る
-		DirectX::XMFLOAT2(GetPosition().x / CELL_SIZE, GetPosition().z / CELL_SIZE);
-
-	//ステップをして　左スティックの入力を0, 1 , -1 , 1 / √2(約0.71)にする
-	//左スティックのx軸のステップ
-	if (ax > 0.f)
-	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f)); ;
-	}
-	else if (ax < 0.f)
-	{
-		ax = Math::StepAnyFloat(game_pad.GetAxisLX(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true); ;
-	}
-
-	//左スティックのy軸のステップ
-	if (ay > 0.f)
-	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, (COS45 / 2.f), 1.f - (COS45 / 2.f)); ;
-	}
-	else if (ay < 0.f)
-	{
-		ay = Math::StepAnyFloat(game_pad.GetAxisLY(), COS45, -1.f + (COS45 / 2.f), (COS45 / 2.f), true);
-	}
-
-	//移動処理
-
-	//右上
-	if (Math::Comparison(ax, 1.f) && Math::Comparison(ay, 1.f))
-	{
-		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-		SetAngleY(Math::ConvertToRadianAngle(45));
-
-		const size_t map_data_diagonal = rogue_like_dungeon.//現在のステージの情報から一つ右上の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x) + 1].map_data;
-
-		const size_t map_data_horizon = rogue_like_dungeon.//現在のステージの情報から一つ右の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;
-
-		const size_t map_data_vertical = rogue_like_dungeon.//現在のステージの情報から一つ上の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
-
-		//壁か敵でないなら
-		//ななめの移動なので上下左右の位置も確認する
-		if (
-			(map_data_diagonal <= static_cast<size_t>(Attribute::Road) && map_data_diagonal > static_cast<size_t>(Attribute::Wall)) &&
-			(map_data_horizon <= static_cast<size_t>(Attribute::Road) && map_data_horizon > static_cast<size_t>(Attribute::Wall)) &&
-			(map_data_vertical <= static_cast<size_t>(Attribute::Road) && map_data_vertical > static_cast<size_t>(Attribute::Wall))
-			)
-		{
-			//右上に移動
-			AddPositionZ(CELL_SIZE);
-			AddPositionX(CELL_SIZE);
-
-			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			player_state_machine.SetState(ParentState::Receive);
-		}
-	}
-	//左上
-	else if (Math::Comparison(ax, -1.f) && Math::Comparison(ay, 1.f))
-	{
-		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-		SetAngleY(Math::ConvertToRadianAngle(315));
-
-		const size_t map_data_diagonal = rogue_like_dungeon.//現在のステージの情報から一つ左上の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x) - 1].map_data;
-
-		const size_t map_data_horizon = rogue_like_dungeon.//現在のステージの情報から一つ左の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;
-
-		const size_t map_data_vertical = rogue_like_dungeon.//現在のステージの情報から一つ上の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;
-
-		//進行方向が移動可能な属性かをチェック
-		//ななめの移動なので上下左右の位置も確認する
-		if (
-			(map_data_diagonal <= static_cast<size_t>(Attribute::Road) && map_data_diagonal > static_cast<size_t>(Attribute::Wall)) &&
-			(map_data_horizon <= static_cast<size_t>(Attribute::Road) && map_data_horizon > static_cast<size_t>(Attribute::Wall)) &&
-			(map_data_vertical <= static_cast<size_t>(Attribute::Road) && map_data_vertical > static_cast<size_t>(Attribute::Wall))
-			)
-		{
-			//左上に移動
-			AddPositionZ(CELL_SIZE);
-			AddPositionX(-CELL_SIZE);
-			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			player_state_machine.SetState(ParentState::Receive);
-		}
-	}
-	//左下-
-	else if (Math::Comparison(ax, 1.f) && Math::Comparison(ay, -1.f))
-	{
-		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-		SetAngleY(Math::ConvertToRadianAngle(225));
-
-		const size_t map_data_diagonal = rogue_like_dungeon.//現在のステージの情報から一つ左下の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x) - 1].map_data;
-
-		const size_t map_data_horizon = rogue_like_dungeon.//現在のステージの情報から一つ左の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;
-
-		const size_t map_data_vertical = rogue_like_dungeon.//現在のステージの情報から一つ下の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;
-
-		//進行方向が移動可能な属性かをチェック
-		//ななめの移動なので上下左右の位置も確認する
-		if (
-			(map_data_diagonal <= static_cast<size_t>(Attribute::Road) && map_data_diagonal > static_cast<size_t>(Attribute::Wall)) &&
-			(map_data_horizon <= static_cast<size_t>(Attribute::Road) && map_data_horizon > static_cast<size_t>(Attribute::Wall)) &&
-			(map_data_vertical <= static_cast<size_t>(Attribute::Road) && map_data_vertical > static_cast<size_t>(Attribute::Wall))
-			)
-		{
-			//左下に移動
-			AddPositionZ(-CELL_SIZE);
-			AddPositionX(-CELL_SIZE);
-
-			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			player_state_machine.SetState(ParentState::Receive);
-		}
-	}
-	//右下
-	else if (Math::Comparison(ax, 1.f) && Math::Comparison(ay, -1.f))
-	{
-		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-		SetAngleY(Math::ConvertToRadianAngle(135));
-
-		const size_t map_data_diagonal = rogue_like_dungeon.//現在のステージの情報から一つ右下の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x) + 1].map_data;
-
-		const size_t map_data_horizon = rogue_like_dungeon.//現在のステージの情報から一つ右の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;
-
-		const size_t map_data_vertical = rogue_like_dungeon.//現在のステージの情報から一つ下の升目を見る
-			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;
-
-		//進行方向が移動可能な属性かをチェック
-		//ななめの移動なので上下左右の位置も確認する
-		if (
-			(map_data_diagonal <= static_cast<size_t>(Attribute::Road) && map_data_diagonal > static_cast<size_t>(Attribute::Wall)) &&
-			(map_data_horizon <= static_cast<size_t>(Attribute::Road) && map_data_horizon > static_cast<size_t>(Attribute::Wall)) &&
-			(map_data_vertical <= static_cast<size_t>(Attribute::Road) && map_data_vertical > static_cast<size_t>(Attribute::Wall))
-			)
-		{
-			//右下に移動
-			AddPositionZ(-CELL_SIZE);
-			AddPositionX(CELL_SIZE);
-
-			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			player_state_machine.SetState(ParentState::Receive);
-		}
-	}
-
-	//上
-	if (Math::Comparison(ax, 0.f) && Math::Comparison(ay, 1.f))
-	{
-		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-		SetAngleY(Math::ConvertToRadianAngle(0));
-
-		const size_t map_data = rogue_like_dungeon.
-			GetMapRole()[static_cast<size_t>(player_pos.y) + 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ上の升目を見る
-
-			//進行方向が移動可能な属性かをチェック
-		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
-		{
-			//上に移動
-			AddPositionZ(CELL_SIZE);
-
-			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			player_state_machine.SetState(ParentState::Receive);
-		}
-	}
-	//下
-	else if (Math::Comparison(ax, 0.f) && Math::Comparison(ay, -1.f))
-	{
-		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-
-		SetAngleY(Math::ConvertToRadianAngle(180));
-		const size_t map_data = rogue_like_dungeon.
-			GetMapRole()[static_cast<size_t>(player_pos.y) - 1][static_cast<size_t>(player_pos.x)].map_data;//現在のステージの情報から一つ下の升目を見る
-
-			//進行方向が移動可能な属性かをチェック
-		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
-		{
-			//下に移動
-			AddPositionZ(-CELL_SIZE);
-			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			player_state_machine.SetState(ParentState::Receive);
-		}
-	}
-	//右
-	else if (Math::Comparison(ax, 1.f) && Math::Comparison(ay, 0.f))
-	{
-		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-		SetAngleY(Math::ConvertToRadianAngle(90));
-
-		const size_t map_data = rogue_like_dungeon.
-			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) + 1].map_data;//現在のステージの情報から一つ右の升目を見る
-
-		//進行方向が移動可能な属性かをチェック
-		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
-		{
-			//右に移動
-			AddPositionX(CELL_SIZE);
-			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			player_state_machine.SetState(ParentState::Receive);
-		}
-	}
-	//左
-	else if ((Math::Comparison(ax, -1.f) && Math::Comparison(ay, 0.f)))
-	{
-		RogueLikeDungeon& rogue_like_dungeon = RogueLikeDungeon::Instance();
-
-		SetAngleY(Math::ConvertToRadianAngle(270));
-
-		const size_t map_data = rogue_like_dungeon.
-			GetMapRole()[static_cast<size_t>(player_pos.y)][static_cast<size_t>(player_pos.x) - 1].map_data;//現在のステージの情報から一つ左の升目を見る
-
-		//進行方向が移動可能な属性かをチェック
-		if (map_data <= static_cast<size_t>(Attribute::Road) && map_data > static_cast<size_t>(Attribute::Wall))
-		{
-			//左に移動
-			AddPositionX(-CELL_SIZE);
-			//プレイヤーの行動を終了する
-			SendMessaging(MESSAGE_TYPE::END_PLAYER_TURN);
-			player_state_machine.SetState(ParentState::Receive);
-		}
-
-	}
-	player_entry_state.SetState(Entry::Select);
 }
 
+//----------------------------------------------------
+//	StopState
+//----------------------------------------------------
+void Player::StopState(const float elapsed_time)
+{
+	if (player_entry_state.IsStateFirstTime())//一度だけ実行
+	{
+
+	}
+}
+
+//----------------------------------------------------
+//	JumpState
+//----------------------------------------------------
+void	Player::JumpState(const float elapsed_time)
+{
+	if (player_entry_state.IsStateFirstTime())//一度だけ実行
+	{
+
+	}
+}
+
+void Player::LandingState(const float elapsed_time)
+{
+	if (player_reaction_state.IsStateFirstTime())//一度だけ実行
+	{
+
+	}
+}
+
+void Player::AvoidState(const float elapsed_time)
+{
+	if (player_reaction_state.IsStateFirstTime())//一度だけ実行
+	{
+
+	}
+}
+
+//----------------------------------------------------
+//	AttackState
+//----------------------------------------------------
+void	Player::AttackState(const float elapsed_time)
+{
+	if (player_entry_state.IsStateFirstTime())//一度だけ実行
+	{
+
+	}
+}
+
+
+void Player::CounterState(const float elapsed_time)
+{
+	if (player_reaction_state.IsStateFirstTime())//一度だけ実行
+	{
+
+	}
+}
 
 //? ReactionState
 
@@ -957,7 +661,7 @@ void	Player::MoveState(const float elapsed_time)
 //----------------------------------------------------
 void Player::ReactionSelectState(const float elapsed_time)
 {
-	if (player_reaction_state.IsStateFirstTime())
+	if (player_reaction_state.IsStateFirstTime())//一度だけ実行
 	{
 		if (GetCurrentHealth() > 0)
 		{
@@ -970,12 +674,22 @@ void Player::ReactionSelectState(const float elapsed_time)
 	}
 }
 
+
+
+void Player::CounteredState(const float elapsed_time)
+{
+	if (player_reaction_state.IsStateFirstTime())//一度だけ実行
+	{
+
+	}
+}
+
 //----------------------------------------------------
 //	DamagedState
 //----------------------------------------------------
 void Player::DamagedState(const float elapsed_time)
 {
-	if (player_reaction_state.IsStateFirstTime())
+	if (player_reaction_state.IsStateFirstTime())//一度だけ実行
 	{
 
 	}
@@ -987,7 +701,7 @@ void Player::DamagedState(const float elapsed_time)
 //----------------------------------------------------
 void Player::DeathState(const float elapsed_time)
 {
-	if (player_reaction_state.IsStateFirstTime())
+	if (player_reaction_state.IsStateFirstTime())//一度だけ実行
 	{
 	}
 	OnDead();
@@ -996,11 +710,11 @@ void Player::DeathState(const float elapsed_time)
 //? ReceiveState
 
 //----------------------------------------------------
-//	WaitState
+//	WaitReactionState
 //----------------------------------------------------
-void Player::WaitState(const float elapsed_time)
+void Player::WaitReactionState(const float elapsed_time)
 {
-	if (player_receive_state.IsStateFirstTime())
+	if (player_receive_state.IsStateFirstTime())//一度だけ実行
 	{
 
 	}

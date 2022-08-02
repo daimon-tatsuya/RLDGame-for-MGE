@@ -8,8 +8,8 @@
 #include <memory>
 
 #include "Shader.h"
-#include "Engine/Systems/Math.h"
-#include "Engine/AI/Telegram.h"
+#include "MyLiblary/Systems/Math.h"
+#include "MyLiblary/AI/Telegram.h"
 
 //‘O•ûéŒ¾
 class Model;

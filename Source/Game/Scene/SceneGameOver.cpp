@@ -6,20 +6,20 @@
 #include <charconv>
 #include <iostream>
 #include "Game/Scene/SceneGameOver.h"
-#include "Engine/Systems/Blender.h"
-#include "Engine/Systems/Graphics.h"
-#include "Engine/Systems/Input.h"
-#include "Engine/Systems/Logger.h"
+#include "MyLiblary/Systems/Blender.h"
+#include "MyLiblary/Systems/Graphics.h"
+#include "MyLiblary/Systems/Input.h"
+#include "MyLiblary/Systems/Logger.h"
 
-#include "Engine/Objects/Sprite.h"
-#include "Engine/Systems/CameraController.h"
-#include "Engine/Systems/CharacterManager.h"
-#include "Engine/Systems/RenderContext.h"
-#include "Engine/Systems/SceneManager.h"
+#include "MyLiblary/Objects/Sprite.h"
+#include "MyLiblary/Systems/CameraController.h"
+#include "MyLiblary/Systems/CharacterManager.h"
+#include "MyLiblary/Systems/RenderContext.h"
+#include "MyLiblary/Systems/SceneManager.h"
 #include "Game/Scene/SceneGame.h"
 #include "Game/Scene/SceneLoading.h"
 #include "Game/Scene/SceneTitle.h"
-#include "Engine/Systems/DungeonSystem.h"
+#include "MyLiblary/Systems/DungeonSystem.h"
 
 
 const float TEXT_ADJUST_FROM_SCENE_OVER = 48.f;//over_textÇ™è≠ÇµÇ∏ÇÍÇƒÇ¢ÇΩÇÃÇ≈ñ⁄âüÇµÇ≈èCê≥

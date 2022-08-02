@@ -8,7 +8,7 @@
 #include <vector>
 #include<memory>
 #include <d3d11.h>
-#include "Engine/AI/Telegram.h"
+#include "MyLiblary/AI/Telegram.h"
 
 //‘O•ûéŒ¾
 class Shader;
