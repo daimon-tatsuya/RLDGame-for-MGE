@@ -5,7 +5,11 @@
 //
 //**********************************************************
 #include <memory>
+<<<<<<< HEAD
 #include "Liblary/Systems/Scene.h"
+=======
+#include "MyLiblary/Systems/Scene.h"
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
 
 
 //‘O•ûéŒ¾

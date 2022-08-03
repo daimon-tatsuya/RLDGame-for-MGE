@@ -5,8 +5,13 @@
 //
 //**********************************************************
 
+<<<<<<< HEAD
 #include "Liblary/Systems/Character.h"
 #include "Liblary/Systems/StateMachine.h"
+=======
+#include "MyLiblary/Systems/Character.h"
+#include "MyLiblary/Systems/StateMachine.h"
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
 
 ///<summary>
 ///プレイヤークラス
@@ -28,17 +33,19 @@ private:
 	// 子ステート
 	enum class Entry
 	{
-		Select = 0,
-		Attack,
-		WayChange,
+		Wait = 0,
 		Move,
+		Stop,
+		Jump,
+		Landing,
+		Avoid,
+		Attack,
+
+
+
+		Counter,
 		// 今後作る予定のステート
-		//Map,
-		//Ability,
-		//MessageLog,
-		//Inventory,
-		//View,
-		//Step,
+		//Menu,
 
 		StateEnd
 	};
@@ -47,6 +54,7 @@ private:
 	enum class Reaction
 	{
 		ReactionSelect = 0,
+		Countered,
 		Damaged,
 		Death,
 
@@ -56,7 +64,7 @@ private:
 	// 子ステート
 	enum class Receive
 	{
-		Wait,
+		WaitReaction,
 	//	Call,
 
 		StateEnd
@@ -113,14 +121,7 @@ private:
 	/// <para>入力に応じて遷移するステートを変える</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
-	void	SelectState(const float elapsed_time);
-
-	/// <summary>
-	/// <para>方向転換ステート</para>
-	/// <para>ボタンと移動の同時入力で方向を変える</para>
-	/// </summary>
-	/// <param name="elapsed_time">経過時間</param>
-	void	WayChangeState(const float elapsed_time);
+	void	WaitState(const float elapsed_time);
 
 	/// <summary>
 	/// <para>移動ステート</para>
@@ -128,6 +129,41 @@ private:
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
 	void	MoveState(const float elapsed_time);
+
+	/// <summary>
+	/// <para>行動選択ステート</para>
+	/// <para>入力に応じて遷移するステートを変える</para>
+	/// </summary>
+	/// <param name="elapsed_time">経過時間</param>
+	void	StopState(const float elapsed_time);
+
+	/// <summary>
+	/// <para>行動選択ステート</para>
+	/// <para>入力に応じて遷移するステートを変える</para>
+	/// </summary>
+	/// <param name="elapsed_time">経過時間</param>
+	void	JumpState(const float elapsed_time);
+
+	/// <summary>
+	/// <para>行動選択ステート</para>
+	/// <para>入力に応じて遷移するステートを変える</para>
+	/// </summary>
+	/// <param name="elapsed_time">経過時間</param>
+	void	LandingState(const float elapsed_time);
+
+	/// <summary>
+	/// <para>行動選択ステート</para>
+	/// <para>入力に応じて遷移するステートを変える</para>
+	/// </summary>
+	/// <param name="elapsed_time">経過時間</param>
+	void	AvoidState(const float elapsed_time);
+
+	/// <summary>
+	/// <para>行動選択ステート</para>
+	/// <para>入力に応じて遷移するステートを変える</para>
+	/// </summary>
+	/// <param name="elapsed_time">経過時間</param>
+	void	CounterState(const float elapsed_time);
 
 	/// <summary>
 	/// <para>攻撃ステート</para>
@@ -145,12 +181,18 @@ private:
 	//void	MenuState(const float elapsed_time);
 
 	//?ReactionState
+		/// <summary>
+	/// <para>行動選択ステート</para>
+	/// <para>入力に応じて遷移するステートを変える</para>
+	/// </summary>
+	/// <param name="elapsed_time">経過時間</param>
+	void	ReactionSelectState(const float elapsed_time);
 
 	/// <summary>
 	/// <para>ダメージを受けた結果を判別する</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
-	void ReactionSelectState(const float elapsed_time);
+	void CounteredState(const float elapsed_time);
 
 	/// <summary>
 	/// <para>被ダメージステート</para>
@@ -172,7 +214,7 @@ private:
 	/// <para>メッセージ受信待ちのステート</para>
 	/// </summary>
 	/// <param name="elapsed_time">経過時間</param>
-	void WaitState(const float elapsed_time);
+	void WaitReactionState(const float elapsed_time);
 
 public:
 

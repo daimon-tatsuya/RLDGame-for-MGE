@@ -6,11 +6,19 @@
 
 #include <thread>
 
+<<<<<<< HEAD
 #include "Liblary/Systems/Graphics.h"
 #include "Liblary/Objects//Sprite.h"
 #include "Liblary/Systems/SceneManager.h"
 #include "Game/Scene/SceneLoading.h"
 #include "Liblary/Systems/Logger.h"
+=======
+#include "MyLiblary/Systems/Graphics.h"
+#include "MyLiblary/Objects//Sprite.h"
+#include "MyLiblary/Systems/SceneManager.h"
+#include "Game/Scene/SceneLoading.h"
+#include "MyLiblary/Systems/Logger.h"
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
 
 
 // ‰Šú‰»

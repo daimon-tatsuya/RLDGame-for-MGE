@@ -5,8 +5,13 @@
 //
 //**********************************************************
 
+<<<<<<< HEAD
 #include "Liblary/Systems/Character.h"
 #include "Liblary/Systems/StateMachine.h"
+=======
+#include "MyLiblary/Systems/Character.h"
+#include "MyLiblary//Systems/StateMachine.h"
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
 
 /// <summary>
 /// “GƒNƒ‰ƒX(ƒwƒr)

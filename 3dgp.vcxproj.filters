@@ -18,6 +18,24 @@
     <Filter Include="HLSL\geometric_primitive">
       <UniqueIdentifier>{f0797ecd-eefd-4e67-8786-be0b4e1fa2a9}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
+=======
+    <Filter Include="Source Files\Engine\Systems">
+      <UniqueIdentifier>{aaebcfaf-a2cf-490b-904e-925ef68293d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Graphics">
+      <UniqueIdentifier>{2573b810-52de-4e9c-aaa9-7cc015a86568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Graphics\ImGuiRenderer">
+      <UniqueIdentifier>{121fcde6-ecb0-4686-9fb5-7523f937ad20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Graphics\DebugRenderer">
+      <UniqueIdentifier>{515faa1d-fc7b-4551-981f-11045b9d7cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Graphics\LineRenderer">
+      <UniqueIdentifier>{b3d75226-23e3-4d12-9ad9-065d87fbd1c4}</UniqueIdentifier>
+    </Filter>
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
     <Filter Include="HLSL\LineRenderer">
       <UniqueIdentifier>{40543093-6dd2-4218-a7d0-a7b04143ac82}</UniqueIdentifier>
     </Filter>
@@ -103,11 +121,16 @@
     <Filter Include="Source\Liblary\Systems\Camera">
       <UniqueIdentifier>{b547ee50-c92a-4861-af12-ce8c08654516}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
     <Filter Include="Source\Liblary\Systems\Collision">
       <UniqueIdentifier>{e3b4852c-4f56-4db8-b4fb-0336793fcd31}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Liblary\Systems\DungeonSystem">
       <UniqueIdentifier>{871cbafa-ce20-4099-8c77-0385b6b39ccb}</UniqueIdentifier>
+=======
+    <Filter Include="Source Files\Engine\Systems\Framework">
+      <UniqueIdentifier>{3f50b83f-a4ff-467d-b356-2243f3db2a9e}</UniqueIdentifier>
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
     </Filter>
     <Filter Include="Source\Liblary\Systems\Input">
       <UniqueIdentifier>{e988a58d-1e5e-4339-b450-162e963ba5c1}</UniqueIdentifier>
@@ -205,7 +228,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Scene\SceneTitle.cpp">
+<<<<<<< HEAD
       <Filter>Source\Game\Scenes\SceneTitle</Filter>
+=======
+      <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
     </ClCompile>
     <ClCompile Include="External\imgui\imgui.cpp">
       <Filter>External\imgui</Filter>
@@ -220,6 +247,7 @@
       <Filter>External\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Scene\SceneLoading.cpp">
+<<<<<<< HEAD
       <Filter>Source\Game\Scenes\SceneLoad</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Scene\SceneGame.cpp">
@@ -305,10 +333,20 @@
     </ClCompile>
     <ClCompile Include="Source\Liblary\Systems\Input.cpp">
       <Filter>Source\Liblary\Systems\Input</Filter>
+=======
+      <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\SceneGame.cpp">
+      <Filter>Source Files\Game\Scenes\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Characters\EnemySnake.cpp">
+      <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
     </ClCompile>
     <ClCompile Include="Source\Liblary\Systems\Mouse.cpp">
       <Filter>Source\Liblary\Systems\Input\Mouse</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Source\Liblary\Systems\Graphics.cpp">
       <Filter>Source\Liblary\Systems\Graphics</Filter>
     </ClCompile>
@@ -353,11 +391,22 @@
     </ClCompile>
     <ClCompile Include="Source\Liblary\Systems\Texture.cpp">
       <Filter>Source\Liblary\Systems\Graphics\Texture</Filter>
+=======
+    <ClCompile Include="Source\Game\Stage\RogueLikeStage.cpp">
+      <Filter>Source Files\Game\Stage\RogueLikeStage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\SceneGameOver.cpp">
+      <Filter>Source Files\Game\Scenes\SceneGameOver</Filter>
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Scene\SceneTitle.h">
+<<<<<<< HEAD
       <Filter>Source\Game\Scenes\SceneTitle</Filter>
+=======
+      <Filter>Source Files\Game\Scenes\SceneTitle</Filter>
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
     </ClInclude>
     <ClInclude Include="External\imgui\imconfig.h">
       <Filter>External\imgui</Filter>
@@ -378,6 +427,7 @@
       <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Scene\SceneLoading.h">
+<<<<<<< HEAD
       <Filter>Source\Game\Scenes\SceneLoad</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Scene\SceneGame.h">
@@ -526,6 +576,24 @@
     </ClInclude>
     <ClInclude Include="Source\Liblary\Systems\Misc.h">
       <Filter>Source\Liblary\Systems\Frameworks</Filter>
+=======
+      <Filter>Source Files\Game\Scenes\SceneLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scene\SceneGame.h">
+      <Filter>Source Files\Game\Scenes\SceneGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\Player.h">
+      <Filter>Source Files\Game\Characters\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Characters\EnemySnake.h">
+      <Filter>Source Files\Game\Characters\Enemis\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Stage\RogueLikeStage.h">
+      <Filter>Source Files\Game\Stage\RogueLikeStage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scene\SceneGameOver.h">
+      <Filter>Source Files\Game\Scenes\SceneGameOver</Filter>
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

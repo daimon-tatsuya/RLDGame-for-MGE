@@ -4,6 +4,7 @@
 //
 //**********************************************************
 
+<<<<<<< HEAD
 #include "Liblary/Systems/Blender.h"
 #include "Liblary/Systems/Graphics.h"
 #include "Liblary/Systems/Input.h"
@@ -15,6 +16,19 @@
 #include "Liblary/Systems/RenderContext.h"
 #include"Game/Characters/Player.h"
 #include "Liblary/Systems/SceneManager.h"
+=======
+#include "MyLiblary/Systems/Blender.h"
+#include "MyLiblary/Systems/Graphics.h"
+#include "MyLiblary/Systems/Input.h"
+#include "MyLiblary/Systems/Logger.h"
+
+#include "MyLiblary/Objects/Sprite.h"
+#include "MyLiblary/Systems/CameraController.h"
+#include "MyLiblary/Systems/CharacterManager.h"
+#include "MyLiblary/Systems/RenderContext.h"
+#include"Game/Characters/Player.h"
+#include "MyLiblary/Systems/SceneManager.h"
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
 #include "Game/Scene/SceneTitle.h"
 #include "Game/Scene/SceneGame.h"
 #include "Game/Scene/SceneLoading.h"

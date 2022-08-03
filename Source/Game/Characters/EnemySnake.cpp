@@ -4,6 +4,7 @@
 //
 //**********************************************************
 
+<<<<<<< HEAD
 #include "Liblary/AI/MetaAI.h"
 #include "Game/Characters/EnemySnake.h"
 #include "Liblary/AI/DungeonMake.h"
@@ -15,6 +16,19 @@
 #include "Liblary/Systems/Shader.h"
 
 #include "Liblary/AI/HeuristicSearch.h"
+=======
+#include "MyLiblary/AI/MetaAI.h"
+#include "Game/Characters/EnemySnake.h"
+#include "MyLiblary/AI/DungeonMake.h"
+#include "MyLiblary/Objects/Model.h"
+#include "MyLiblary/Systems/CharacterManager.h"
+#include "MyLiblary/Systems/DebugRenderer.h"
+#include "MyLiblary/Systems/Graphics.h"
+#include "MyLiblary/Systems/Logger.h"
+#include "MyLiblary/Systems/Shader.h"
+
+#include "MyLiblary/AI/HeuristicSearch.h"
+>>>>>>> 391d7ac7691752defb0d457a531fb1c9072387b3
 
 EnemySnake::EnemySnake()
 {
