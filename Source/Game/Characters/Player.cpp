@@ -6,20 +6,20 @@
 
 #include "Game/Characters/Player.h"
 
-#include  "Engine/AI/MetaAI.h"
-#include "Engine/Systems/Logger.h"
-#include "Engine/Systems/Input.h"
-#include "Engine/Systems/Graphics.h"
-#include "Engine/Systems/Shader.h"
-#include "Engine/Systems/ShaderManager.h"
-#include "Engine/Systems/DebugRenderer.h"
-#include "Engine/Systems/ImGuiRenderer.h"
-#include "Engine/Objects/Model.h"
-#include "Engine/AI/DungeonMake.h"
+#include  "Liblary/AI/MetaAI.h"
+#include "Liblary/Systems/Logger.h"
+#include "Liblary/Systems/Input.h"
+#include "Liblary/Systems/Graphics.h"
+#include "Liblary/Systems/Shader.h"
+#include "Liblary/Systems/ShaderManager.h"
+#include "Liblary/Systems/DebugRenderer.h"
+#include "Liblary/Systems/ImGuiRenderer.h"
+#include "Liblary/Objects/Model.h"
+#include "Liblary/AI/DungeonMake.h"
 
 
 
-#include "Engine/Systems/CharacterManager.h"
+#include "Liblary/Systems/CharacterManager.h"
 
 const float COS45 = cosf(DirectX::XMConvertToRadians(45.f));
 

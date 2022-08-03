@@ -5,8 +5,8 @@
 //
 //**********************************************************
 
-#include "Engine/Systems/Character.h"
-#include "Engine/Systems/StateMachine.h"
+#include "Liblary/Systems/Character.h"
+#include "Liblary/Systems/StateMachine.h"
 
 /// <summary>
 /// “GƒNƒ‰ƒX(ƒwƒr)

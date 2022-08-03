@@ -4,13 +4,13 @@
 //
 //**********************************************************
 
-#include "Engine/Systems/Shader.h"
-#include "Engine/Objects/Model.h"
-#include "Engine/Systems/DebugRenderer.h"
-#include "Engine/Systems/ImGuiRenderer.h"
+#include "Liblary/Systems/Shader.h"
+#include "Liblary/Objects/Model.h"
+#include "Liblary/Systems/DebugRenderer.h"
+#include "Liblary/Systems/ImGuiRenderer.h"
 #include "Game/Stage/RogueLikeStage.h"
-#include "Engine/AI/DungeonMake.h"
-#include "Engine/Systems/Collision.h"
+#include "Liblary/AI/DungeonMake.h"
+#include "Liblary/Systems/Collision.h"
 
 
 RogueLikeStage::RogueLikeStage()

@@ -6,11 +6,11 @@
 
 #include <thread>
 
-#include "Engine/Systems/Graphics.h"
-#include "Engine/Objects//Sprite.h"
-#include "Engine/Systems/SceneManager.h"
+#include "Liblary/Systems/Graphics.h"
+#include "Liblary/Objects//Sprite.h"
+#include "Liblary/Systems/SceneManager.h"
 #include "Game/Scene/SceneLoading.h"
-#include "Engine/Systems/Logger.h"
+#include "Liblary/Systems/Logger.h"
 
 
 // ‰Šú‰»
